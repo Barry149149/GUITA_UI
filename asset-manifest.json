@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/GUITA_UI/static/css/main.5f361e03.chunk.css",
+    "main.js": "/GUITA_UI/static/js/main.995a6090.chunk.js",
+    "main.js.map": "/GUITA_UI/static/js/main.995a6090.chunk.js.map",
+    "runtime-main.js": "/GUITA_UI/static/js/runtime-main.e958554c.js",
+    "runtime-main.js.map": "/GUITA_UI/static/js/runtime-main.e958554c.js.map",
+    "static/js/2.f11e82bc.chunk.js": "/GUITA_UI/static/js/2.f11e82bc.chunk.js",
+    "static/js/2.f11e82bc.chunk.js.map": "/GUITA_UI/static/js/2.f11e82bc.chunk.js.map",
+    "index.html": "/GUITA_UI/index.html",
+    "precache-manifest.1b78ff57d20ffc7943160a0e28dc7f09.js": "/GUITA_UI/precache-manifest.1b78ff57d20ffc7943160a0e28dc7f09.js",
+    "service-worker.js": "/GUITA_UI/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/GUITA_UI/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.f11e82bc.chunk.js.LICENSE.txt": "/GUITA_UI/static/js/2.f11e82bc.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/GUITA_UI/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e958554c.js",
+    "static/js/2.f11e82bc.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.995a6090.chunk.js"
+  ]
+}
