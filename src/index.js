@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-
+import App from "./select_toy";
 
 class Editor extends React.Component{
     render(){
@@ -21,6 +21,6 @@ class Editor extends React.Component{
 // ========================================
 
 ReactDOM.render(
-    <Editor />,
+    <App />,
     document.getElementById('root')
 );
