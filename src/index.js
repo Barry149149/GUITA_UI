@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from "./select_toy";
+import Selection from "./sidebar";
+import {optionType} from "./docs/data";
 
 class Editor extends React.Component{
     render(){
         return(
             <div className="ide">
                 <div className="sidebar">
-                    This is a sidebar
+                    <Selection>
+                        {optionType.DRIVER}
+                    </Selection>
                 </div>
                 <div className="textarea">
                     This is a editor
@@ -21,6 +24,6 @@ class Editor extends React.Component{
 // ========================================
 
 ReactDOM.render(
-    <App />,
+    <Editor />,
     document.getElementById('root')
 );

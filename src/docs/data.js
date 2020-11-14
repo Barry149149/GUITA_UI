@@ -116,3 +116,45 @@ export const groupedOptions = [
         options: flavourOptions,
     },
 ];
+
+export const languageOption = [
+    {
+        value: 'cpp',
+        label: 'C++'
+    },
+    {
+        value: 'java',
+        label: 'Java'
+    }
+]
+
+export const frameworkOption = [
+    {
+        value: 'qt',
+        label: 'Qt'
+    },
+    {
+        value: 'javafx',
+        label: 'JavaFX'
+    }
+]
+
+export const driverOption = [
+    {
+        value: 'qtDriver',
+        label: 'DOM for Qt Driver'
+    },
+    {
+        value: 'computerVision',
+        label: 'Computer Vision'
+    }
+]
+
+export const optionType = {
+    LANGUAGE : 1,
+    FRAMEWORK : 2,
+    DRIVER: 3,
+    FALLBACK: 4
+
+
+}
