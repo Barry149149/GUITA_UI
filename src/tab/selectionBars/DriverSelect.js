@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { driverOption } from './docs/data';
+import { driverOption } from '../../docs/data';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
@@ -32,7 +32,7 @@ export default function DriverSelect() {
     return(
         <div>
             <FormControl className={classes.formControl}>
-                <InputLabel shrink htmlFor="age-native-label-placeholder">
+                <InputLabel>
                     Driver
                 </InputLabel>
                 <NativeSelect

@@ -6,8 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import FrameworkSelect from './FrameworkSelect';
-import DriverSelect from './DriverSelect';
+import FrameworkSelect from './selectionBars/FrameworkSelect';
+import DriverSelect from './selectionBars/DriverSelect';
+import LanguageSelect from './selectionBars/LanguageSelect'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -76,6 +77,7 @@ export default function CaseAndConfigTab() {
             </AppBar>
             <TabPanel value={value} index={0}>
                 <div>
+                    <LanguageSelect/>
                     <FrameworkSelect/>
                     <DriverSelect/>
                 </div>

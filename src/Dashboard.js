@@ -18,7 +18,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
-import CaseAndConfigTab from "./Tab";
+import CaseAndConfigTab from "./tab/Tab";
 
 
 
