@@ -1,29 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Selection from "./sidebar";
-import {optionType} from "./docs/data";
-
-class Editor extends React.Component{
-    render(){
-        return(
-            <div className="ide">
-                <div className="sidebar">
-                    <Selection>
-                        {optionType.DRIVER}
-                    </Selection>
-                </div>
-                <div className="textarea">
-                    This is a editor
-                </div>
-            </div>
-        )
-    }
-}
+//import Selection from "./sidebar";
+//import {optionType} from "./docs/data";
+//import { JsonEditor as Editor } from 'jsoneditor-react';
+//import 'jsoneditor-react/es/editor.min.css';
+import Dashboard from './Dashboard';
 
 // ========================================
 
 ReactDOM.render(
-    <Editor />,
+    <Dashboard/>,
     document.getElementById('root')
 );
