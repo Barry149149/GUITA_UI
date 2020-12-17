@@ -1,9 +1,9 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { driverOption } from '../../docs/data';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import {Select, MenuItem}from '@material-ui/core';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,40 +18,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DriverSelect() {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-        framework:''
-    });
+    const [value, setValue] = useState('');
 
-    const handleChange = (event) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        });
-    };
+    const handleChange = e => setValue(e.target.value)
+
     return(
         <div>
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Driver
                 </InputLabel>
-                <NativeSelect
-                    value={state.age}
-                    onChange={handleChange}
-                    inputProps={{
-                        name: 'age',
-                        id: 'age-native-label-placeholder',
-                    }}
-                >
+                <Select
+                onChange={handleChange}>
+                    <MenuItem key="" value="">
+                        <em>None</em>
+                    </MenuItem>
                     {driverOption.map(({index,value,label}) => {
                         return (
-                            <option key={index} value={value}>
+                            <MenuItem key={index} value={value}>
                                 {label}
-                            </option>
+                            </MenuItem>
                         )
                     })
                     }
-                </NativeSelect>
+                </Select>
                 <FormHelperText>Select the driver for the assignment</FormHelperText>
             </FormControl>
         </div>
