@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import FrameworkSelect from './selectionBars/FrameworkSelect';
 import DriverSelect from './selectionBars/DriverSelect';
 import LanguageSelect from './selectionBars/LanguageSelect'
+import CaseTree from './testCaseTree/CaseTree';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -69,7 +70,6 @@ export default function CaseAndConfigTab() {
                     textColor="primary"
                     variant="scrollable"
                     scrollButtons="auto"
-                    aria-label="scrollable auto tabs example"
                 >
                     <Tab label="Configuration" {...a11yProps(0)} />
                     <Tab label="Test Cases" {...a11yProps(1)} />
@@ -83,7 +83,7 @@ export default function CaseAndConfigTab() {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Item Two
+                <CaseTree />
             </TabPanel>
         </div>
     );
