@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CaseAndConfigTab() {
+export default function CaseAndConfigTab(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -83,7 +83,16 @@ export default function CaseAndConfigTab() {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <CaseTree />
+                <CaseTree
+                    selectedCase={props.selectedCase}
+                    setSelectedCase={props.setSelectedCase}
+                    tree={props.tree}
+                    setTree={props.setTree}
+                    createdCases={props.createdCases}
+                    setCreatedCases={props.setCreatedCases}
+                    noOfCases={props.noOfCases}
+                    setNoOfCases={props.setNoOfCases}
+                />
             </TabPanel>
         </div>
     );

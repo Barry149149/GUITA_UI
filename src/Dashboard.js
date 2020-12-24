@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +13,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Chart from './Chart';
 import Deposits from './Deposits';
@@ -107,28 +106,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const [tree,setTree] = useState([
+    {
+      value: 'Test Cases',
+      nodes: [
+        { value: 'Test 1' },
+        { value: 'Test 2' }
+      ],
+    },
+  ]);
+  const [selectedCase,setSelectedCase] = useState(0);
+  const [createdCases,setCreatedCases] = useState(2);
+  const [noOfCases,setNoOfCases] = useState(2);
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+            GUITA Test Case Creator
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -146,7 +146,16 @@ export default function Dashboard() {
       >
         <Toolbar />
         <div className={classes.drawerContainer}>
-          <CaseAndConfigTab/>
+          <CaseAndConfigTab
+            selectedCase={selectedCase}
+            setSelectedCase={setSelectedCase}
+            tree={tree}
+            setTree={setTree}
+            createdCases={createdCases}
+            setCreatedCases={setCreatedCases}
+            noOfCases={noOfCases}
+            setNoOfCases={setNoOfCases}
+          />
         </div>
       </Drawer>
       <main className={classes.content}>

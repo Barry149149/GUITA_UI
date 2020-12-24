@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import MuiTreeView from 'material-ui-treeview';
 import Button from '@material-ui/core/Button';
-
-import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const styleSmallText={
     fontSize: 'small',
@@ -10,71 +13,75 @@ const styleSmallText={
     lineHeight: 0.8,
 }
 
-export default function CaseTree(){
+export default function CaseTree(props){
+    const [open, setOpen]= React.useState(false);
 
-     const [tree,setTree] = useState([
-        {
-            value: 'Test Cases',
-            nodes: [
-                { value: 'Test 1' },
-                { value: 'Test 2' }
-            ],
-        },
-    ]);
+    const handleOpen=()=>{
+        setOpen(true);
+    };
 
-    const [select,setSelect] = useState(0);
-
-    const [createdCases,setCreatedCases] = useState(2);
-
-    const [noOfCases,setNoOfCases] = useState(2)
-
-    const handleLeafClick=e=>setSelect(e.value);
+    const handleClose=()=>{
+        setOpen(false);
+    }
 
     return (
         <div>
-            <Box>
-                <Button
-                    variant= 'outlined'
-                    color= 'primary'
-                    size= 'small'
-                    onClick={()=>{
-                        tree[0].nodes.push({value: 'Test ' + (createdCases+1)});
-                        setTree(tree);
-                        setCreatedCases(createdCases+1);
-                        setNoOfCases(noOfCases+1)
-                    }
-                    }>Add</Button>
-                <Button
-                    variant= 'outlined'
-                    color= 'primary'
-                    size= 'small'
-                    onClick={()=>{
-                        for(let i=0; i < tree[0].nodes.length; i++) {
+            <MuiTreeView
+                tree={props.tree}
+                onLeafClick={e=>{props.setSelectedCase(e.value)}}
+            />
+            <Button
+                variant= 'outlined'
+                color= 'primary'
+                size= 'small'
 
-                            if(tree[0].nodes[i].value===select){
-                                tree[0].nodes.splice(i,1);
+                onClick={()=>{
+                    props.tree[0].nodes.push({value: 'Test ' + (props.createdCases+1)});
+                    props.setTree(props.tree);
+                    props.setCreatedCases(props.createdCases+1);
+                    props.setNoOfCases(props.noOfCases+1)
+                }
+                }>Add</Button>
+            <Button
+                variant= 'outlined'
+                color= 'primary'
+                size= 'small'
+                onClick={handleOpen}>
+                Delete
+            </Button>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle>{"Confirm Deletion"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText >
+                        Are you sure you want to delete this {props.selectedCase}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={()=>{
+                        for(let i=0; i < props.tree[0].nodes.length; i++) {
+
+                            if(props.tree[0].nodes[i].value===props.selectedCase){
+                                props.tree[0].nodes.splice(i,1);
                                 i--;
-                                setNoOfCases(noOfCases-1)
+                                props.setNoOfCases(props.noOfCases-1)
                             }
                         }
-                    }}>
-                    Delete
-                </Button>
-            </Box>
+                        handleClose();
+                    }} color="secondary" autoFocus>
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
-            <Box
-                component="div"
-                overflow="visible"
-            >
-            <MuiTreeView
-                tree={tree}
-                onLeafClick={handleLeafClick}
-            />
-            </Box>
-
-            <p style={styleSmallText}>Selected Case is {select}</p>
-            <p style={styleSmallText}>No. of Created Test Cases: {createdCases}</p>
-            <p style={styleSmallText}>No. of Test Cases: {noOfCases}</p>
+            <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
+            <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
+            <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>
 
 
         </div>
