@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -14,10 +13,11 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
 import CaseAndConfigTab from "./tab/Tab";
+import JSONInput from 'react-json-editor-ajrm';
+import locale    from 'react-json-editor-ajrm/locale/en';
+import SettingDialog from "./SettingDialog";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 
 
@@ -34,7 +34,7 @@ function Copyright() {
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -121,7 +121,8 @@ export default function Dashboard() {
   const [createdCases,setCreatedCases] = useState(2);
   const [noOfCases,setNoOfCases] = useState(2);
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [settingsOpen,setSettingsOpen] = useState(0);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -130,11 +131,13 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             GUITA Test Case Creator
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}}>
+            <SettingsIcon/>
           </IconButton>
+          <SettingDialog
+              open={settingsOpen}
+              setOpen={setSettingsOpen}
+          />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -160,27 +163,14 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
+        <Container className={classes.container}>
+          <JSONInput
+              id     = 'a_unique_id'
+              locale = { locale }
+              width  = "100%"
+              theme  = "dark_vscode_tribute"
+              onChange ={ (e) => {console.log(e.plainText)}}
+          />
           <Box pt={4}>
             <Copyright />
           </Box>

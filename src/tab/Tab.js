@@ -50,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
+    tab:{
+        minWidth: 120,
+        width: 120,
+    }
 }));
 
 export default function CaseAndConfigTab(props) {
@@ -68,11 +72,17 @@ export default function CaseAndConfigTab(props) {
                     onChange={handleChange}
                     indicatorColor="primary"
                     textColor="primary"
-                    variant="scrollable"
+                    variant="fullWidth"
                     scrollButtons="auto"
                 >
-                    <Tab label="Configuration" {...a11yProps(0)} />
-                    <Tab label="Test Cases" {...a11yProps(1)} />
+                    <Tab
+                        className={classes.tab}
+                        label="Configuration" {...a11yProps(0)}
+                    />
+                    <Tab
+                        className={classes.tab}
+                        label="Test Cases" {...a11yProps(1)}
+                    />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
