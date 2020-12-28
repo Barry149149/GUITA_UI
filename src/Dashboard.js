@@ -7,12 +7,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import CaseAndConfigTab from "./tab/Tab";
 import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
@@ -123,6 +119,8 @@ export default function Dashboard() {
 
   const [settingsOpen,setSettingsOpen] = useState(0);
 
+  const [darkTheme, setDarkTheme]=useState(true);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,6 +135,8 @@ export default function Dashboard() {
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}
+              darkTheme={darkTheme}
+              setDarkTheme={setDarkTheme}
           />
         </Toolbar>
       </AppBar>
@@ -168,7 +168,7 @@ export default function Dashboard() {
               id     = 'a_unique_id'
               locale = { locale }
               width  = "100%"
-              theme  = "dark_vscode_tribute"
+              theme  = {(darkTheme)?'dark_vscode_tribute':'light_mitsuketa_tribute'}
               onChange ={ (e) => {console.log(e.plainText)}}
           />
           <Box pt={4}>

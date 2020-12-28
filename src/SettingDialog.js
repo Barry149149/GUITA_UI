@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,8 +11,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
-import SettingsIcon from "@material-ui/icons/Settings";
-import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -33,57 +30,30 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SettingDialog(props) {
     const classes = useStyles();
-    const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth, setMaxWidth] = React.useState('sm');
 
     const handleClose = () => {
         props.setOpen(false);
     };
 
-    const handleMaxWidthChange = (event) => {
-        setMaxWidth(event.target.value);
-    };
 
-    const handleFullWidthChange = (event) => {
-        setFullWidth(event.target.checked);
+    const handleChange = (event) => {
+        props.setDarkTheme(event.target.checked);
     };
 
     return (
         <React.Fragment>
-
             <Dialog
-                fullWidth={fullWidth}
-                maxWidth={maxWidth}
                 open={props.open}
                 onClose={handleClose}
                 aria-labelledby="max-width-dialog-title"
             >
-                <DialogTitle id="max-width-dialog-title">Preference</DialogTitle>
+                <DialogTitle >Preference</DialogTitle>
                 <DialogContent>
                     <form className={classes.form} noValidate>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-                            <Select
-                                autoFocus
-                                value={maxWidth}
-                                onChange={handleMaxWidthChange}
-                                inputProps={{
-                                    name: 'max-width',
-                                    id: 'max-width',
-                                }}
-                            >
-                                <MenuItem value={false}>false</MenuItem>
-                                <MenuItem value="xs">xs</MenuItem>
-                                <MenuItem value="sm">sm</MenuItem>
-                                <MenuItem value="md">md</MenuItem>
-                                <MenuItem value="lg">lg</MenuItem>
-                                <MenuItem value="xl">xl</MenuItem>
-                            </Select>
-                        </FormControl>
                         <FormControlLabel
                             className={classes.formControlLabel}
-                            control={<Switch checked={fullWidth} onChange={handleFullWidthChange} />}
-                            label="Full width"
+                            control={<Switch checked={props.darkTheme} onChange={handleChange} />}
+                            label={(props.darkTheme)?"Dark Theme":"Light Theme"}
                         />
                     </form>
                 </DialogContent>
