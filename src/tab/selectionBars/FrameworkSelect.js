@@ -16,11 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FrameWorkSelect() {
+export default function FrameWorkSelect(props) {
     const classes = useStyles();
-    const [value, setValue] = useState('');
 
-    const handleChange = e => setValue(e.target.value)
+    const handleChange = e => props.setFramework(e.target.value);
 
     return(
         <div>

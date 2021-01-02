@@ -28,16 +28,14 @@ export default function CaseTree(props){
         <div>
             <MuiTreeView
                 tree={props.tree}
-                onLeafClick={e=>{props.setSelectedCase(e.value)}}
+                onLeafClick={e=>{props.setSelectedCase(e.id)}}
             />
             <Button
                 variant= 'outlined'
                 color= 'primary'
-                size= 'small'
-
+                fullWidth={true}
                 onClick={()=>{
-                    props.tree[0].nodes.push({value: 'Test ' + (props.createdCases+1)});
-                    props.setTree(props.tree);
+                    props.tree[0].nodes.push({id: (props.createdCases+1), value: 'Test ' + (props.createdCases+1), json:{name: 'Test'+(props.createdCases+1)}});
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
                 }
@@ -45,9 +43,16 @@ export default function CaseTree(props){
             <Button
                 variant= 'outlined'
                 color= 'primary'
-                size= 'small'
+                fullWidth={true}
                 onClick={handleOpen}>
                 Delete
+            </Button>
+            <Button
+                variant= 'outlined'
+                color= 'primary'
+                fullWidth={true}
+                onClick={()=>{props.setOpenCase(props.selectedCase)}}>
+                Open
             </Button>
             <Dialog
                 open={open}
@@ -66,19 +71,25 @@ export default function CaseTree(props){
                     <Button onClick={()=>{
                         for(let i=0; i < props.tree[0].nodes.length; i++) {
 
-                            if(props.tree[0].nodes[i].value===props.selectedCase){
+                            if(props.tree[0].nodes[i].id===props.selectedCase){
                                 props.tree[0].nodes.splice(i,1);
                                 i--;
                                 props.setNoOfCases(props.noOfCases-1)
                             }
                         }
                         handleClose();
-                    }} color="secondary" autoFocus>
+                    }}
+                            color="secondary"
+                            autoFocus
+                    >
                         Delete
                     </Button>
                 </DialogActions>
+
+
             </Dialog>
 
+            <p style={styleSmallText}>Opened Case is {props.openCase}</p>
             <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
             <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
             <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>

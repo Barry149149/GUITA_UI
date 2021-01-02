@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Dashboard from './Dashboard';
+import Editor from './Editor';
 
 // ========================================
 
 ReactDOM.render(
-    <Dashboard/>,
+    <Editor/>,
     document.getElementById('root')
 );

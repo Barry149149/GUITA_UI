@@ -16,11 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function LanguageSelect() {
+export default function Language0Select(props) {
     const classes = useStyles();
-    const [value, setValue] = useState('');
 
-    const handleChange = e => setValue(e.target.value)
+    const handleChange = e => props.setLanguage(e.target.value);
 
     return(
         <div>

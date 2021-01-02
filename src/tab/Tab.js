@@ -51,8 +51,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
     tab:{
-        minWidth: 120,
-        width: 120,
+        minWidth: 90,
+        width: 90,
+        fontSize: 10,
+        maxHeight: 25,
     }
 }));
 
@@ -77,7 +79,7 @@ export default function CaseAndConfigTab(props) {
                 >
                     <Tab
                         className={classes.tab}
-                        label="Configuration" {...a11yProps(0)}
+                        label="configuration" {...a11yProps(0)}
                     />
                     <Tab
                         className={classes.tab}
@@ -87,9 +89,18 @@ export default function CaseAndConfigTab(props) {
             </AppBar>
             <TabPanel value={value} index={0}>
                 <div>
-                    <LanguageSelect/>
-                    <FrameworkSelect/>
-                    <DriverSelect/>
+                    <LanguageSelect
+                        language={props.language}
+                        setLanguage={props.setLanguage}
+                    />
+                    <FrameworkSelect
+                        framework={props.framework}
+                        setFramework={props.setFramework}
+                    />
+                    <DriverSelect
+                        driver={props.driver}
+                        setDriver={props.setDriver}
+                    />
                 </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -102,6 +113,8 @@ export default function CaseAndConfigTab(props) {
                     setCreatedCases={props.setCreatedCases}
                     noOfCases={props.noOfCases}
                     setNoOfCases={props.setNoOfCases}
+                    openCase={props.openCase}
+                    setOpenCase={props.setOpenCase}
                 />
             </TabPanel>
         </div>

@@ -11,6 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Switch from '@material-ui/core/Switch';
+import {Slider} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -50,6 +51,12 @@ export default function SettingDialog(props) {
                 <DialogTitle >Preference</DialogTitle>
                 <DialogContent>
                     <form className={classes.form} noValidate>
+                        <p>font size: {props.fontSize}</p>
+                        <Slider
+                            value={props.fontSize}
+                            valueLabelDisplay="auto"
+                            onChange={(e, newValue)=>{props.setFontSize(newValue)}}
+                        />
                         <FormControlLabel
                             className={classes.formControlLabel}
                             control={<Switch checked={props.darkTheme} onChange={handleChange} />}

@@ -14,7 +14,7 @@ import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
-
+import Button from '@material-ui/core/Button';
 
 
 function Copyright() {
@@ -30,7 +30,7 @@ function Copyright() {
   );
 }
 
-const drawerWidth = 300;
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,14 +53,6 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  /*appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },*/
   menuButton: {
     marginRight: 36,
   },
@@ -103,25 +95,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Editor() {
 
   const classes = useStyles();
+
+  //this is for the test case management
+  const [driver,setDriver] = useState('');
+  const [language, setLanguage] = useState('');
+  const [framework,setFramework] = useState('');
+
   const [tree,setTree] = useState([
     {
       value: 'Test Cases',
       nodes: [
-        { value: 'Test 1' },
-        { value: 'Test 2' }
+        {id:1, value: 'Test 1', json: {name: 'Test 1'} },
       ],
     },
   ]);
   const [selectedCase,setSelectedCase] = useState(0);
-  const [createdCases,setCreatedCases] = useState(2);
-  const [noOfCases,setNoOfCases] = useState(2);
+  const [openCase,setOpenCase] = useState(1);
+  const [createdCases,setCreatedCases] = useState(1);
+  const [noOfCases,setNoOfCases] = useState(1);
 
-  const [settingsOpen,setSettingsOpen] = useState(0);
+  //this is for the open of the setting page
+  const [settingsOpen,setSettingsOpen] = useState(false);
 
+  //this is for the editor
   const [darkTheme, setDarkTheme]=useState(true);
+  const [fontSize, setFontSize] = useState(14);
+
+  const [tempJson,setTempJson] = useState('');
 
   return (
     <div className={classes.root}>
@@ -139,6 +142,8 @@ export default function Dashboard() {
               setOpen={setSettingsOpen}
               darkTheme={darkTheme}
               setDarkTheme={setDarkTheme}
+              fontSize={fontSize}
+              setFontSize={setFontSize}
           />
         </Toolbar>
       </AppBar>
@@ -160,6 +165,14 @@ export default function Dashboard() {
             setCreatedCases={setCreatedCases}
             noOfCases={noOfCases}
             setNoOfCases={setNoOfCases}
+            driver={driver}
+            setDriver={setDriver}
+            language={language}
+            setLanguage={setLanguage}
+            framework={framework}
+            setFramework={setFramework}
+            openCase={openCase}
+            setOpenCase={setOpenCase}
           />
         </div>
       </Drawer>
@@ -170,9 +183,47 @@ export default function Dashboard() {
               id     = 'a_unique_id'
               locale = { locale }
               width  = "100%"
-              theme  = {(darkTheme)?'dark_vscode_tribute':'light_mitsuketa_tribute'}
-              onChange ={ (e) => {console.log(e.plainText)}}
+              height = "550px"
+              placeholder = {tree[0].nodes.find(x=>x.id === openCase).json}
+              colors = {(darkTheme)?{
+                default: '#D4D4D4',
+                background: '#1E1E1E',
+                background_warning: '#1E1E1E',
+                string: '#CE8453',
+                number: '#B5CE9F',
+                colon: '#49B8F7',
+                keys: '#9CDCFE',
+                keys_whiteSpace: '#AF74A5',
+                primitive: '#6392C6'
+              }:
+              {
+                default: '#000000',
+                background: '#FFFFFF',
+                background_warning: '#FEECEB',
+                string: '#FA7921',
+                number: '#70CE35',
+                colon: '#49B8F7',
+                keys: '#59A5D8',
+                keys_whiteSpace: '#835FB6',
+                primitive: '#386FA4'
+              }
+              }
+              style = {{
+                body: {
+                  fontSize: fontSize,
+                  fontWeight: 800,
+                }
+              }}
+              onChange = {(e)=>{setTempJson(e.jsObject)}}
           />
+          <Box pt={4}>
+            <Button
+            color='primary'
+            onClick={()=>{tree[0].nodes.find(x=>x.id === openCase).json=tempJson}}
+            >
+              Save
+            </Button>
+          </Box>
           <Box pt={4}>
             <Copyright />
           </Box>

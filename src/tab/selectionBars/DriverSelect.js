@@ -16,11 +16,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function DriverSelect() {
+export default function DriverSelect(props) {
     const classes = useStyles();
-    const [value, setValue] = useState('');
 
-    const handleChange = e => setValue(e.target.value)
+    const handleChange = e => props.setDriver(e.target.value);
 
     return(
         <div>
