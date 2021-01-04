@@ -114,8 +114,6 @@ export default function CaseAndConfigTab(props) {
                     setCreatedCases={props.setCreatedCases}
                     noOfCases={props.noOfCases}
                     setNoOfCases={props.setNoOfCases}
-                    openCase={props.openCase}
-                    setOpenCase={props.setOpenCase}
                 />
             </TabPanel>
         </div>
