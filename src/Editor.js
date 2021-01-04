@@ -214,16 +214,8 @@ export default function Editor() {
                   fontWeight: 800,
                 }
               }}
-              onChange = {(e)=>{setTempJson(e.jsObject)}}
+              onChange = {(e)=>{tree[0].nodes.find(x=>x.id === openCase).json=e.jsObject}}
           />
-          <Box pt={4}>
-            <Button
-            color='primary'
-            onClick={()=>{tree[0].nodes.find(x=>x.id === openCase).json=tempJson}}
-            >
-              Save
-            </Button>
-          </Box>
           <Box pt={4}>
             <Copyright />
           </Box>

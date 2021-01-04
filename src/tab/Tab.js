@@ -104,6 +104,7 @@ export default function CaseAndConfigTab(props) {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
+
                 <CaseTree
                     selectedCase={props.selectedCase}
                     setSelectedCase={props.setSelectedCase}
