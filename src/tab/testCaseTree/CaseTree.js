@@ -16,10 +16,21 @@ const styleSmallText={
 
 export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
+    const [warningOpen, setWarningOpen] = React.useState(false)
 
-    const handleOpen=()=>{
-        setOpen(true);
+    const handleWarningOpen=()=>{
+        if(props.tree[0].nodes.length<=1){
+            setWarningOpen(true)
+        }
+        else {
+            setOpen(true);
+        }
     };
+
+    const handleWarningClose=()=>{
+        setWarningOpen(false)
+    }
+
 
     const handleClose=()=>{
         setOpen(false);
@@ -37,7 +48,7 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 onClick={()=>{
-                    props.tree[0].nodes.push({id: (props.createdCases+1), value: 'Test ' + (props.createdCases+1), json:{name: 'Test'+(props.createdCases+1)}});
+                    props.tree[0].nodes.push({id: (props.createdCases+1), value: 'Test ' + (props.createdCases+1), json:{name: 'Test '+(props.createdCases+1)}});
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
                 }
@@ -46,15 +57,8 @@ export default function CaseTree(props){
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
-                onClick={handleOpen}>
+                onClick={handleWarningOpen}>
                 Delete
-            </Button>
-            <Button
-                variant= 'outlined'
-                color= 'primary'
-                fullWidth={true}
-                onClick={()=>{props.setOpenCase(props.selectedCase)}}>
-                Open
             </Button>
             <Dialog
                 open={open}
@@ -79,6 +83,7 @@ export default function CaseTree(props){
                                 props.setNoOfCases(props.noOfCases-1)
                             }
                         }
+                        props.setSelectedCase(props.tree[0].nodes[0].id);
                         handleClose();
                     }}
                             color="secondary"
@@ -87,11 +92,24 @@ export default function CaseTree(props){
                         Delete
                     </Button>
                 </DialogActions>
-
-
+            </Dialog>
+            <Dialog
+                open={warningOpen}
+                onClose={handleClose}
+            >
+                <DialogTitle>{"Confirm Deletion"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText >
+                        You cannot delete the last test case
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleWarningClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
 
-            <p style={styleSmallText}>Opened Case is {props.openCase}</p>
             <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
             <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
             <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>

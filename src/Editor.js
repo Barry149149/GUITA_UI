@@ -14,7 +14,6 @@ import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Button from '@material-ui/core/Button';
 
 
 function Copyright() {
@@ -112,8 +111,7 @@ export default function Editor() {
       ],
     },
   ]);
-  const [selectedCase,setSelectedCase] = useState(0);
-  const [openCase,setOpenCase] = useState(1);
+  const [selectedCase,setSelectedCase] = useState(1);
   const [createdCases,setCreatedCases] = useState(1);
   const [noOfCases,setNoOfCases] = useState(1);
 
@@ -124,7 +122,6 @@ export default function Editor() {
   const [darkTheme, setDarkTheme]=useState(true);
   const [fontSize, setFontSize] = useState(14);
 
-  const [tempJson,setTempJson] = useState('');
 
   return (
     <div className={classes.root}>
@@ -171,8 +168,6 @@ export default function Editor() {
             setLanguage={setLanguage}
             framework={framework}
             setFramework={setFramework}
-            openCase={openCase}
-            setOpenCase={setOpenCase}
           />
         </div>
       </Drawer>
@@ -184,7 +179,7 @@ export default function Editor() {
               locale = { locale }
               width  = "100%"
               height = "550px"
-              placeholder = {tree[0].nodes.find(x=>x.id === openCase).json}
+              placeholder = {tree[0].nodes.find(x=>x.id === selectedCase).json}
               colors = {(darkTheme)?{
                 default: '#D4D4D4',
                 background: '#1E1E1E',
@@ -216,7 +211,7 @@ export default function Editor() {
               }}
               onChange = {(e)=>{
                 if(!e.error) {
-                  tree[0].nodes.find(x => x.id === openCase).json = e.jsObject;
+                  tree[0].nodes.find(x => x.id === selectedCase).json = e.jsObject;
                 }
               }
               }
