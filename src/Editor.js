@@ -15,6 +15,7 @@ import locale    from 'react-json-editor-ajrm/locale/en';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Button from '@material-ui/core/Button';
+import UploadFiles from "./components/upload-files.component";
 
 
 function Copyright() {
@@ -223,6 +224,9 @@ export default function Editor() {
           />
           <Box pt={4}>
             <Copyright />
+          </Box>
+          <Box pt={4}>
+            <UploadFiles />
           </Box>
         </Container>
       </main>
