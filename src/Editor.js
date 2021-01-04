@@ -218,7 +218,7 @@ export default function Editor() {
               }
               }
           />
-          <Box pt={4}>
+          <Box pt={2}>
             <Copyright />
           </Box>
           <Box pt={4}>
