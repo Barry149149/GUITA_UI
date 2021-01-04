@@ -214,7 +214,12 @@ export default function Editor() {
                   fontWeight: 800,
                 }
               }}
-              onChange = {(e)=>{tree[0].nodes.find(x=>x.id === openCase).json=e.jsObject}}
+              onChange = {(e)=>{
+                if(!e.error) {
+                  tree[0].nodes.find(x => x.id === openCase).json = e.jsObject;
+                }
+              }
+              }
           />
           <Box pt={4}>
             <Copyright />
