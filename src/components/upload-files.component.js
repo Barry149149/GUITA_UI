@@ -140,10 +140,7 @@ export default class UploadFiles extends Component {
         <Typography variant="subtitle2" className={`upload-message ${isError ? "error" : ""}`}>
           {message}
         </Typography>
-
-        <Typography variant="h6" className="list-header">
-          List of Files
-          </Typography>
+        
         <ul className="list-group">
           {fileInfos &&
             fileInfos.map((file, index) => (
