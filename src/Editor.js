@@ -14,11 +14,8 @@ import JSONInput from 'react-json-editor-ajrm';
 import locale    from 'react-json-editor-ajrm/locale/en';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
-<<<<<<< HEAD
-import Button from '@material-ui/core/Button';
 import UploadFiles from "./components/upload-files.component";
-=======
->>>>>>> 2466b02bb5eec63024ba88de200dfb7471366588
+
 
 
 function Copyright() {
