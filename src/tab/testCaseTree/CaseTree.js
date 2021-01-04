@@ -31,7 +31,7 @@ export default function CaseTree(props){
                 tree={props.tree}
                 onLeafClick={e=>{props.setSelectedCase(e.id)}}
             />
-            <Box pt={1} />
+            <Box pt={4} />
             <Button
                 variant= 'outlined'
                 color= 'primary'
