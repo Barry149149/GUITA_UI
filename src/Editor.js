@@ -15,7 +15,7 @@ import locale    from 'react-json-editor-ajrm/locale/en';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
 import UploadFiles from "./components/upload-files.component";
-
+import FileIO from "./FileIO";
 
 
 function Copyright() {
