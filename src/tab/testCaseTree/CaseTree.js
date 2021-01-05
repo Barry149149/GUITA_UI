@@ -48,7 +48,13 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 onClick={()=>{
-                    props.tree[0].nodes.push({id: (props.createdCases+1), value: 'Test ' + (props.createdCases+1), json:{name: 'Test '+(props.createdCases+1)}});
+                    props.tree[0].nodes.push({
+                        id: (props.createdCases+1),
+                        value: 'Test ' + (props.createdCases+1),
+                        json:[{
+                            "command": "Test "+(props.createdCases+1)
+                        }]
+                    });
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
                 }

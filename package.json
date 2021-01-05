@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "jsoneditor": "^9.1.2",
     "jsoneditor-react": "^3.0.1",
+    "material-editable-table": "0.0.3",
     "material-ui-tree": "^2.2.3",
     "material-ui-treeview": "^5.0.0",
     "prop-types": "^15.7.2",
@@ -22,6 +23,7 @@
     "react-scripts": "^4.0.0",
     "react-select": "^3.1.1",
     "react-spring": "^8.0.27",
+    "react-swipeable-views": "^0.13.9",
     "recharts": "^1.8.5"
   },
   "scripts": {
