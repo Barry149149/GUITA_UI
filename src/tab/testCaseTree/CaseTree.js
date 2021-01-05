@@ -48,7 +48,13 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 onClick={()=>{
-                    props.tree[0].nodes.push({id: (props.createdCases+1), value: 'Test ' + (props.createdCases+1), json:{name: 'Test '+(props.createdCases+1)}});
+                    props.tree[0].nodes.push({
+                        id: (props.createdCases+1),
+                        value: 'Test ' + (props.createdCases+1),
+                        json:[{
+                            "command": "Test "+(props.createdCases+1)
+                        }]
+                    });
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
                 }
@@ -59,6 +65,22 @@ export default function CaseTree(props){
                 fullWidth={true}
                 onClick={handleWarningOpen}>
                 Delete
+            </Button>
+            <Button
+                variant= 'outlined'
+                color= 'primary'
+                fullWidth={true}
+                onClick={()=>{
+                    const fileData = JSON.stringify(props.tree[0].nodes[props.selectedCase-1].json);
+                    const blob = new Blob([fileData], {type: "text/plain"});
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = 'test'+props.selectedCase+'.json';
+                    link.href = url;
+                    link.click();
+                }
+                }>
+                Download
             </Button>
             <Dialog
                 open={open}

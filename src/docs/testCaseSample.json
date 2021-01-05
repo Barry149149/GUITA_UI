@@ -1,0 +1,150 @@
+[
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "startButton",
+    "setVariable": "startButton"
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "startButton"
+    }
+  },
+  {
+    "command": "sleep",
+    "time": 2
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_1_5",
+    "setVariable": "square_f2"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_2_5",
+    "setVariable": "square_f3"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_6_4",
+    "setVariable": "square_e7"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_4_4",
+    "setVariable": "square_e5"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_1_6",
+    "setVariable": "square_g2"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_3_6",
+    "setVariable": "square_g4"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_7_3",
+    "setVariable": "square_d8"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "square_3_7",
+    "setVariable": "square_h4"
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_f2"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_f3"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_e7"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_e5"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_g2"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_g4"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_d8"
+    }
+  },
+  {
+    "command": "click",
+    "widget": {
+      "type": "variable",
+      "value": "square_h4"
+    }
+  },
+  {
+    "command": "getText",
+    "widget": {
+      "type": "variable",
+      "value": "square_f3"
+    },
+    "setVariable": "square_f3_text"
+  },
+  {
+    "command": "assertEqual",
+    "valueLhs": {
+      "type": "variable",
+      "value": "square_f3_text"
+    },
+    "valueRhs": "p"
+  },
+  {
+    "command": "locateByWidgetName",
+    "widgetName": "checkmate",
+    "setVariable": "checkmate"
+  },
+  {
+    "command": "isVisible",
+    "widget": {
+      "type": "variable",
+      "value": "checkmate"
+    },
+    "setVariable": "checkmate_visible"
+  },
+  {
+    "command": "assert",
+    "value": {
+      "type": "variable",
+      "value": "checkmate_visible"
+    }
+  }
+]
