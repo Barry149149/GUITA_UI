@@ -29,6 +29,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Collapse from '@material-ui/core/Collapse';
 import SchemaForm from 'jsonschema-form-for-material-ui';
+import Form from '@rjsf/material-ui';
 import {commandList} from "./docs/commandList";
 import {FormControl} from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
@@ -417,7 +418,6 @@ export default function Editor() {
                           command: e.target.value,
                           schema: commandList.find(x => x.command === e.target.value).schema
                         });
-
                     }}
                     value={cmdSchema.command}
                   >
@@ -430,7 +430,7 @@ export default function Editor() {
                     })}
                   </Select>
                 </FormControl>
-                <SchemaForm
+                <Form
                     classes={classes.form}
                     schema={cmdSchema.schema}
                     onSubmit={()=>{}}
