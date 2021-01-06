@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver';
 
 const styleSmallText={
     fontSize: 'small',
@@ -71,13 +73,24 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 onClick={()=>{
-                    const fileData = JSON.stringify(props.tree[0].nodes[props.selectedCase-1].json);
-                    const blob = new Blob([fileData], {type: "text/plain"});
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.download = 'test'+props.selectedCase+'.json';
-                    link.href = url;
-                    link.click();
+                    var zip = new JSZip();
+                    for(const index in props.tree[0].nodes){
+                        //const fileData = JSON.stringify(props.tree[0].nodes[props.selectedCase-1].json);
+                        const fileData = JSON.stringify(props.tree[0].nodes[index].json);
+                        //zip.file('testcase'+props.selectedCase+'.json', fileData);
+                        zip.file('testcase'+props.tree[0].nodes[index].id+'.json', fileData);
+                    }
+                    zip.generateAsync({type:"blob"})
+                    .then(function(content) {
+                        // see FileSaver.js
+                        saveAs(content, "testcases.zip");
+                    });
+                    //const blob = new Blob([fileData], {type: "text/plain"});
+                    //const url = URL.createObjectURL(blob);
+                    //const link = document.createElement('a');
+                    //link.download = 'testcase'+props.selectedCase+'.json';
+                    //link.href = url;
+                    //link.click();
                 }
                 }>
                 Download
