@@ -95,6 +95,12 @@ export default function CaseTree(props){
                 }>
                 Download
             </Button>
+            <Button
+                variant= 'outlined'
+                color= 'primary'
+                fullWidth={true}>
+                Open
+            </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
