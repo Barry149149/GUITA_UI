@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -263,11 +263,20 @@ export default function Editor() {
   const [fontSize, setFontSize] = useState(14);
 
   const [tabValue, setTabValue] = React.useState(0);
-  const [command,setCommand]=useState('None')
+  const [cmdSchema,setCmdSchema]=useState({
+    command:'None',
+    schema: {
+      "type":"object",
+    }
+  })
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  useEffect(() =>{
+
+  });
 
   return (
     <div className={classes.root}>
@@ -401,8 +410,16 @@ export default function Editor() {
                     Command
                   </InputLabel>
                   <Select
-                    onChange={e=>{setCommand(e.target.value)}}
-                    value={command}
+                    onChange={e=>{
+                      //Should be update through this onChange
+                      setCmdSchema({
+                        ...cmdSchema,
+                          command: e.target.value,
+                          schema: commandList.find(x => x.command === e.target.value).schema
+                        });
+
+                    }}
+                    value={cmdSchema.command}
                   >
                     {commandList.map(({index,command})=>{
                       return(
@@ -415,10 +432,8 @@ export default function Editor() {
                 </FormControl>
                 <SchemaForm
                     classes={classes.form}
-                    schema={commandList.find(x=>x.command===command).schema}
-                    onChange={()=>{}}
+                    schema={cmdSchema.schema}
                     onSubmit={()=>{}}
-                    onError={()=>{}}
                 />
               </div>
             </TabPanel>
