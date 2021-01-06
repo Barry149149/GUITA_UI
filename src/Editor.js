@@ -28,6 +28,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Collapse from '@material-ui/core/Collapse';
+import SchemaForm from 'jsonschema-form-for-material-ui';
+import {commandList} from "./docs/commandList";
+import {FormControl} from "@material-ui/core";
+import InputLabel from '@material-ui/core/InputLabel';
+import {Select, MenuItem}from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -121,6 +126,14 @@ const useStyles = makeStyles((theme) => ({
       tableLayout: 'fixed'
     },
   },
+  formControl: {
+    margin: theme.spacing(2),
+    marginLeft: theme.spacing(2.5),
+    minWidth: 120,
+  },
+  form:{
+    minHeight: 200,
+  }
 }));
 
 function TabPanel(props) {
@@ -155,6 +168,7 @@ function a11yProps(index) {
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
+
 
 function Row(props){
   const {row} =props;
@@ -249,6 +263,7 @@ export default function Editor() {
   const [fontSize, setFontSize] = useState(14);
 
   const [tabValue, setTabValue] = React.useState(0);
+  const [command,setCommand]=useState('None')
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -378,6 +393,33 @@ export default function Editor() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
+              <Box pt={1}></Box>
+              <div  style={{ overflow: 'auto', height: '300px' , background:'#FFFFFF'}}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel>
+                    Command
+                  </InputLabel>
+                  <Select
+                    onChange={e=>{setCommand(e.target.value)}}
+                    value={command}
+                  >
+                    {commandList.map(({index,command})=>{
+                      return(
+                          <MenuItem key={index} value={command}>
+                            {command}
+                          </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+                <SchemaForm
+                    classes={classes.form}
+                    schema={commandList.find(x=>x.command===command).schema}
+                    onChange={()=>{}}
+                    onSubmit={()=>{}}
+                    onError={()=>{}}
+                />
               </div>
             </TabPanel>
         </Container>
