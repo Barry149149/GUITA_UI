@@ -82,7 +82,7 @@ export const commandList=[
             "properties":{
                 "command":{
                     "type":"string",
-                    "default":"sleep",
+                    "default":"getText",
                     "readOnly": true
                 },
                 "widget":{
@@ -200,11 +200,11 @@ export const commandList=[
                     "properties": {
                         "value":{
                             "type":"string",
-                            "title":"Widget Value"
+                            "title":"Value"
                         },
                         "type":{
                             "type":"string",
-                            "title":"Widget Type"
+                            "title":"Type"
                         }
                     }
                 }
