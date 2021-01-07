@@ -10,7 +10,13 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"click",
+                    "readOnly": true
+                },
                 "widget":{
+                    "title":"",
                     "type":"object",
                     "required":[
                         "value",
@@ -35,6 +41,11 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"click",
+                    "readOnly": true
+                },
                 "widgetName":{
                     "type":"string",
                     "title":"Widget Name"
@@ -52,6 +63,11 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"sleep",
+                    "readOnly": true
+                },
                 "time":{
                     "type":"number",
                     "title":"Sleep Time"
@@ -64,7 +80,13 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"sleep",
+                    "readOnly": true
+                },
                 "widget":{
+                    "title":"",
                     "type":"object",
                     "required":[
                         "value",
@@ -93,7 +115,13 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
+                "command":{
+                    "default":"assertEqual",
+                    "type":"string",
+                    "readOnly": true
+                },
                 "valueLhs":{
+                    "title":"",
                     "type":"object",
                     "required":[
                         "value",
@@ -122,7 +150,13 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"isVisible",
+                    "readOnly": true
+                },
                 "widget":{
+                    "title":"",
                     "type":"object",
                     "required":[
                         "value",
@@ -151,7 +185,13 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
+                "command":{
+                    "type":"string",
+                    "default":"assert",
+                    "readOnly": true
+                },
                 "value":{
+                    "title":"",
                     "type":"object",
                     "required":[
                         "value",
@@ -172,4 +212,5 @@ export const commandList=[
         }
     },
 ]
+
 

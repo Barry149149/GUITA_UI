@@ -28,12 +28,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Collapse from '@material-ui/core/Collapse';
-import SchemaForm from 'jsonschema-form-for-material-ui';
 import Form from '@rjsf/material-ui';
 import {commandList} from "./docs/commandList";
 import {FormControl} from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
 import {Select, MenuItem}from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Grow from '@material-ui/core/Grow';
+import Button from '@material-ui/core/Button';
 
 function Copyright() {
   return (
@@ -121,8 +124,7 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       borderBottom: 'unset',
       backgroundColor: '#FFFFFF',
-      borderRadius: 1,
-      boxShadow: '0 3px 3px 3px rgba(70, 70, 70, .3)',
+      borderRadius: 0,
       padding: '0 30px',
       tableLayout: 'fixed'
     },
@@ -133,7 +135,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   form:{
-    minHeight: 200,
+    minHeight: 180,
+    marginTop:0,
+    width: 300,
   }
 }));
 
@@ -179,13 +183,13 @@ function Row(props){
   return(
       <React.Fragment className={classes.table}>
         <TableRow >
-          <TableCell width='30px'>
+          <TableCell component="th" scope="row"  align="left">
+            {row.command}
+          </TableCell>
+          <TableCell align="right">
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row"  align="left">
-            {row.command}
           </TableCell>
         </TableRow>
         <TableRow>
@@ -198,24 +202,24 @@ function Row(props){
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>WidgetName</TableCell>
-                      <TableCell>widget</TableCell>
-                      <TableCell>setVariable</TableCell>
-                      <TableCell>valueLhs</TableCell>
-                      <TableCell>valueRhs</TableCell>
-                      <TableCell>time</TableCell>
-                      <TableCell>value</TableCell>
+                      {(row.widgetName===undefined)?null:<TableCell>WidgetName</TableCell>}
+                      {(row.widget===undefined)?null:<TableCell>widget</TableCell>}
+                      {(row.setVariable===undefined)?null:<TableCell>setVariable</TableCell>}
+                      {(row.valueLhs===undefined)?null:<TableCell>valueLhs</TableCell>}
+                      {(row.valueRhs===undefined)?null:<TableCell>valueRhs</TableCell>}
+                      {(row.time===undefined)?null:<TableCell>time</TableCell>}
+                      {(row.value===undefined)?null:<TableCell>value</TableCell>}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableCell component="th" scope="row">{(row.widgetName===undefined)?" ":row.widgetName}</TableCell>
-                      <TableCell>{(row.widget===undefined)?" ":"Type: "+ row.widget.type+", Value: "+row.widget.value}</TableCell>
-                      <TableCell>{(row.setVariable===undefined)?" ":row.setVariable}</TableCell>
-                      <TableCell>{(row.valueLhs===undefined)?" ":"Type: "+row.valueLhs.type+", Value:"+row.valueLhs.value}</TableCell>
-                      <TableCell>{(row.valueRhs===undefined)?" ":row.valueRhs}</TableCell>
-                      <TableCell>{(row.time===undefined)?" ":row.time}</TableCell>
-                      <TableCell>{(row.value===undefined)?" ":"Type: "+row.value.type+", Value:"+row.value.value}</TableCell>
+                      {(row.widgetName===undefined)?null:<TableCell component="th" scope="row">row.widgetName</TableCell>}
+                      {(row.widget===undefined)?null:<TableCell>"Type: "+ row.widget.type+", Value: "+row.widget.value</TableCell>}
+                      {(row.setVariable===undefined)?null:<TableCell>row.setVariable</TableCell>}
+                      {(row.valueLhs===undefined)?null:<TableCell>"Type: "+row.valueLhs.type+", Value:"+row.valueLhs.value</TableCell>}
+                      {(row.valueRhs===undefined)?null:<TableCell>row.valueRhs</TableCell>}
+                      {(row.time===undefined)?null:<TableCell>row.time</TableCell>}
+                      {(row.value===undefined)?null:<TableCell>"Type: "+row.value.type+", Value:"+row.value.value</TableCell>}
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -258,6 +262,7 @@ export default function Editor() {
 
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
+  const [formOpen,setFormOpen] = useState(false);
 
   //this is for the editor
   const [darkTheme, setDarkTheme]=useState(true);
@@ -268,7 +273,8 @@ export default function Editor() {
     command:'None',
     schema: {
       "type":"object",
-    }
+    },
+    formData:''
   })
 
   const handleChange = (event, newValue) => {
@@ -337,8 +343,8 @@ export default function Editor() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container className={classes.container}>
             <TabPanel value={tabValue} index={0}>
+              <Container className={classes.container}>
                 <JSONInput
                     id     = 'a_unique_id'
                     locale = { locale }
@@ -381,63 +387,89 @@ export default function Editor() {
                     }
                     }
                   />
-              <Box pt={2}>
-                <Copyright />
-              </Box>
-              <Box pt={4}>
-                <UploadFiles />
-              </Box>
+                  <Box pt={2}>
+                    <Copyright />
+                  </Box>
+                  <Box pt={4}>
+                    <UploadFiles />
+                  </Box>
+               </Container>
             </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <div style={{ overflow: 'auto', height: '550px' }}>
-              <Table className={classes.table} >
-                <TableHead>
-                  <TableRow>
-                    <TableCell/>
-                    <TableCell> Command </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {tree[0].nodes.find(x => x.id === selectedCase).json.map(row=>(
-                      <Row key={row.command} row={row}/>
-                  ))}
-                </TableBody>
-              </Table>
-              </div>
-              <Box pt={1}></Box>
-              <div  style={{ overflow: 'auto', height: '300px' , background:'#FFFFFF'}}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel>
-                    Command
-                  </InputLabel>
-                  <Select
-                    onChange={e=>{
-                      //Should be update through this onChange
-                      setCmdSchema({
-                        ...cmdSchema,
-                          command: e.target.value,
-                          schema: commandList.find(x => x.command === e.target.value).schema
-                        });
-                    }}
-                    value={cmdSchema.command}
-                  >
-                    {commandList.map(({index,command})=>{
-                      return(
-                          <MenuItem key={index} value={command}>
-                            {command}
-                          </MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
-                <Form
-                    classes={classes.form}
-                    schema={cmdSchema.schema}
-                    onSubmit={()=>{}}
-                />
-              </div>
-            </TabPanel>
-        </Container>
+        <TabPanel value={tabValue} index={1}>
+          <div maxHeight={(formOpen)?0:50}>
+          <Grow in={!formOpen}>
+            <Button onClick={()=>{setFormOpen(true)}} style={{float:'right'}}>
+              ADD
+            </Button>
+          </Grow>
+          </div>
+          <Grid container spacing={2}>
+            <Grid item xs={(formOpen)?8:12}>
+          <div style={{ overflow: 'auto', maxHeight: '550px' }}>
+            <Paper>
+                <Table >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left"> Command </TableCell>
+                      <TableCell/>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tree[0].nodes.find(x => x.id === selectedCase).json.map(row=>(
+                        <Row key={row.command} row={row}/>
+                    ))}
+                  </TableBody>
+                </Table>
+            </Paper>
+          </div>
+            </Grid>
+            <Grow in={formOpen} timeout={(formOpen)?1000:0}>
+              <Grid item xs={4}>
+                <Paper>
+                  <Button onClick={()=>{setFormOpen(false)}} style={{float:'right'}}>
+                    X
+                  </Button>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel>
+                      Command
+                    </InputLabel>
+                    <Select
+                        onChange={e=>{
+                          //Should be update through this onChange
+                          setCmdSchema({
+                            ...cmdSchema,
+                            command: e.target.value,
+                            schema: commandList.find(x => x.command === e.target.value).schema,
+                          });
+                        }}
+                        value={cmdSchema.command}
+                    >
+                      {commandList.map(({index,command})=>{
+                        return(
+                            <MenuItem key={index} value={command}>
+                              {command}
+                            </MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                  <div style={{paddingLeft:24,paddingRight:24,paddingBottom:24}}>
+                    <Form
+                        classes={classes.form}
+                        schema={cmdSchema.schema}
+                        onSubmit={(e)=>{
+                          if(cmdSchema.command==='None'){
+                            return ;
+                          }
+                          tree[0].nodes.find(x => x.id === selectedCase).json.push(e.formData);
+                        }}
+                    />
+                  </div>
+                </Paper>
+              </Grid>
+            </Grow>
+          </Grid>
+        </TabPanel>
       </main>
     </div>
   );
