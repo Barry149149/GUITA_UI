@@ -18,7 +18,8 @@ const styleSmallText={
 
 export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
-    const [warningOpen, setWarningOpen] = React.useState(false)
+    const [warningOpen, setWarningOpen] = React.useState(false);
+    const [confirmOpen, setConfirmOpen] = React.useState(false);
 
     const handleWarningOpen=()=>{
         if(props.tree[0].nodes.length<=1){
@@ -29,6 +30,10 @@ export default function CaseTree(props){
         }
     };
 
+    const handleConfirmOpen=()=>{
+        setConfirmOpen(true);
+    }
+
     const handleWarningClose=()=>{
         setWarningOpen(false)
     }
@@ -36,6 +41,10 @@ export default function CaseTree(props){
 
     const handleClose=()=>{
         setOpen(false);
+    }
+
+    const handleConfirmClose=()=>{
+        setConfirmOpen(false);
     }
 
     return (
@@ -97,10 +106,48 @@ export default function CaseTree(props){
             </Button>
             <Button
                 variant= 'outlined'
+                component='label'
                 color= 'primary'
-                fullWidth={true}>
+                fullWidth={true}
+                // TODO: 1. Open confirm window 2. Get input file 3. Extract file 4. Copy to test case
+                onClick={()=>{
+                    const fs = require('fs');
+                    
+                }
+                }
+                >
                 Open
+                <input
+                    type='file'
+                    // TODO: Chrome accept also i.e. pptx, docx, xlsx, other browsers work fine
+                    accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
+                    hidden
+                />
             </Button>
+            <Dialog
+                open={confirmOpen}
+                onClose={handleConfirmClose}
+            >
+                <DialogTitle>{"Confirm Open Test Case"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        The following file(s) will be open:
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleConfirmClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                        
+                            onClick={handleConfirmClose}
+                            color="primary"
+                            autofocus
+                        >
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
             <Dialog
                 open={open}
                 onClose={handleClose}
