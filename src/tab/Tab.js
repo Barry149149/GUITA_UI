@@ -90,16 +90,16 @@ export default function CaseAndConfigTab(props) {
             <TabPanel value={value} index={0}>
                 <div>
                     <LanguageSelect
-                        language={props.language}
-                        setLanguage={props.setLanguage}
+                        config={props.config}
+                        setConfig={props.setConfig}
                     />
                     <FrameworkSelect
-                        framework={props.framework}
-                        setFramework={props.setFramework}
+                        config={props.config}
+                        setConfig={props.setConfig}
                     />
                     <DriverSelect
-                        driver={props.driver}
-                        setDriver={props.setDriver}
+                        config={props.config}
+                        setConfig={props.setConfig}
                     />
                 </div>
             </TabPanel>

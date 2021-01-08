@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -19,7 +19,10 @@ const useStyles = makeStyles((theme) => ({
 export default function DriverSelect(props) {
     const classes = useStyles();
 
-    const handleChange = e => props.setDriver(e.target.value);
+    const handleChange = e => props.setConfig({
+        ...props.config,
+        driver:e.target.value
+    });
 
     return(
         <div>

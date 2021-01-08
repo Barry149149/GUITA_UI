@@ -38,7 +38,10 @@ export default function SettingDialog(props) {
 
 
     const handleChange = (event) => {
-        props.setDarkTheme(event.target.checked);
+        props.setStyle({
+            ...props.style,
+            darkTheme:event.target.checked
+        });
     };
 
     return (
@@ -51,16 +54,16 @@ export default function SettingDialog(props) {
                 <DialogTitle >Preference</DialogTitle>
                 <DialogContent>
                     <form className={classes.form} noValidate>
-                        <p>font size: {props.fontSize}</p>
+                        <p>font size: {props.style.fontSize}</p>
                         <Slider
-                            value={props.fontSize}
+                            value={props.style.fontSize}
                             valueLabelDisplay="auto"
                             onChange={(e, newValue)=>{props.setFontSize(newValue)}}
                         />
                         <FormControlLabel
                             className={classes.formControlLabel}
-                            control={<Switch checked={props.darkTheme} onChange={handleChange} />}
-                            label={(props.darkTheme)?"Dark Theme":"Light Theme"}
+                            control={<Switch checked={props.style.darkTheme} onChange={handleChange} />}
+                            label={(props.style.darkTheme)?"Dark Theme":"Light Theme"}
                         />
                     </form>
                 </DialogContent>
