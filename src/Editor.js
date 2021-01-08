@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -138,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 180,
     marginTop:0,
     width: 300,
-  }
+  },
 }));
 
 function TabPanel(props) {
@@ -203,23 +203,23 @@ function Row(props){
                   <TableHead>
                     <TableRow>
                       {(row.widgetName===undefined)?null:<TableCell>WidgetName</TableCell>}
-                      {(row.widget===undefined)?null:<TableCell>widget</TableCell>}
-                      {(row.setVariable===undefined)?null:<TableCell>setVariable</TableCell>}
-                      {(row.valueLhs===undefined)?null:<TableCell>valueLhs</TableCell>}
-                      {(row.valueRhs===undefined)?null:<TableCell>valueRhs</TableCell>}
-                      {(row.time===undefined)?null:<TableCell>time</TableCell>}
-                      {(row.value===undefined)?null:<TableCell>value</TableCell>}
+                      {(row.widget===undefined)?null:<TableCell>Widget</TableCell>}
+                      {(row.setVariable===undefined)?null:<TableCell>SetVariable</TableCell>}
+                      {(row.valueLhs===undefined)?null:<TableCell>ValueLhs</TableCell>}
+                      {(row.valueRhs===undefined)?null:<TableCell>ValueRhs</TableCell>}
+                      {(row.time===undefined)?null:<TableCell>Time</TableCell>}
+                      {(row.value===undefined)?null:<TableCell>Value</TableCell>}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      {(row.widgetName===undefined)?null:<TableCell component="th" scope="row">row.widgetName</TableCell>}
-                      {(row.widget===undefined)?null:<TableCell>"Type: "+ row.widget.type+", Value: "+row.widget.value</TableCell>}
-                      {(row.setVariable===undefined)?null:<TableCell>row.setVariable</TableCell>}
-                      {(row.valueLhs===undefined)?null:<TableCell>"Type: "+row.valueLhs.type+", Value:"+row.valueLhs.value</TableCell>}
-                      {(row.valueRhs===undefined)?null:<TableCell>row.valueRhs</TableCell>}
-                      {(row.time===undefined)?null:<TableCell>row.time</TableCell>}
-                      {(row.value===undefined)?null:<TableCell>"Type: "+row.value.type+", Value:"+row.value.value</TableCell>}
+                      {(row.widgetName===undefined)?null:<TableCell component="th" scope="row">{row.widgetName}</TableCell>}
+                      {(row.widget===undefined)?null:<TableCell>{"Type:"+row.widget.type +" Value:"+row.widget.value}</TableCell>}
+                      {(row.setVariable===undefined)?null:<TableCell>{row.setVariable}</TableCell>}
+                      {(row.valueLhs===undefined)?null:<TableCell>{"Type: "+row.valueLhs.type+", Value:"+row.valueLhs.value}</TableCell>}
+                      {(row.valueRhs===undefined)?null:<TableCell>{row.valueRhs}</TableCell>}
+                      {(row.time===undefined)?null:<TableCell>{row.time}</TableCell>}
+                      {(row.value===undefined)?null:<TableCell><p>{"Type: "+row.value.type}</p><p>{"Value:"+row.value.value}</p></TableCell>}
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -256,7 +256,12 @@ export default function Editor() {
       ],
     },
   ]);
-  const [selectedCase,setSelectedCase] = useState(1);
+
+
+  const [selectedCase,setSelectedCase] = useState({
+    id:1,
+    json:tree[0].nodes[0].json
+  });
   const [createdCases,setCreatedCases] = useState(1);
   const [noOfCases,setNoOfCases] = useState(1);
 
@@ -281,9 +286,20 @@ export default function Editor() {
     setTabValue(newValue);
   };
 
-  useEffect(() =>{
+  const  mounted=useRef();
 
-  });
+  useEffect(() =>{
+    if(mounted.current===false) {
+      mounted.current=true;
+      console.log("Mounted");
+    }
+    else{
+      console.log("Updated");
+    }
+      return (()=>{
+        console.log("Unmounted")
+      });
+  },[selectedCase.json]);
 
   return (
     <div className={classes.root}>
@@ -291,7 +307,7 @@ export default function Editor() {
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            GUITA Test Case Creator \ Test Case \ Test {selectedCase}
+            GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
           </Typography>
           <Tabs
               value={tabValue}
@@ -350,7 +366,7 @@ export default function Editor() {
                     locale = { locale }
                     width  = "100%"
                     height = "550px"
-                    placeholder = {tree[0].nodes.find(x=>x.id === selectedCase).json}
+                    placeholder = {selectedCase.json}
                     colors = {(darkTheme)?{
                       default: '#D4D4D4',
                       background: '#1E1E1E',
@@ -382,7 +398,7 @@ export default function Editor() {
                     }}
                     onChange = {(e)=>{
                       if(!e.error) {
-                        tree[0].nodes.find(x => x.id === selectedCase).json = e.jsObject;
+                        selectedCase.json = e.jsObject;
                       }
                     }
                     }
@@ -398,24 +414,24 @@ export default function Editor() {
         <TabPanel value={tabValue} index={1}>
           <div maxHeight={(formOpen)?0:50}>
           <Grow in={!formOpen}>
-            <Button onClick={()=>{setFormOpen(true)}} style={{float:'right'}}>
+            <Button onClick={()=>{setFormOpen(true)}} className={classes.float_right}>
               ADD
             </Button>
           </Grow>
           </div>
           <Grid container spacing={2}>
-            <Grid item xs={(formOpen)?8:12}>
+            <Grid item xs={(formOpen)?8:11}>
           <div style={{ overflow: 'auto', maxHeight: '550px' }}>
             <Paper>
                 <Table >
                   <TableHead>
                     <TableRow>
                       <TableCell align="left"> Command </TableCell>
-                      <TableCell/>
+                      <TableCell align="center"/>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {tree[0].nodes.find(x => x.id === selectedCase).json.map(row=>(
+                    {selectedCase.json.map(row=>(
                         <Row key={row.command} row={row}/>
                     ))}
                   </TableBody>
@@ -424,9 +440,9 @@ export default function Editor() {
           </div>
             </Grid>
             <Grow in={formOpen} timeout={(formOpen)?1000:0}>
-              <Grid item xs={4}>
+              <Grid item xs={(formOpen)?4:1}>
                 <Paper>
-                  <Button onClick={()=>{setFormOpen(false)}} style={{float:'right'}}>
+                  <Button onClick={()=>{setFormOpen(false)}}>
                     X
                   </Button>
                   <FormControl className={classes.formControl}>
@@ -461,7 +477,10 @@ export default function Editor() {
                           if(cmdSchema.command==='None'){
                             return ;
                           }
-                          tree[0].nodes.find(x => x.id === selectedCase).json.push(e.formData);
+                          setSelectedCase({
+                            ...selectedCase,
+                            json:[...selectedCase.json,e.formData]
+                          })
                         }}
                     />
                   </div>

@@ -10,12 +10,6 @@ import Box from "@material-ui/core/Box";
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver';
 
-const styleSmallText={
-    fontSize: 'small',
-    color: 'gainsboro',
-    lineHeight: 0.8,
-}
-
 export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
     const [warningOpen, setWarningOpen] = React.useState(false);
@@ -51,7 +45,11 @@ export default function CaseTree(props){
         <div>
             <MuiTreeView
                 tree={props.tree}
-                onLeafClick={e=>{props.setSelectedCase(e.id)}}
+                onLeafClick={e=>{props.setSelectedCase({
+                    ...props.selectedCase,
+                    id: e.id,
+                    json: props.tree[0].nodes.find(x=>x.id===e.id).json,
+                })}}
             />
             <Box pt={4} />
             <Button
@@ -155,7 +153,7 @@ export default function CaseTree(props){
                 <DialogTitle>{"Confirm Deletion"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText >
-                        Are you sure you want to delete this {props.selectedCase}
+                        Are you sure you want to delete this {props.selectedCase.id}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -165,13 +163,18 @@ export default function CaseTree(props){
                     <Button onClick={()=>{
                         for(let i=0; i < props.tree[0].nodes.length; i++) {
 
-                            if(props.tree[0].nodes[i].id===props.selectedCase){
+                            if(props.tree[0].nodes[i].id===props.selectedCase.id){
                                 props.tree[0].nodes.splice(i,1);
                                 i--;
                                 props.setNoOfCases(props.noOfCases-1)
                             }
                         }
-                        props.setSelectedCase(props.tree[0].nodes[0].id);
+
+                        props.setSelectedCase({
+                            ...props.selectedCase,
+                            id:props.tree[0].nodes[0].id,
+                            json:props.tree[0].nodes[0].json
+                        });
                         handleClose();
                     }}
                             color="secondary"
