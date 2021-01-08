@@ -198,12 +198,15 @@ export default function CaseTree(props){
                 </DialogActions>
             </Dialog>
 
-            <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
-            <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
-            <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>
 
 
         </div>
 
     )
 }
+
+/*
+*     <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
+            <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
+            <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>
+* */
