@@ -3,7 +3,7 @@ import locale from "react-json-editor-ajrm/locale/en";
 import Box from "@material-ui/core/Box";
 import UploadFiles from "../components/upload-files.component";
 import Container from "@material-ui/core/Container";
-import React from "react";
+import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/Styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) =>({
 
 export default function JsonEditor(props){
     const classes = useStyles();
+
     return (
         <Container className={classes.container}>
         <JSONInput
@@ -70,7 +71,19 @@ export default function JsonEditor(props){
             }}
             onChange = {(e)=>{
                 if(!e.error) {
-                    props.selectedCase.json = e.jsObject;
+                    let new_json_id=[]
+                    for(let i=0;i<e.jsObject.length;i++) {
+                        new_json_id.push({
+                            id:(i+1),
+                            command:e.jsObject[i]
+                        })
+                    }
+                    props.setSelectedCase({
+                        ...props.selectedCase,
+                        json: e.jsObject,
+                        json_id: new_json_id
+                    })
+
                 }
             }
             }
