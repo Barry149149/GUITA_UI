@@ -24,10 +24,6 @@ export default function CaseTree(props){
         }
     };
 
-    const handleConfirmOpen=()=>{
-        setConfirmOpen(true);
-    }
-
     const handleWarningClose=()=>{
         setWarningOpen(false)
     }
@@ -49,6 +45,7 @@ export default function CaseTree(props){
                     ...props.selectedCase,
                     id: e.id,
                     json: props.tree[0].nodes.find(x=>x.id===e.id).json,
+                    json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
                 })}}
             />
             <Box pt={4} />
@@ -62,6 +59,12 @@ export default function CaseTree(props){
                         value: 'Test ' + (props.createdCases+1),
                         json:[{
                             "command": "Test "+(props.createdCases+1)
+                        }],
+                        json_id:[{
+                            id:1,
+                            command: {
+                                "command": "Test " + (props.createdCases + 1)
+                            }
                         }]
                     });
                     props.setCreatedCases(props.createdCases+1);
@@ -173,7 +176,8 @@ export default function CaseTree(props){
                         props.setSelectedCase({
                             ...props.selectedCase,
                             id:props.tree[0].nodes[0].id,
-                            json:props.tree[0].nodes[0].json
+                            json:props.tree[0].nodes[0].json,
+                            json_id:props.tree[0].nodes[0].json_id
                         });
                         handleClose();
                     }}

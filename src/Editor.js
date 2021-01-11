@@ -146,7 +146,15 @@ export default function Editor() {
                 {
                   "command": 'Test 1'
                 }
-              ]
+              ],
+          json_id:[
+                  {
+                    id:1,
+                    command:{
+                      "command":'Test1'
+                    }
+                  }
+          ]
           },
       ],
     },
@@ -155,7 +163,8 @@ export default function Editor() {
 
   const [selectedCase,setSelectedCase] = useState({
     id:1,
-    json:tree[0].nodes[0].json
+    json:tree[0].nodes[0].json,
+    json_id:tree[0].nodes[0].json_id
   });
   const [createdCases,setCreatedCases] = useState(1);
   const [noOfCases,setNoOfCases] = useState(1);
@@ -239,6 +248,7 @@ export default function Editor() {
             <TabPanel value={tabValue} index={0}>
               <JsonEditor
                   selectedCase={selectedCase}
+                  setSelectedCase={setSelectedCase}
                   style={style}
               />
             </TabPanel>
