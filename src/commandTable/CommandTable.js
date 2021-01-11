@@ -29,16 +29,22 @@ const useStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+                color: theme.palette.primary.main,
+                backgroundColor: lighten(theme.palette.primary.light, 0.85),
             }
             : {
                 color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
+                backgroundColor: theme.palette.primary.dark,
             },
     title: {
         flex: '1 1 100%',
     },
+    tableRow: {
+        "&$selected, &$selected:hover": {
+            backgroundColor: lighten(theme.palette.primary.light, 0.85),
+        }
+    },
+    selected: {}
 }));
 
 export default function CommandTable(props){
@@ -161,10 +167,13 @@ export default function CommandTable(props){
                                     key={row.id}
                                     aria-checked={isItemSelected}
                                     selected={isItemSelected}
+                                    className={classes.tableRow}
+                                    classes={{ selected: classes.selected }}
                                 >
                                     <TableCell padding="checkbox">
                                         <Checkbox
                                             checked={isItemSelected}
+                                            color="primary"
                                             onChange={(event) => {
                                                 props.setFormOpen(false)
                                                 handleRowClick(event, row.id)
@@ -180,7 +189,11 @@ export default function CommandTable(props){
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
-                                <TableRow>
+                                <TableRow
+                                    selected={isItemSelected}
+                                    className={classes.tableRow}
+                                    classes={{ selected: classes.selected }}
+                                >
                                     <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                                         <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
                                             <Box margin={1}>
