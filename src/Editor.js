@@ -252,6 +252,8 @@ export default function Editor() {
                   selectedCase={selectedCase}
                   setSelectedCase={setSelectedCase}
                   style={style}
+                  setTree={setTree}
+                  tree={tree}
               />
             </TabPanel>
         <TabPanel value={tabValue} index={1}>
@@ -281,6 +283,8 @@ export default function Editor() {
                     setSelectedCase={setSelectedCase}
                     cmdSchema={cmdSchema}
                     setCmdSchema={setCmdSchema}
+                    setTree={setTree}
+                    tree={tree}
                   />
                 </Paper>
               </Grid>

@@ -68,6 +68,23 @@ export default function CommandForm(props){
                                 command:e.formData
                             }]
                         })
+                        let newNodes=[
+                            ...props.tree[0].nodes,
+                        ]
+                        newNodes.find(x=>x.id===props.selectedCase.id).json=[...props.selectedCase.json,e.formData]
+                        newNodes.find(x=>x.id===props.selectedCase.id).json_id=[
+                            ...props.selectedCase.json_id,
+                            {
+                                id:(props.selectedCase.json.length+1),
+                                command:e.formData
+                            }
+                        ]
+                        props.setTree([
+                            {
+                                value: 'Test Cases',
+                                nodes: newNodes
+                            }
+                        ])
                     }}
                 />
             </div>

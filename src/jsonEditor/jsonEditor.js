@@ -83,7 +83,17 @@ export default function JsonEditor(props){
                         json: e.jsObject,
                         json_id: new_json_id
                     })
-
+                    let newNodes=[
+                        ...props.tree[0].nodes,
+                    ]
+                    newNodes.find(x=>x.id===props.selectedCase.id).json=e.jsObject
+                    newNodes.find(x=>x.id===props.selectedCase.id).json_id=new_json_id
+                    props.setTree([
+                        {
+                            value: 'Test Cases',
+                            nodes: newNodes
+                        }
+                    ])
                 }
             }
             }

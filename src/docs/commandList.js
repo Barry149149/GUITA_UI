@@ -43,7 +43,7 @@ export const commandList=[
             "properties":{
                 "command":{
                     "type":"string",
-                    "default":"click",
+                    "default":"locateByWidgetName",
                     "readOnly": true
                 },
                 "widgetName":{

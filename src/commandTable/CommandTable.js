@@ -105,6 +105,7 @@ export default function CommandTable(props){
             json:newJson,
             json_id:newJsonId
         })
+        setSelected([])
     }
 
     useEffect(() => {
@@ -150,7 +151,7 @@ export default function CommandTable(props){
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" width="checkbox"/>
+                        <TableCell align="center" padding="checkbox"/>
                         <TableCell align="left"> Command </TableCell>
                         <TableCell align="Right" />
                     </TableRow>
