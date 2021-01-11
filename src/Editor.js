@@ -22,6 +22,8 @@ import Button from '@material-ui/core/Button';
 import CommandTable from "./commandTable/CommandTable";
 import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
+import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 240;
 
@@ -267,7 +269,13 @@ export default function Editor() {
             <Grow in={formOpen} timeout={(formOpen)?1000:0}>
               <Grid item xs={(formOpen)?4:1}>
                 <Paper>
-                  <Button onClick={()=>{setFormOpen(false)}}>X</Button>
+                  <Toolbar>
+                    <Tooltip>
+                      <Button onClick={()=>{setFormOpen(false)}}>
+                        <CloseIcon fontSize='small'/>
+                      </Button>
+                    </Tooltip>
+                  </Toolbar>
                   <CommandForm
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
