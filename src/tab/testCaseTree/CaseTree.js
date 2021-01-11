@@ -108,9 +108,18 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 // TODO: 1. Open confirm window 2. Get input file 3. Extract file 4. Copy to test case
+                
                 onClick={()=>{
-                    const fs = require('fs');
-                    
+                    let fs = require("fs");
+                    let JSZip = require("jszip");
+
+                    // read a zip file
+                    fs.readFile("test.zip", function(err, data) {
+                        if (err) throw err;
+                        JSZip.loadAsync(data).then(function (zip) {
+                            // ...
+                        });
+                    });
                 }
                 }
                 >
