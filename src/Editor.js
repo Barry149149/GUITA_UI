@@ -253,17 +253,15 @@ export default function Editor() {
               />
             </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          <div>
-          <Grow in={!formOpen}>
-            <Button onClick={()=>{setFormOpen(true)}}>
-              ADD
-            </Button>
-          </Grow>
-          </div>
           <Grid container spacing={2}>
             <Grid item xs={(formOpen)?8:11}>
           <div >
-            <CommandTable selectedCase={selectedCase} />
+            <CommandTable
+                selectedCase={selectedCase}
+                setSelectedCase={setSelectedCase}
+                formOpen={formOpen}
+                setFormOpen={setFormOpen}
+            />
           </div>
             </Grid>
             <Grow in={formOpen} timeout={(formOpen)?1000:0}>
