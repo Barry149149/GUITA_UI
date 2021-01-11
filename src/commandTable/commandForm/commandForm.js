@@ -3,7 +3,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import {commandList} from "../../docs/commandList";
 import Form from "@rjsf/material-ui";
 import React, {useEffect} from "react";
-import {makeStyles} from "@material-ui/core/Styles";
+import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme)=>({
     formControl: {

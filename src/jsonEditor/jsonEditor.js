@@ -4,7 +4,7 @@ import Box from "@material-ui/core/Box";
 import UploadFiles from "../components/upload-files.component";
 import Container from "@material-ui/core/Container";
 import React, {useEffect} from "react";
-import {makeStyles} from "@material-ui/core/Styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 
