@@ -9,19 +9,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver';
-import JSONInput from "react-json-editor-ajrm";
-import fs from 'fs';
 
 export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
     const [warningOpen, setWarningOpen] = React.useState(false);
     const [confirmOpen, setConfirmOpen] = React.useState(false);
-
-
-    const handleFiles=()=>{
-        const fileList = this.files; /* now you can work with the file list */
-        console.log(fileList);
-    }
 
     const handleWarningOpen=()=>{
         if(props.tree[0].nodes.length<=1){
@@ -100,7 +92,6 @@ export default function CaseTree(props){
                 onClick={()=>{
                     const zip = new JSZip();
                     console.log(props.tree[0].nodes[0].json);
-                    /*
                     for(const index in props.tree[0].nodes){
                         const fileData = JSON.stringify(props.tree[0].nodes[index].json);
                         zip.file('testcase'+props.tree[0].nodes[index].id+'.json', fileData);
@@ -108,7 +99,7 @@ export default function CaseTree(props){
                     zip.generateAsync({type:"blob"})
                     .then(function(content) {
                         saveAs(content, "testcases.zip");
-                    });*/
+                    });
                 }
                 }>
                 Download
