@@ -91,7 +91,7 @@ export default function JsonEditor(props){
                     props.setTree([
                         {
                             value: 'Test Cases',
-                            nodes:0
+                            nodes:newNodes,
                         }
                     ])
                 }

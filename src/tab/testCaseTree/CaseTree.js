@@ -134,6 +134,7 @@ export default function CaseTree(props){
                                 let newNodes=[
                                     ...props.tree[0].nodes,
                                 ]
+                                console.log(data.length);
                                 console.log(props.createdCases);
                                 let last_jsObject=[];
                                 let last_new_json_id =[];
@@ -152,7 +153,7 @@ export default function CaseTree(props){
                                     }
 
                                     newNodes.push({
-                                        id: (props.createdCases+i),
+                                        id: (props.createdCases+parseInt(i)+1),
                                         value: 'Test ' + (props.createdCases+parseInt(i)+1),
                                         json:jsObject,
                                         json_id:new_json_id,
@@ -161,16 +162,12 @@ export default function CaseTree(props){
                                     last_jsObject = jsObject;
                                     last_new_json_id = new_json_id;
                                 }
-
-
-
                                 props.setTree([
                                     {
                                         value: 'Test Cases',
                                         nodes: newNodes
                                     }
                                 ])
-
                                 props.setCreatedCases(props.createdCases+data.length);
                                 props.setNoOfCases(props.createdCases+data.length);
 
@@ -179,10 +176,7 @@ export default function CaseTree(props){
                                     json: last_jsObject,
                                     json_id: last_new_json_id,
                                 })
-                                
-
                             }, function(err){
-
                             })
                         });
                         e.target.value = null;
