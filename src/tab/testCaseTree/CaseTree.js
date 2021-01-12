@@ -161,9 +161,9 @@ export default function CaseTree(props){
                                 json: jsObject,
                                 json_id: new_json_id,
                             })
-                          });               
+                          });
+                          e.target.value = null;
                     }
-
                     }
                 />
                 
