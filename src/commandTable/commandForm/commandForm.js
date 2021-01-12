@@ -56,6 +56,10 @@ export default function CommandForm(props){
                 <Form
                     classes={classes.form}
                     schema={props.cmdSchema.schema}
+                    formData={props.formData}
+                    onChange={(e)=>{
+                        props.setFormData(e.formData)
+                    }}
                     onSubmit={(e)=>{
                         if(props.cmdSchema.command==='None'){
                             return ;
