@@ -121,48 +121,59 @@ export default function CaseTree(props){
                     hidden
 
                     onChange={(e)=>{
-                        JSZip.loadAsync(e.target.files[0]).then(function ($content) {
-                            console.log($content.files);
-                            return $content.files["testcase1.json"].async('string');
-                        }).then(function (str) {
-                            const jsObject = JSON.parse(str);
+                        const promises = [];
 
-                            let newNodes=[
-                                ...props.tree[0].nodes,
-                            ]
-
-                            let new_json_id=[]
-                            for(let i=0;i<jsObject.length;i++) {
-                                new_json_id.push({
-                                    id:(i+1),
-                                    command:jsObject[i]
-                                })
-                            }
-
-                            newNodes.push({
-                                id: (props.createdCases+1),
-                                value: 'Test ' + (props.createdCases+1),
-                                json:jsObject,
-                                json_id:new_json_id,
-                            });
+                        JSZip.loadAsync(e.target.files[0]).then(function (zip) {
                             
-                            props.setTree([
-                                {
-                                    value: 'Test Cases',
-                                    nodes: newNodes
+                            zip.forEach(function (relativePath, zipEntry){
+                                promises.push(zip.file(zipEntry.name).async('string'));
+                            });
+
+                            Promise.all(promises).then(function (data) {
+                                for(const i in data){
+                                    console.log(data[i]);
+                                    const jsObject = JSON.parse(data[i]);
+                                    
+                                    let newNodes=[
+                                        ...props.tree[0].nodes,
+                                    ]
+
+                                    let new_json_id=[]
+                                    for(let i=0;i<jsObject.length;i++) {
+                                        new_json_id.push({
+                                            id:(i+1),
+                                            command:jsObject[i]
+                                        })
+                                    }
+
+                                    newNodes.push({
+                                        id: (props.createdCases+1),
+                                        value: 'Test ' + (props.createdCases+1),
+                                        json:jsObject,
+                                        json_id:new_json_id,
+                                    });
+
+                                    props.setTree([
+                                        {
+                                            value: 'Test Cases',
+                                            nodes: newNodes
+                                        }
+                                    ])
+
+                                    props.setCreatedCases(props.createdCases+1);
+                                    props.setNoOfCases(props.noOfCases+1)
+
+                                    props.setSelectedCase({
+                                        ...props.selectedCase,
+                                        json: jsObject,
+                                        json_id: new_json_id,
+                                    })
                                 }
-                            ])
+                            }, function(err){
 
-                            props.setCreatedCases(props.createdCases+1);
-                            props.setNoOfCases(props.noOfCases+1)
-
-                            props.setSelectedCase({
-                                ...props.selectedCase,
-                                json: jsObject,
-                                json_id: new_json_id,
                             })
-                          });
-                          e.target.value = null;
+                        });
+                        e.target.value = null;
                     }
                     }
                 />
