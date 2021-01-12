@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver';
+import JSONInput from "react-json-editor-ajrm";
 import fs from 'fs';
 
 export default function CaseTree(props){
@@ -17,7 +18,7 @@ export default function CaseTree(props){
     const [confirmOpen, setConfirmOpen] = React.useState(false);
 
 
-    function handleFiles() {
+    const handleFiles=()=>{
         const fileList = this.files; /* now you can work with the file list */
         console.log(fileList);
     }
@@ -76,6 +77,13 @@ export default function CaseTree(props){
                     });
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
+
+                    props.setSelectedCase({
+                        ...props.selectedCase,
+                        id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
+                        json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
+                        json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                    })
                 }
                 }>Add</Button>
             <Button
@@ -91,24 +99,16 @@ export default function CaseTree(props){
                 fullWidth={true}
                 onClick={()=>{
                     const zip = new JSZip();
-                    console.log(props.tree[0].nodes);
+                    console.log(props.tree[0].nodes[0].json);
+                    /*
                     for(const index in props.tree[0].nodes){
-                        //const fileData = JSON.stringify(props.tree[0].nodes[props.selectedCase-1].json);
                         const fileData = JSON.stringify(props.tree[0].nodes[index].json);
-                        //zip.file('testcase'+props.selectedCase+'.json', fileData);
                         zip.file('testcase'+props.tree[0].nodes[index].id+'.json', fileData);
                     }
                     zip.generateAsync({type:"blob"})
                     .then(function(content) {
-                        // see FileSaver.js
                         saveAs(content, "testcases.zip");
-                    });
-                    //const blob = new Blob([fileData], {type: "text/plain"});
-                    //const url = URL.createObjectURL(blob);
-                    //const link = document.createElement('a');
-                    //link.download = 'testcase'+props.selectedCase+'.json';
-                    //link.href = url;
-                    //link.click();
+                    });*/
                 }
                 }>
                 Download
@@ -118,10 +118,7 @@ export default function CaseTree(props){
                 component='label'
                 color= 'primary'
                 fullWidth={true}
-                // TODO: 1. Open confirm window 2. Get input file 3. Extract file 4. Copy to test case
-                onClick={()=>{
-
-                }}
+                onClick={()=>{}}
                 >
                 Open
                 <input
@@ -137,7 +134,56 @@ export default function CaseTree(props){
                             console.log($content.files);
                             return $content.files["testcase1.json"].async('string');
                         }).then(function (str) {
-                            console.log(str);
+                            const jsObject = JSON.parse(str);
+                            console.log(jsObject);
+                            
+                            props.tree[0].nodes.push({
+                                id: (props.createdCases+1),
+                                value: 'Test ' + (props.createdCases+1),
+                                json:[{
+
+                                }],
+                                json_id:[{
+                                    id:1,
+                                    command: {
+
+                                    }
+                                }]
+                            });
+
+                            props.setCreatedCases(props.createdCases+1);
+                            props.setNoOfCases(props.noOfCases+1)
+
+                            props.setSelectedCase({
+                                ...props.selectedCase,
+                                id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
+                                json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
+                                json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                            })
+
+                            let new_json_id=[]
+                            for(let i=0;i<jsObject.length;i++) {
+                                new_json_id.push({
+                                    id:(i+1),
+                                    command:jsObject[i]
+                                })
+                            }
+                            props.setSelectedCase({
+                                ...props.selectedCase,
+                                json: jsObject,
+                                json_id: new_json_id
+                            })
+                            let newNodes=[
+                                ...props.tree[0].nodes,
+                            ]
+                            newNodes.find(x=>x.id===props.selectedCase.id).json=jsObject
+                            newNodes.find(x=>x.id===props.selectedCase.id).json_id=new_json_id
+                            props.setTree([
+                                {
+                                    value: 'Test Cases',
+                                    nodes: newNodes
+                                }
+                            ])
                           });
                     }
 
