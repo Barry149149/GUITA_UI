@@ -4,6 +4,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Table from "@material-ui/core/Table";
 import React, {useState, useEffect} from "react";
+import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -12,8 +13,43 @@ import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
+import Toolbar from "@material-ui/core/Toolbar";
+import {lighten, makeStyles} from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
+import Grow from "@material-ui/core/Grow";
+import {PlaylistAdd} from "@material-ui/icons";
+import DeleteIcon from '@material-ui/icons/Delete';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(1),
+    },
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.primary.main,
+                backgroundColor: lighten(theme.palette.primary.light, 0.85),
+            }
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.primary.dark,
+            },
+    title: {
+        flex: '1 1 100%',
+    },
+    tableRow: {
+        "&$selected, &$selected:hover": {
+            backgroundColor: lighten(theme.palette.primary.light, 0.85),
+        }
+    },
+    selected: {}
+}));
 
 export default function CommandTable(props){
+
+    const classes = useStyles();
 
     const [selected,setSelected]=useState([])
     const [open,setOpen]=useState([])
@@ -56,21 +92,68 @@ export default function CommandTable(props){
         setOpen(newSelected);
     }
 
+    const deleteSelected=()=>{
+        let newJsonId=[], newJson=[]
+        for(let i=0; i <props.selectedCase.json_id.length;i++) {
+            if(selected.indexOf(props.selectedCase.json_id[i].id)===-1) {
+                newJsonId.push(props.selectedCase.json_id[i])
+                newJson.push(props.selectedCase.json[i])
+            }
+        }
+        props.setSelectedCase({
+            ...props.selectedCase,
+            json:newJson,
+            json_id:newJsonId
+        })
+        setSelected([])
+    }
+
     useEffect(() => {
         console.log(selected)
     })
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
     const isOpen = (id) =>open.indexOf(id) !== -1;
+    const numSelected = selected.length;
 
         return (
         <Paper>
+            <Toolbar  className={clsx(classes.root, {
+                [classes.highlight]: numSelected > 0,
+            })}>
+                {(numSelected >0)?(
+                    <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                        {numSelected} selected
+                    </Typography>):
+                    (<Typography className={classes.title}>
+                    Command Table
+                    </Typography>)
+                }
+                {!(numSelected > 0) ?(
+                    <Tooltip title="Add">
+                        <Grow in={!(props.formOpen||numSelected >0)}>
+                            <Button onClick={() => {
+                                props.setFormOpen(true)
+                            }}>
+                                <PlaylistAdd/>
+                            </Button>
+                        </Grow>
+                    </Tooltip>
+                    ):(
+                    <Tooltip title="Delete">
+                        <Button onClick={deleteSelected}>
+                            <DeleteIcon/>
+                        </Button>
+                    </Tooltip>
+                )
+                }
+            </Toolbar>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" width="30"/>
+                        <TableCell align="center" padding="checkbox"/>
                         <TableCell align="left"> Command </TableCell>
-                        <TableCell align="center"/>
+                        <TableCell align="Right" />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -85,11 +168,17 @@ export default function CommandTable(props){
                                     key={row.id}
                                     aria-checked={isItemSelected}
                                     selected={isItemSelected}
+                                    className={classes.tableRow}
+                                    classes={{ selected: classes.selected }}
                                 >
                                     <TableCell padding="checkbox">
                                         <Checkbox
                                             checked={isItemSelected}
-                                            onChange={(event) => handleRowClick(event, row.id)}
+                                            color="primary"
+                                            onChange={(event) => {
+                                                props.setFormOpen(false)
+                                                handleRowClick(event, row.id)
+                                            }}
                                         />
                                     </TableCell>
                                     <TableCell component="th" scope="row" align="left">
@@ -101,7 +190,11 @@ export default function CommandTable(props){
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
-                                <TableRow>
+                                <TableRow
+                                    selected={isItemSelected}
+                                    className={classes.tableRow}
+                                    classes={{ selected: classes.selected }}
+                                >
                                     <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                                         <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
                                             <Box margin={1}>
@@ -156,6 +249,8 @@ export default function CommandTable(props){
                             </React.Fragment>
                         );
                     })}
+                    <TableRow>
+                    </TableRow>
                 </TableBody>
             </Table>
         </Paper>

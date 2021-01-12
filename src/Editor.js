@@ -22,6 +22,8 @@ import Button from '@material-ui/core/Button';
 import CommandTable from "./commandTable/CommandTable";
 import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
+import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 240;
 
@@ -250,31 +252,39 @@ export default function Editor() {
                   selectedCase={selectedCase}
                   setSelectedCase={setSelectedCase}
                   style={style}
+                  setTree={setTree}
+                  tree={tree}
               />
             </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          <div>
-          <Grow in={!formOpen}>
-            <Button onClick={()=>{setFormOpen(true)}}>
-              ADD
-            </Button>
-          </Grow>
-          </div>
           <Grid container spacing={2}>
             <Grid item xs={(formOpen)?8:11}>
           <div >
-            <CommandTable selectedCase={selectedCase} />
+            <CommandTable
+                selectedCase={selectedCase}
+                setSelectedCase={setSelectedCase}
+                formOpen={formOpen}
+                setFormOpen={setFormOpen}
+            />
           </div>
             </Grid>
             <Grow in={formOpen} timeout={(formOpen)?1000:0}>
               <Grid item xs={(formOpen)?4:1}>
                 <Paper>
-                  <Button onClick={()=>{setFormOpen(false)}}>X</Button>
+                  <Toolbar>
+                    <Tooltip>
+                      <Button onClick={()=>{setFormOpen(false)}}>
+                        <CloseIcon fontSize='small'/>
+                      </Button>
+                    </Tooltip>
+                  </Toolbar>
                   <CommandForm
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
                     cmdSchema={cmdSchema}
                     setCmdSchema={setCmdSchema}
+                    setTree={setTree}
+                    tree={tree}
                   />
                 </Paper>
               </Grid>
