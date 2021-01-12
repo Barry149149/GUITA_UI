@@ -272,6 +272,8 @@ export default function Editor() {
                 setSelectedCase={setSelectedCase}
                 formOpen={formOpen}
                 setFormOpen={setFormOpen}
+                tree={tree}
+                setTree={setTree}
             />
           </div>
             </Grid>

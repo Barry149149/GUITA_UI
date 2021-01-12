@@ -192,6 +192,18 @@ export default function CommandTable(props){
                             json_id:new_json_id,
                             json:new_json
                         })
+
+                        let newNodes=[
+                            ...props.tree[0].nodes,
+                        ]
+                        newNodes.find(x=>x.id===props.selectedCase.id).json=new_json
+                        newNodes.find(x=>x.id===props.selectedCase.id).json_id=new_json_id
+                        props.setTree([
+                            {
+                                value: 'Test Cases',
+                                nodes: newNodes
+                            }
+                        ])
                     }}
                     onBeforeDragStart={()=>{
                         open.length=0;
