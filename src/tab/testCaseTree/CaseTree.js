@@ -130,45 +130,57 @@ export default function CaseTree(props){
                             });
 
                             Promise.all(promises).then(function (data) {
+                                
+                                let newNodes=[
+                                    ...props.tree[0].nodes,
+                                ]
+                                console.log(props.createdCases);
+                                let last_jsObject=[];
+                                let last_new_json_id =[];
+                                
                                 for(const i in data){
-                                    console.log(data[i]);
-                                    const jsObject = JSON.parse(data[i]);
                                     
-                                    let newNodes=[
-                                        ...props.tree[0].nodes,
-                                    ]
+                                    const jsObject = JSON.parse(data[i]);
+                                    console.log(jsObject);
 
-                                    let new_json_id=[]
-                                    for(let i=0;i<jsObject.length;i++) {
+                                    let new_json_id=[];
+                                    for(let j=0;j<jsObject.length;j++) {
                                         new_json_id.push({
-                                            id:(i+1),
-                                            command:jsObject[i]
+                                            id:(j+1),
+                                            command:jsObject[j],
                                         })
                                     }
 
                                     newNodes.push({
-                                        id: (props.createdCases+1),
-                                        value: 'Test ' + (props.createdCases+1),
+                                        id: (props.createdCases+i),
+                                        value: 'Test ' + (props.createdCases+parseInt(i)+1),
                                         json:jsObject,
                                         json_id:new_json_id,
                                     });
 
-                                    props.setTree([
-                                        {
-                                            value: 'Test Cases',
-                                            nodes: newNodes
-                                        }
-                                    ])
-
-                                    props.setCreatedCases(props.createdCases+1);
-                                    props.setNoOfCases(props.noOfCases+1)
-
-                                    props.setSelectedCase({
-                                        ...props.selectedCase,
-                                        json: jsObject,
-                                        json_id: new_json_id,
-                                    })
+                                    last_jsObject = jsObject;
+                                    last_new_json_id = new_json_id;
                                 }
+
+
+
+                                props.setTree([
+                                    {
+                                        value: 'Test Cases',
+                                        nodes: newNodes
+                                    }
+                                ])
+
+                                props.setCreatedCases(props.createdCases+data.length);
+                                props.setNoOfCases(props.createdCases+data.length);
+
+                                props.setSelectedCase({
+                                    ...props.selectedCase,
+                                    json: last_jsObject,
+                                    json_id: last_new_json_id,
+                                })
+                                
+
                             }, function(err){
 
                             })
