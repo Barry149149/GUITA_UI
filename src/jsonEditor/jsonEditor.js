@@ -91,8 +91,5 @@ export default function JsonEditor(props){
         <Box pt={2}>
             <Copyright />
         </Box>
-        <Box pt={4}>
-            <UploadFiles />
-        </Box>
     </Container>)
 }

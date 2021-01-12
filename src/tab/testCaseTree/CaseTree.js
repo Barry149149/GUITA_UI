@@ -9,11 +9,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver';
+import fs from 'fs';
 
 export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
     const [warningOpen, setWarningOpen] = React.useState(false);
     const [confirmOpen, setConfirmOpen] = React.useState(false);
+
+
+    function handleFiles() {
+        const fileList = this.files; /* now you can work with the file list */
+        console.log(fileList);
+    }
 
     const handleWarningOpen=()=>{
         if(props.tree[0].nodes.length<=1){
@@ -83,7 +90,8 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 onClick={()=>{
-                    var zip = new JSZip();
+                    const zip = new JSZip();
+                    console.log(props.tree[0].nodes);
                     for(const index in props.tree[0].nodes){
                         //const fileData = JSON.stringify(props.tree[0].nodes[props.selectedCase-1].json);
                         const fileData = JSON.stringify(props.tree[0].nodes[index].json);
@@ -111,28 +119,31 @@ export default function CaseTree(props){
                 color= 'primary'
                 fullWidth={true}
                 // TODO: 1. Open confirm window 2. Get input file 3. Extract file 4. Copy to test case
-                
                 onClick={()=>{
-                    let fs = require("fs");
-                    let JSZip = require("jszip");
 
-                    // read a zip file
-                    fs.readFile("test.zip", function(err, data) {
-                        if (err) throw err;
-                        JSZip.loadAsync(data).then(function (zip) {
-                            // ...
-                        });
-                    });
-                }
-                }
+                }}
                 >
                 Open
                 <input
                     type='file'
-                    // TODO: Chrome accept also i.e. pptx, docx, xlsx, other browsers work fine
+                    id='file'
+                    name='file'
                     accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
+                    // TODO: Chrome accept also i.e. pptx, docx, xlsx, other browsers work fine
                     hidden
+
+                    onChange={(e)=>{
+                        JSZip.loadAsync(e.target.files[0]).then(function ($content) {
+                            console.log($content.files);
+                            return $content.files["testcase1.json"].async('string');
+                        }).then(function (str) {
+                            console.log(str);
+                          });
+                    }
+
+                    }
                 />
+                
             </Button>
             <Dialog
                 open={confirmOpen}
