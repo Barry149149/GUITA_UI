@@ -1,8 +1,8 @@
-import {FormControl, MenuItem, Select} from "@material-ui/core";
+import {Divider, FormControl, MenuItem, Select} from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import {commandList} from "../../docs/commandList";
 import Form from "@rjsf/material-ui";
-import React, {useEffect} from "react";
+import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme)=>({
@@ -21,10 +21,6 @@ const useStyles = makeStyles((theme)=>({
 export default function CommandForm(props){
     const classes = useStyles();
 
-    useEffect(()=>{
-        console.log(props.selectedCase.json_id);
-    })
-
     return (
 
             <div>
@@ -40,6 +36,7 @@ export default function CommandForm(props){
                             command: e.target.value,
                             schema: commandList.find(x => x.command === e.target.value).schema,
                         });
+                        props.setFormData({})
                     }}
                     value={props.cmdSchema.command}
                 >
@@ -52,6 +49,7 @@ export default function CommandForm(props){
                     })}
                 </Select>
             </FormControl>
+            <Divider/>
             <div style={{paddingLeft:24,paddingRight:24,paddingBottom:24}}>
                 <Form
                     classes={classes.form}
@@ -66,10 +64,16 @@ export default function CommandForm(props){
                         }
                         props.setSelectedCase({
                             ...props.selectedCase,
-                            json:[...props.selectedCase.json,e.formData],
+                            json:[...props.selectedCase.json,{
+                                command:props.cmdSchema.command,
+                                ...e.formData
+                            }],
                             json_id:[...props.selectedCase.json_id,{
                                 id:(props.selectedCase.json.length+1),
-                                command:e.formData
+                                command:{
+                                    command:props.cmdSchema.command,
+                                    ...e.formData
+                                }
                             }]
                         })
                         let newNodes=[

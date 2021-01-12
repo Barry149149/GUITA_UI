@@ -20,6 +20,7 @@ import Button from "@material-ui/core/Button";
 import Grow from "@material-ui/core/Grow";
 import {PlaylistAdd} from "@material-ui/icons";
 import DeleteIcon from '@material-ui/icons/Delete';
+import {Divider} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -148,6 +149,7 @@ export default function CommandTable(props){
                 )
                 }
             </Toolbar>
+            <Divider />
             <Table>
                 <TableHead>
                     <TableRow>

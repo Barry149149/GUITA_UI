@@ -1,3 +1,38 @@
+const valTypeStruct=(title)=> {
+    return ({
+        "title": "",
+        "type": "object",
+        "required": [
+            "value",
+            "type",
+        ],
+        "properties": {
+            "value": {
+                "type": "string",
+                "title": title+" Value"
+            },
+            "type": {
+                "type": "string",
+                "title": title+" Type"
+            }
+        }
+    })
+}
+
+const stringStruct=(title)=>{
+    return({
+        "title":title,
+        "type":"string"
+    })
+}
+
+const intStruct=(title)=>{
+    return({
+        "title":title,
+        "type":"number"
+    })
+}
+
 export const commandList=[
     {
         command:"None",
@@ -10,29 +45,7 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"click",
-                    "readOnly": true
-                },
-                "widget":{
-                    "title":"",
-                    "type":"object",
-                    "required":[
-                        "value",
-                        "type",
-                    ],
-                    "properties": {
-                        "value":{
-                            "type":"string",
-                            "title":"Widget Value"
-                        },
-                        "type":{
-                            "type":"string",
-                            "title":"Widget Type"
-                        }
-                    }
-                }
+                "widget":valTypeStruct("widget")
             }
         }
     },
@@ -41,19 +54,8 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"locateByWidgetName",
-                    "readOnly": true
-                },
-                "widgetName":{
-                    "type":"string",
-                    "title":"Widget Name"
-                },
-                "setVariable":{
-                    "type":"string",
-                    "title":"set Variable"
-                }
+                "widgetName":stringStruct("Widget Name"),
+                "setVariable":stringStruct("set Variable")
             }
 
         }
@@ -63,15 +65,7 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"sleep",
-                    "readOnly": true
-                },
-                "time":{
-                    "type":"number",
-                    "title":"Sleep Time"
-                }
+                "time":intStruct("Sleep Time")
             }
         }
     },
@@ -80,33 +74,8 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"getText",
-                    "readOnly": true
-                },
-                "widget":{
-                    "title":"",
-                    "type":"object",
-                    "required":[
-                        "value",
-                        "type",
-                    ],
-                    "properties": {
-                        "value":{
-                            "type":"string",
-                            "title":"Value"
-                        },
-                        "type":{
-                            "type":"string",
-                            "title":"Type"
-                        }
-                    }
-                },
-                "setVariable":{
-                    "type":"string",
-                    "title":"Set Variable"
-                }
+                "widget":valTypeStruct,
+                "setVariable":stringStruct("set Variable")
             }
         }
     },
@@ -115,33 +84,8 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
-                "command":{
-                    "default":"assertEqual",
-                    "type":"string",
-                    "readOnly": true
-                },
-                "valueLhs":{
-                    "title":"",
-                    "type":"object",
-                    "required":[
-                        "value",
-                        "type",
-                    ],
-                    "properties": {
-                        "value":{
-                            "type":"string",
-                            "title":"value LHS Value"
-                        },
-                        "type":{
-                            "type":"string",
-                            "title":"value LHS Type"
-                        }
-                    }
-                },
-                "valueRhs":{
-                    "type":"string",
-                    "title":"value RHS"
-                }
+                "valueLhs":valTypeStruct,
+                "valueRhs":stringStruct("Value Rhs")
             }
         }
     },
@@ -150,33 +94,8 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"isVisible",
-                    "readOnly": true
-                },
-                "widget":{
-                    "title":"",
-                    "type":"object",
-                    "required":[
-                        "value",
-                        "type",
-                    ],
-                    "properties": {
-                        "value":{
-                            "type":"string",
-                            "title":"Widget Value"
-                        },
-                        "type":{
-                            "type":"string",
-                            "title":"Widget Type"
-                        }
-                    }
-                },
-                "setVariable":{
-                    "type":"string",
-                    "title":"Set Variable"
-                }
+                "widget":valTypeStruct,
+                "setVariable":stringStruct("set Variable")
             }
         }
     },
@@ -185,29 +104,7 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "command":{
-                    "type":"string",
-                    "default":"assert",
-                    "readOnly": true
-                },
-                "value":{
-                    "title":"",
-                    "type":"object",
-                    "required":[
-                        "value",
-                        "type",
-                    ],
-                    "properties": {
-                        "value":{
-                            "type":"string",
-                            "title":"Value"
-                        },
-                        "type":{
-                            "type":"string",
-                            "title":"Type"
-                        }
-                    }
-                }
+                "value":valTypeStruct
             }
         }
     },

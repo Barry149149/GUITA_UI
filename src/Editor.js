@@ -22,7 +22,6 @@ import Button from '@material-ui/core/Button';
 import CommandTable from "./commandTable/CommandTable";
 import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
-import CloseIcon from '@material-ui/icons/Close';
 import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 280;
@@ -253,7 +252,7 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid className={classes.container} xs={10} xl={8} >
+                <Grid className={classes.container} xs={10} >
                   <JsonEditor
                       selectedCase={selectedCase}
                       setSelectedCase={setSelectedCase}
@@ -287,7 +286,6 @@ export default function Editor() {
                         </svg>
                       </Button>
                     </Tooltip>
-                  <Box pt={1} />
                   <CommandForm
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
