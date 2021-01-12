@@ -71,6 +71,7 @@ export default function JsonEditor(props){
             onChange = {(e)=>{
                 if(!e.error) {
                     let new_json_id=[]
+                    if(e.jsObject.length===undefined) {return}
                     for(let i=0;i<e.jsObject.length;i++) {
                         new_json_id.push({
                             id:(i+1),
@@ -90,7 +91,7 @@ export default function JsonEditor(props){
                     props.setTree([
                         {
                             value: 'Test Cases',
-                            nodes: newNodes
+                            nodes:0
                         }
                     ])
                 }
