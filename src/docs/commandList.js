@@ -74,7 +74,7 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "widget":valTypeStruct,
+                "widget":valTypeStruct("widget"),
                 "setVariable":stringStruct("set Variable")
             }
         }
@@ -84,7 +84,7 @@ export const commandList=[
         schema: {
             "type":"object",
             "properties":{
-                "valueLhs":valTypeStruct,
+                "valueLhs":valTypeStruct("Value Lhs"),
                 "valueRhs":stringStruct("Value Rhs")
             }
         }
@@ -94,7 +94,7 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "widget":valTypeStruct,
+                "widget":valTypeStruct("widget"),
                 "setVariable":stringStruct("set Variable")
             }
         }
@@ -104,7 +104,7 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "value":valTypeStruct
+                "value":valTypeStruct("Asserted Value")
             }
         }
     },
