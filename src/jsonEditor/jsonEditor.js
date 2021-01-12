@@ -30,15 +30,14 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 export default function JsonEditor(props){
-    const classes = useStyles();
 
     return (
-        <Container className={classes.container}>
+        <React.Fragment >
         <JSONInput
             id     = 'a_unique_id'
             locale = { locale }
             width  = "100%"
-            height = "550px"
+            height = "100%"
             placeholder = {props.selectedCase.json}
             colors = {(props.style.darkTheme)?{
                     default: '#D4D4D4',
@@ -101,8 +100,5 @@ export default function JsonEditor(props){
         <Box pt={2}>
             <Copyright />
         </Box>
-        <Box pt={4}>
-            <UploadFiles />
-        </Box>
-    </Container>)
+    </React.Fragment>)
 }

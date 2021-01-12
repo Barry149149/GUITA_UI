@@ -25,7 +25,7 @@ import JsonEditor from "./jsonEditor/jsonEditor";
 import CloseIcon from '@material-ui/icons/Close';
 import Tooltip from "@material-ui/core/Tooltip";
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,8 +90,11 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
 
   },
-
-
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    height: 600
+  },
 }));
 
 function TabPanel(props) {
@@ -181,7 +184,7 @@ export default function Editor() {
     fontSize: 14,
   })
 
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [cmdSchema,setCmdSchema]=useState({
     command:'None',
     schema: {
@@ -189,6 +192,7 @@ export default function Editor() {
     },
     formData:''
   })
+  const [formData,setFormData]=useState({})
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -248,18 +252,22 @@ export default function Editor() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
             <TabPanel value={tabValue} index={0}>
-              <JsonEditor
-                  selectedCase={selectedCase}
-                  setSelectedCase={setSelectedCase}
-                  style={style}
-                  setTree={setTree}
-                  tree={tree}
-              />
+              <Grid  container spacing={2} justify='center' alignItems="stretch">
+                <Grid className={classes.container} xs={10} xl={8} >
+                  <JsonEditor
+                      selectedCase={selectedCase}
+                      setSelectedCase={setSelectedCase}
+                      style={style}
+                      setTree={setTree}
+                      tree={tree}
+                  />
+                </Grid>
+              </Grid>
             </TabPanel>
         <TabPanel value={tabValue} index={1}>
           <Grid container spacing={2}>
             <Grid item xs={(formOpen)?8:11}>
-          <div >
+          <div>
             <CommandTable
                 selectedCase={selectedCase}
                 setSelectedCase={setSelectedCase}
@@ -271,13 +279,15 @@ export default function Editor() {
             <Grow in={formOpen} timeout={(formOpen)?1000:0}>
               <Grid item xs={(formOpen)?4:1}>
                 <Paper>
-                  <Toolbar>
-                    <Tooltip>
-                      <Button onClick={()=>{setFormOpen(false)}}>
-                        <CloseIcon fontSize='small'/>
+                  <Box pt={1} />
+                    <Tooltip title="Close" style={{float:"right"}}>
+                      <Button onClick={()=>{setFormOpen(false)}} variant='small' >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                        </svg>
                       </Button>
                     </Tooltip>
-                  </Toolbar>
+                  <Box pt={1} />
                   <CommandForm
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
@@ -285,6 +295,8 @@ export default function Editor() {
                     setCmdSchema={setCmdSchema}
                     setTree={setTree}
                     tree={tree}
+                    formData={formData}
+                    setFormData={setFormData}
                   />
                 </Paper>
               </Grid>

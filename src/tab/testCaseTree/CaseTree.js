@@ -69,6 +69,12 @@ export default function CaseTree(props){
                     });
                     props.setCreatedCases(props.createdCases+1);
                     props.setNoOfCases(props.noOfCases+1)
+                    props.setSelectedCase({
+                        ...props.selectedCase,
+                        id:props.tree[0].nodes[props.tree[0].nodes.length-1].id,
+                        json:props.tree[0].nodes[props.tree[0].nodes.length-1].json,
+                        json_id:props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                    })
                 }
                 }>Add</Button>
             <Button
@@ -211,9 +217,3 @@ export default function CaseTree(props){
 
     )
 }
-
-/*
-*     <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
-            <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
-            <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>
-* */
