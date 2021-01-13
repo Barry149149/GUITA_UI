@@ -1,0 +1,10 @@
+<----------------------------------------------------------------->
+
+Please input the id with description to the corresponding component
+when you have create an new id no matter the reason you create it.
+
+Example:
+
+Drawer: Column on left with two button
+
+<----------------------------------------------------------------->
