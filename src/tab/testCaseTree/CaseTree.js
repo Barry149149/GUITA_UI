@@ -111,7 +111,7 @@ export default function CaseTree(props){
                 fullWidth={true}
                 onClick={()=>{}}
                 >
-                Open
+                Upload
                 <input
                     type='file'
                     id='file'
@@ -121,63 +121,66 @@ export default function CaseTree(props){
                     hidden
 
                     onChange={(e)=>{
-                        JSZip.loadAsync(e.target.files[0]).then(function ($content) {
-                            console.log($content.files);
-                            return $content.files["testcase1.json"].async('string');
-                        }).then(function (str) {
-                            const jsObject = JSON.parse(str);
-                            console.log(jsObject);
+                        const promises = [];
+
+                        JSZip.loadAsync(e.target.files[0]).then(function (zip) {
                             
-                            props.tree[0].nodes.push({
-                                id: (props.createdCases+1),
-                                value: 'Test ' + (props.createdCases+1),
-                                json:[{
-
-                                }],
-                                json_id:[{
-                                    id:1,
-                                    command: {
-
-                                    }
-                                }]
+                            zip.forEach(function (relativePath, zipEntry){
+                                promises.push(zip.file(zipEntry.name).async('string'));
                             });
 
-                            props.setCreatedCases(props.createdCases+1);
-                            props.setNoOfCases(props.noOfCases+1)
+                            Promise.all(promises).then(function (data) {
+                                
+                                let newNodes=[
+                                    ...props.tree[0].nodes,
+                                ]
+                                console.log(data.length);
+                                console.log(props.createdCases);
+                                let last_jsObject=[];
+                                let last_new_json_id =[];
+                                
+                                for(const i in data){
+                                    
+                                    const jsObject = JSON.parse(data[i]);
+                                    console.log(jsObject);
 
-                            props.setSelectedCase({
-                                ...props.selectedCase,
-                                id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
-                                json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
-                                json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
-                            })
+                                    let new_json_id=[];
+                                    for(let j=0;j<jsObject.length;j++) {
+                                        new_json_id.push({
+                                            id:(j+1),
+                                            command:jsObject[j],
+                                        })
+                                    }
 
-                            let new_json_id=[]
-                            for(let i=0;i<jsObject.length;i++) {
-                                new_json_id.push({
-                                    id:(i+1),
-                                    command:jsObject[i]
-                                })
-                            }
-                            props.setSelectedCase({
-                                ...props.selectedCase,
-                                json: jsObject,
-                                json_id: new_json_id
-                            })
-                            let newNodes=[
-                                ...props.tree[0].nodes,
-                            ]
-                            newNodes.find(x=>x.id===props.selectedCase.id).json=jsObject
-                            newNodes.find(x=>x.id===props.selectedCase.id).json_id=new_json_id
-                            props.setTree([
-                                {
-                                    value: 'Test Cases',
-                                    nodes: newNodes
+                                    newNodes.push({
+                                        id: (props.createdCases+parseInt(i)+1),
+                                        value: 'Test ' + (props.createdCases+parseInt(i)+1),
+                                        json:jsObject,
+                                        json_id:new_json_id,
+                                    });
+
+                                    last_jsObject = jsObject;
+                                    last_new_json_id = new_json_id;
                                 }
-                            ])
-                          });
-                    }
+                                props.setTree([
+                                    {
+                                        value: 'Test Cases',
+                                        nodes: newNodes
+                                    }
+                                ])
+                                props.setCreatedCases(props.createdCases+data.length);
+                                props.setNoOfCases(props.createdCases+data.length);
 
+                                props.setSelectedCase({
+                                    ...props.selectedCase,
+                                    json: last_jsObject,
+                                    json_id: last_new_json_id,
+                                })
+                            }, function(err){
+                            })
+                        });
+                        e.target.value = null;
+                    }
                     }
                 />
                 
@@ -268,3 +271,9 @@ export default function CaseTree(props){
 
     )
 }
+
+/*
+*     <p style={styleSmallText}>Selected Case is {props.selectedCase}</p>
+            <p style={styleSmallText}>No. of Created Test Cases: {props.createdCases}</p>
+            <p style={styleSmallText}>No. of Test Cases: {props.noOfCases}</p>
+* */
