@@ -23,6 +23,7 @@ import CommandTable from "./commandTable/CommandTable";
 import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
 import Tooltip from "@material-ui/core/Tooltip";
+import GuideTour from "./guideTour";
 import LanguageSelect from "./tab/selectionBars/LanguageSelect";
 import FrameworkSelect from "./tab/selectionBars/FrameworkSelect";
 import DriverSelect from "./tab/selectionBars/DriverSelect";
@@ -225,6 +226,7 @@ export default function Editor() {
 
   return (
     <div className={classes.root}>
+      <GuideTour />
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>

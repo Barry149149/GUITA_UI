@@ -1,8 +1,6 @@
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import Box from "@material-ui/core/Box";
-import UploadFiles from "../components/upload-files.component";
-import Container from "@material-ui/core/Container";
 import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
