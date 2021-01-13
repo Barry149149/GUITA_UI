@@ -291,7 +291,7 @@ export default function Editor() {
             <Paper className={classes.detailedDrawer}>
               <Toolbar>
                 <Button onClick={()=>setDrawerOpen(false)}>
-                  <ArrowBackIosIcon/>
+                  <ArrowBackIosIcon fontSize='small'/>
                </Button>
               </Toolbar>
               <Divider />
