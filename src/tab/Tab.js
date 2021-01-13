@@ -51,10 +51,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
     tab:{
-        minWidth: 90,
-        width: 90,
-        fontSize: 10,
-        maxHeight: 25,
+        borderRight: `1px solid ${theme.palette.divider}`,
     }
 }));
 
@@ -68,7 +65,6 @@ export default function CaseAndConfigTab(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default">
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -76,6 +72,7 @@ export default function CaseAndConfigTab(props) {
                     textColor="primary"
                     variant="fullWidth"
                     scrollButtons="auto"
+                    orientation="vertical"
                 >
                     <Tab
                         className={classes.tab}
@@ -86,7 +83,6 @@ export default function CaseAndConfigTab(props) {
                         label="Test Cases" {...a11yProps(1)}
                     />
                 </Tabs>
-            </AppBar>
             <TabPanel value={value} index={0}>
                 <div>
                     <LanguageSelect
@@ -104,7 +100,6 @@ export default function CaseAndConfigTab(props) {
                 </div>
             </TabPanel>
             <TabPanel value={value} index={1}>
-
                 <CaseTree
                     selectedCase={props.selectedCase}
                     setSelectedCase={props.setSelectedCase}
