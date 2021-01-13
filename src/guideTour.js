@@ -6,7 +6,6 @@ export default function GuideTour(props) {
     return (
       <Joyride
         run={true}
-        stepIndex={0}
         callback={() => null}
         continuous={true}
         showProgress={true}
@@ -36,11 +35,7 @@ export default function GuideTour(props) {
             },
             {
                 content:"Buttons for case tree",
-                target:"#button-casetree"
-            },
-                        {
-                content:'test',
-                target:'#'
+                target:"#Drawer"
             },
         ]}
       />

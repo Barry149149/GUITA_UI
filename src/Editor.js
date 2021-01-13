@@ -226,7 +226,9 @@ export default function Editor() {
 
   return (
     <div className={classes.root}>
-      <GuideTour />
+      <GuideTour
+        setDrawerOpen={setDrawerOpen}
+      />
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
@@ -242,7 +244,7 @@ export default function Editor() {
             <Tab icon={<CodeIcon fontSize='small'/>} label="Code Editor" fontSize='16px' {...a11yProps(0)} size="small" />
             <Tab icon={<ViewListIcon fontSize='small'/>} label="Table View" fontSize='16px' {...a11yProps(1)} />
           </Tabs>
-          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}}>
+          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button-setting'>
             <SettingsIcon/>
           </IconButton>
           <SettingDialog
@@ -250,7 +252,6 @@ export default function Editor() {
               setOpen={setSettingsOpen}
               style={style}
               setStyle={setStyle}
-
           />
         </Toolbar>
       </AppBar>
@@ -260,9 +261,10 @@ export default function Editor() {
         classes={{
           paper: classes.drawerPaper,
         }}
+
       >
         <Toolbar />
-        <div className={classes.drawerContainer}>
+        <div className={classes.drawerContainer} id='Drawer'>
           <Tabs
               value={drawerValue}
               onChange={handleDrawerChange}
@@ -271,15 +273,18 @@ export default function Editor() {
               variant="fullWidth"
               orientation="vertical"
               className={classes.tab}
+
           >
             <Tab
+                id='tab-config'
                 className={classes.tab}
-                icon={<ListAltIcon color='primary'/>}
+                icon={<TuneIcon color='primary'/>}
                 {...a11yProps(0)}
             />
             <Tab
+                id='tab-cases'
                 className={classes.tab}
-                icon={<TuneIcon color='primary'/>}
+                icon={<ListAltIcon color='primary'/>}
                 {...a11yProps(1)}
             />
           </Tabs>
@@ -292,12 +297,18 @@ export default function Editor() {
           <Grid xs={2}>
             <Paper className={classes.detailedDrawer}>
               <Toolbar>
-                <Button onClick={()=>setDrawerOpen(false)}>
-                  <ArrowBackIosIcon/>
+                <Button
+                    id='button-closeDrawer'
+                    onClick={()=>setDrawerOpen(false)}
+                >
+                  <ArrowBackIosIcon fontSize='small'/>
                </Button>
               </Toolbar>
               <Divider />
-              <TabPanel value={drawerValue} index={0}>
+              <TabPanel
+                  id="tabPanel-config"
+                  value={drawerValue}
+                  index={0} >
                 <div>
                   <LanguageSelect
                       config={config}
@@ -313,7 +324,10 @@ export default function Editor() {
                   />
                 </div>
               </TabPanel>
-              <TabPanel value={drawerValue} index={1}>
+              <TabPanel
+                  id="tabPanel-caseTree"
+                  value={drawerValue}
+                  index={1}>
                 <CaseTree
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
@@ -331,7 +345,7 @@ export default function Editor() {
           <Grid xs={(drawerOpen)?10:12}>
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid className={classes.container} xs={10} >
+                <Grid className={classes.container} xs={10} id="jsonEditor" >
                   <JsonEditor
                       selectedCase={selectedCase}
                       setSelectedCase={setSelectedCase}
@@ -345,21 +359,21 @@ export default function Editor() {
         <TabPanel value={tabValue} index={1}>
           <Grid container spacing={1} justify='center'>
             <Grid item xs={(formOpen)?8:12}>
-          <div>
-            <CommandTable
-                selectedCase={selectedCase}
-                setSelectedCase={setSelectedCase}
-                formOpen={formOpen}
-                setFormOpen={setFormOpen}
-                tree={tree}
-                setTree={setTree}
-            />
-          </div>
+              <div id="commandTable">
+                <CommandTable
+                    selectedCase={selectedCase}
+                    setSelectedCase={setSelectedCase}
+                    formOpen={formOpen}
+                    setFormOpen={setFormOpen}
+                    tree={tree}
+                    setTree={setTree}
+                />
+              </div>
             </Grid>
             {(formData)?
               <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
                 <Grid item xs={(formOpen) ? 4 : 1}>
-                  <Paper>
+                  <Paper id="commandForm">
                     <Box pt={1}/>
                     <Tooltip title="Close" style={{float: "right"}}>
                       <Button onClick={() => {
