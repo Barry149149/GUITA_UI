@@ -1,7 +1,7 @@
 import React from "react";
 import Joyride from 'react-joyride';
 
-export default function GuideTour() {
+export default function GuideTour(props) {
 
     return (
       <Joyride
@@ -30,6 +30,11 @@ export default function GuideTour() {
                 "Click on this button to switch to the Table Editor",
                 target: ".MuiTab-labelIcon:last-child"
             },
+            {
+                content:
+                "This is the button for opening the Setting Dialog",
+                target: "#settingButton"
+            }
         ]}
       />
     );
