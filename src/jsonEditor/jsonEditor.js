@@ -37,7 +37,7 @@ export default function JsonEditor(props){
             id     = 'a_unique_id'
             locale = { locale }
             width  = "100%"
-            height = "100%"
+            height = "600px"
             placeholder = {props.selectedCase.json}
             colors = {(props.style.darkTheme)?{
                     default: '#D4D4D4',
