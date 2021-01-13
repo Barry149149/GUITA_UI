@@ -22,10 +22,18 @@ import Button from '@material-ui/core/Button';
 import CommandTable from "./commandTable/CommandTable";
 import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
-import CloseIcon from '@material-ui/icons/Close';
 import Tooltip from "@material-ui/core/Tooltip";
+import GuideTour from "./guideTour";
+import LanguageSelect from "./tab/selectionBars/LanguageSelect";
+import FrameworkSelect from "./tab/selectionBars/FrameworkSelect";
+import DriverSelect from "./tab/selectionBars/DriverSelect";
+import CaseTree from "./tab/testCaseTree/CaseTree";
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import TuneIcon from '@material-ui/icons/Tune';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import {Divider} from "@material-ui/core";
 
-const drawerWidth = 240;
+const drawerWidth = 82;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,8 +73,7 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerContainer: {
-    paddingTop: theme.spacing(1),
-    overflow: 'auto',
+    paddingTop: theme.spacing(3),
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -86,11 +93,21 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
   tab:{
+    display: 'flex',
     backgroundColor: theme.palette.background.paper,
-    width: 200,
-
+    minWidth: 80,
+    width: 80,
   },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    height: 600
+  },
+  detailedDrawer:{
+    height: '100%',
+    paddingTop: theme.spacing(2),
 
+  }
 
 }));
 
@@ -174,6 +191,7 @@ export default function Editor() {
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
+  const [drawerOpen,setDrawerOpen]=useState(false);
 
   //this is for the editor
    const [style, setStyle]= useState({
@@ -181,7 +199,7 @@ export default function Editor() {
     fontSize: 14,
   })
 
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [cmdSchema,setCmdSchema]=useState({
     command:'None',
     schema: {
@@ -189,6 +207,18 @@ export default function Editor() {
     },
     formData:''
   })
+  const [formData,setFormData]=useState({})
+
+  const [drawerValue, setDrawerValue] = React.useState(0);
+
+  const handleDrawerChange = (event, newValue) => {
+    if(drawerValue==newValue){
+      setDrawerOpen((drawerOpen)?false:true)
+    }else{
+      setDrawerOpen(true)
+    }
+    setDrawerValue(newValue);
+  };
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -196,6 +226,9 @@ export default function Editor() {
 
   return (
     <div className={classes.root}>
+      <GuideTour
+        setDrawerOpen={setDrawerOpen}
+      />
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
@@ -206,11 +239,12 @@ export default function Editor() {
               value={tabValue}
               onChange={handleChange}
               indicatorColor="inherit"
+
           >
             <Tab icon={<CodeIcon fontSize='small'/>} label="Code Editor" fontSize='16px' {...a11yProps(0)} size="small" />
             <Tab icon={<ViewListIcon fontSize='small'/>} label="Table View" fontSize='16px' {...a11yProps(1)} />
           </Tabs>
-          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}}>
+          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button-setting'>
             <SettingsIcon/>
           </IconButton>
           <SettingDialog
@@ -218,7 +252,6 @@ export default function Editor() {
               setOpen={setSettingsOpen}
               style={style}
               setStyle={setStyle}
-
           />
         </Toolbar>
       </AppBar>
@@ -228,69 +261,148 @@ export default function Editor() {
         classes={{
           paper: classes.drawerPaper,
         }}
+
       >
         <Toolbar />
-        <div className={classes.drawerContainer}>
-          <CaseAndConfigTab
-            selectedCase={selectedCase}
-            setSelectedCase={setSelectedCase}
-            tree={tree}
-            setTree={setTree}
-            createdCases={createdCases}
-            setCreatedCases={setCreatedCases}
-            noOfCases={noOfCases}
-            setNoOfCases={setNoOfCases}
-            config={config}
-            setConfig={setConfig}
-          />
+        <div className={classes.drawerContainer} id='Drawer'>
+          <Tabs
+              value={drawerValue}
+              onChange={handleDrawerChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              orientation="vertical"
+              className={classes.tab}
+
+          >
+            <Tab
+                id='tab-config'
+                className={classes.tab}
+                icon={<TuneIcon color='primary'/>}
+                {...a11yProps(0)}
+            />
+            <Tab
+                id='tab-cases'
+                className={classes.tab}
+                icon={<ListAltIcon color='primary'/>}
+                {...a11yProps(1)}
+            />
+          </Tabs>
         </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-            <TabPanel value={tabValue} index={0}>
-              <JsonEditor
-                  selectedCase={selectedCase}
-                  setSelectedCase={setSelectedCase}
-                  style={style}
-                  setTree={setTree}
-                  tree={tree}
-              />
-            </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <Grid container spacing={2}>
-            <Grid item xs={(formOpen)?8:11}>
-          <div >
-            <CommandTable
-                selectedCase={selectedCase}
-                setSelectedCase={setSelectedCase}
-                formOpen={formOpen}
-                setFormOpen={setFormOpen}
-            />
-          </div>
-            </Grid>
-            <Grow in={formOpen} timeout={(formOpen)?1000:0}>
-              <Grid item xs={(formOpen)?4:1}>
-                <Paper>
-                  <Toolbar>
-                    <Tooltip>
-                      <Button onClick={()=>{setFormOpen(false)}}>
-                        <CloseIcon fontSize='small'/>
-                      </Button>
-                    </Tooltip>
-                  </Toolbar>
-                  <CommandForm
+        <Grid  container spacing={0} justify='centered' style={{height:"93%"}}>
+          {(drawerOpen)?
+          <Grid xs={2}>
+            <Paper className={classes.detailedDrawer}>
+              <Toolbar>
+                <Button
+                    id='button-closeDrawer'
+                    onClick={()=>setDrawerOpen(false)}
+                >
+                  <ArrowBackIosIcon fontSize='small'/>
+               </Button>
+              </Toolbar>
+              <Divider />
+              <TabPanel
+                  id="tabPanel-config"
+                  value={drawerValue}
+                  index={0} >
+                <div>
+                  <LanguageSelect
+                      config={config}
+                      setConfig={setConfig}
+                  />
+                  <FrameworkSelect
+                      config={config}
+                      setConfig={setConfig}
+                  />
+                  <DriverSelect
+                      config={config}
+                      setConfig={setConfig}
+                  />
+                </div>
+              </TabPanel>
+              <TabPanel
+                  id="tabPanel-caseTree"
+                  value={drawerValue}
+                  index={1}>
+                <CaseTree
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
-                    cmdSchema={cmdSchema}
-                    setCmdSchema={setCmdSchema}
-                    setTree={setTree}
                     tree={tree}
+                    setTree={setTree}
+                    createdCases={createdCases}
+                    setCreatedCases={setCreatedCases}
+                    noOfCases={noOfCases}
+                    setNoOfCases={setNoOfCases}
+                />
+              </TabPanel>
+            </Paper>
+          </Grid>:null
+          }
+          <Grid xs={(drawerOpen)?10:12}>
+            <TabPanel value={tabValue} index={0}>
+              <Grid  container spacing={2} justify='center' alignItems="stretch">
+                <Grid className={classes.container} xs={10} id="jsonEditor" >
+                  <JsonEditor
+                      selectedCase={selectedCase}
+                      setSelectedCase={setSelectedCase}
+                      style={style}
+                      setTree={setTree}
+                      tree={tree}
                   />
-                </Paper>
+                </Grid>
               </Grid>
-            </Grow>
+            </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          <Grid container spacing={1} justify='center'>
+            <Grid item xs={(formOpen)?8:12}>
+              <div id="commandTable">
+                <CommandTable
+                    selectedCase={selectedCase}
+                    setSelectedCase={setSelectedCase}
+                    formOpen={formOpen}
+                    setFormOpen={setFormOpen}
+                    tree={tree}
+                    setTree={setTree}
+                />
+              </div>
+            </Grid>
+            {(formData)?
+              <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
+                <Grid item xs={(formOpen) ? 4 : 1}>
+                  <Paper id="commandForm">
+                    <Box pt={1}/>
+                    <Tooltip title="Close" style={{float: "right"}}>
+                      <Button onClick={() => {
+                        setFormOpen(false)
+                      }} variant='small'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                          <path
+                              d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                        </svg>
+                      </Button>
+                    </Tooltip>
+                    <CommandForm
+                        selectedCase={selectedCase}
+                        setSelectedCase={setSelectedCase}
+                        cmdSchema={cmdSchema}
+                        setCmdSchema={setCmdSchema}
+                        setTree={setTree}
+                        tree={tree}
+                        formData={formData}
+                        setFormData={setFormData}
+                    />
+                  </Paper>
+                </Grid>
+              </Grow>:null
+            }
           </Grid>
         </TabPanel>
+          </Grid>
+        </Grid>
       </main>
     </div>
   );

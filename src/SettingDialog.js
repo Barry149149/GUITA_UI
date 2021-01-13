@@ -58,7 +58,7 @@ export default function SettingDialog(props) {
                         <Slider
                             value={props.style.fontSize}
                             valueLabelDisplay="auto"
-                            onChange={(e, newValue)=>{props.setFontSize(newValue)}}
+                            onChange={(e, newValue)=>{props.setStyle({...props.style, fontSize:newValue})}}
                         />
                         <FormControlLabel
                             className={classes.formControlLabel}

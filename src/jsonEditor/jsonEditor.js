@@ -1,8 +1,6 @@
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import Box from "@material-ui/core/Box";
-import UploadFiles from "../components/upload-files.component";
-import Container from "@material-ui/core/Container";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -30,15 +28,14 @@ const useStyles = makeStyles((theme) =>({
 }));
 
 export default function JsonEditor(props){
-    const classes = useStyles();
 
     return (
-        <Container className={classes.container}>
+        <React.Fragment >
         <JSONInput
             id     = 'a_unique_id'
             locale = { locale }
             width  = "100%"
-            height = "550px"
+            height = "600px"
             placeholder = {props.selectedCase.json}
             colors = {(props.style.darkTheme)?{
                     default: '#D4D4D4',
@@ -72,6 +69,7 @@ export default function JsonEditor(props){
             onChange = {(e)=>{
                 if(!e.error) {
                     let new_json_id=[]
+                    if(e.jsObject.length===undefined) {return}
                     for(let i=0;i<e.jsObject.length;i++) {
                         new_json_id.push({
                             id:(i+1),
@@ -91,7 +89,7 @@ export default function JsonEditor(props){
                     props.setTree([
                         {
                             value: 'Test Cases',
-                            nodes: newNodes
+                            nodes:newNodes,
                         }
                     ])
                 }
@@ -101,8 +99,6 @@ export default function JsonEditor(props){
         <Box pt={2}>
             <Copyright />
         </Box>
-        <Box pt={4}>
-            <UploadFiles />
-        </Box>
-    </Container>)
+    </React.Fragment>)
+
 }
