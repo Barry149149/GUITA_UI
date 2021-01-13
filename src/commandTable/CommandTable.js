@@ -21,6 +21,11 @@ import Grow from "@material-ui/core/Grow";
 import {PlaylistAdd} from "@material-ui/icons";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {Divider} from "@material-ui/core";
+import {
+    DragDropContext,
+    Draggable,
+    Droppable
+} from "react-beautiful-dnd";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     selected: {}
 }));
+
 
 export default function CommandTable(props){
 
@@ -110,7 +116,7 @@ export default function CommandTable(props){
     }
 
     useEffect(() => {
-        console.log(selected)
+        console.log(props.selectedCase.json_id)
     })
 
     const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -158,141 +164,165 @@ export default function CommandTable(props){
                         <TableCell align="Right" />
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {props.selectedCase.json_id.map((row, index) => {
-                        const isItemOpened = isOpen(row.id)
-                        const isItemSelected = isSelected(row.id);
+                <DragDropContext
+                    onDragEnd={(result)=>{
+                        if(!result.destination) return
 
-                        return (
-                            <React.Fragment>
-                                <TableRow
-                                    hover
-                                    key={row.id}
-                                    aria-checked={isItemSelected}
-                                    selected={isItemSelected}
-                                    className={classes.tableRow}
-                                    classes={{ selected: classes.selected }}
-                                >
-                                    <TableCell padding="checkbox">
-                                        <Checkbox
-                                            checked={isItemSelected}
-                                            color="primary"
-                                            onChange={(event) => {
-                                                props.setFormOpen(false)
-                                                handleRowClick(event, row.id)
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell component="th" scope="row" align="left">
-                                        {row.command.command}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton aria-label="expand row" size="small" onClick={(e) => handleOpenClick(e,row.id)}>
-                                            {isItemOpened ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow
-                                    selected={isItemSelected}
-                                    className={classes.tableRow}
-                                    classes={{ selected: classes.selected }}
-                                >
-                                    <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
-                                        <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
-                                            <Box margin={1}>
-                                                <Typography variant="h8" gutterBottom component="div">
-                                                    Detail
-                                                </Typography>
-                                                <Table size="small">
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            {(row.command.widgetName === undefined) ? null :
-                                                                <TableCell>WidgetName</TableCell>}
-                                                            {(row.command.widget === undefined) ? null :
-                                                                <TableCell>Widget</TableCell>}
-                                                            {(row.command.setVariable === undefined) ? null :
-                                                                <TableCell>SetVariable</TableCell>}
-                                                            {(row.command.valueLhs === undefined) ? null :
-                                                                <TableCell>ValueLhs</TableCell>}
-                                                            {(row.command.valueRhs === undefined) ? null :
-                                                                <TableCell>ValueRhs</TableCell>}
-                                                            {(row.command.time === undefined) ? null :
-                                                                <TableCell>Time</TableCell>}
-                                                            {(row.command.value === undefined) ? null :
-                                                                <TableCell>Value</TableCell>}
+                        let new_json_unordered=props.selectedCase.json_id
+                        const [removed] = new_json_unordered.splice(result.source.index, 1)
+                        new_json_unordered.splice(result.destination.index, 0, removed)
+
+                        let new_json_id=[],new_json=[]
+                        for(let i=0;i<new_json_unordered.length;i++){
+                            new_json_id=[
+                                ...new_json_id,
+                                {
+                                    id:i+1,
+                                    command:new_json_unordered[i].command
+                                }
+                            ]
+                            new_json=[
+                                ...new_json,
+                                new_json_unordered[i].command
+                            ]
+                        }
+
+                        props.setSelectedCase({
+                            ...props.selectedCase,
+                            json_id:new_json_id,
+                            json:new_json
+                        })
+
+                        let newNodes=[
+                            ...props.tree[0].nodes,
+                        ]
+                        newNodes.find(x=>x.id===props.selectedCase.id).json=new_json
+                        newNodes.find(x=>x.id===props.selectedCase.id).json_id=new_json_id
+                        props.setTree([
+                            {
+                                value: 'Test Cases',
+                                nodes: newNodes
+                            }
+                        ])
+                    }}
+                    onBeforeDragStart={()=>{
+                        open.length=0;
+                }}
+                >
+                    <Droppable droppableId="1" type="Command">
+                        {(provided, snapshot) => (
+                            <TableBody
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                {props.selectedCase.json_id.map((row, index) => {
+                                    const isItemOpened = isOpen(row.id)
+                                    const isItemSelected = isSelected(row.id);
+
+                                    return (
+                                        <React.Fragment>
+                                            <Draggable  draggableId={`${row.id}`} index={index}>
+                                                {(provided,snapshot)=> (
+                                                        <TableRow
+                                                            hover
+                                                            key={row.id}
+                                                            aria-checked={isItemSelected}
+                                                            selected={isItemSelected}
+                                                            className={classes.tableRow}
+                                                            classes={{selected: classes.selected}}
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                        >
+                                                            <TableCell padding="checkbox">
+                                                                <Checkbox
+                                                                    checked={isItemSelected}
+                                                                    color="primary"
+                                                                    onChange={(event) => {
+                                                                        props.setFormOpen(false)
+                                                                        handleRowClick(event, row.id)
+                                                                    }}
+                                                                />
+                                                            </TableCell>
+                                                            <TableCell component="th" scope="row" align="left">
+                                                                {row.command.command}
+                                                            </TableCell>
+                                                            <TableCell align="right">
+                                                                <IconButton aria-label="expand row" size="small"
+                                                                            onClick={(e) => handleOpenClick(e, row.id)}>
+                                                                    {isItemOpened ? <KeyboardArrowUpIcon/> :
+                                                                        <KeyboardArrowDownIcon/>}
+                                                                </IconButton>
+                                                            </TableCell>
                                                         </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        <TableRow>
-                                                            {(row.command.widgetName === undefined) ? null :
-                                                                <TableCell component="th"
-                                                                           scope="row">{row.command.widgetName}</TableCell>}
-                                                            {(row.command.widget === undefined) ? null :
-                                                                <TableCell>{"Type:" + row.command.widget.type + " Value:" + row.command.widget.value}</TableCell>}
-                                                            {(row.command.setVariable === undefined) ? null :
-                                                                <TableCell>{row.command.setVariable}</TableCell>}
-                                                            {(row.command.valueLhs === undefined) ? null :
-                                                                <TableCell>{"Type: " + row.command.valueLhs.type + ", Value:" + row.command.valueLhs.value}</TableCell>}
-                                                            {(row.command.valueRhs === undefined) ? null :
-                                                                <TableCell>{row.command.valueRhs}</TableCell>}
-                                                            {(row.command.time === undefined) ? null :
-                                                                <TableCell>{row.command.time}</TableCell>}
-                                                            {(row.command.value === undefined) ? null :
-                                                                <TableCell><p>{"Type: " + row.command.value.type}</p>
-                                                                    <p>{"Value:" + row.command.value.value}</p>
-                                                                </TableCell>}
-                                                        </TableRow>
-                                                    </TableBody>
-                                                </Table>
-                                            </Box>
-                                        </Collapse>
-                                    </TableCell>
-                                </TableRow>
-                            </React.Fragment>
-                        );
-                    })}
-                    <TableRow>
-                    </TableRow>
-                </TableBody>
+                                                )}
+                                            </Draggable>
+                                            <TableRow
+                                                selected={isItemSelected}
+                                                className={classes.tableRow}
+                                                classes={{ selected: classes.selected }}
+                                            >
+                                                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                                                    <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
+                                                        <Box margin={1}>
+                                                            <Typography variant="h8" gutterBottom component="div">
+                                                                Detail
+                                                            </Typography>
+                                                            <Table size="small">
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        {(row.command.widgetName === undefined) ? null :
+                                                                            <TableCell>WidgetName</TableCell>}
+                                                                        {(row.command.widget === undefined) ? null :
+                                                                            <TableCell>Widget</TableCell>}
+                                                                        {(row.command.setVariable === undefined) ? null :
+                                                                            <TableCell>SetVariable</TableCell>}
+                                                                        {(row.command.valueLhs === undefined) ? null :
+                                                                            <TableCell>ValueLhs</TableCell>}
+                                                                        {(row.command.valueRhs === undefined) ? null :
+                                                                            <TableCell>ValueRhs</TableCell>}
+                                                                        {(row.command.time === undefined) ? null :
+                                                                            <TableCell>Time</TableCell>}
+                                                                        {(row.command.value === undefined) ? null :
+                                                                            <TableCell>Value</TableCell>}
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        {(row.command.widgetName === undefined) ? null :
+                                                                            <TableCell component="th"
+                                                                                       scope="row">{row.command.widgetName}</TableCell>}
+                                                                        {(row.command.widget === undefined) ? null :
+                                                                            <TableCell>{"Type:" + row.command.widget.type + " Value:" + row.command.widget.value}</TableCell>}
+                                                                        {(row.command.setVariable === undefined) ? null :
+                                                                            <TableCell>{row.command.setVariable}</TableCell>}
+                                                                        {(row.command.valueLhs === undefined) ? null :
+                                                                            <TableCell>{"Type: " + row.command.valueLhs.type + ", Value:" + row.command.valueLhs.value}</TableCell>}
+                                                                        {(row.command.valueRhs === undefined) ? null :
+                                                                            <TableCell>{row.command.valueRhs}</TableCell>}
+                                                                        {(row.command.time === undefined) ? null :
+                                                                            <TableCell>{row.command.time}</TableCell>}
+                                                                        {(row.command.value === undefined) ? null :
+                                                                            <TableCell><p>{"Type: " + row.command.value.type}</p>
+                                                                                <p>{"Value:" + row.command.value.value}</p>
+                                                                            </TableCell>}
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
+                                                        </Box>
+                                                    </Collapse>
+                                                </TableCell>
+                                            </TableRow>
+                                        </React.Fragment>
+                                    );
+                                })}
+                                {provided.placeholder}
+                            </TableBody>
+                            )}
+                    </Droppable>
+                </DragDropContext>
             </Table>
         </Paper>
     )
 }
 
-/*const DraggableComponent = (id, index) => (props) => {
-    return (
-        <Draggable draggableId={id} index={index}>
-            {(provided, snapshot) => (
-                <TableRow
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-
-                    {...props}
-                >
-                    {props.children}
-                </TableRow>
-            )}
-        </Draggable>
-    )
-}
-
-const DroppableComponent = (
-    onDragEnd: (result, provided) => void) => (props) =>
-{
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId={'1'} direction="vertical">
-                {(provided) => {
-                    return (
-                        <TableBody ref={provided.innerRef} {...provided.droppableProps} {...props}>
-                            {props.children}
-                            {provided.placeholder}
-                        </TableBody>
-                    )
-                }}
-            </Droppable>
-        </DragDropContext>
-    )
-}*/

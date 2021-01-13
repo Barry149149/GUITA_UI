@@ -111,7 +111,7 @@ export default function CaseTree(props){
                 fullWidth={true}
                 onClick={()=>{}}
                 >
-                Open
+                Upload
                 <input
                     type='file'
                     id='file'
