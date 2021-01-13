@@ -48,8 +48,12 @@ export default function CaseTree(props){
                     json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
                 })}}
             />
+            <div
+                id= 'button-caseTree'
+            >
             <Box pt={4} />
             <Button
+                id= 'button-add'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -79,6 +83,7 @@ export default function CaseTree(props){
                 }
                 }>Add</Button>
             <Button
+                id= 'button-delete'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -86,6 +91,7 @@ export default function CaseTree(props){
                 Delete
             </Button>
             <Button
+                id= 'button-download'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -105,6 +111,7 @@ export default function CaseTree(props){
                 Download
             </Button>
             <Button
+                id= 'button-upload'
                 variant= 'outlined'
                 component='label'
                 color= 'primary'
@@ -185,6 +192,7 @@ export default function CaseTree(props){
                 />
                 
             </Button>
+            </div>
             <Dialog
                 open={confirmOpen}
                 onClose={handleConfirmClose}

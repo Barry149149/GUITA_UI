@@ -75,10 +75,12 @@ export default function CaseAndConfigTab(props) {
                     orientation="vertical"
                 >
                     <Tab
+                        id= 'tab-configuration'
                         className={classes.tab}
                         label="configuration" {...a11yProps(0)}
                     />
                     <Tab
+                        id= 'tab-testCase'
                         className={classes.tab}
                         label="Test Cases" {...a11yProps(1)}
                     />
