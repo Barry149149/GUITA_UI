@@ -132,7 +132,7 @@ export default function CommandTable(props){
                     <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
                         {numSelected} selected
                     </Typography>):
-                    (<Typography className={classes.title}>
+                    (<Typography className={classes.title} variant="h6" color="primary">
                     Command Table
                     </Typography>)
                 }

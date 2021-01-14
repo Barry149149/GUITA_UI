@@ -33,6 +33,8 @@ import {Divider} from "@material-ui/core";
 import TabIcon from '@material-ui/icons/Tab';
 import TableChartIcon from '@material-ui/icons/TableChart';
 import clsx from 'clsx';
+import Container from '@material-ui/core/Container';
+import Title from './Title';
 
 const drawerWidth = 360;
 
@@ -94,6 +96,8 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerContainer: {
     paddingTop: theme.spacing(3),
+    display: 'flex',
+    flexGrow: 1,
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -115,19 +119,14 @@ const useStyles = makeStyles((theme) => ({
   tab:{
     display: 'flex',
     backgroundColor: theme.palette.background.paper,
-    minWidth: 70,
-    width: 70,
+    minWidth: 60,
+    width: 60,
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
     height: 600
   },
-  detailedDrawer:{
-    height: '100%',
-    paddingTop: theme.spacing(1),
-  }
-
 }));
 
 function TabPanel(props) {
@@ -277,10 +276,10 @@ export default function Editor() {
           }),
         }}
       >
-        <Toolbar />
+
         <div className={classes.drawerContainer} id='Drawer'>
-          <Grid  container spacing={0}>
-            <Grid xs={2}>
+          <div>
+            <Box p={4}/>
               <Tabs
                   value={drawerValue}
                   onChange={handleDrawerChange}
@@ -310,24 +309,15 @@ export default function Editor() {
                     {...a11yProps(2)}
                 />
               </Tabs>
-            </Grid>
-            {(drawerOpen)?
-            <Grid xs={10}>
-                <Toolbar
-                    variant='dense'
-                >
-                  <Button
-                      id='button_closeDrawer'
-                      onClick={()=>setDrawerOpen(false)}
-                  >
-                    <ArrowBackIosIcon fontSize='small'/>
-                  </Button>
-                </Toolbar>
-                <Divider />
+          </div>
+              <div>
+                <Box p={3}/>
                 <TabPanel
                     id="tabPanel_config"
                     value={drawerValue}
                     index={0} >
+                  <Title>Configuration</Title>
+                  <Divider/>
                   <div>
                     <LanguageSelect
                         config={config}
@@ -347,6 +337,8 @@ export default function Editor() {
                     id="tabPanel_caseTree"
                     value={drawerValue}
                     index={1}>
+                  <Title>Case Tree</Title>
+                  <Divider/>
                   <CaseTree
                       selectedCase={selectedCase}
                       setSelectedCase={setSelectedCase}
@@ -363,6 +355,9 @@ export default function Editor() {
                     value={drawerValue}
                     index={2}
                 >
+                  <Title>Editor Mode</Title>
+                  <Divider/>
+                  <Container>
                   <Tabs
                       value={tabValue}
                       onChange={handleChange}
@@ -374,21 +369,19 @@ export default function Editor() {
                         id="tab_codeEditor"
                         icon={<CodeIcon/>}
                         label="Code Editor"
-                        fontSize='16px'
                         {...a11yProps(0)}
                     />
                     <Tab
                         id="tab_tableView"
-                        icon={<TableChartIcon/>}
+                        icon={<TableChartIcon />}
                         label="Table View"
-                        fontSize='16px'
                         {...a11yProps(1)}
                     />
                   </Tabs>
+                  </Container>
                 </TabPanel>
-            </Grid>:null}
-          </Grid>
-        </div>
+              </div>
+          </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
