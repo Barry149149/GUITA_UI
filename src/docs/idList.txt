@@ -8,3 +8,31 @@ Example:
 Drawer: Column on left with two button
 
 <----------------------------------------------------------------->
+
+Button:
+button-add:button to add case under the case tree
+button-caseTree:div for Buttons below case tree
+button_closeDrawer: button to close the drawer
+button-delete:button to delete case
+button-download: button for downloading all test case in .json below the case tree
+button_setting: button to open setting dialog
+button-upload: button for uploading test case to the case tree
+
+components
+caseTree: the case tree
+commandForm: the json schema form for adding command to the selected json
+commandTable: table showing the command and its details
+Drawer: Column on left with two button
+jsonEditor: div containing the json editor
+
+Tabs:
+[aria-labelledby="tab_cases"]: tab button for opening drawer for selecting case
+[aria-labelledby="tab_config"]: tab button for opening drawer for the configuration setting box
+tab_codeEditor:Button on top right for Code Editor
+tab_editorMode:tab_button for opening drawer for selecting editor mode
+tab_tableView:Button on top right for Table View
+
+Tab Panel:
+tabPanel_caseTree: tab panel for selecting case
+tabPanel_config: tab panel for configuration setting box
+tabPanel_codeEditor: tab panel for selecting code editor

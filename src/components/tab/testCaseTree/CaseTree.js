@@ -9,8 +9,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver';
+import {makeStyles} from '@material-ui/core/styles';
+import { ButtonGroup } from '@material-ui/core';
+
+const useStyles = makeStyles({
+    button_container: {
+        width:260
+    }
+});
 
 export default function CaseTree(props){
+    const classes = useStyles();
+
     const [open, setOpen]= React.useState(false);
     const [warningOpen, setWarningOpen] = React.useState(false);
     const [confirmOpen, setConfirmOpen] = React.useState(false);
@@ -39,6 +49,7 @@ export default function CaseTree(props){
 
     return (
         <div>
+            <div id="caseTree">
             <MuiTreeView
                 tree={props.tree}
                 onLeafClick={e=>{props.setSelectedCase({
@@ -48,8 +59,12 @@ export default function CaseTree(props){
                     json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
                 })}}
             />
-            <div
+            </div>
+            <ButtonGroup
+                className={classes.button_container}
                 id= 'button-caseTree'
+                fullWidth={true}
+                orientation='vertical'
             >
             <Box pt={4} />
             <Button
@@ -192,7 +207,7 @@ export default function CaseTree(props){
                 />
                 
             </Button>
-            </div>
+            </ButtonGroup>
             <Dialog
                 open={confirmOpen}
                 onClose={handleConfirmClose}
