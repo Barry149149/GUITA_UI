@@ -139,7 +139,9 @@ export default function CommandTable(props){
                 {!(numSelected > 0) ?(
                     <Tooltip title="Add">
                         <Grow in={!(props.formOpen||numSelected >0)}>
-                            <Button onClick={() => {
+                            <Button
+                                id='button_commandAdd'
+                                onClick={() => {
                                 props.setFormOpen(true)
                             }}>
                                 <PlaylistAdd/>
@@ -236,6 +238,7 @@ export default function CommandTable(props){
                                                         >
                                                             <TableCell padding="checkbox">
                                                                 <Checkbox
+                                                                    id='checkbox_commandTableRow'
                                                                     checked={isItemSelected}
                                                                     color="primary"
                                                                     onChange={(event) => {
@@ -248,7 +251,7 @@ export default function CommandTable(props){
                                                                 {row.command.command}
                                                             </TableCell>
                                                             <TableCell align="right">
-                                                                <IconButton aria-label="expand row" size="small"
+                                                                <IconButton id="button_expandRow" size="small"
                                                                             onClick={(e) => handleOpenClick(e, row.id)}>
                                                                     {isItemOpened ? <KeyboardArrowUpIcon/> :
                                                                         <KeyboardArrowDownIcon/>}

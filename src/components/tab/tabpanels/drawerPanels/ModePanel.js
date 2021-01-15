@@ -38,13 +38,13 @@ export default function ModePanel(props){
                     centered={true}
                 >
                     <Tab
-                        id="tab_codeEditor"
+                        aria-label="tab_codeEditor"
                         icon={<CodeIcon/>}
                         label="Code Editor"
                         {...a11yProps(0)}
                     />
                     <Tab
-                        id="tab_tableView"
+                        aria-label="tab_tableView"
                         icon={<TableChartIcon />}
                         label="Table View"
                         {...a11yProps(1)}

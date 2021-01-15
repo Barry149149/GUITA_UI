@@ -28,6 +28,7 @@ import Configuration from "./tab/tabpanels/drawerPanels/ConfigPanel";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
 import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 const drawerWidth = 360;
 
@@ -196,6 +197,8 @@ export default function Editor() {
 
   const [drawerValue, setDrawerValue] = React.useState(-1);
 
+  const [guideRun,setGuideRun] = useState(true);
+
   const handleDrawerChange = (event, newValue) => {
     if(drawerValue===newValue){
       setDrawerOpen(!drawerOpen)
@@ -205,11 +208,18 @@ export default function Editor() {
     setDrawerValue(newValue);
   };
 
-
-
   return (
     <div className={classes.root}>
-      <GuideTour/>
+      <GuideTour
+          drawerValue={drawerValue}
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          setDrawerValue={setDrawerValue}
+          setTabValue={setTabValue}
+          setFormOpen={setFormOpen}
+          setRun={setGuideRun}
+          run={guideRun}
+      />
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
@@ -241,8 +251,8 @@ export default function Editor() {
           }),
         }}
       >
-        <div className={classes.drawerContainer} id='Drawer'>
-          <div>
+        <div className={classes.drawerContainer} >
+          <div id='Drawer'>
             <Box p={4}/>
               <Tabs
                   value={drawerValue}
@@ -273,6 +283,9 @@ export default function Editor() {
                     {...a11yProps(2)}
                 />
               </Tabs>
+              <Button onClick={()=>{setGuideRun(true)}}>
+                <HelpOutlineIcon/>
+              </Button>
           </div>
               <div>
                 <Box p={3}/>
@@ -332,7 +345,7 @@ export default function Editor() {
                 />
               </div>
             </Grid>
-            {(formData)?
+            {(formOpen)?
               <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
                 <Grid item xs={(formOpen) ? 4 : 1}>
                   <Paper id="commandForm">

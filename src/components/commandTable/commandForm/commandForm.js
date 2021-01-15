@@ -27,7 +27,7 @@ export default function CommandForm(props){
             <FormControl className={classes.formControl}>
                 <Title>Command Form</Title>
                 <Box p={1}/>
-                <div id="select-command">
+                <div id="select_command">
                 <Select
                     onChange={e=>{
                         //Should be update through this onChange

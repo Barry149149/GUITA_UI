@@ -18,6 +18,8 @@ const useStyles = makeStyles({
     }
 });
 
+
+
 export default function CaseTree(props){
     const classes = useStyles();
 
@@ -62,13 +64,13 @@ export default function CaseTree(props){
             </div>
             <ButtonGroup
                 className={classes.button_container}
-                id= 'button-caseTree'
+                id= 'button_caseTree'
                 fullWidth={true}
                 orientation='vertical'
             >
             <Box pt={4} />
             <Button
-                id= 'button-add'
+                id= 'button_add'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -98,7 +100,7 @@ export default function CaseTree(props){
                 }
                 }>Add</Button>
             <Button
-                id= 'button-delete'
+                id= 'button_delete'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -106,7 +108,7 @@ export default function CaseTree(props){
                 Delete
             </Button>
             <Button
-                id= 'button-download'
+                id= 'button_download'
                 variant= 'outlined'
                 color= 'primary'
                 fullWidth={true}
@@ -126,7 +128,7 @@ export default function CaseTree(props){
                 Download
             </Button>
             <Button
-                id= 'button-upload'
+                id= 'button_upload'
                 variant= 'outlined'
                 component='label'
                 color= 'primary'
