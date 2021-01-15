@@ -1,5 +1,4 @@
 import {Box, Divider, FormControl, MenuItem, Select} from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
 import {commandList} from "../../../docs/commandList";
 import Form from "@rjsf/material-ui";
 import React from "react";

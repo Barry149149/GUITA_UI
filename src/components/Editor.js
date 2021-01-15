@@ -9,10 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
-import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CodeIcon from '@material-ui/icons/Code';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Grow from '@material-ui/core/Grow';
@@ -22,19 +20,14 @@ import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
 import Tooltip from "@material-ui/core/Tooltip";
 import GuideTour from "./guideTour";
-import LanguageSelect from "./tab/selectionBars/LanguageSelect";
-import FrameworkSelect from "./tab/selectionBars/FrameworkSelect";
-import DriverSelect from "./tab/selectionBars/DriverSelect";
-import CaseTree from "./tab/testCaseTree/CaseTree";
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import TuneIcon from '@material-ui/icons/Tune';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import {Divider} from "@material-ui/core";
 import TabIcon from '@material-ui/icons/Tab';
-import TableChartIcon from '@material-ui/icons/TableChart';
 import clsx from 'clsx';
-import Container from '@material-ui/core/Container';
-import Title from './Title';
+import Configuration from "./tab/tabpanels/drawerPanels/ConfigPanel";
+import TabPanel from "./tab/tabpanels/Tabpanel";
+import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
+import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
 
 const drawerWidth = 360;
 
@@ -129,32 +122,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-      <div
-          role="tabpanel"
-          hidden={value !== index}
-          id={`full-width-tabpanel-${index}`}
-          aria-labelledby={`full-width-tab-${index}`}
-          {...other}
-      >
-        {value === index && (
-            <Box p={3}>
-              <Typography>{children}</Typography>
-            </Box>
-        )}
-      </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
@@ -227,7 +194,7 @@ export default function Editor() {
   })
   const [formData,setFormData]=useState({})
 
-  const [drawerValue, setDrawerValue] = React.useState(0);
+  const [drawerValue, setDrawerValue] = React.useState(-1);
 
   const handleDrawerChange = (event, newValue) => {
     if(drawerValue===newValue){
@@ -238,9 +205,7 @@ export default function Editor() {
     setDrawerValue(newValue);
   };
 
-  const handleChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+
 
   return (
     <div className={classes.root}>
@@ -276,7 +241,6 @@ export default function Editor() {
           }),
         }}
       >
-
         <div className={classes.drawerContainer} id='Drawer'>
           <div>
             <Box p={4}/>
@@ -312,74 +276,28 @@ export default function Editor() {
           </div>
               <div>
                 <Box p={3}/>
-                <TabPanel
-                    id="tabPanel_config"
-                    value={drawerValue}
-                    index={0} >
-                  <Title>Configuration</Title>
-                  <Divider/>
-                  <div>
-                    <LanguageSelect
-                        config={config}
-                        setConfig={setConfig}
-                    />
-                    <FrameworkSelect
-                        config={config}
-                        setConfig={setConfig}
-                    />
-                    <DriverSelect
-                        config={config}
-                        setConfig={setConfig}
-                    />
-                  </div>
-                </TabPanel>
-                <TabPanel
-                    id="tabPanel_caseTree"
-                    value={drawerValue}
-                    index={1}>
-                  <Title>Case Tree</Title>
-                  <Divider/>
-                  <CaseTree
-                      selectedCase={selectedCase}
-                      setSelectedCase={setSelectedCase}
-                      tree={tree}
-                      setTree={setTree}
-                      createdCases={createdCases}
-                      setCreatedCases={setCreatedCases}
-                      noOfCases={noOfCases}
-                      setNoOfCases={setNoOfCases}
+                <Configuration
+                    drawerValue={drawerValue}
+                    config={config}
+                    setConfig={setConfig}
+
+                />
+                <TreePanel
+                    drawerValue={drawerValue}
+                    selectedCase={selectedCase}
+                    setSelectedCase={setSelectedCase}
+                    tree={tree}
+                    setTree={setTree}
+                    createdCases={createdCases}
+                    setCreatedCases={setCreatedCases}
+                    noOfCases={noOfCases}
+                    setNoOfCases={setNoOfCases}
+                />
+                <ModePanel
+                    drawerValue={drawerValue}
+                    tabValue={tabValue}
+                    setTabValue={setTabValue}
                   />
-                </TabPanel>
-                <TabPanel
-                    id="tabPanel_codeEditor"
-                    value={drawerValue}
-                    index={2}
-                >
-                  <Title>Editor Mode</Title>
-                  <Divider/>
-                  <Container>
-                  <Tabs
-                      value={tabValue}
-                      onChange={handleChange}
-                      indicatorColor="inherit"
-                      orientation="vertical"
-                      centered={true}
-                  >
-                    <Tab
-                        id="tab_codeEditor"
-                        icon={<CodeIcon/>}
-                        label="Code Editor"
-                        {...a11yProps(0)}
-                    />
-                    <Tab
-                        id="tab_tableView"
-                        icon={<TableChartIcon />}
-                        label="Table View"
-                        {...a11yProps(1)}
-                    />
-                  </Tabs>
-                  </Container>
-                </TabPanel>
               </div>
           </div>
       </Drawer>
