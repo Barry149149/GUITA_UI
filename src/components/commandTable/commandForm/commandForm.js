@@ -1,9 +1,9 @@
-import {Divider, FormControl, MenuItem, Select} from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import {commandList} from "../../docs/commandList";
+import {Box, Divider, FormControl, MenuItem, Select} from "@material-ui/core";
+import {commandList} from "../../../docs/commandList";
 import Form from "@rjsf/material-ui";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
+import Title from "../../Title"
 
 const useStyles = makeStyles((theme)=>({
     formControl: {
@@ -25,9 +25,9 @@ export default function CommandForm(props){
 
             <div>
             <FormControl className={classes.formControl}>
-                <InputLabel>
-                    Command
-                </InputLabel>
+                <Title>Command Form</Title>
+                <Box p={1}/>
+                <div id="select_command">
                 <Select
                     onChange={e=>{
                         //Should be update through this onChange
@@ -48,6 +48,7 @@ export default function CommandForm(props){
                         )
                     })}
                 </Select>
+                </div>
             </FormControl>
             <Divider/>
             <div style={{paddingLeft:24,paddingRight:24,paddingBottom:24}}>

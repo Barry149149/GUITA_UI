@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import {frameworkOption} from '../../docs/data';
+import { languageOption } from '../../../docs/data';
 import {Select, MenuItem}from '@material-ui/core';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
@@ -16,26 +16,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FrameWorkSelect(props) {
+export default function Language0Select(props) {
     const classes = useStyles();
 
     const handleChange = e => props.setConfig({
         ...props.config,
-        framework:e.target.value
+        language:e.target.value
     });
 
     return(
         <div>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    FrameWork
+                    Language
                 </InputLabel>
                 <Select
                     onChange={handleChange}>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {frameworkOption.map(({index,value,label}) => {
+                    {languageOption.map(({index,value,label}) => {
                         return (
                             <MenuItem key={index} value={value}>
                                 {label}
@@ -44,7 +44,7 @@ export default function FrameWorkSelect(props) {
                     })
                     }
                 </Select>
-                <FormHelperText>Select the FrameWork for the assignment</FormHelperText>
+                <FormHelperText>Select the Language for the assignment</FormHelperText>
             </FormControl>
         </div>
     )

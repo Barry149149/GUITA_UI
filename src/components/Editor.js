@@ -7,14 +7,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import CaseAndConfigTab from "./tab/Tab";
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
-import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CodeIcon from '@material-ui/icons/Code';
-import ViewListIcon from '@material-ui/icons/ViewList';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Grow from '@material-ui/core/Grow';
@@ -24,16 +20,19 @@ import CommandForm from "./commandTable/commandForm/commandForm";
 import JsonEditor from "./jsonEditor/jsonEditor";
 import Tooltip from "@material-ui/core/Tooltip";
 import GuideTour from "./guideTour";
-import LanguageSelect from "./tab/selectionBars/LanguageSelect";
-import FrameworkSelect from "./tab/selectionBars/FrameworkSelect";
-import DriverSelect from "./tab/selectionBars/DriverSelect";
-import CaseTree from "./tab/testCaseTree/CaseTree";
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import TuneIcon from '@material-ui/icons/Tune';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import {Divider} from "@material-ui/core";
+import TabIcon from '@material-ui/icons/Tab';
+import clsx from 'clsx';
+import Configuration from "./tab/tabpanels/drawerPanels/ConfigPanel";
+import TabPanel from "./tab/tabpanels/Tabpanel";
+import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
+import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import DescriptionIcon from '@material-ui/icons/Description';
+import { render } from '@testing-library/react';
 
-const drawerWidth = 82;
+const drawerWidth = 360;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,12 +67,33 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+    whiteSpace: 'nowrap',
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: 100,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(9) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9) + 1,
+    },
   },
   drawerPaper: {
     width: drawerWidth,
   },
   drawerContainer: {
     paddingTop: theme.spacing(3),
+    display: 'flex',
+    flexGrow: 1,
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -95,47 +115,15 @@ const useStyles = makeStyles((theme) => ({
   tab:{
     display: 'flex',
     backgroundColor: theme.palette.background.paper,
-    minWidth: 80,
-    width: 80,
+    minWidth: 60,
+    width: 60,
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
     height: 600
   },
-  detailedDrawer:{
-    height: '100%',
-    paddingTop: theme.spacing(2),
-
-  }
-
 }));
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-      <div
-          role="tabpanel"
-          hidden={value !== index}
-          id={`full-width-tabpanel-${index}`}
-          aria-labelledby={`full-width-tab-${index}`}
-          {...other}
-      >
-        {value === index && (
-            <Box p={3}>
-              <Typography>{children}</Typography>
-            </Box>
-        )}
-      </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
 
 function a11yProps(index) {
   return {
@@ -209,42 +197,83 @@ export default function Editor() {
   })
   const [formData,setFormData]=useState({})
 
-  const [drawerValue, setDrawerValue] = React.useState(0);
+  const [drawerValue, setDrawerValue] = React.useState(-1);
+
+  const [guideRun,setGuideRun] = useState(true);
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue==newValue){
-      setDrawerOpen((drawerOpen)?false:true)
+    if(drawerValue===newValue){
+      setDrawerOpen(!drawerOpen)
     }else{
       setDrawerOpen(true)
     }
     setDrawerValue(newValue);
   };
 
-  const handleChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+  /*
+  const [startTour,setStartTour] = useState(window.localStorage.getItem('tour'));
+
+  let tour;
+  console.log('start'+startTour);
+  if (!startTour){
+      tour = <GuideTour
+        drawerValue={drawerValue}
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        setDrawerValue={setDrawerValue}
+        setTabValue={setTabValue}
+        setFormOpen={setFormOpen}
+        setRun={setGuideRun}
+        run={guideRun}
+    />;
+  }*/
+  function useTourStickyState(defaultValue, key) {
+    const [value, setValue] = React.useState(() => {
+      const stickyValue = window.localStorage.getItem(key);
+      return stickyValue !== null
+        ? JSON.parse(stickyValue)
+        : defaultValue;
+    });
+    React.useEffect(() => {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }, [key, value]);
+    return [value, setValue];
+  }
+
+  const [
+    tour,
+    setTour
+  ] = useTourStickyState(0, "tour");
+  
+  let guide;
+
+  if(tour<1){
+    guide= <GuideTour
+    drawerValue={drawerValue}
+    drawerOpen={drawerOpen}
+    setDrawerOpen={setDrawerOpen}
+    setDrawerValue={setDrawerValue}
+    setTabValue={setTabValue}
+    setFormOpen={setFormOpen}
+    setRun={setGuideRun}
+    tour={tour}
+    setTour={setTour}
+    run={guideRun}
+/>;
+  }
 
   return (
     <div className={classes.root}>
-      <GuideTour
-        setDrawerOpen={setDrawerOpen}
-      />
+      {guide}
+      
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
           </Typography>
-          <Tabs
-              value={tabValue}
-              onChange={handleChange}
-              indicatorColor="inherit"
 
-          >
-            <Tab icon={<CodeIcon fontSize='small'/>} label="Code Editor" fontSize='16px' {...a11yProps(0)} size="small" />
-            <Tab icon={<ViewListIcon fontSize='small'/>} label="Table View" fontSize='16px' {...a11yProps(1)} />
-          </Tabs>
-          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button-setting'>
+          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
             <SettingsIcon/>
           </IconButton>
           <SettingDialog
@@ -252,83 +281,76 @@ export default function Editor() {
               setOpen={setSettingsOpen}
               style={style}
               setStyle={setStyle}
+              tour={tour}
+              setTour={setTour}
           />
         </Toolbar>
       </AppBar>
       <Drawer
-        className={classes.drawer}
         variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: drawerOpen,
+          [classes.drawerClose]: !drawerOpen,
+        })}
         classes={{
-          paper: classes.drawerPaper,
+          paper: clsx({
+            [classes.drawerOpen]: drawerOpen,
+            [classes.drawerClose]: !drawerOpen,
+          }),
         }}
-
       >
-        <Toolbar />
-        <div className={classes.drawerContainer} id='Drawer'>
-          <Tabs
-              value={drawerValue}
-              onChange={handleDrawerChange}
-              indicatorColor="primary"
-              textColor="primary"
-              variant="fullWidth"
-              orientation="vertical"
-              className={classes.tab}
+        <div className={classes.drawerContainer} >
+          <div id='Drawer'>
+            <Box p={4}/>
+              <Tabs
+                  value={drawerValue}
+                  onChange={handleDrawerChange}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  variant="fullWidth"
+                  orientation="vertical"
+                  className={classes.tab}
 
-          >
-            <Tab
-                id='tab-config'
-                className={classes.tab}
-                icon={<TuneIcon color='primary'/>}
-                {...a11yProps(0)}
-            />
-            <Tab
-                id='tab-cases'
-                className={classes.tab}
-                icon={<ListAltIcon color='primary'/>}
-                {...a11yProps(1)}
-            />
-          </Tabs>
-        </div>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Grid  container spacing={0} justify='centered' style={{height:"93%"}}>
-          {(drawerOpen)?
-          <Grid xs={2}>
-            <Paper className={classes.detailedDrawer}>
-              <Toolbar>
-                <Button
-                    id='button-closeDrawer'
-                    onClick={()=>setDrawerOpen(false)}
-                >
-                  <ArrowBackIosIcon fontSize='small'/>
-               </Button>
-              </Toolbar>
-              <Divider />
-              <TabPanel
-                  id="tabPanel-config"
-                  value={drawerValue}
-                  index={0} >
-                <div>
-                  <LanguageSelect
-                      config={config}
-                      setConfig={setConfig}
-                  />
-                  <FrameworkSelect
-                      config={config}
-                      setConfig={setConfig}
-                  />
-                  <DriverSelect
-                      config={config}
-                      setConfig={setConfig}
-                  />
-                </div>
-              </TabPanel>
-              <TabPanel
-                  id="tabPanel-caseTree"
-                  value={drawerValue}
-                  index={1}>
-                <CaseTree
+              >
+                <Tab
+                    aria-labelledby='tab_config'
+                    className={classes.tab}
+                    icon={<TuneIcon color='primary'/>}
+                    {...a11yProps(0)}
+                />
+                <Tab
+                    aria-labelledby='tab_cases'
+                    className={classes.tab}
+                    icon={<ListAltIcon color='primary'/>}
+                    {...a11yProps(1)}
+                />
+                <Tab
+                    aria-labelledby='tab_editorMode'
+                    className={classes.tab}
+                    icon={<TabIcon color='primary'/>}
+                    {...a11yProps(2)}
+                />
+                <Tab
+                    aria-labelledby='tab_result'
+                    className={classes.tab}
+                    icon={<DescriptionIcon color='primary'/>}
+                    {...a11yProps(3)}
+                />
+              </Tabs>
+              <Button id='button_help' onClick={()=>{setGuideRun(true)}}>
+                <HelpOutlineIcon/>
+              </Button>
+          </div>
+              <div>
+                <Box p={3}/>
+                <Configuration
+                    drawerValue={drawerValue}
+                    config={config}
+                    setConfig={setConfig}
+
+                />
+                <TreePanel
+                    drawerValue={drawerValue}
                     selectedCase={selectedCase}
                     setSelectedCase={setSelectedCase}
                     tree={tree}
@@ -338,11 +360,18 @@ export default function Editor() {
                     noOfCases={noOfCases}
                     setNoOfCases={setNoOfCases}
                 />
-              </TabPanel>
-            </Paper>
-          </Grid>:null
-          }
-          <Grid xs={(drawerOpen)?10:12}>
+                <ModePanel
+                    drawerValue={drawerValue}
+                    tabValue={tabValue}
+                    setTabValue={setTabValue}
+                  />
+              </div>
+          </div>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Grid  container spacing={0} justify='centered' style={{height:"93%"}}>
+          <Grid xs={(drawerOpen)?12:12}>
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
                 <Grid className={classes.container} xs={10} id="jsonEditor" >
@@ -370,7 +399,7 @@ export default function Editor() {
                 />
               </div>
             </Grid>
-            {(formData)?
+            {(formOpen)?
               <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
                 <Grid item xs={(formOpen) ? 4 : 1}>
                   <Paper id="commandForm">

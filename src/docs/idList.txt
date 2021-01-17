@@ -8,3 +8,43 @@ Example:
 Drawer: Column on left with two button
 
 <----------------------------------------------------------------->
+
+Button:
+button_add:button to add case under the case tree
+button_caseTree:div for Buttons below case tree
+button_closeDrawer: button to close the drawer
+button_commandAdd: button for adding command
+button_delete:button to delete case
+button_download: button for downloading all test case in .json below the case tree
+button_expandRow: button to expand each row
+button_setting: button to open setting dialog
+button_upload: button for uploading test case to the case tree
+button_help: button for starting the guide
+
+
+Check Box:
+checkbox_commandTableRow : checkbox in command Table row
+
+
+components
+caseTree: the case tree
+commandForm: the json schema form for adding command to the selected json
+commandTable: table showing the command and its details
+Drawer: Column on left with two button
+jsonEditor: div containing the json editor
+
+Select:
+select_command: selection bar of command
+
+Tabs:
+[aria_labelledby="tab_cases"]: tab button for opening drawer for selecting case
+[aria_labelledby="tab_config"]: tab button for opening drawer for the configuration setting box
+[aria_labelledby="tab_result"]: tab button for opening drawner for selecting assignment result
+tab_codeEditor:Button on top right for Code Editor
+tab_editorMode:tab_button for opening drawer for selecting editor mode
+tab_tableView:Button on top right for Table View
+
+Tab Panel:
+tabPanel_caseTree: tab panel for selecting case
+tabPanel_config: tab panel for configuration setting box
+tabPanel_codeEditor: tab panel for selecting code editor
