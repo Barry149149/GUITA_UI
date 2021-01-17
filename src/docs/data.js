@@ -160,3 +160,41 @@ export const backupdriverOption = [
         label: 'Computer Vision'
     }
 ]
+
+export const courseOption = [
+    {
+        value: 'comp2012',
+        label: 'COMP 2012'
+    },
+    {
+        value: 'comp3021',
+        label: 'COMP 3021'
+    },
+]
+
+export const comp2012Option = [
+    {
+        vale: 'pa1',
+        label: 'Assignment #1'
+    },
+    {
+        vale: 'pa2',
+        label: 'Assignment #2'
+    },
+    
+]
+
+export const comp3021Option = [
+    {
+        valie: 'pa1',
+        label: 'Assignment #1'
+    },
+    {
+        valie: 'pa2',
+        label: 'Assignment #2'
+    },
+    {
+        valie: 'pa3',
+        label: 'Assignment #3'
+    },
+]
