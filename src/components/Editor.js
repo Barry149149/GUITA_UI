@@ -28,6 +28,7 @@ import Configuration from "./tab/tabpanels/drawerPanels/ConfigPanel";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
 import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
+import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { render } from '@testing-library/react';
@@ -364,6 +365,9 @@ export default function Editor() {
                     drawerValue={drawerValue}
                     tabValue={tabValue}
                     setTabValue={setTabValue}
+                  />
+                <ResultPanel
+                    drawerValue={drawerValue}
                   />
               </div>
           </div>
