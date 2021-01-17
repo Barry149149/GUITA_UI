@@ -203,25 +203,25 @@ export const dataCategories = [
 ];
 
 export const dataProducts = [
-    { productName: "Chai", productId: 1, categoryId: 1 },
-    { productName: "Chang", productId: 2, categoryId: 1 },
-    { productName: "Aniseed Syrup", productId: 3, categoryId: 2 },
-    { productName: "Genen Shouyu", productId: 4, categoryId: 2 },
-    { productName: "Ikura", productId: 5, categoryId: 3 },
-    { productName: "Konbu", productId: 6, categoryId: 3 }
+    { value: "Chai", label: "Chai",productId: 1, categoryId: 1 },
+    { value: "Chang", label: "Chang", productId: 2, categoryId: 1 },
+    { value: "Aniseed Syrup", label: "Aniseed Syrup", productId: 3, categoryId: 2 },
+    { value: "Genen Shouyu", label: "Genen Shouyu", productId: 4, categoryId: 2 },
+    { value: "Ikura", label: "Ikura", productId: 5, categoryId: 3 },
+    { value: "Konbu", label: "Konbu", productId: 6, categoryId: 3 }
 ];
 
 export const dataOrders = [
-    { orderName: "Cunewalde", orderId: 1, productId: 1 },
-    { orderName: "Albuquerque", orderId: 2, productId: 1 },
-    { orderName: "Geneva", orderId: 3, productId: 2 },
-    { orderName: "Graz", orderId: 4, productId: 2 },
-    { orderName: "London", orderId: 5, productId: 3 },
-    { orderName: "I. de Margarita", orderId: 6, productId: 3 },
-    { orderName: "Barquisimeto", orderId: 7, productId: 4 },
-    { orderName: "Brandenburg", orderId: 8, productId: 4 },
-    { orderName: "Cunewalde", orderId: 9, productId: 5 },
-    { orderName: "Mexico D.F.", orderId: 10, productId: 5 },
-    { orderName: "Mexico D.F.", orderId: 11, productId: 6 },
-    { orderName: "Rio de Janeiro", orderId: 12, productId: 6 }
+    { value: "Cunewalde", label: "Cunewalde", orderId: 1, productId: 1 },
+    { value: "Albuquerque", label: "Albuquerque", orderId: 2, productId: 1 },
+    { value: "Geneva", label: "Geneva", orderId: 3, productId: 2 },
+    { value: "Graz", label: "Graz", orderId: 4, productId: 2 },
+    { value: "London", label: "London", orderId: 5, productId: 3 },
+    { value: "I. de Margarita", label: "I. de Margarita", orderId: 6, productId: 3 },
+    { value: "Barquisimeto", label: "Barquisimeto", orderId: 7, productId: 4 },
+    { value: "Brandenburg", label: "Brandenburg", orderId: 8, productId: 4 },
+    { value: "Cunewalde", label: "Cunewalde", orderId: 9, productId: 5 },
+    { value: "Mexico D.F.", label: "Mexico D.F.", orderId: 10, productId: 5 },
+    { value: "Mexico D.F.", label: "Mexico D.F.", orderId: 11, productId: 6 },
+    { value: "Rio de Janeiro", label: "Rio de Janeiro", orderId: 12, productId: 6 }
 ];
