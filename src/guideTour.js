@@ -10,6 +10,7 @@ export default function GuideTour(props) {
         continuous={true}
         showProgress={true}
         showSkipButton={true}
+        scrollToFirstStep={true}
         styles={{
             options: {
                 beaconSize: 42,
@@ -23,6 +24,14 @@ export default function GuideTour(props) {
         }}
         
         steps={[
+            {
+                content:
+                "Begin Tutorial",
+                styles: {
+                },
+                target: "body",
+                placement: "center",
+            },
             {
                 content:
                 "Click on this button to open the Code Editor",
