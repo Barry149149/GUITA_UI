@@ -37,7 +37,7 @@ export default function FrameWorkSelect(props) {
                     </MenuItem>
                     {frameworkOption.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )

@@ -304,56 +304,56 @@ export default function Editor() {
           }),
         }}
       >
-        <div className={classes.drawerContainer} >
-          <div id='Drawer'>
-            <Box p={4}/>
-              <Tabs
-                  value={drawerValue}
-                  onChange={handleDrawerChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                  orientation="vertical"
-                  className={classes.tab}
+            <div className={classes.drawerContainer} >
+              <div id='Drawer'>
+                <Box p={4}/>
+                  <Tabs
+                      value={drawerValue}
+                      onChange={handleDrawerChange}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      variant="fullWidth"
+                      orientation="vertical"
+                      className={classes.tab}
 
-              >
-                <Tab
-                    aria-labelledby='tab_config'
-                    className={classes.tab}
-                    icon={<TuneIcon color='primary'/>}
-                    {...a11yProps(0)}
-                />
-                <Tab
-                    aria-labelledby='tab_cases'
-                    className={classes.tab}
-                    icon={<ListAltIcon color='primary'/>}
-                    {...a11yProps(1)}
-                />
-                <Tab
-                    aria-labelledby='tab_editorMode'
-                    className={classes.tab}
-                    icon={<TabIcon color='primary'/>}
-                    {...a11yProps(2)}
-                />
-                <Tab
-                    aria-labelledby='tab_result'
-                    className={classes.tab}
-                    icon={<DescriptionIcon color='primary'/>}
-                    {...a11yProps(3)}
-                />
-              </Tabs>
-              <Button
-                  id='button_help'
-                  onClick={()=>{
-                    setGuideRun(true);
-                    setTour(0)
-                  }}>
-                <HelpOutlineIcon
-                    color="primary"
-                    className={classes.drawer_button}
-                />
-              </Button>
-          </div>
+                  >
+                    <Tab
+                        aria-labelledby='tab_config'
+                        className={classes.tab}
+                        icon={<TuneIcon color='primary'/>}
+                        {...a11yProps(0)}
+                    />
+                    <Tab
+                        aria-labelledby='tab_cases'
+                        className={classes.tab}
+                        icon={<ListAltIcon color='primary'/>}
+                        {...a11yProps(1)}
+                    />
+                    <Tab
+                        aria-labelledby='tab_editorMode'
+                        className={classes.tab}
+                        icon={<TabIcon color='primary'/>}
+                        {...a11yProps(2)}
+                    />
+                    <Tab
+                        aria-labelledby='tab_result'
+                        className={classes.tab}
+                        icon={<DescriptionIcon color='primary'/>}
+                        {...a11yProps(3)}
+                    />
+                  </Tabs>
+                  <Button
+                      id='button_help'
+                      onClick={()=>{
+                        setGuideRun(true);
+                        setTour(0)
+                      }}>
+                    <HelpOutlineIcon
+                        color="primary"
+                        className={classes.drawer_button}
+                    />
+                  </Button>
+              </div>
               <div>
                 <Box p={3}/>
                 <Configuration
