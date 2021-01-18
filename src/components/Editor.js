@@ -124,6 +124,11 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     height: 600
   },
+  drawer_button:{
+    display: 'flex',
+    minWidth: 30,
+    width: 30,
+  }
 }));
 
 function a11yProps(index) {
@@ -266,7 +271,6 @@ export default function Editor() {
   return (
     <div className={classes.root}>
       {guide}
-      
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
@@ -275,7 +279,7 @@ export default function Editor() {
           </Typography>
 
           <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
-            <SettingsIcon/>
+            <SettingsIcon />
           </IconButton>
           <SettingDialog
               open={settingsOpen}
@@ -338,8 +342,16 @@ export default function Editor() {
                     {...a11yProps(3)}
                 />
               </Tabs>
-              <Button id='button_help' onClick={()=>{setGuideRun(true)}}>
-                <HelpOutlineIcon/>
+              <Button
+                  id='button_help'
+                  onClick={()=>{
+                    setGuideRun(true);
+                    setTour(0)
+                  }}>
+                <HelpOutlineIcon
+                    color="primary"
+                    className={classes.drawer_button}
+                />
               </Button>
           </div>
               <div>
@@ -389,51 +401,54 @@ export default function Editor() {
                 </Grid>
               </Grid>
             </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <Grid container spacing={1} justify='center'>
-            <Grid item xs={(formOpen)?8:12}>
-              <div id="commandTable">
-                <CommandTable
-                    selectedCase={selectedCase}
-                    setSelectedCase={setSelectedCase}
-                    formOpen={formOpen}
-                    setFormOpen={setFormOpen}
-                    tree={tree}
-                    setTree={setTree}
-                />
-              </div>
-            </Grid>
-            {(formOpen)?
-              <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
-                <Grid item xs={(formOpen) ? 4 : 1}>
-                  <Paper id="commandForm">
-                    <Box pt={1}/>
-                    <Tooltip title="Close" style={{float: "right"}}>
-                      <Button onClick={() => {
-                        setFormOpen(false)
-                      }} variant='small'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                          <path
-                              d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
-                        </svg>
-                      </Button>
-                    </Tooltip>
-                    <CommandForm
+            <TabPanel value={tabValue} index={1}>
+              <Grid container spacing={1} justify='center'>
+                <Grid item xs={(formOpen)?8:12}>
+                  <div id="commandTable">
+                    <CommandTable
                         selectedCase={selectedCase}
                         setSelectedCase={setSelectedCase}
-                        cmdSchema={cmdSchema}
-                        setCmdSchema={setCmdSchema}
-                        setTree={setTree}
+                        formOpen={formOpen}
+                        setFormOpen={setFormOpen}
                         tree={tree}
-                        formData={formData}
-                        setFormData={setFormData}
+                        setTree={setTree}
                     />
-                  </Paper>
-                </Grid>
-              </Grow>:null
-            }
-          </Grid>
-        </TabPanel>
+                  </div>
+              </Grid>
+                {(formOpen)?
+                  <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
+                    <Grid item xs={(formOpen) ? 4 : 1}>
+                      <Paper id="commandForm">
+                        <Box pt={1}/>
+                        <Tooltip title="Close" style={{float: "right"}}>
+                          <Button onClick={() => {
+                            setFormOpen(false)
+                          }} variant='small'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                              <path
+                                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                            </svg>
+                          </Button>
+                        </Tooltip>
+                        <CommandForm
+                            selectedCase={selectedCase}
+                            setSelectedCase={setSelectedCase}
+                            cmdSchema={cmdSchema}
+                            setCmdSchema={setCmdSchema}
+                            setTree={setTree}
+                            tree={tree}
+                            formData={formData}
+                            setFormData={setFormData}
+                        />
+                      </Paper>
+                    </Grid>
+                  </Grow>:null
+                }
+              </Grid>
+            </TabPanel>
+            <TabPanel value={tabValue} index={2}>
+
+            </TabPanel>
           </Grid>
         </Grid>
       </main>
