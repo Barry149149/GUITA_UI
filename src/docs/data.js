@@ -197,18 +197,18 @@ export const courseOption = [
 ]
 
 export const dataCategories = [
-    { value: "Beverages", label: "Beverages", categoryId: 1 },
-    { value: "Condiments", label: "Condiments", categoryId: 2 },
-    { value: "Seafood", label: "Seafood", categoryId: 3 }
+    { value: "comp2012", label: "COMP2012", categoryId: 1 },
+    { value: "comp3021", label: "COMP3021", categoryId: 2 },
+    { value: "comp1022p", label: "COMP1022P", categoryId: 3 }
 ];
 
 export const dataProducts = [
-    { value: "Chai", label: "Chai",productId: 1, categoryId: 1 },
-    { value: "Chang", label: "Chang", productId: 2, categoryId: 1 },
-    { value: "Aniseed Syrup", label: "Aniseed Syrup", productId: 3, categoryId: 2 },
-    { value: "Genen Shouyu", label: "Genen Shouyu", productId: 4, categoryId: 2 },
-    { value: "Ikura", label: "Ikura", productId: 5, categoryId: 3 },
-    { value: "Konbu", label: "Konbu", productId: 6, categoryId: 3 }
+    { value: "assign1", label: "Assignment #1",productId: 1, categoryId: 1 },
+    { value: "assign2", label: "Assignment #2", productId: 2, categoryId: 1 },
+    { value: "assign1", label: "Assignment #1", productId: 3, categoryId: 2 },
+    { value: "assign2", label: "Assignment #2", productId: 4, categoryId: 2 },
+    { value: "hw1", label: "Homework #1", productId: 5, categoryId: 3 },
+    { value: "hw2", label: "Homework #2", productId: 6, categoryId: 3 }
 ];
 
 export const dataOrders = [

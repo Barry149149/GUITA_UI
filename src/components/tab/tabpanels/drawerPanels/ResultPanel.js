@@ -10,7 +10,7 @@ export default function ResultPanel(props){
         id="tabPanel_config"
         value={props.drawerValue}
         index={3} >
-        <Title>Assignments</Title>
+        <Title>Results</Title>
         <Divider/>
         <div>
             <CourseSelect />

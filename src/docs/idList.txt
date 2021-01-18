@@ -20,7 +20,7 @@ button_expandRow: button to expand each row
 button_setting: button to open setting dialog
 button_upload: button for uploading test case to the case tree
 button_help: button for starting the guide
-
+button_fileUpload: button for uploading testcase file to server
 
 Check Box:
 checkbox_commandTableRow : checkbox in command Table row

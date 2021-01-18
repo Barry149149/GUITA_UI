@@ -31,6 +31,7 @@ import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
 import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
+import PublishIcon from '@material-ui/icons/Publish';
 import { render } from '@testing-library/react';
 
 const drawerWidth = 360;
@@ -211,6 +212,7 @@ export default function Editor() {
     setDrawerValue(newValue);
   };
 
+  const [submit, setSubmit] = useState(true);
   /*
   const [startTour,setStartTour] = useState(window.localStorage.getItem('tour'));
 
@@ -274,6 +276,9 @@ export default function Editor() {
             GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
           </Typography>
 
+          <IconButton color="inherit" onClick={()=>{setSubmit(true)}} id='button_fileUpload'>
+            <PublishIcon />
+          </IconButton>
           <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
             <SettingsIcon/>
           </IconButton>
@@ -338,7 +343,11 @@ export default function Editor() {
                     {...a11yProps(3)}
                 />
               </Tabs>
-              <Button id='button_help' onClick={()=>{setGuideRun(true)}}>
+              <Button 
+              
+                id='button_help' onClick={()=>{
+                    setGuideRun(true); setTour(0);
+                }}>
                 <HelpOutlineIcon/>
               </Button>
           </div>

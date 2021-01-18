@@ -97,6 +97,9 @@ const test=()=> {
     return(
         <div>
             <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Courses
+                </InputLabel>
                 <Select
                     onChange={categoryChange}
                     >
@@ -112,6 +115,11 @@ const test=()=> {
                     })
                     }
                 </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Assignments
+                </InputLabel>
                 <Select
                     disabled={!hasCategory}
                     onChange={productChange}
@@ -128,6 +136,11 @@ const test=()=> {
                     })
                     }
                 </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Others
+                </InputLabel>
                 <Select
                     disabled={!hasProduct}
                     onChange={orderChange}
