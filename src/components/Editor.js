@@ -33,7 +33,7 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { render } from '@testing-library/react';
 
-const drawerWidth = 360;
+const drawerWidth = 400;
 
 const useStyles = makeStyles((theme) => ({
   root: {

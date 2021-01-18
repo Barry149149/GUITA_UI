@@ -95,16 +95,18 @@ export default function CourseSelect(props) {
         }
         }, [course, assign]);
         */
-const test=()=> {
+/*useEffect=()=> {
     console.log(state.products);
     console.log(state.orders);
-}
+}*/
     return(
-        <div>
             <FormControl className={classes.formControl}>
                 <Select
                     onChange={categoryChange}
                     >
+                    <InputLabel>
+                        Categories
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -121,6 +123,9 @@ const test=()=> {
                     disabled={!hasCategory}
                     onChange={productChange}
                     >
+                    <InputLabel>
+                        Products
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -137,6 +142,9 @@ const test=()=> {
                     disabled={!hasProduct}
                     onChange={orderChange}
                     >
+                    <InputLabel>
+                        Orders
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -150,6 +158,5 @@ const test=()=> {
                     }
                 </Select>
             </FormControl>
-        </div>
     )
 }
