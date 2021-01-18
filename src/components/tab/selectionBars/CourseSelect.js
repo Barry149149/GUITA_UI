@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { courseOption , dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem}from '@material-ui/core';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -95,11 +94,9 @@ export default function CourseSelect(props) {
         }
         }, [course, assign]);
         */
-/*useEffect=()=> {
-    console.log(state.products);
-    console.log(state.orders);
-}*/
+
     return(
+        <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Courses
@@ -171,5 +168,6 @@ export default function CourseSelect(props) {
                     }
                 </Select>
             </FormControl>
+        </React.Fragment>
     )
 }

@@ -37,8 +37,6 @@ import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PublishIcon from '@material-ui/icons/Publish';
-import JSZip from 'jszip';
-import { render } from '@testing-library/react';
 
 const drawerWidth = 400;
 
@@ -225,7 +223,6 @@ export default function Editor() {
 
   const [submitConfirm, setSubmitConfirm]= useState(false);
   const [submitWarning, setSubmitWarning]= useState(false);
-  const [upload, setUpload]= useState(false);
 
   const handleSubmitWarningClose=()=>{
     setSubmitWarning(false);
@@ -235,17 +232,12 @@ export default function Editor() {
     setSubmitConfirm(false);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
-
       setSubmitConfirm(true);
-
-      
-
     } else{
       setSubmitWarning(true);
     }
-    
   }
 
   function uploadFile(){
@@ -255,7 +247,7 @@ export default function Editor() {
       fData.append('language', config.language);
       fData.append('framework',config.framework);
 
-      for(const index in tree[0].nodes){
+      for(let index=0;index<tree[0].nodes.length;index++){
         const fileData = JSON.stringify(tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
         fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id);
@@ -268,7 +260,7 @@ export default function Editor() {
           'Content-Type': 'application/json',
         },
         body: fData,
-      })
+      }).then()
   }
 
   function useTourStickyState(defaultValue, key) {
@@ -316,7 +308,7 @@ export default function Editor() {
             GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
           </Typography>
 
-          <IconButton color="inherit" onClick={(e)=>{handleSubmit(e)}} id='button_fileUpload'>
+          <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
             <PublishIcon />
           </IconButton>
           <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
@@ -395,32 +387,36 @@ export default function Editor() {
               </Button>
           </div>
               <div>
-                <Box p={3}/>
-                <Configuration
-                    drawerValue={drawerValue}
-                    config={config}
-                    setConfig={setConfig}
+                {(drawerOpen)?
+                    <React.Fragment>
+                      <Box p={3}/>
+                      <Configuration
+                          drawerValue={drawerValue}
+                          config={config}
+                          setConfig={setConfig}
 
-                />
-                <TreePanel
-                    drawerValue={drawerValue}
-                    selectedCase={selectedCase}
-                    setSelectedCase={setSelectedCase}
-                    tree={tree}
-                    setTree={setTree}
-                    createdCases={createdCases}
-                    setCreatedCases={setCreatedCases}
-                    noOfCases={noOfCases}
-                    setNoOfCases={setNoOfCases}
-                />
-                <ModePanel
-                    drawerValue={drawerValue}
-                    tabValue={tabValue}
-                    setTabValue={setTabValue}
-                  />
-                <ResultPanel
-                    drawerValue={drawerValue}
-                  />
+                      />
+                      <TreePanel
+                          drawerValue={drawerValue}
+                          selectedCase={selectedCase}
+                          setSelectedCase={setSelectedCase}
+                          tree={tree}
+                          setTree={setTree}
+                          createdCases={createdCases}
+                          setCreatedCases={setCreatedCases}
+                          noOfCases={noOfCases}
+                          setNoOfCases={setNoOfCases}
+                      />
+                      <ModePanel
+                          drawerValue={drawerValue}
+                          tabValue={tabValue}
+                          setTabValue={setTabValue}
+                        />
+                      <ResultPanel
+                          drawerValue={drawerValue}
+                        />
+                    </React.Fragment>
+                  :null}
               </div>
           </div>
       </Drawer>
@@ -487,7 +483,6 @@ export default function Editor() {
               </Grid>
             </TabPanel>
             <TabPanel value={tabValue} index={2}>
-
             </TabPanel>
           </Grid>
         </Grid>
@@ -530,7 +525,6 @@ export default function Editor() {
                             Cancel
                         </Button>
                         <Button
-                        
                             onClick={()=>{
                               handleSubmitConfirmClose();
                               uploadFile();
