@@ -62,7 +62,7 @@ export default function SettingDialog(props) {
                         />
                         <FormControlLabel
                             className={classes.formControlLabel}
-                            control={<Switch checked={props.style.darkTheme} onChange={handleChange} />}
+                            control={<Switch checked={props.style.darkTheme} onChange={handleChange} color='primary'/>}
                             label={(props.style.darkTheme)?"Dark Theme":"Light Theme"}
                         />
                     </form>
