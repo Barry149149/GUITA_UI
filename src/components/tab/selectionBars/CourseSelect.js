@@ -35,6 +35,7 @@ export default function CourseSelect(props) {
         const products = dataProducts.filter(product => product.categoryId === category.categoryId);
         console.log(state.products);
         setState({
+            ...state,
             category: category,
             products: products,
             product: null,
@@ -47,6 +48,7 @@ export default function CourseSelect(props) {
         const orders = dataOrders.filter(order => order.productId === product.productId);
 
         setState({
+            ...state,
             product: product,
             orders: orders,
             order: null
@@ -54,7 +56,10 @@ export default function CourseSelect(props) {
     }
 
     const orderChange = (event) => {
-        setState({ order: event.target.value });
+        setState({ 
+            ...state,
+            order: event.target.value 
+        });
     }
 
     const category = state.category;
@@ -108,7 +113,7 @@ const test=()=> {
                     </MenuItem>
                     {dataCategories.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )
@@ -129,7 +134,7 @@ const test=()=> {
                     </MenuItem>
                     {dataProducts.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )
@@ -150,7 +155,7 @@ const test=()=> {
                     </MenuItem>
                     {dataOrders.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )

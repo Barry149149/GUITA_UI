@@ -7,6 +7,7 @@ import CodeIcon from "@material-ui/icons/Code";
 import TableChartIcon from "@material-ui/icons/TableChart";
 import TabPanel from "../Tabpanel";
 import React from "react";
+import GradeIcon from '@material-ui/icons/Grade';
 
 function a11yProps(index) {
     return {
@@ -48,6 +49,12 @@ export default function ModePanel(props){
                         icon={<TableChartIcon />}
                         label="Table View"
                         {...a11yProps(1)}
+                    />
+                    <Tab
+                        aria-label="tab_resultMode"
+                        icon={<GradeIcon/>}
+                        label="Grades"
+                        {...a11yProps(2)}
                     />
                 </Tabs>
             </Container>
