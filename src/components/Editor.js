@@ -258,7 +258,7 @@ export default function Editor() {
       for(const index in tree[0].nodes){
         const fileData = JSON.stringify(tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
-        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id);
+        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
       }
 
       fetch('https://ent2363yfbcal.x.pipedream.net', {
@@ -268,7 +268,7 @@ export default function Editor() {
           'Content-Type': 'application/json',
         },
         body: fData,
-      })
+      }).then().catch();
   }
 
   function useTourStickyState(defaultValue, key) {
@@ -329,6 +329,8 @@ export default function Editor() {
               setStyle={setStyle}
               tour={tour}
               setTour={setTour}
+              setRun={setGuideRun}
+              run={guideRun}
           />
         </Toolbar>
       </AppBar>

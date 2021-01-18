@@ -42,6 +42,7 @@ export default function SettingDialog(props) {
 
     const handleTour = () => {
         props.setTour(0);
+        props.setRun(false);
     }
     return (
         <React.Fragment>
