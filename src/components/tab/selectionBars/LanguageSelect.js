@@ -37,7 +37,7 @@ export default function Language0Select(props) {
                     </MenuItem>
                     {languageOption.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )
