@@ -56,9 +56,9 @@ export default function CourseSelect(props) {
     }
 
     const orderChange = (event) => {
-        setState({
+        setState({ 
             ...state,
-            order: event.target.value
+            order: event.target.value 
         });
     }
 
@@ -101,6 +101,9 @@ export default function CourseSelect(props) {
 }*/
     return(
             <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Courses
+                </InputLabel>
                 <Select
                     onChange={categoryChange}
                     >
@@ -112,13 +115,18 @@ export default function CourseSelect(props) {
                     </MenuItem>
                     {dataCategories.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )
                     })
                     }
                 </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Assignments
+                </InputLabel>
                 <Select
                     disabled={!hasCategory}
                     onChange={productChange}
@@ -131,13 +139,18 @@ export default function CourseSelect(props) {
                     </MenuItem>
                     {dataProducts.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )
                     })
                     }
                 </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Others
+                </InputLabel>
                 <Select
                     disabled={!hasProduct}
                     onChange={orderChange}
@@ -150,7 +163,7 @@ export default function CourseSelect(props) {
                     </MenuItem>
                     {dataOrders.map(({index,value,label}) => {
                         return (
-                            <MenuItem key={index} value={value}>
+                            <MenuItem key={label} value={value}>
                                 {label}
                             </MenuItem>
                         )

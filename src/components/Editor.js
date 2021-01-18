@@ -6,6 +6,11 @@ import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import SettingDialog from "./SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -31,6 +36,8 @@ import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
 import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
+import PublishIcon from '@material-ui/icons/Publish';
+import JSZip from 'jszip';
 import { render } from '@testing-library/react';
 
 const drawerWidth = 400;
@@ -216,23 +223,54 @@ export default function Editor() {
     setDrawerValue(newValue);
   };
 
-  /*
-  const [startTour,setStartTour] = useState(window.localStorage.getItem('tour'));
+  const [submitConfirm, setSubmitConfirm]= useState(false);
+  const [submitWarning, setSubmitWarning]= useState(false);
+  const [upload, setUpload]= useState(false);
 
-  let tour;
-  console.log('start'+startTour);
-  if (!startTour){
-      tour = <GuideTour
-        drawerValue={drawerValue}
-        drawerOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
-        setDrawerValue={setDrawerValue}
-        setTabValue={setTabValue}
-        setFormOpen={setFormOpen}
-        setRun={setGuideRun}
-        run={guideRun}
-    />;
-  }*/
+  const handleSubmitWarningClose=()=>{
+    setSubmitWarning(false);
+  }
+
+  const handleSubmitConfirmClose=()=>{
+    setSubmitConfirm(false);
+  }
+
+  const handleSubmit = (e) => {
+    if (config.driver && config.language && config.framework) {
+
+      setSubmitConfirm(true);
+
+      
+
+    } else{
+      setSubmitWarning(true);
+    }
+    
+  }
+
+  function uploadFile(){
+    let fData = new FormData();
+
+      fData.append('driver', config.driver);
+      fData.append('language', config.language);
+      fData.append('framework',config.framework);
+
+      for(const index in tree[0].nodes){
+        const fileData = JSON.stringify(tree[0].nodes[index].json);
+        const blob = new Blob([fileData],{type:'application/json'});
+        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id);
+      }
+
+      fetch('https://ent2363yfbcal.x.pipedream.net', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: fData,
+      })
+  }
+
   function useTourStickyState(defaultValue, key) {
     const [value, setValue] = React.useState(() => {
       const stickyValue = window.localStorage.getItem(key);
@@ -278,6 +316,9 @@ export default function Editor() {
             GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
           </Typography>
 
+          <IconButton color="inherit" onClick={(e)=>{handleSubmit(e)}} id='button_fileUpload'>
+            <PublishIcon />
+          </IconButton>
           <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
             <SettingsIcon />
           </IconButton>
@@ -315,7 +356,6 @@ export default function Editor() {
                       variant="fullWidth"
                       orientation="vertical"
                       className={classes.tab}
-
                   >
                     <Tab
                         aria-labelledby='tab_config'
@@ -341,19 +381,19 @@ export default function Editor() {
                         icon={<DescriptionIcon color='primary'/>}
                         {...a11yProps(3)}
                     />
-                  </Tabs>
-                  <Button
-                      id='button_help'
-                      onClick={()=>{
-                        setGuideRun(true);
-                        setTour(0)
-                      }}>
-                    <HelpOutlineIcon
-                        color="primary"
-                        className={classes.drawer_button}
-                    />
-                  </Button>
-              </div>
+              </Tabs>
+              <Button 
+              
+                id='button_help' onClick={()=>{
+                    setGuideRun(true); 
+                    setTour(0);
+                }}>
+                <HelpOutlineIcon
+                  color="primary"
+                  className={classes.drawer_button}
+                />
+              </Button>
+          </div>
               <div>
                 <Box p={3}/>
                 <Configuration
@@ -451,6 +491,58 @@ export default function Editor() {
             </TabPanel>
           </Grid>
         </Grid>
+        <Dialog
+                open={submitWarning}
+                onClose={handleSubmitWarningClose}
+            >
+                <DialogTitle>{"Configuration Warning"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please make sure valid configuration
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleSubmitWarningClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                        
+                            onClick={handleSubmitWarningClose}
+                            color="primary"
+                            autofocus
+                        >
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+            <Dialog
+                open={submitConfirm}
+                onClose={handleSubmitConfirmClose}
+            >
+                <DialogTitle>{"Submission Confirm"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        The following files will be submitted:
+                        {}
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleSubmitConfirmClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                        
+                            onClick={()=>{
+                              handleSubmitConfirmClose();
+                              uploadFile();
+                            }}
+                            color="primary"
+                            autofocus
+                        >
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
       </main>
     </div>
   );
