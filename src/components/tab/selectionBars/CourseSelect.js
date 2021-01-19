@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { courseOption , dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem}from '@material-ui/core';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -95,12 +94,9 @@ export default function CourseSelect(props) {
         }
         }, [course, assign]);
         */
-const test=()=> {
-    console.log(state.products);
-    console.log(state.orders);
-}
+
     return(
-        <div>
+        <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Courses
@@ -108,6 +104,9 @@ const test=()=> {
                 <Select
                     onChange={categoryChange}
                     >
+                    <InputLabel>
+                        Categories
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -129,6 +128,9 @@ const test=()=> {
                     disabled={!hasCategory}
                     onChange={productChange}
                     >
+                    <InputLabel>
+                        Products
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -150,6 +152,9 @@ const test=()=> {
                     disabled={!hasProduct}
                     onChange={orderChange}
                     >
+                    <InputLabel>
+                        Orders
+                    </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
@@ -163,6 +168,6 @@ const test=()=> {
                     }
                 </Select>
             </FormControl>
-        </div>
+        </React.Fragment>
     )
 }

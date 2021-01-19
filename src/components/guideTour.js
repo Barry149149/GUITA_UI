@@ -179,6 +179,7 @@ export default function GuideTour(props) {
                 ...state,
                 index:0
             })
+            props.setDrawerOpen(false);
             handleTourFinished();
         }
 
