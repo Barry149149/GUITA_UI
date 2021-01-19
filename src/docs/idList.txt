@@ -19,7 +19,8 @@ button_download: button for downloading all test case in .json below the case tr
 button_expandRow: button to expand each row
 button_setting: button to open setting dialog
 button_upload: button for uploading test case to the case tree
-
+button_help: button for starting the guide
+button_fileUpload: button for uploading testcase file to server
 
 Check Box:
 checkbox_commandTableRow : checkbox in command Table row
@@ -38,6 +39,7 @@ select_command: selection bar of command
 Tabs:
 [aria_labelledby="tab_cases"]: tab button for opening drawer for selecting case
 [aria_labelledby="tab_config"]: tab button for opening drawer for the configuration setting box
+[aria_labelledby="tab_result"]: tab button for opening drawner for selecting assignment result
 tab_codeEditor:Button on top right for Code Editor
 tab_editorMode:tab_button for opening drawer for selecting editor mode
 tab_tableView:Button on top right for Table View

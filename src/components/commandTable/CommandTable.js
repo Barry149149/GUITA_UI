@@ -26,6 +26,7 @@ import {
     Draggable,
     Droppable
 } from "react-beautiful-dnd";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -112,6 +113,65 @@ export default function CommandTable(props){
             json:newJson,
             json_id:newJsonId
         })
+
+        let newNodes=[
+            ...props.tree[0].nodes,
+        ]
+        newNodes.find(x=>x.id===props.selectedCase.id).json=newJson
+        newNodes.find(x=>x.id===props.selectedCase.id).json_id=newJsonId
+        props.setTree([
+            {
+                value: 'Test Cases',
+                nodes: newNodes
+            }
+        ])
+
+        setSelected([])
+
+    }
+
+    const duplicateSelected=()=>{
+        let commandDup=[], commandDup_id=[], duplicated=1
+        for(let i=0; i <props.selectedCase.json_id.length;i++) {
+            if(selected.indexOf(props.selectedCase.json_id[i].id)!==-1) {
+                commandDup_id.push({
+                    id:props.selectedCase.json_id[i].length+duplicated,
+                    command:props.selectedCase.json_id[i].command,
+                })
+                commandDup.push(props.selectedCase.json[i]);
+                duplicated++;
+            }
+        }
+        props.setSelectedCase({
+            ...props.selectedCase,
+            json:[
+                ...props.selectedCase.json,
+                ...commandDup
+            ],
+            json_id:[
+                ...props.selectedCase.json_id,
+                ...commandDup_id
+            ]
+        })
+
+        let newNodes=[
+            ...props.tree[0].nodes,
+        ]
+        newNodes.find(x=>x.id===props.selectedCase.id).json=[
+            ...props.selectedCase.json,
+            ...commandDup
+        ]
+        newNodes.find(x=>x.id===props.selectedCase.id).json_id=[
+            ...props.selectedCase.json_id,
+            ...commandDup_id
+        ]
+        props.setTree([
+            {
+                value: 'Test Cases',
+                nodes: newNodes
+            }
+        ])
+
         setSelected([])
     }
 
@@ -149,11 +209,19 @@ export default function CommandTable(props){
                         </Grow>
                     </Tooltip>
                     ):(
-                    <Tooltip title="Delete">
-                        <Button onClick={deleteSelected}>
-                            <DeleteIcon/>
-                        </Button>
-                    </Tooltip>
+
+                        <React.Fragment>
+                            <Tooltip title="Duplicate">
+                                <Button onClick={duplicateSelected}>
+                                    <FileCopyIcon/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <Button onClick={deleteSelected}>
+                                    <DeleteIcon/>
+                                </Button>
+                            </Tooltip>
+                        </React.Fragment>
                 )
                 }
             </Toolbar>
@@ -209,6 +277,7 @@ export default function CommandTable(props){
                     }}
                     onBeforeDragStart={()=>{
                         open.length=0;
+                        selected.length=0;
                 }}
                 >
                     <Droppable droppableId="1" type="Command">

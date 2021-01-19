@@ -4,6 +4,11 @@ import Typography from "@material-ui/core/Typography";
 
 
 export default function GuideTour(props) {
+
+    const handleTourFinished=()=> {
+        props.setTour(1);
+      }
+
     const [state,setState]=useState({
         index:0,
         steps:[
@@ -138,7 +143,7 @@ export default function GuideTour(props) {
             },
             {
                 content:"If you want to revisit this tutorial again, you may press the help button in the driver",
-                target:"body"
+                target:"#button_help"
             }
         ]
     });
@@ -174,6 +179,8 @@ export default function GuideTour(props) {
                 ...state,
                 index:0
             })
+            props.setDrawerOpen(false);
+            handleTourFinished();
         }
 
         console.log(state.index)
@@ -186,6 +193,9 @@ export default function GuideTour(props) {
         disableOverlayClose={true}
         hideCloseButton={true}
         stepIndex={state.index}
+        showProgress={true}
+        showSkipButton={true}
+        scrollToFirstStep={true}
         styles={{
             options: {
                 beaconSize: 42,
