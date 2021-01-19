@@ -6,13 +6,8 @@ import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
-import SettingDialog from "./SettingDialog";
+import SettingDialog from "./dialog/SettingDialog";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -37,6 +32,9 @@ import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PublishIcon from '@material-ui/icons/Publish';
+import SubmitConfirmDialog from "./dialog/SubmitCofirm";
+import SubmitWarningDialog from "./dialog/SubmitWarning";
+import JSZip from 'jszip';
 
 const drawerWidth = 400;
 
@@ -152,6 +150,7 @@ export default function Editor() {
     driver:'',
     language:'',
     framework:'',
+    assignments:'',
   });
 
   const [tree,setTree] = useState([
@@ -224,13 +223,6 @@ export default function Editor() {
   const [submitConfirm, setSubmitConfirm]= useState(false);
   const [submitWarning, setSubmitWarning]= useState(false);
 
-  const handleSubmitWarningClose=()=>{
-    setSubmitWarning(false);
-  }
-
-  const handleSubmitConfirmClose=()=>{
-    setSubmitConfirm(false);
-  }
 
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
@@ -253,7 +245,9 @@ export default function Editor() {
         fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
       }
 
-      fetch('https://ent2363yfbcal.x.pipedream.net', {
+      fData.append('assignmentFiles', config.assignments);
+
+      fetch('https://en082s72jshudo.x.pipedream.net/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -314,16 +308,6 @@ export default function Editor() {
           <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
             <SettingsIcon />
           </IconButton>
-          <SettingDialog
-              open={settingsOpen}
-              setOpen={setSettingsOpen}
-              style={style}
-              setStyle={setStyle}
-              tour={tour}
-              setTour={setTour}
-              setRun={setGuideRun}
-              run={guideRun}
-          />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -376,9 +360,9 @@ export default function Editor() {
                         {...a11yProps(3)}
                     />
               </Tabs>
-              <Button 
-              
-                id='button_help' onClick={()=>{
+              <Button
+                id='button_help'
+                onClick={()=>{
                     setGuideRun(true); 
                     setTour(0);
                 }}>
@@ -488,57 +472,21 @@ export default function Editor() {
             </TabPanel>
           </Grid>
         </Grid>
-        <Dialog
-                open={submitWarning}
-                onClose={handleSubmitWarningClose}
-            >
-                <DialogTitle>{"Configuration Warning"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Please make sure valid configuration
-                    </DialogContentText>
-                    <DialogActions>
-                        <Button onClick={handleSubmitWarningClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                        
-                            onClick={handleSubmitWarningClose}
-                            color="primary"
-                            autofocus
-                        >
-                            Confirm
-                        </Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
-            <Dialog
-                open={submitConfirm}
-                onClose={handleSubmitConfirmClose}
-            >
-                <DialogTitle>{"Submission Confirm"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        The following files will be submitted:
-                        {}
-                    </DialogContentText>
-                    <DialogActions>
-                        <Button onClick={handleSubmitConfirmClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={()=>{
-                              handleSubmitConfirmClose();
-                              uploadFile();
-                            }}
-                            color="primary"
-                            autofocus
-                        >
-                            Confirm
-                        </Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
+          <SettingDialog
+              open={settingsOpen}
+              setOpen={setSettingsOpen}
+              style={style}
+              setStyle={setStyle}
+          />
+          <SubmitConfirmDialog
+              submitConfirm={submitConfirm}
+              setSubmitConfirm={setSubmitConfirm}
+              uploadFile={uploadFile}
+          />
+          <SubmitWarningDialog
+              submitWarning={submitWarning}
+              setSubmitWarning={setSubmitWarning}
+          />
       </main>
     </div>
   );

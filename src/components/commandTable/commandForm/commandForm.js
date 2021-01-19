@@ -80,12 +80,20 @@ export default function CommandForm(props){
                         let newNodes=[
                             ...props.tree[0].nodes,
                         ]
-                        newNodes.find(x=>x.id===props.selectedCase.id).json=[...props.selectedCase.json,e.formData]
+                        newNodes.find(x=>x.id===props.selectedCase.id).json=[...props.selectedCase.json,
+                            {
+                            command:props.cmdSchema.command,
+                            ...e.formData
+                        }
+                        ]
                         newNodes.find(x=>x.id===props.selectedCase.id).json_id=[
                             ...props.selectedCase.json_id,
                             {
                                 id:(props.selectedCase.json.length+1),
-                                command:e.formData
+                                command:{
+                                    command:props.cmdSchema.command,
+                                    ...e.formData
+                                }
                             }
                         ]
                         props.setTree([

@@ -40,10 +40,6 @@ export default function SettingDialog(props) {
         });
     };
 
-    const handleTour = () => {
-        props.setTour(0);
-        props.setRun(false);
-    }
     return (
         <React.Fragment>
             <Dialog
@@ -66,14 +62,6 @@ export default function SettingDialog(props) {
                             label={(props.style.darkTheme)?"Dark Theme":"Light Theme"}
                         />
                     </form>
-
-                    <Button 
-                        variant= 'outlined'
-                        color= 'primary'
-                        onClick={handleTour}
-                    >
-                        Reset Guide Tour
-                    </Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

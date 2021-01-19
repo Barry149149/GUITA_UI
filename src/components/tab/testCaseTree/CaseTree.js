@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from "@material-ui/core/Box";
-import JSZip from 'jszip'
+import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import {makeStyles} from '@material-ui/core/styles';
 import { ButtonGroup } from '@material-ui/core';
