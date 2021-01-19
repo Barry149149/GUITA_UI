@@ -284,7 +284,7 @@ export default function Editor() {
                 />
               </Tabs>
               <Button onClick={()=>{setGuideRun(true)}}>
-                <HelpOutlineIcon/>
+                <HelpOutlineIcon color="primary"/>
               </Button>
           </div>
               <div>
