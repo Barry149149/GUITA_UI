@@ -62,20 +62,9 @@ export default function GuideTour(props) {
                 placement: 'right',
             },
             {
-                content:"Now, try to press this button to create a new test case",
+                content:"Now, press this button to create a new test case",
                 target:"#button_add",
-                spotlightClicks: true,
                 placement: 'right',
-            },
-            {
-                content:"You can see a new tests case is created. Press the new test case",
-                target:"#caseTree",
-                spotlightClicks: true,
-                placement: 'right',
-            },
-            {
-                content:"You will see as the change on selected Test case, the content will change as well",
-                target:"#jsonEditor"
             },
             {
                 content:"Press the delete button, you will be able to delete the currently opened test case",
@@ -111,7 +100,6 @@ export default function GuideTour(props) {
             {
                 content:"Each row will show the command in order, to see detail, press the down arrow on the right",
                 target:"#button_expandRow",
-                spotlightClicks: true,
             },
             {
                 content:"To add new command, press this button",
@@ -119,23 +107,12 @@ export default function GuideTour(props) {
             },
             {
                 content:"Then selected the command through the selection bar. After you fill in the detail, press the submit button",
-                target:"#select_command",
-                placement: 'left',
-            },
-            {
-                content:"To delete the command, check the checkbox on the row you want to delete, then click the trash can button that will show after you have selected it.",
-                target:"#checkbox_commandTableRow",
-            },
-            {
-                content:"Now try to add a new command by yourself",
                 target:"#commandForm",
                 placement: 'left',
-                spotlightClicks: true,
             },
             {
                 content:"You can also reorder the command simply by drag and drop on the table. Have a try!",
                 target:"#commandTable",
-                spotlightClicks: true,
             },
             {
                 content:"Last, you can also customize this editor through the setting",
