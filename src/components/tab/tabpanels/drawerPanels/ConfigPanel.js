@@ -7,7 +7,6 @@ import React, {useState} from "react";
 import TabPanel from "../Tabpanel";
 import Button from '@material-ui/core/Button';
 
-
 export default function Configuration(props){
     const [file, setFile] = useState({
         name: '',
