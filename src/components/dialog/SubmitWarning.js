@@ -24,9 +24,6 @@ export default function SubmitWarningDialog(props) {
                     Please make sure valid configuration
                 </DialogContentText>
                 <DialogActions>
-                    <Button onClick={handleSubmitWarningClose} color="primary">
-                        Cancel
-                    </Button>
                     <Button
 
                         onClick={handleSubmitWarningClose}

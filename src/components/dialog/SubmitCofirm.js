@@ -5,6 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
+import {Divider} from "@material-ui/core";
 
 export default function SubmitConfirmDialog(props){
 
@@ -21,7 +22,8 @@ export default function SubmitConfirmDialog(props){
             <DialogContent>
                 <DialogContentText>
                     The following files will be submitted:
-                    {}
+                    <Divider/>
+                    {props.fileName.name}
                 </DialogContentText>
                 <DialogActions>
                     <Button onClick={handleSubmitConfirmClose} color="primary">
