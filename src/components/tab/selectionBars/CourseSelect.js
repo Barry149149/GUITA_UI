@@ -27,16 +27,18 @@ export default function CourseSelect(props) {
     });
 
     const categoryChange = (event) => {
-        let category = event.target.value;
-        let products = dataProducts.filter(product =>
-            product.categoryId ===
-            dataCategories.find(x=>x.value===category).categoryId);
-        setState({
-            ...state,
-            category: category,
-            products: products,
-            product: null,
-        });
+        if(event.target.value){
+            let category = event.target.value;
+            let products = dataProducts.filter(product =>
+                product.categoryId ===
+                dataCategories.find(x=>x.value===category).categoryId);
+            setState({
+                ...state,
+                category: category,
+                products: products,
+                product: null,
+            });
+        }
     }
 
     const productChange = (event) => {
@@ -49,33 +51,6 @@ export default function CourseSelect(props) {
     const category = state.category;
 
     const hasCategory = category && category !== 'None';
-    /*
-    const classes = useStyles();
-
-    const [course, setCourse] = useState(null);
-    const [assign, setAssign] = useState(null);
-    const [assignList, setAssignList] = useState([]);
-
-    // handle change event of the country dropdown
-    const handleCourseChange = (obj) => {
-        console.log(obj);
-        setCourse(obj);
-        setAssignList(obj.assignments);
-        setAssign(null);
-    };
-
-    // handle change event of the language dropdown
-    const handleAssignChange = (obj) => {
-        setAssign(obj);
-    };
-
-    // generate the link when both dropdowns are selected
-    useEffect(() => {
-        if (course && assign) {
-            
-        }
-        }, [course, assign]);
-        */
 
     return(
         <React.Fragment>
