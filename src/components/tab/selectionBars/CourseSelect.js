@@ -22,51 +22,33 @@ export default function CourseSelect(props) {
     const [state, setState] = useState({
         category: null,
         product: null,
-        order: null,
         orders: dataOrders,
         products: dataProducts
     });
 
     const categoryChange = (event) => {
-        console.log(state.products);
-        console.log(state.orders);
-        const category = event.target.value;
-        const products = dataProducts.filter(product => product.categoryId === category.categoryId);
-        console.log(state.products);
+        let category = event.target.value;
+        let products = dataProducts.filter(product =>
+            product.categoryId ===
+            dataCategories.find(x=>x.value===category).categoryId);
         setState({
             ...state,
             category: category,
             products: products,
             product: null,
-            order: null
         });
     }
 
     const productChange = (event) => {
-        const product = event.target.value;
-        const orders = dataOrders.filter(order => order.productId === product.productId);
-
         setState({
             ...state,
-            product: product,
-            orders: orders,
-            order: null
-        });
-    }
-
-    const orderChange = (event) => {
-        setState({ 
-            ...state,
-            order: event.target.value 
+            product: event.target.value,
         });
     }
 
     const category = state.category;
-    const product = state.product;
-    const order = state.order;
 
     const hasCategory = category && category !== 'None';
-    const hasProduct = product && product !== 'None';
     /*
     const classes = useStyles();
 
@@ -110,7 +92,7 @@ export default function CourseSelect(props) {
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {dataCategories.map(({index,value,label}) => {
+                    {dataCategories.map(({index,value,label,categoryId}) => {
                         return (
                             <MenuItem key={label} value={value}>
                                 {label}
@@ -134,31 +116,7 @@ export default function CourseSelect(props) {
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {dataProducts.map(({index,value,label}) => {
-                        return (
-                            <MenuItem key={label} value={value}>
-                                {label}
-                            </MenuItem>
-                        )
-                    })
-                    }
-                </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-                <InputLabel>
-                    Others
-                </InputLabel>
-                <Select
-                    disabled={!hasProduct}
-                    onChange={orderChange}
-                    >
-                    <InputLabel>
-                        Orders
-                    </InputLabel>
-                    <MenuItem key="" value="">
-                        <em>None</em>
-                    </MenuItem>
-                    {dataOrders.map(({index,value,label}) => {
+                    {state.products.map(({index,value,label}) => {
                         return (
                             <MenuItem key={label} value={value}>
                                 {label}
