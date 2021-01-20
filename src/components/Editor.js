@@ -244,14 +244,10 @@ export default function Editor() {
         fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
       }
 
-      fData.append('assignmentFiles', config.assignments);
+      fData.append('submission_file', config.assignments);
 
-      fetch('https://en082s72jshudo.x.pipedream.net/', {
+      fetch('/api/v1/job', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
         body: fData,
       }).then().catch();
   }
