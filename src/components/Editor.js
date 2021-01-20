@@ -188,10 +188,10 @@ export default function Editor() {
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
-  const [drawerOpen,setDrawerOpen]=useState(false);
+  const [drawerOpen,setDrawerOpen] = useState(false);
 
   //this is for the editor
-   const [style, setStyle]= useState({
+   const [style, setStyle] = useState({
     darkTheme: true,
     fontSize: 14,
   })
