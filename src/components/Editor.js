@@ -222,6 +222,9 @@ export default function Editor() {
 
   const [submitConfirm, setSubmitConfirm]= useState(false);
   const [submitWarning, setSubmitWarning]= useState(false);
+  const [fileNmae, setFileName] = useState({
+    name: [],
+  });
 
 
   const handleSubmit = () => {
@@ -240,6 +243,9 @@ export default function Editor() {
       fData.append('framework',config.framework);
 
       for(let index=0;index<tree[0].nodes.length;index++){
+        setFileName({
+          name: name.append
+        });
         const fileData = JSON.stringify(tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
         fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
@@ -482,6 +488,7 @@ export default function Editor() {
               submitConfirm={submitConfirm}
               setSubmitConfirm={setSubmitConfirm}
               uploadFile={uploadFile}
+              fileName={fileName}
           />
           <SubmitWarningDialog
               submitWarning={submitWarning}
