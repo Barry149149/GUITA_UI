@@ -6,8 +6,6 @@ import DriverSelect from "../../selectionBars/DriverSelect";
 import React from "react";
 import TabPanel from "../Tabpanel";
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import JSZip from 'jszip';
 
 export default function Configuration(props){
     return (

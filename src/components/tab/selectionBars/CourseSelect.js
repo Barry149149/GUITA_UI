@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { courseOption , dataCategories, dataOrders, dataProducts } from '../../../docs/data';
+import { dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem}from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({

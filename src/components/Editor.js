@@ -34,7 +34,6 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
-import JSZip from 'jszip';
 
 const drawerWidth = 400;
 
