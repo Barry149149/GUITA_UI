@@ -180,7 +180,7 @@ export default function GuideTour(props) {
                 index:0
             })
             props.setDrawerOpen(false);
-            handleTourFinished();
+           handleTourFinished();
         }
 
         console.log(state.index)
