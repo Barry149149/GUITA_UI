@@ -34,7 +34,6 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
-import JSZip from 'jszip';
 
 const drawerWidth = 400;
 
@@ -222,13 +221,23 @@ export default function Editor() {
 
   const [submitConfirm, setSubmitConfirm]= useState(false);
   const [submitWarning, setSubmitWarning]= useState(false);
-  const [fileNmae, setFileName] = useState({
+  const [fileName, setFileName] = useState({
     name: [],
   });
 
 
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
+      const name = [];
+      for(let index=0;index<tree[0].nodes.length;index++){
+        name.push(tree[0].nodes[index].value);
+      }
+      console.log(name);
+      setFileName({
+        ...fileName,
+        name: name,
+      });
+      console.log(fileName.name);
       setSubmitConfirm(true);
     } else{
       setSubmitWarning(true);
@@ -242,15 +251,19 @@ export default function Editor() {
       fData.append('language', config.language);
       fData.append('framework',config.framework);
 
+      const name = [];
       for(let index=0;index<tree[0].nodes.length;index++){
-        setFileName({
-          name: name.append
-        });
+        name.push(tree[0].nodes[index].value);
         const fileData = JSON.stringify(tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
         fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
       }
-
+      console.log(name);
+      setFileName({
+        ...fileName,
+        name: name,
+      });
+      console.log(fileName.name);
       fData.append('submission_file', config.assignments);
 
       fetch('/api/v1/job', {
