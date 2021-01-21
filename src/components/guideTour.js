@@ -123,7 +123,7 @@ export default function GuideTour(props) {
                 placement: 'left',
             },
             {
-                content:"To delete the command, check the checkbox on the row you want to delete, then click the trash can button that will show after you have selected it.",
+                content:"To delete/ duplicate the command(s), check the checkbox on the row you want to delete/ duplicate, then click the trash can button/ copy button that will show after you have selected it.",
                 target:"#checkbox_commandTableRow",
             },
             {

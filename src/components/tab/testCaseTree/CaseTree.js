@@ -65,7 +65,7 @@ export default function CaseTree(props){
             <ButtonGroup
                 className={classes.button_container}
                 id= 'button_caseTree'
-                fullWidth={true}
+                width={200}
                 orientation='vertical'
             >
             <Box pt={4} />
@@ -73,7 +73,7 @@ export default function CaseTree(props){
                 id= 'button_add'
                 variant= 'outlined'
                 color= 'primary'
-                fullWidth={true}
+                width={200}
                 onClick={()=>{
                     props.tree[0].nodes.push({
                         id: (props.createdCases+1),
@@ -103,7 +103,7 @@ export default function CaseTree(props){
                 id= 'button_delete'
                 variant= 'outlined'
                 color= 'primary'
-                fullWidth={true}
+                width={200}
                 onClick={handleWarningOpen}>
                 Delete
             </Button>
@@ -111,7 +111,7 @@ export default function CaseTree(props){
                 id= 'button_download'
                 variant= 'outlined'
                 color= 'primary'
-                fullWidth={true}
+                width={200}
                 onClick={()=>{
                     const zip = new JSZip();
                     console.log(props.tree[0].nodes[0].json);
@@ -132,7 +132,7 @@ export default function CaseTree(props){
                 variant= 'outlined'
                 component='label'
                 color= 'primary'
-                fullWidth={true}
+                width={200}
                 onClick={()=>{}}
                 >
                 Upload

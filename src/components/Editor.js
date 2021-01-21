@@ -35,7 +35,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
 
-const drawerWidth = 400;
+const drawerWidth = 360;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,9 +85,9 @@ const useStyles = makeStyles((theme) => ({
       duration: 100,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(9) + 1,
+    width: theme.spacing(8) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(8) + 1,
     },
   },
   drawerPaper: {
@@ -369,7 +369,7 @@ export default function Editor() {
                 />
               </Button>
           </div>
-              <div>
+              <div style={{width:240}}>
                 {(drawerOpen)?
                     <React.Fragment>
                       <Box p={3}/>
