@@ -2,7 +2,6 @@ import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import Box from "@material-ui/core/Box";
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 
@@ -46,8 +45,8 @@ export default function JsonEditor(props){
                     background_warning: '#FEECEB',
                     string: '#FA7921',
                     number: '#70CE35',
-                    colon: '#49B8F7',
-                    keys: '#59A5D8',
+                    colon: '#0978B7',
+                    keys: '#097598',
                     keys_whiteSpace: '#835FB6',
                     primitive: '#386FA4'
                 }

@@ -34,6 +34,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
+import Container from "@material-ui/core/Container";
 
 const drawerWidth = 360;
 
@@ -97,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     display: 'flex',
     flexGrow: 1,
+
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -130,6 +132,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     minWidth: 30,
     width: 30,
+  },
+  resultContainer: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    height: 800
+  },
+  resultPaper:{
+    height:'100%'
   }
 }));
 
@@ -149,6 +159,7 @@ export default function Editor() {
     driver:'',
     language:'',
     framework:'',
+    assignments:'',
   });
 
   const [tree,setTree] = useState([
@@ -187,10 +198,10 @@ export default function Editor() {
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
-  const [drawerOpen,setDrawerOpen]=useState(false);
+  const [drawerOpen,setDrawerOpen] = useState(false);
 
   //this is for the editor
-   const [style, setStyle]= useState({
+   const [style, setStyle] = useState({
     darkTheme: true,
     fontSize: 14,
   })
@@ -213,17 +224,34 @@ export default function Editor() {
     if(drawerValue===newValue){
       setDrawerOpen(!drawerOpen)
     }else{
-      setDrawerOpen(true)
+      if(newValue===3){
+        setDrawerOpen(false)
+      }else {
+        setDrawerOpen(true)
+      }
     }
     setDrawerValue(newValue);
   };
 
   const [submitConfirm, setSubmitConfirm]= useState(false);
   const [submitWarning, setSubmitWarning]= useState(false);
+  const [fileName, setFileName] = useState({
+    name: [],
+  });
 
 
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
+      const name = [];
+      for(let index=0;index<tree[0].nodes.length;index++){
+        name.push(tree[0].nodes[index].value);
+      }
+      console.log(name);
+      setFileName({
+        ...fileName,
+        name: name,
+      });
+      console.log(fileName.name);
       setSubmitConfirm(true);
     } else{
       setSubmitWarning(true);
@@ -237,20 +265,25 @@ export default function Editor() {
       fData.append('language', config.language);
       fData.append('framework',config.framework);
 
+      const name = [];
       for(let index=0;index<tree[0].nodes.length;index++){
+        name.push(tree[0].nodes[index].value);
         const fileData = JSON.stringify(tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
-        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id);
+        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
       }
+      console.log(name);
+      setFileName({
+        ...fileName,
+        name: name,
+      });
+      console.log(fileName.name);
+      fData.append('submission_file', config.assignments);
 
-      fetch('https://ent2363yfbcal.x.pipedream.net', {
+      fetch('/api/v1/job', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
         body: fData,
-      }).then()
+      }).then().catch();
   }
 
   function useTourStickyState(defaultValue, key) {
@@ -301,10 +334,25 @@ export default function Editor() {
           <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
             <PublishIcon />
           </IconButton>
-          <IconButton color="inherit" onClick={()=>{setSettingsOpen(true)}} id='button_setting'>
+          <IconButton
+              color="inherit"
+              onClick={()=>{setSettingsOpen(true)}}
+              id='button_setting'>
             <SettingsIcon />
           </IconButton>
-
+          <Tooltip
+              title="Start the tour again"
+              >
+            <IconButton
+                color="inherit"
+                id='button_help'
+                onClick={()=>{
+                  setGuideRun(true);
+                  setTour(0);
+                }}>
+              <HelpOutlineIcon/>
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -332,42 +380,40 @@ export default function Editor() {
                       orientation="vertical"
                       className={classes.tab}
                   >
-                    <Tab
-                        aria-labelledby='tab_config'
-                        className={classes.tab}
-                        icon={<TuneIcon color='primary'/>}
-                        {...a11yProps(0)}
-                    />
+                    <Tooltip title="Configuration for grading" placement="right">
+                      <Tab
+                          aria-labelledby='tab_config'
+                          className={classes.tab}
+                          icon={<TuneIcon color='primary'/>}
+                          {...a11yProps(0)}
+                      />
+                    </Tooltip>
+                    <Tooltip title="Test Case List" placement="right">
                     <Tab
                         aria-labelledby='tab_cases'
                         className={classes.tab}
                         icon={<ListAltIcon color='primary'/>}
                         {...a11yProps(1)}
                     />
+                    </Tooltip>
+                    <Tooltip title="Mode of Cases' Editor" placement="right">
                     <Tab
                         aria-labelledby='tab_editorMode'
                         className={classes.tab}
                         icon={<TabIcon color='primary'/>}
                         {...a11yProps(2)}
                     />
+                    </Tooltip>
+                    <Tooltip title="Grading Result" placement="right">
                     <Tab
                         aria-labelledby='tab_result'
                         className={classes.tab}
                         icon={<DescriptionIcon color='primary'/>}
                         {...a11yProps(3)}
                     />
+                    </Tooltip>
               </Tabs>
-              <Button
-                id='button_help'
-                onClick={()=>{
-                    setGuideRun(true); 
-                    setTour(0);
-                }}>
-                <HelpOutlineIcon
-                  color="primary"
-                  className={classes.drawer_button}
-                />
-              </Button>
+
           </div>
               <div style={{width:240}}>
                 {(drawerOpen)?
@@ -395,9 +441,7 @@ export default function Editor() {
                           tabValue={tabValue}
                           setTabValue={setTabValue}
                         />
-                      <ResultPanel
-                          drawerValue={drawerValue}
-                        />
+
                     </React.Fragment>
                   :null}
               </div>
@@ -405,8 +449,16 @@ export default function Editor() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Grid  container spacing={0} justify='centered' style={{height:"93%"}}>
-          <Grid xs={(drawerOpen)?12:12}>
+        {(drawerValue === 3)?
+            <Container className={classes.resultContainer}>
+              <Paper className={classes.resultPaper}>
+                <ResultPanel
+                    drawerValue={drawerValue}
+                />
+              </Paper>
+            </Container>
+            :
+            <React.Fragment>
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
                 <Grid className={classes.container} xs={10} id="jsonEditor" >
@@ -465,10 +517,8 @@ export default function Editor() {
                 }
               </Grid>
             </TabPanel>
-            <TabPanel value={tabValue} index={2}>
-            </TabPanel>
-          </Grid>
-        </Grid>
+              </React.Fragment>
+            }
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}
@@ -479,6 +529,7 @@ export default function Editor() {
               submitConfirm={submitConfirm}
               setSubmitConfirm={setSubmitConfirm}
               uploadFile={uploadFile}
+              fileName={fileName}
           />
           <SubmitWarningDialog
               submitWarning={submitWarning}
