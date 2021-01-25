@@ -1,0 +1,47 @@
+{
+  "courseName": "comp3021",
+  "assignment": 1,
+  "taskNumber": 4,
+  "result":[
+    {
+      "name": "Chan Tai Man",
+      "id": "32153221",
+      "scores": [20,20,30,40]
+    },
+    {
+      "name": "Chan Kai Man",
+      "id": "32155421",
+      "scores": [20,10,23,42]
+    },
+    {
+      "name": "Chan Sai Man",
+      "id": "32156421",
+      "scores": [20,22,30,42]
+    },
+    {
+      "name": "Chan Pai Man",
+      "id": "32155861",
+      "scores": [30,22,30,42]
+    },
+    {
+      "name": "Chan Qai Man",
+      "id": "32167521",
+      "scores": [20,50,30,23]
+    },
+    {
+      "name": "Chan Wai Man",
+      "id": "32155599",
+      "scores": [30,20,32,43]
+    },
+    {
+      "name": "Chan Gai Man",
+      "id": "32785521",
+      "scores": [20,20,23,34]
+    },
+    {
+      "name": "Chan Fai Man",
+      "id": "36755521",
+      "scores": [63,23,30,40]
+    }
+  ]
+}

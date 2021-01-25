@@ -35,6 +35,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
 import Container from "@material-ui/core/Container";
+import ResultTable from "./resultTable/ResultTable";
 
 const drawerWidth = 360;
 
@@ -224,12 +225,9 @@ export default function Editor() {
     if(drawerValue===newValue){
       setDrawerOpen(!drawerOpen)
     }else{
-      if(newValue===3){
-        setDrawerOpen(false)
-      }else {
-        setDrawerOpen(true)
-      }
+      setDrawerOpen(true)
     }
+
     setDrawerValue(newValue);
   };
 
@@ -441,6 +439,9 @@ export default function Editor() {
                           tabValue={tabValue}
                           setTabValue={setTabValue}
                         />
+                      <ResultPanel
+                          drawerValue={drawerValue}
+                      />
 
                     </React.Fragment>
                   :null}
@@ -452,9 +453,7 @@ export default function Editor() {
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
               <Paper className={classes.resultPaper}>
-                <ResultPanel
-                    drawerValue={drawerValue}
-                />
+                <ResultTable/>
               </Paper>
             </Container>
             :

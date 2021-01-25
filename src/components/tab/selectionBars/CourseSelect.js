@@ -77,6 +77,7 @@ export default function CourseSelect(props) {
                     }
                 </Select>
             </FormControl>
+            <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Assignments
