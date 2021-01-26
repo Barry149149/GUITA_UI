@@ -141,12 +141,13 @@ function ResultTableToolbar(props){
 
 export default function ResultTable(props) {
     const classes = useStyles();
-    const data = {
-        "semester":"2020S",
-        "courseName": "comp3021",
-        "assignment": 1,
-        "taskNumber": 4,
-        "result":[
+    const [data, setData] = React.useState({
+        "semester":props.resultData.year,
+        "courseName": props.resultData.course,
+        "assignment": props.resultData.assignment,
+        "taskNumber": props.resultData.taskNumber,
+        "result":props.resultData.result,
+        /*"result":[
             {
                 "name": "Chan Tai Man",
                 "id": "32153221",
@@ -187,8 +188,8 @@ export default function ResultTable(props) {
                 "id": "36755521",
                 "scores": [63,23,30,40]
             }
-        ]
-    };
+        ]*/
+    });
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [filterCriteria, setFilterCriteria]=React.useState('')
@@ -200,6 +201,7 @@ export default function ResultTable(props) {
     };
 
     React.useEffect(() => {
+        console.log(props.resultData);
         console.log(filterCriteria);
     })
 

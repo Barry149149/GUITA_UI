@@ -4,6 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -23,6 +24,7 @@ export default function CourseSelect(props) {
         year: null,
         category: null,
         product: null,
+        taskNumber: null,
         categories: dataCategories,
         orders: dataOrders,
         products: dataProducts,
@@ -34,7 +36,6 @@ export default function CourseSelect(props) {
             let categories = dataCategories.filter(category =>
                 category.yearId ===
                 dataYear.find(x=>x.value===year).yearId);
-            console.log(categories);
             setState({
                 ...state,
                 year: year,
@@ -50,7 +51,6 @@ export default function CourseSelect(props) {
             let products = dataProducts.filter(product =>
                 product.categoryId ===
                 dataCategories.find(x=>x.value===category).categoryId);
-            console.log(products);
             setState({
                 ...state,
                 category: category,
@@ -66,23 +66,50 @@ export default function CourseSelect(props) {
             let orders = dataOrders.filter(order =>
                 order.productId ===
                 dataProducts.find(x=>x.value===product).productId);
-            console.log(orders);
+            let taskNumber = dataProducts.find(x=>x.value===product).taskNumber;
             setState({
                 ...state,
                 product: event.target.value,
+                taskNumber: taskNumber,
                 orders: orders,
             });
-
         }
     }
+
+    const handleShow=()=>{
+        let result = [];
+        for( const i in state.orders){
+            result.push({
+                name: state.orders[i].value,
+                id: state.orders[i].id,
+                scores: state.orders[i].scores,
+            })
+        };
+        props.setResultData({
+            ...props.resultData,
+            year: state.year,
+            course: state.category,
+            assignment: state.product,
+            taskNumber: state.taskNumber,
+            result: result,
+        })
+    }
+
+    React.useEffect(() => {
+        console.log(state);
+    })
 
     const year = state.year;
 
     const category = state.category;
+    
+    const product = state.product;
 
     const hasYear = year && year !== 'None';
     
     const hasCategory = category && category !== 'None';
+
+    const hasProduct = product && product !== 'None';
 
     return(
         <React.Fragment>
@@ -119,7 +146,7 @@ export default function CourseSelect(props) {
                     onChange={categoryChange}
                     >
                     <InputLabel>
-                        Categories
+                        Courses
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -144,7 +171,7 @@ export default function CourseSelect(props) {
                     onChange={productChange}
                     >
                     <InputLabel>
-                        Products
+                        Assignments
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -159,6 +186,16 @@ export default function CourseSelect(props) {
                     }
                 </Select>
             </FormControl>
+            <br/>
+            <Button 
+                variant= 'outlined'
+                component='label'
+                color= 'primary'
+                disabled={!hasProduct}
+                onClick={handleShow}    
+            >
+                Show
+            </Button>
         </React.Fragment>
     )
 }

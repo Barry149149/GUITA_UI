@@ -238,7 +238,13 @@ export default function Editor() {
   });
 
   //this is for result page
-  const [resultData, setResultData]= useState('');
+  const [resultData, setResultData]= useState({
+    year: null,
+    course: null,
+    assignment: null,
+    taskNumber: null,
+    result: [],
+  });
 
   //this is for zip submission
   const handleSubmit = () => {
@@ -458,11 +464,12 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
+              {(resultData.year&&resultData.course&&resultData.assignment&&resultData.taskNumber)?
               <Paper className={classes.resultPaper}>
                 <ResultTable
                   resultData={resultData}
                 />
-              </Paper>
+              </Paper>:null}
             </Container>
             :
             <React.Fragment>
