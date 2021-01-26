@@ -468,6 +468,7 @@ export default function Editor() {
               <Paper className={classes.resultPaper}>
                 <ResultTable
                   resultData={resultData}
+                  setResultData={setResultData}
                 />
               </Paper>:null}
             </Container>
