@@ -15,7 +15,10 @@ export default function ResultPanel(props){
         <Divider/>
         <Box pt={1}/>
         <div>
-            <CourseSelect />
+            <CourseSelect 
+                resultData={props.resultData}
+                setResultData={props.setResultData}
+            />
         </div>
     </TabPanel>
     )

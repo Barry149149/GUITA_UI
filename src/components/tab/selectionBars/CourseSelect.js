@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
-import {Select, MenuItem}from '@material-ui/core';
-
+import {Select, MenuItem} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -51,6 +50,7 @@ export default function CourseSelect(props) {
             let products = dataProducts.filter(product =>
                 product.categoryId ===
                 dataCategories.find(x=>x.value===category).categoryId);
+            console.log(products);
             setState({
                 ...state,
                 category: category,
@@ -61,10 +61,19 @@ export default function CourseSelect(props) {
     }
 
     const productChange = (event) => {
-        setState({
-            ...state,
-            product: event.target.value,
-        });
+        if(event.target.value){
+            let product = event.target.value;
+            let orders = dataOrders.filter(order =>
+                order.productId ===
+                dataProducts.find(x=>x.value===product).productId);
+            console.log(orders);
+            setState({
+                ...state,
+                product: event.target.value,
+                orders: orders,
+            });
+
+        }
     }
 
     const year = state.year;
@@ -140,7 +149,7 @@ export default function CourseSelect(props) {
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {state.products.map(({index,value,label}) => {
+                    {state.products.map(({index,value,label,productId}) => {
                         return (
                             <MenuItem key={label} value={value}>
                                 {label}

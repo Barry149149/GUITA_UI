@@ -237,7 +237,11 @@ export default function Editor() {
     name: [],
   });
 
-
+  //this is for result page
+  const [resultData, setResultData]= useState({
+    result: [],
+  });
+  //this is for zip submission
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
       const name = [];
@@ -284,6 +288,7 @@ export default function Editor() {
       }).then().catch();
   }
 
+  //this is for tour guide
   function useTourStickyState(defaultValue, key) {
     const [value, setValue] = React.useState(() => {
       const stickyValue = window.localStorage.getItem(key);
@@ -440,6 +445,8 @@ export default function Editor() {
                           setTabValue={setTabValue}
                         />
                       <ResultPanel
+                          resultData={resultData}
+                          setResultData={setResultData}
                           drawerValue={drawerValue}
                       />
 
@@ -453,14 +460,16 @@ export default function Editor() {
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
               <Paper className={classes.resultPaper}>
-                <ResultTable/>
+                <ResultTable
+                  resultData={resultData}
+                />
               </Paper>
             </Container>
             :
             <React.Fragment>
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid className={classes.container} xs={10} id="jsonEditor" >
+                <Grid item className={classes.container} xs={10} id="jsonEditor" >
                   <JsonEditor
                       selectedCase={selectedCase}
                       setSelectedCase={setSelectedCase}
