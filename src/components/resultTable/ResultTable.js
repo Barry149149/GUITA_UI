@@ -228,7 +228,7 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(data.result, getComparator(order, orderBy))
-                                .filter(e=>(e.name.includes(filterCriteria)||e.id.includes(filterCriteria)))
+                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_taskScore=[]
