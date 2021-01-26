@@ -7,6 +7,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import {TextField} from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
     if(orderBy === 'name'||orderBy ==='id'){
@@ -116,14 +119,33 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1,
     },
+    title: {
+        flex: '1 1 100%',
+    },
 }));
+
+function ResultTableToolbar(props){
+    const {classes,course,semester, assignment, setFilterCriteria}=props
+    return(
+        <Toolbar>
+            <Typography className={classes.title}>{semester+"-"+course+"-Assignment"+assignment}</Typography>
+            <TextField
+                label="Search"
+                onChange={(e)=>{
+                    setFilterCriteria(e.target.value)
+                }
+                }/>
+        </Toolbar>
+    )
+}
 
 export default function ResultTable(props) {
     const classes = useStyles();
-    const data = {
-        "courseName": "comp3021",
-        "assignment": 1,
-        "taskNumber": 4,
+    const [data, setData] = React.useState({
+        "semester":props.resultData.year,
+        "courseName": props.resultData.course,
+        "assignment": props.resultData.assignment,
+        "taskNumber": props.resultData.taskNumber,
         "result":[
             {
                 "name": "Chan Tai Man",
@@ -166,9 +188,10 @@ export default function ResultTable(props) {
                 "scores": [63,23,30,40]
             }
         ]
-    };
+    });
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
+    const [filterCriteria, setFilterCriteria]=React.useState('')
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -177,12 +200,19 @@ export default function ResultTable(props) {
     };
 
     React.useEffect(() => {
-        console.log(orderBy);
         console.log(props.resultData);
+        console.log(filterCriteria);
     })
 
     return (
         <div className={classes.root}>
+            <ResultTableToolbar
+                course={data.courseName}
+                semester={data.semester}
+                assignment={data.assignment}
+                classes={classes}
+                setFilterCriteria={setFilterCriteria}
+            />
             <TableContainer>
                     <Table
                         className={classes.table}
@@ -199,6 +229,7 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(data.result, getComparator(order, orderBy))
+                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_taskScore=[]

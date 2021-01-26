@@ -245,6 +245,7 @@ export default function Editor() {
     taskNumber: null,
     result: [],
   });
+
   //this is for zip submission
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
@@ -463,11 +464,12 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
+              {(resultData.year&&resultData.course&&resultData.assignment&&resultData.taskNumber)?
               <Paper className={classes.resultPaper}>
                 <ResultTable
                   resultData={resultData}
                 />
-              </Paper>
+              </Paper>:null}
             </Container>
             :
             <React.Fragment>

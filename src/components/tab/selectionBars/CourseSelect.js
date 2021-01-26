@@ -4,6 +4,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -72,17 +73,19 @@ export default function CourseSelect(props) {
                 taskNumber: taskNumber,
                 orders: orders,
             });
-            props.setResultData({
-                ...props.resultData,
-                year: state.year,
-                course: state.category,
-                assignment: product,
-                taskNumber: taskNumber,
-                result: orders,
-            })
         }
     }
 
+    const handleShow=()=>{
+        props.setResultData({
+            ...props.resultData,
+            year: state.year,
+            course: state.category,
+            assignment: state.product,
+            taskNumber: state.taskNumber,
+            result: state.orders,
+        })
+    }
 
     React.useEffect(() => {
         console.log(state);
@@ -91,10 +94,14 @@ export default function CourseSelect(props) {
     const year = state.year;
 
     const category = state.category;
+    
+    const product = state.product;
 
     const hasYear = year && year !== 'None';
     
     const hasCategory = category && category !== 'None';
+
+    const hasProduct = product && product !== 'None';
 
     return(
         <React.Fragment>
@@ -171,6 +178,16 @@ export default function CourseSelect(props) {
                     }
                 </Select>
             </FormControl>
+            <br/>
+            <Button 
+                variant= 'outlined'
+                component='label'
+                color= 'primary'
+                disabled={!hasProduct}
+                onClick={handleShow}    
+            >
+                Show
+            </Button>
         </React.Fragment>
     )
 }
