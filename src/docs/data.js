@@ -161,54 +161,31 @@ export const backupdriverOption = [
     }
 ]
 
-export const courseOption = [
-    {
-        value: 'comp2012',
-        label: 'COMP 2012',
-        'assignments': [
-            {
-                value: 'pa1',
-                label: 'Assignment #1'
-            },
-            {
-                value: 'pa2',
-                label: 'Assignment #2'
-            },
-            {
-                value: 'pa3',
-                label: 'Assignment #3'
-            },
-        ]
-    },
-    {
-        value: 'comp3021',
-        label: 'COMP 3021',
-        'assignments': [
-            {
-                value: 'pa1',
-                label: 'Assignment #1'
-            },
-            {
-                value: 'pa2',
-                label: 'Assignment #2'
-            }
-        ]
-    },
+
+export const dataYear = [
+    {value: "2020s", label: "2020S", yearId: 1 },
+    {value: "2020f", label: "2020F", yearId: 2 },
 ]
 
 export const dataCategories = [
-    { value: "comp2012", label: "COMP2012", categoryId: 1 },
-    { value: "comp3021", label: "COMP3021", categoryId: 2 },
-    { value: "comp1022p", label: "COMP1022P", categoryId: 3 }
+    { value: "2020scomp2012", label: "COMP2012", categoryId: 1 , yearId: 1 },
+    { value: "2020scomp3021", label: "COMP3021", categoryId: 2 , yearId: 1 },
+    { value: "2020scomp1022p", label: "COMP1022P", categoryId: 3 , yearId: 1},
+    { value: "2020fcomp2012", label: "COMP2012", categoryId: 4 , yearId: 2 },
+    { value: "2020fcomp1022p", label: "COMP1022P", categoryId: 5 , yearId: 2},
 ];
 
 export const dataProducts = [
-    { value: "assign1", label: "Assignment #1",productId: 1, categoryId: 1 },
-    { value: "assign2", label: "Assignment #2", productId: 2, categoryId: 1 },
-    { value: "assign1", label: "Assignment #1", productId: 3, categoryId: 2 },
-    { value: "assign2", label: "Assignment #2", productId: 4, categoryId: 2 },
-    { value: "hw1", label: "Homework #1", productId: 5, categoryId: 3 },
-    { value: "hw2", label: "Homework #2", productId: 6, categoryId: 3 }
+    { value: "2020scomp2012assign1", label: "Assignment #1",productId: 1, categoryId: 1 },
+    { value: "2020scomp2012assign2", label: "Assignment #2", productId: 2, categoryId: 1 },
+    { value: "2020scomp3021assign1", label: "Assignment #1", productId: 3, categoryId: 2 },
+    { value: "2020scomp3021assign2", label: "Assignment #2", productId: 4, categoryId: 2 },
+    { value: "2020scomp1022phw1", label: "Homework #1", productId: 5, categoryId: 3 },
+    { value: "2020scomp1022phw2", label: "Homework #2", productId: 6, categoryId: 3 },
+    { value: "2020fcomp2012assign1", label: "Assignment #1", productId: 7, categoryId: 4 },
+    { value: "2020fcomp2012assign2", label: "Assignment #2", productId: 8, categoryId: 4 },
+    { value: "2020fcomp2012assign3", label: "Assignment #3", productId: 9, categoryId: 4 },
+    { value: "2020fcomp1022phw1", label: "Homework #1", productId: 10, categoryId: 5 },
 ];
 
 export const dataOrders = [
@@ -223,5 +200,13 @@ export const dataOrders = [
     { value: "Cunewalde", label: "Cunewalde", orderId: 9, productId: 5 },
     { value: "Mexico D.F.", label: "Mexico D.F.", orderId: 10, productId: 5 },
     { value: "Mexico D.F.", label: "Mexico D.F.", orderId: 11, productId: 6 },
-    { value: "Rio de Janeiro", label: "Rio de Janeiro", orderId: 12, productId: 6 }
+    { value: "Rio de Janeiro", label: "Rio de Janeiro", orderId: 12, productId: 6 },
+    { value: "Chan Tai Man", label: "Chan Tai Man", order: 13, product: 7 },
+    { value: "Brandenburg", label: "Brandenburg", orderId: 14, productId: 7 },
+    { value: "Cunewalde", label: "Cunewalde", orderId: 15, productId: 7 },
+    { value: "Mexico D.F.", label: "Mexico D.F.", orderId: 16, productId: 8 },
+    { value: "Geneva", label: "Geneva", orderId: 17, productId: 8 },
+    { value: "Graz", label: "Graz", orderId: 18, productId: 9 },
+    { value: "Rio de Janeiro", label: "Rio de Janeiro", orderId: 19, productId: 10 },
+    { value: "Chan Tai Man", label: "Chan Tai Man", order: 20, product: 10 },
 ];

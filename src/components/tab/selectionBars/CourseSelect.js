@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { dataCategories, dataOrders, dataProducts } from '../../../docs/data';
+import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem}from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -20,11 +21,29 @@ export default function CourseSelect(props) {
     const classes = useStyles();
 
     const [state, setState] = useState({
+        year: null,
         category: null,
         product: null,
+        categories: dataCategories,
         orders: dataOrders,
-        products: dataProducts
+        products: dataProducts,
     });
+
+    const yearChange = (event) => {
+        if(event.target.value){
+            let year = event.target.value;
+            let categories = dataCategories.filter(category =>
+                category.yearId ===
+                dataYear.find(x=>x.value===year).yearId);
+            console.log(categories);
+            setState({
+                ...state,
+                year: year,
+                categories: categories,
+                category: null,
+            });
+        }
+    }
 
     const categoryChange = (event) => {
         if(event.target.value){
@@ -48,17 +67,46 @@ export default function CourseSelect(props) {
         });
     }
 
+    const year = state.year;
+
     const category = state.category;
 
+    const hasYear = year && year !== 'None';
+    
     const hasCategory = category && category !== 'None';
 
     return(
         <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
+                    Years
+                </InputLabel>
+                <Select
+                    onChange={yearChange}
+                    >
+                    <InputLabel>
+                        Years
+                    </InputLabel>
+                    <MenuItem key="" value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {dataYear.map(({index,value,label,yearId}) => {
+                        return (
+                            <MenuItem key={label} value={value}>
+                                {label}
+                            </MenuItem>
+                        )
+                    })
+                    }
+                </Select>
+            </FormControl>
+            <br/>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
                     Courses
                 </InputLabel>
                 <Select
+                    disabled={!hasYear}
                     onChange={categoryChange}
                     >
                     <InputLabel>
@@ -67,7 +115,7 @@ export default function CourseSelect(props) {
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {dataCategories.map(({index,value,label,categoryId}) => {
+                    {state.categories.map(({index,value,label,categoryId}) => {
                         return (
                             <MenuItem key={label} value={value}>
                                 {label}
