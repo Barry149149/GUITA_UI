@@ -163,29 +163,29 @@ export const backupdriverOption = [
 
 
 export const dataYear = [
-    {value: "2020s", label: "2020S", yearId: 1 },
-    {value: "2020f", label: "2020F", yearId: 2 },
+    {value: "2020S", label: "2020S", yearId: 1 },
+    {value: "2020F", label: "2020F", yearId: 2 },
 ]
 
 export const dataCategories = [
-    { value: "2020scomp2012", label: "COMP2012", categoryId: 1 , yearId: 1 },
-    { value: "2020scomp3021", label: "COMP3021", categoryId: 2 , yearId: 1 },
-    { value: "2020scomp1022p", label: "COMP1022P", categoryId: 3 , yearId: 1},
-    { value: "2020fcomp2012", label: "COMP2012", categoryId: 4 , yearId: 2 },
-    { value: "2020fcomp1022p", label: "COMP1022P", categoryId: 5 , yearId: 2},
+    { value: "COMP2012", label: "COMP2012", categoryId: 1 , yearId: 1 },
+    { value: "COMP3021", label: "COMP3021", categoryId: 2 , yearId: 1 },
+    { value: "COMP1022P", label: "COMP1022P", categoryId: 3 , yearId: 1},
+    { value: "COMP2012", label: "COMP2012", categoryId: 4 , yearId: 2 },
+    { value: "COMP1022P", label: "COMP1022P", categoryId: 5 , yearId: 2},
 ];
 
 export const dataProducts = [
-    { value: "2020scomp2012assign1", label: "Assignment #1",productId: 1, categoryId: 1 },
-    { value: "2020scomp2012assign2", label: "Assignment #2", productId: 2, categoryId: 1 },
-    { value: "2020scomp3021assign1", label: "Assignment #1", productId: 3, categoryId: 2 },
-    { value: "2020scomp3021assign2", label: "Assignment #2", productId: 4, categoryId: 2 },
-    { value: "2020scomp1022phw1", label: "Homework #1", productId: 5, categoryId: 3 },
-    { value: "2020scomp1022phw2", label: "Homework #2", productId: 6, categoryId: 3 },
-    { value: "2020fcomp2012assign1", label: "Assignment #1", productId: 7, categoryId: 4 },
-    { value: "2020fcomp2012assign2", label: "Assignment #2", productId: 8, categoryId: 4 },
-    { value: "2020fcomp2012assign3", label: "Assignment #3", productId: 9, categoryId: 4 },
-    { value: "2020fcomp1022phw1", label: "Homework #1", productId: 10, categoryId: 5 },
+    { value: "Assignment #1", label: "Assignment #1",productId: 1, categoryId: 1, taskNumber: 4 },
+    { value: "Assignment #2", label: "Assignment #2", productId: 2, categoryId: 1, taskNumber: 4  },
+    { value: "Assignment #1", label: "Assignment #1", productId: 3, categoryId: 2, taskNumber: 4  },
+    { value: "Assignment #2", label: "Assignment #2", productId: 4, categoryId: 2, taskNumber: 4  },
+    { value: "Homework #1", label: "Homework #1", productId: 5, categoryId: 3, taskNumber: 4  },
+    { value: "Homework #2", label: "Homework #2", productId: 6, categoryId: 3, taskNumber: 4  },
+    { value: "Assignment #1", label: "Assignment #1", productId: 7, categoryId: 4, taskNumber: 4  },
+    { value: "Assignment #2", label: "Assignment #2", productId: 8, categoryId: 4, taskNumber: 4  },
+    { value: "Assignment #3", label: "Assignment #3", productId: 9, categoryId: 4, taskNumber: 4  },
+    { value: "Homework #1", label: "Homework #1", productId: 10, categoryId: 5, taskNumber: 4  },
 ];
 
 export const dataOrders = [

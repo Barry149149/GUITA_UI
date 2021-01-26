@@ -23,6 +23,7 @@ export default function CourseSelect(props) {
         year: null,
         category: null,
         product: null,
+        taskNumber: null,
         categories: dataCategories,
         orders: dataOrders,
         products: dataProducts,
@@ -34,7 +35,6 @@ export default function CourseSelect(props) {
             let categories = dataCategories.filter(category =>
                 category.yearId ===
                 dataYear.find(x=>x.value===year).yearId);
-            console.log(categories);
             setState({
                 ...state,
                 year: year,
@@ -50,7 +50,6 @@ export default function CourseSelect(props) {
             let products = dataProducts.filter(product =>
                 product.categoryId ===
                 dataCategories.find(x=>x.value===category).categoryId);
-            console.log(products);
             setState({
                 ...state,
                 category: category,
@@ -66,15 +65,28 @@ export default function CourseSelect(props) {
             let orders = dataOrders.filter(order =>
                 order.productId ===
                 dataProducts.find(x=>x.value===product).productId);
-            console.log(orders);
+            let taskNumber = dataProducts.find(x=>x.value===product).taskNumber;
             setState({
                 ...state,
                 product: event.target.value,
+                taskNumber: taskNumber,
                 orders: orders,
             });
-
+            props.setResultData({
+                ...props.resultData,
+                year: state.year,
+                course: state.category,
+                assignment: product,
+                taskNumber: taskNumber,
+                result: orders,
+            })
         }
     }
+
+
+    React.useEffect(() => {
+        console.log(state);
+    })
 
     const year = state.year;
 
@@ -119,7 +131,7 @@ export default function CourseSelect(props) {
                     onChange={categoryChange}
                     >
                     <InputLabel>
-                        Categories
+                        Courses
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -144,7 +156,7 @@ export default function CourseSelect(props) {
                     onChange={productChange}
                     >
                     <InputLabel>
-                        Products
+                        Assignments
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>

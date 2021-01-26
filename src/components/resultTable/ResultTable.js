@@ -178,6 +178,7 @@ export default function ResultTable(props) {
 
     React.useEffect(() => {
         console.log(orderBy);
+        console.log(props.resultData);
     })
 
     return (

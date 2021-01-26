@@ -239,6 +239,10 @@ export default function Editor() {
 
   //this is for result page
   const [resultData, setResultData]= useState({
+    year: null,
+    course: null,
+    assignment: null,
+    taskNumber: null,
     result: [],
   });
   //this is for zip submission
