@@ -73,7 +73,7 @@ function EnhancedTableHead(props) {
     ];
 
     return (
-        <TableHead>
+        <TableHead >
             <TableRow>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -178,6 +178,7 @@ export default function ResultTable(props) {
                         aria-labelledby="tableTitle"
                         size='medium'
                         aria-label="enhanced table"
+                        stickyHeader
                     >
                         <EnhancedTableHead
                             classes={classes}
