@@ -146,7 +146,8 @@ export default function ResultTable(props) {
         "courseName": props.resultData.course,
         "assignment": props.resultData.assignment,
         "taskNumber": props.resultData.taskNumber,
-        "result":[
+        "result":props.resultData.result,
+        /*"result":[
             {
                 "name": "Chan Tai Man",
                 "id": "32153221",
@@ -187,7 +188,7 @@ export default function ResultTable(props) {
                 "id": "36755521",
                 "scores": [63,23,30,40]
             }
-        ]
+        ]*/
     });
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');

@@ -77,13 +77,21 @@ export default function CourseSelect(props) {
     }
 
     const handleShow=()=>{
+        let result = [];
+        for( const i in state.orders){
+            result.push({
+                name: state.orders[i].value,
+                id: state.orders[i].id,
+                scores: state.orders[i].scores,
+            })
+        };
         props.setResultData({
             ...props.resultData,
             year: state.year,
             course: state.category,
             assignment: state.product,
             taskNumber: state.taskNumber,
-            result: state.orders,
+            result: result,
         })
     }
 
