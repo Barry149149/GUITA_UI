@@ -238,9 +238,8 @@ export default function Editor() {
   });
 
   //this is for result page
-  const [resultData, setResultData]= useState({
-    result: [],
-  });
+  const [resultData, setResultData]= useState('');
+
   //this is for zip submission
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
