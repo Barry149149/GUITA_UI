@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { resultSample, dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
+import { resultSample } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ResultRequest from '../../resultTable/ResultRequest';
@@ -21,108 +21,92 @@ const useStyles = makeStyles((theme) => ({
 export default function CourseSelect(props) {
     const classes = useStyles();
 
-    const [state, setState] = useState({
-        year: null,
-        category: null,
-        product: null,
-        taskNumber: null,
-        categories: dataCategories,
-        orders: dataOrders,
-        products: dataProducts,
-    });
-
     const [semester, setSemester] = useState(null);
+    const [filterSemesterList, setFilterSemesterList] = useState([]);
     const [course, setCourse] = useState(null);
-    const [courseList, setCourseList] = useState([]);
+    const [courseOption, setCourseOption] = useState([]);
+    const [filterCourseList, setFilterCourseList] = useState([]);
     const [assignment, setAssignment] = useState(null);
-    const [assignmentList, setAssignmentList] = useState([]);
+    const [filterResult, setFilterResult] = useState([]);
+    const [assignmentOption, setAssignmentOption] = useState([]);
 
     const handleSemesterChange = (event) => {
+        console.log(event.target.value);
+        if(event.target.value){
+            let semester = event.target.value;
+            const filterSemesterList = resultSample.filter(result => 
+                result.semester === semester);
+            console.log(filterSemesterList);
+            const courseOption = Array.from(new Set(filterSemesterList.map(result => result.courseName)));
+                console.log(courseOption);
+
+            setSemester(semester);
+            setFilterSemesterList(filterSemesterList);
+            setCourseOption(courseOption);
+        } else {
+            setSemester(null);
+            setCourse(null);
+            setAssignment(null);
+        }
     };
 
-    const yearChange = (event) => {
+    const handleCourseChange = (event) => {
+        console.log(semester);
+        console.log(filterSemesterList);
         if(event.target.value){
-            let year = event.target.value;
-            let categories = dataCategories.filter(category =>
-                category.yearId ===
-                dataYear.find(x=>x.value===year).yearId);
-            setState({
-                ...state,
-                year: year,
-                categories: categories,
-                category: null,
-                product:null,
-            });
+            let course = event.target.value;
+            const filterCourseList = filterSemesterList.filter(result =>
+                result.courseName === course);
+            console.log(filterCourseList);
+            const assignmentOption = Array.from(new Set(filterCourseList.map(result => result.assignment)));
+            console.log(assignmentOption);
+
+            setCourse(course);
+            setFilterCourseList(filterCourseList);
+            setAssignmentOption(assignmentOption);
+        } else {
+            setCourse(null);
+            setAssignment(null);
+        }
+
+    };
+
+    const handleAssignmentChange = (event) => {
+        if(event.target.value){
+            let assignment = event.target.value;
+            const filterResult = filterCourseList.filter(result =>
+                result.assignment === assignment);
+
+            console.log(filterResult);
+
+            setAssignment(assignment);
+            setFilterResult(filterResult);
+        } else {
+            setAssignment(null);
         }
     }
 
-    const categoryChange = (event) => {
-        if(event.target.value){
-            let category = event.target.value;
-            let products = dataProducts.filter(product =>
-                product.categoryId ===
-                dataCategories.find(x=>x.value===category).categoryId);
-            setState({
-                ...state,
-                category: category,
-                products: products,
-                product: null,
-            });
-        }
-    }
-
-    const productChange = (event) => {
-        if(event.target.value){
-            let product = event.target.value;
-            let orders = dataOrders.filter(order =>
-                order.productId ===
-                dataProducts.find(x=>x.value===product).productId);
-            let taskNumber = dataProducts.find(x=>x.value===product).taskNumber;
-            setState({
-                ...state,
-                product: event.target.value,
-                taskNumber: taskNumber,
-                orders: orders,
-            });
-        }
-    }
-
-    const handleShow=()=>{
-        let result = [];
-        for( const i in state.orders){
-            result.push({
-                name: state.orders[i].value,
-                id: state.orders[i].id,
-                scores: state.orders[i].scores,
-            })
-        };
+    const handleResultShow=()=>{
         props.setResultData({
             ...props.resultData,
-            year: state.year,
-            course: state.category,
-            assignment: state.product,
-            taskNumber: state.taskNumber,
-            result: result,
+            semester: filterResult[0].semester,
+            courseName: filterResult[0].courseName,
+            assignment: filterResult[0].assignment,
+            taskNumber: filterResult[0].taskNumber,
+            result: filterResult[0].result,
         })
     }
 
     React.useEffect(() => {
-        console.log(semesterOption);
     })
 
     const semesterOption = Array.from(new Set(resultSample.map(result => result.semester)));
 
-    const year = state.year;
+    const hasSemester = semester && semester !== null;
 
-    const category = state.category;
-    
-    const product = state.product;
+    const hasCourse = course && course !== null;
 
-    const hasYear = year && year !== 'None';
-    
-    const hasCategory = category && category !== 'None';
-
-    const hasProduct = product && product !== 'None';
+    const hasAssignment = assignment && assignment !== null;
 
     return(
         <React.Fragment>
@@ -152,21 +136,22 @@ export default function CourseSelect(props) {
             <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    Semesters
+                    TestCourses
                 </InputLabel>
                 <Select
-                    onChange={yearChange}
+                    disabled={!hasSemester}
+                    onChange={handleCourseChange}
                     >
                     <InputLabel>
-                        Semesters
+                        TestCourses
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {dataYear.map(({index,value,label,yearId}) => {
+                    {courseOption.map((courseName) => {
                         return (
-                            <MenuItem key={label} value={value}>
-                                {label}
+                            <MenuItem key={courseName} value={courseName}>
+                                {courseName}
                             </MenuItem>
                         )
                     })
@@ -176,47 +161,22 @@ export default function CourseSelect(props) {
             <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    Courses
+                    TestAssignments
                 </InputLabel>
                 <Select
-                    disabled={!hasYear}
-                    onChange={categoryChange}
+                    disabled={!hasCourse}
+                    onChange={handleAssignmentChange}
                     >
                     <InputLabel>
-                        Courses
+                        TestAssignments
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
                     </MenuItem>
-                    {state.categories.map(({index,value,label,categoryId}) => {
+                    {assignmentOption.map((assignment) => {
                         return (
-                            <MenuItem key={label} value={value}>
-                                {label}
-                            </MenuItem>
-                        )
-                    })
-                    }
-                </Select>
-            </FormControl>
-            <br/>
-            <FormControl className={classes.formControl}>
-                <InputLabel>
-                    Assignments
-                </InputLabel>
-                <Select
-                    disabled={!hasCategory}
-                    onChange={productChange}
-                    >
-                    <InputLabel>
-                        Assignments
-                    </InputLabel>
-                    <MenuItem key="" value="">
-                        <em>None</em>
-                    </MenuItem>
-                    {state.products.map(({index,value,label,productId}) => {
-                        return (
-                            <MenuItem key={label} value={value}>
-                                {label}
+                            <MenuItem key={assignment} value={assignment}>
+                                {assignment}
                             </MenuItem>
                         )
                     })
@@ -228,13 +188,11 @@ export default function CourseSelect(props) {
                 variant= 'outlined'
                 component='label'
                 color= 'primary'
-                disabled={!hasProduct}
-                onClick={handleShow}    
+                disabled={!hasAssignment}
+                onClick={handleResultShow}    
             >
                 Show
             </Button>
-            <br/>
-            <ResultRequest/>
         </React.Fragment>
     )
 }

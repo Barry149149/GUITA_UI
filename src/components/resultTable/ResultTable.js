@@ -128,7 +128,7 @@ function ResultTableToolbar(props){
     const {classes,course,semester, assignment, setFilterCriteria}=props
     return(
         <Toolbar>
-            <Typography className={classes.title}>{semester+"-"+course+"-Assignment"+assignment}</Typography>
+            <Typography className={classes.title}>{semester+"-"+course+"-"+assignment}</Typography>
             <TextField
                 label="Search"
                 onChange={(e)=>{
@@ -142,8 +142,8 @@ function ResultTableToolbar(props){
 export default function ResultTable(props) {
     const classes = useStyles();
     const [data, setData] = React.useState({
-        "semester":props.resultData.year,
-        "courseName": props.resultData.course,
+        "semester":props.resultData.semester,
+        "courseName": props.resultData.courseName,
         "assignment": props.resultData.assignment,
         "taskNumber": props.resultData.taskNumber,
         "result":props.resultData.result,
@@ -166,8 +166,8 @@ export default function ResultTable(props) {
     return (
         <div className={classes.root}>
             <ResultTableToolbar
-                course={props.resultData.course}
-                semester={props.resultData.year}
+                course={props.resultData.courseName}
+                semester={props.resultData.semester}
                 assignment={props.resultData.assignment}
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}

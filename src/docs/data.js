@@ -211,6 +211,21 @@ export const dataOrders = [
     { value: "Chan Tai Man", label: "Chan Tai Man", orderId: 20, productId: 10, id: 36755521,scores: [63,23,30,40] },
 ];
 
+/*
+ for my reference
+    2020s
+        comp2012
+            a1,a2,a3
+        comp1022p
+            h1
+        comp3021
+            a1,a2
+    2020f
+        comp2012
+            a1,a2
+        comp1022p
+            h1,h2
+*/
 export const resultSample = [
     {
         semester: '2020S',

@@ -239,8 +239,8 @@ export default function Editor() {
 
   //this is for result page
   const [resultData, setResultData]= useState({
-    year: null,
-    course: null,
+    semester: null,
+    courseName: null,
     assignment: null,
     taskNumber: null,
     result: [],
@@ -464,7 +464,7 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
-              {(resultData.year&&resultData.course&&resultData.assignment&&resultData.taskNumber)?
+              {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
               <Paper className={classes.resultPaper}>
                 <ResultTable
                   resultData={resultData}
