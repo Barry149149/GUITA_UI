@@ -141,6 +141,7 @@ function ResultTableToolbar(props){
 
 export default function ResultTable(props) {
     const classes = useStyles();
+    /*
     const [data, setData] = React.useState({
         "semester":props.resultData.semester,
         "courseName": props.resultData.courseName,
@@ -148,6 +149,7 @@ export default function ResultTable(props) {
         "taskNumber": props.resultData.taskNumber,
         "result":props.resultData.result,
     });
+    */
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [filterCriteria, setFilterCriteria]=React.useState('')

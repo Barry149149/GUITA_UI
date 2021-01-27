@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { resultSample } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import ResultRequest from '../../resultTable/ResultRequest';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
+    button: {
+        margin: theme.spacing(1),
+    }
 }));
 
 
@@ -112,13 +116,13 @@ export default function CourseSelect(props) {
         <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    TestSemesters
+                    Semesters
                 </InputLabel>
                 <Select
                     onChange={handleSemesterChange}
                     >
                     <InputLabel>
-                        TestSemesters
+                        Semesters
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -132,18 +136,19 @@ export default function CourseSelect(props) {
                     })
                     }
                 </Select>
+                <FormHelperText>Select Semester</FormHelperText>
             </FormControl>
             <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    TestCourses
+                    Courses
                 </InputLabel>
                 <Select
                     disabled={!hasSemester}
                     onChange={handleCourseChange}
                     >
                     <InputLabel>
-                        TestCourses
+                        Courses
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -157,18 +162,19 @@ export default function CourseSelect(props) {
                     })
                     }
                 </Select>
+                <FormHelperText>Select Course</FormHelperText>
             </FormControl>
             <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    TestAssignments
+                    Assignments
                 </InputLabel>
                 <Select
                     disabled={!hasCourse}
                     onChange={handleAssignmentChange}
                     >
                     <InputLabel>
-                        TestAssignments
+                        Assignments
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
@@ -182,9 +188,11 @@ export default function CourseSelect(props) {
                     })
                     }
                 </Select>
+                <FormHelperText>Select Assignment</FormHelperText>
             </FormControl>
             <br/>
             <Button 
+                className={classes.button}
                 variant= 'outlined'
                 component='label'
                 color= 'primary'
