@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import ResultRequest from '../../resultTable/ResultRequest';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -41,6 +42,7 @@ export default function CourseSelect(props) {
                 year: year,
                 categories: categories,
                 category: null,
+                product:null,
             });
         }
     }
@@ -196,6 +198,8 @@ export default function CourseSelect(props) {
             >
                 Show
             </Button>
+            <br/>
+            <ResultRequest/>
         </React.Fragment>
     )
 }
