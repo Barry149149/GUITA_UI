@@ -166,9 +166,9 @@ export default function ResultTable(props) {
     return (
         <div className={classes.root}>
             <ResultTableToolbar
-                course={data.courseName}
-                semester={data.semester}
-                assignment={data.assignment}
+                course={props.resultData.course}
+                semester={props.resultData.year}
+                assignment={props.resultData.assignment}
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
             />
@@ -185,10 +185,10 @@ export default function ResultTable(props) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            taskNumber={data.taskNumber}
+                            taskNumber={props.resultData.taskNumber}
                         />
                         <TableBody>
-                            {stableSort(data.result, getComparator(order, orderBy))
+                            {stableSort(props.resultData.result, getComparator(order, orderBy))
                                 .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;

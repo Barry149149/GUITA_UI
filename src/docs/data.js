@@ -210,3 +210,96 @@ export const dataOrders = [
     { value: "Rio de Janeiro", label: "Rio de Janeiro", orderId: 19, productId: 10, id: 36755521,scores: [63,23,30,40] },
     { value: "Chan Tai Man", label: "Chan Tai Man", orderId: 20, productId: 10, id: 36755521,scores: [63,23,30,40] },
 ];
+
+export const resultSample = [
+    {
+        year: '2020S',
+        courseName: 'COMP2012',
+        assignment: 'Assignment #1',
+        taskNumber: 4,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP2012',
+        assignment: 'Assignment #2',
+        taskNumber: 5,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP2012',
+        assignment: 'Assignment #3',
+        taskNumber: 5,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP2012',
+        assignment: 'Assignment #4',
+        taskNumber: 4,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP1022P',
+        assignment: 'Assignment #1',
+        taskNumber: 5,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP1022P',
+        assignment: 'Assignment #2',
+        taskNumber: 4,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP1022P',
+        assignment: 'Assignment #3',
+        taskNumber: 4,
+        results: [
+            {
+                value: '', id: 30544728, scores: [],
+            },
+        ]
+    },
+    {
+        year: '2020S',
+        courseName: 'COMP3021',
+    },
+    {
+        year: '2020F',
+        courseName: 'COMP2012',
+    },
+    {
+        year: '2020F',
+        courseName: 'COMP1022P',
+    },
+
+]
