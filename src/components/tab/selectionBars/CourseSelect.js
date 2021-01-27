@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import { dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
+import { resultSample, dataYear, dataCategories, dataOrders, dataProducts } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ResultRequest from '../../resultTable/ResultRequest';
@@ -30,6 +30,15 @@ export default function CourseSelect(props) {
         orders: dataOrders,
         products: dataProducts,
     });
+
+    const [semester, setSemester] = useState(null);
+    const [course, setCourse] = useState(null);
+    const [courseList, setCourseList] = useState([]);
+    const [assignment, setAssignment] = useState(null);
+    const [assignmentList, setAssignmentList] = useState([]);
+
+    const handleSemesterChange = (event) => {
+    };
 
     const yearChange = (event) => {
         if(event.target.value){
@@ -98,8 +107,10 @@ export default function CourseSelect(props) {
     }
 
     React.useEffect(() => {
-        console.log(state);
+        console.log(semesterOption);
     })
+
+    const semesterOption = Array.from(new Set(resultSample.map(result => result.semester)));
 
     const year = state.year;
 
@@ -117,13 +128,37 @@ export default function CourseSelect(props) {
         <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    Years
+                    TestSemesters
+                </InputLabel>
+                <Select
+                    onChange={handleSemesterChange}
+                    >
+                    <InputLabel>
+                        TestSemesters
+                    </InputLabel>
+                    <MenuItem key="" value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {semesterOption.map((semester) => {
+                        return (
+                            <MenuItem key={semester} value={semester}>
+                                {semester}
+                            </MenuItem>
+                        )
+                    })
+                    }
+                </Select>
+            </FormControl>
+            <br/>
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Semesters
                 </InputLabel>
                 <Select
                     onChange={yearChange}
                     >
                     <InputLabel>
-                        Years
+                        Semesters
                     </InputLabel>
                     <MenuItem key="" value="">
                         <em>None</em>
