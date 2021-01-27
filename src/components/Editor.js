@@ -139,9 +139,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     height: 800
   },
-  resultPaper:{
-    height:'100%'
-  }
 }));
 
 function a11yProps(index) {
@@ -452,7 +449,7 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
-              <Paper className={classes.resultPaper}>
+              <Paper >
                 <ResultTable/>
               </Paper>
             </Container>
