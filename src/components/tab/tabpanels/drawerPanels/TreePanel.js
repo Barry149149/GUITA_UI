@@ -14,13 +14,10 @@ export default function TreePanel(props){
             <Divider/>
             <CaseTree
                 selectedCase={props.selectedCase}
-                setSelectedCase={props.setSelectedCase}
                 tree={props.tree}
-                setTree={props.setTree}
                 createdCases={props.createdCases}
-                setCreatedCases={props.setCreatedCases}
                 noOfCases={props.noOfCases}
-                setNoOfCases={props.setNoOfCases}
+                dispatch={props.dispatch}
             />
         </TabPanel>
     )

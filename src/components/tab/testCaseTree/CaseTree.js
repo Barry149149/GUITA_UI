@@ -55,6 +55,7 @@ export default function CaseTree(props){
             <MuiTreeView
                 tree={props.tree}
                 onLeafClick={e=>{
+                    if(e.id===props.selectedCase.id) return
                     props.dispatch({
                         data:{
                             tree: props.tree,

@@ -62,6 +62,7 @@ function stateReducer(state, action){
         future: newFuture
       }
     default:
+      if(present===action.data) return state
         return{
           past: [...past, present],
           present: action.data,

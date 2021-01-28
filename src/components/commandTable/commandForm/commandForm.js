@@ -63,20 +63,7 @@ export default function CommandForm(props){
                         if(props.cmdSchema.command==='None'){
                             return ;
                         }
-                        props.setSelectedCase({
-                            ...props.selectedCase,
-                            json:[...props.selectedCase.json,{
-                                command:props.cmdSchema.command,
-                                ...e.formData
-                            }],
-                            json_id:[...props.selectedCase.json_id,{
-                                id:(props.selectedCase.json.length+1),
-                                command:{
-                                    command:props.cmdSchema.command,
-                                    ...e.formData
-                                }
-                            }]
-                        })
+
                         let newNodes=[
                             ...props.tree[0].nodes,
                         ]
@@ -96,12 +83,33 @@ export default function CommandForm(props){
                                 }
                             }
                         ]
-                        props.setTree([
-                            {
-                                value: 'Test Cases',
-                                nodes: newNodes
+
+                        props.dispatch({
+                            data:{
+                                tree:[
+                                    {
+                                        value: 'Test Cases',
+                                        nodes: newNodes
+                                    }
+                                ],
+                                createdCases:props.createdCases,
+                                noOfCases:props.noOfCases,
+                                selectedCase:{
+                                    ...props.selectedCase,
+                                    json:[...props.selectedCase.json,{
+                                        command:props.cmdSchema.command,
+                                        ...e.formData
+                                    }],
+                                    json_id:[...props.selectedCase.json_id,{
+                                        id:(props.selectedCase.json.length+1),
+                                        command:{
+                                            command:props.cmdSchema.command,
+                                            ...e.formData
+                                        }
+                                    }]
+                                }
                             }
-                        ])
+                        })
                     }}
                 />
             </div>
