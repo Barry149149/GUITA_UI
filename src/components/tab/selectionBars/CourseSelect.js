@@ -114,6 +114,16 @@ export default function CourseSelect(props) {
 
     return(
         <React.Fragment>
+            <Button
+                className={classes.button}
+                variant= 'outlined'
+                component='label'
+                color='primary'
+                onClick={ResultRequest}
+            >
+                Fetch from Server
+            </Button>
+            <br/>
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Semesters
