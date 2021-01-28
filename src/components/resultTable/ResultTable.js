@@ -11,8 +11,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 
-
-
 function descendingComparator(a, b, orderBy) {
     if(orderBy === 'name'||orderBy ==='id'){
         if (b[orderBy] < a[orderBy]) {
@@ -64,7 +62,7 @@ function EnhancedTableHead(props) {
     let headCell_tasks=[]
 
     for(let i=0;i<taskNumber;i++) {
-       headCell_tasks.push({ id:(i+1),numeric: false, label:'Task '+(i+1)});
+        headCell_tasks.push({ id:(i+1),numeric: false, label:'Task '+(i+1)});
     }
 
     const headCells = [
@@ -75,7 +73,7 @@ function EnhancedTableHead(props) {
     ];
 
     return (
-        <TableHead>
+        <TableHead >
             <TableRow>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -108,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
     },
     table: {
-        minWidth: 450,
+        minWidth: 500,
     },
     visuallyHidden: {
         border: 0,
@@ -123,9 +121,6 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flex: '1 1 100%',
-    },
-    container: {
-        maxHeight: 650,
     },
 }));
 
@@ -146,6 +141,15 @@ function ResultTableToolbar(props){
 
 export default function ResultTable(props) {
     const classes = useStyles();
+    /*
+    const [data, setData] = React.useState({
+        "semester":props.resultData.semester,
+        "courseName": props.resultData.courseName,
+        "assignment": props.resultData.assignment,
+        "taskNumber": props.resultData.taskNumber,
+        "result":props.resultData.result,
+    });
+    */
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
     const [filterCriteria, setFilterCriteria]=React.useState('')
@@ -157,7 +161,8 @@ export default function ResultTable(props) {
     };
 
     React.useEffect(() => {
-        console.log(orderBy);
+        console.log(props.resultData);
+        console.log(filterCriteria);
     })
 
     return (
