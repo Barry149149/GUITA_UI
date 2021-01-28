@@ -106,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
     },
     table: {
-        minWidth: 500,
+        minWidth: 450,
     },
     visuallyHidden: {
         border: 0,
@@ -121,6 +121,9 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flex: '1 1 100%',
+    },
+    container: {
+        maxHeight: 650,
     },
 }));
 
@@ -174,7 +177,7 @@ export default function ResultTable(props) {
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
             />
-            <TableContainer>
+            <TableContainer className={classes.container}>
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
