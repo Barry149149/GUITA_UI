@@ -175,51 +175,51 @@ export default function ResultTable(props) {
                 setFilterCriteria={setFilterCriteria}
             />
             <TableContainer>
-                <Table
-                    className={classes.table}
-                    aria-labelledby="tableTitle"
-                    size='medium'
-                    aria-label="enhanced table"
-                    stickyHeader
-                >
-                    <EnhancedTableHead
-                        classes={classes}
-                        order={order}
-                        orderBy={orderBy}
-                        onRequestSort={handleRequestSort}
-                        taskNumber={props.resultData.taskNumber}
-                    />
-                    <TableBody>
-                        {stableSort(props.resultData.result, getComparator(order, orderBy))
-                            .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
-                            .map((row, index) => {
-                                const labelId = `enhanced-table-checkbox-${index}`;
-                                let cell_taskScore=[]
-                                for(let i=0;i<row.scores.length;i++){
-                                    cell_taskScore.push(<TableCell>{row.scores[i]}</TableCell>)
-                                }
-                                return (
-                                    <TableRow
-                                        hover
-                                        tabIndex={-1}
-                                        key={row.name}
-                                    >
-                                        <TableCell id={labelId} >
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell>
-                                            {row.id}
-                                        </TableCell>
-                                        <TableCell>
-                                            {row.scores.reduce((a,b)=>a+b)}
-                                        </TableCell>
-                                        {cell_taskScore}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                    <Table
+                        className={classes.table}
+                        aria-labelledby="tableTitle"
+                        size='medium'
+                        aria-label="enhanced table"
+                        stickyHeader
+                    >
+                        <EnhancedTableHead
+                            classes={classes}
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            taskNumber={props.resultData.taskNumber}
+                        />
+                        <TableBody>
+                            {stableSort(props.resultData.result, getComparator(order, orderBy))
+                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .map((row, index) => {
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    let cell_taskScore=[]
+                                    for(let i=0;i<row.scores.length;i++){
+                                        cell_taskScore.push(<TableCell>{row.scores[i]}</TableCell>)
+                                    }
+                                    return (
+                                        <TableRow
+                                            hover
+                                            tabIndex={-1}
+                                            key={row.name}
+                                        >
+                                            <TableCell id={labelId} >
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.id}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.scores.reduce((a,b)=>a+b)}
+                                            </TableCell>
+                                            {cell_taskScore}
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
         </div>
     );
 }
