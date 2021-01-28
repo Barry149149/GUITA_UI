@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useReducer} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -36,8 +36,40 @@ import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
 import Container from "@material-ui/core/Container";
 import ResultTable from "./resultTable/ResultTable";
+import UndoIcon from '@material-ui/icons/Undo';
+import RedoIcon from '@material-ui/icons/Redo';
 
 const drawerWidth = 360;
+
+function stateReducer(state, action){
+  const {past, present, future} = state;
+
+  switch (action.type) {
+    case 'UNDO':
+      const previous=past[past.length-1]
+      const newPast=past.slice(0,past.length-1)
+      return{
+        past:newPast,
+        present:previous,
+        future:[present,...future]
+      }
+    case 'REDO':
+      const next=future[0]
+      const newFuture=future.slice(1)
+      return{
+        past: [...past,present],
+        present: next,
+        future: newFuture
+      }
+    default:
+        return{
+          past: [...past, present],
+          present: action.data,
+          future:[]
+        }
+  }
+
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -139,6 +171,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     height: 800
   },
+  resultPaper:{
+    height:'100%'
+  }
 }));
 
 function a11yProps(index) {
@@ -160,38 +195,53 @@ export default function Editor() {
     assignments:'',
   });
 
-  const [tree,setTree] = useState([
-    {
-      value: 'Test Cases',
-      nodes: [
-        {id:1,
-          value: 'Test 1',
-          json: [
+  const [state ,dispatch]=useReducer(stateReducer,{
+    past:[],
+    present:{
+      tree:[
+        {
+          value: 'Test Cases',
+          nodes: [
+            {id:1,
+              value: 'Test 1',
+              json: [
                 {
                   "command": 'Test 1'
                 }
               ],
-          json_id:[
-                  {
-                    id:1,
-                    command:{
-                      "command":'Test1'
-                    }
+              json_id:[
+                {
+                  id:1,
+                  command:{
+                    "command":'Test1'
                   }
-          ]
-          },
+                }
+              ]
+            },
+          ],
+        },
       ],
+      selectedCase:{
+        id:1,
+        json: [
+          {
+            "command": 'Test 1'
+          }
+        ],
+        json_id:[
+          {
+            id:1,
+            command:{
+              "command":'Test1'
+            }
+          }
+        ]
+      },
+      createdCases: 1,
+      noOfCases:1
     },
-  ]);
-
-
-  const [selectedCase,setSelectedCase] = useState({
-    id:1,
-    json:tree[0].nodes[0].json,
-    json_id:tree[0].nodes[0].json_id
-  });
-  const [createdCases,setCreatedCases] = useState(1);
-  const [noOfCases,setNoOfCases] = useState(1);
+    future:[]
+  })
 
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
@@ -234,12 +284,21 @@ export default function Editor() {
     name: [],
   });
 
+  //this is for result page
+  const [resultData, setResultData]= useState({
+    semester: null,
+    courseName: null,
+    assignment: null,
+    taskNumber: null,
+    result: [],
+  });
 
+  //this is for zip submission
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
       const name = [];
-      for(let index=0;index<tree[0].nodes.length;index++){
-        name.push(tree[0].nodes[index].value);
+      for(let index=0;index<state.present.tree[0].nodes.length;index++){
+        name.push(state.present.tree[0].nodes[index].value);
       }
       console.log(name);
       setFileName({
@@ -253,6 +312,10 @@ export default function Editor() {
     }
   }
 
+  React.useEffect(() => {
+    console.log(state)
+  })
+
   function uploadFile(){
     let fData = new FormData();
 
@@ -261,11 +324,11 @@ export default function Editor() {
       fData.append('framework',config.framework);
 
       const name = [];
-      for(let index=0;index<tree[0].nodes.length;index++){
-        name.push(tree[0].nodes[index].value);
-        const fileData = JSON.stringify(tree[0].nodes[index].json);
+      for(let index=0;index<state.present.tree[0].nodes.length;index++){
+        name.push(state.present.tree[0].nodes[index].value);
+        const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
         const blob = new Blob([fileData],{type:'application/json'});
-        fData.append('testcases[]',blob, 'testcase'+tree[0].nodes[index].id+'.json');
+        fData.append('testcases[]',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
       }
       console.log(name);
       setFileName({
@@ -281,6 +344,7 @@ export default function Editor() {
       }).then().catch();
   }
 
+  //this is for tour guide
   function useTourStickyState(defaultValue, key) {
     const [value, setValue] = React.useState(() => {
       const stickyValue = window.localStorage.getItem(key);
@@ -298,7 +362,7 @@ export default function Editor() {
     tour,
     setTour
   ] = useTourStickyState(0, "tour");
-  
+
   let guide;
 
   if(tour<1){
@@ -323,9 +387,14 @@ export default function Editor() {
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            GUITA Test Case Creator \ Test Case \ Test {selectedCase.id}
+            GUITA Test Case Creator \ Test Case \ Test {state.present.selectedCase.id}
           </Typography>
-
+          <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
+            <UndoIcon/>
+          </IconButton>
+          <IconButton color="inherit" disabled={state.future.length===0} onClick={()=>{dispatch({type:"REDO"})}}>
+            <RedoIcon/>
+          </IconButton>
           <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
             <PublishIcon />
           </IconButton>
@@ -422,14 +491,11 @@ export default function Editor() {
                       />
                       <TreePanel
                           drawerValue={drawerValue}
-                          selectedCase={selectedCase}
-                          setSelectedCase={setSelectedCase}
-                          tree={tree}
-                          setTree={setTree}
-                          createdCases={createdCases}
-                          setCreatedCases={setCreatedCases}
-                          noOfCases={noOfCases}
-                          setNoOfCases={setNoOfCases}
+                          selectedCase={state.present.selectedCase}
+                          tree={state.present.tree}
+                          createdCases={state.present.createdCases}
+                          noOfCases={state.present.noOfCases}
+                          dispatch={dispatch}
                       />
                       <ModePanel
                           drawerValue={drawerValue}
@@ -437,6 +503,8 @@ export default function Editor() {
                           setTabValue={setTabValue}
                         />
                       <ResultPanel
+                          resultData={resultData}
+                          setResultData={setResultData}
                           drawerValue={drawerValue}
                       />
 
@@ -449,21 +517,26 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
-              <Paper >
-                <ResultTable/>
-              </Paper>
+              {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
+              <Paper className={classes.resultPaper}>
+                <ResultTable
+                  resultData={resultData}
+                  setResultData={setResultData}
+                />
+              </Paper>:null}
             </Container>
             :
             <React.Fragment>
             <TabPanel value={tabValue} index={0}>
               <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid className={classes.container} xs={10} id="jsonEditor" >
+                <Grid item className={classes.container} xs={10} id="jsonEditor" >
                   <JsonEditor
-                      selectedCase={selectedCase}
-                      setSelectedCase={setSelectedCase}
+                      selectedCase={state.present.selectedCase}
                       style={style}
-                      setTree={setTree}
-                      tree={tree}
+                      tree={state.present.tree}
+                      createdCases={state.present.createdCases}
+                      noOfCases={state.present.noOfCases}
+                      dispatch={dispatch}
                   />
                 </Grid>
               </Grid>
@@ -473,12 +546,13 @@ export default function Editor() {
                 <Grid item xs={(formOpen)?8:12}>
                   <div id="commandTable">
                     <CommandTable
-                        selectedCase={selectedCase}
-                        setSelectedCase={setSelectedCase}
+                        selectedCase={state.present.selectedCase}
                         formOpen={formOpen}
                         setFormOpen={setFormOpen}
-                        tree={tree}
-                        setTree={setTree}
+                        tree={state.present.tree}
+                        createdCases={state.present.createdCases}
+                        noOfCases={state.present.noOfCases}
+                        dispatch={dispatch}
                     />
                   </div>
               </Grid>
@@ -498,14 +572,15 @@ export default function Editor() {
                           </Button>
                         </Tooltip>
                         <CommandForm
-                            selectedCase={selectedCase}
-                            setSelectedCase={setSelectedCase}
+                            selectedCase={state.present.selectedCase}
                             cmdSchema={cmdSchema}
                             setCmdSchema={setCmdSchema}
-                            setTree={setTree}
-                            tree={tree}
+                            tree={state.present.tree}
                             formData={formData}
                             setFormData={setFormData}
+                            createdCases={state.present.createdCases}
+                            noOfCases={state.present.noOfCases}
+                            dispatch={dispatch}
                         />
                       </Paper>
                     </Grid>

@@ -54,12 +54,21 @@ export default function CaseTree(props){
             <div id="caseTree">
             <MuiTreeView
                 tree={props.tree}
-                onLeafClick={e=>{props.setSelectedCase({
-                    ...props.selectedCase,
-                    id: e.id,
-                    json: props.tree[0].nodes.find(x=>x.id===e.id).json,
-                    json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
-                })}}
+                onLeafClick={e=>{
+                    props.dispatch({
+                        data:{
+                            tree: props.tree,
+                            createdCases:props.createdCases,
+                            noOfCases:props.noOfCases,
+                            selectedCase:{
+                                id: e.id,
+                                json: props.tree[0].nodes.find(x=>x.id===e.id).json,
+                                json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
+                            }
+                        }
+                    })
+
+                }}
             />
             </div>
             <ButtonGroup
@@ -75,27 +84,37 @@ export default function CaseTree(props){
                 color= 'primary'
                 width={200}
                 onClick={()=>{
-                    props.tree[0].nodes.push({
-                        id: (props.createdCases+1),
-                        value: 'Test ' + (props.createdCases+1),
-                        json:[{
-                            "command": "Test "+(props.createdCases+1)
-                        }],
-                        json_id:[{
-                            id:1,
-                            command: {
-                                "command": "Test " + (props.createdCases + 1)
-                            }
-                        }]
-                    });
-                    props.setCreatedCases(props.createdCases+1);
-                    props.setNoOfCases(props.noOfCases+1)
-
-                    props.setSelectedCase({
-                        ...props.selectedCase,
-                        id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
-                        json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
-                        json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                    props.dispatch({
+                        data:{
+                            tree:[
+                                {
+                                    value: 'Test Cases',
+                                    nodes: [
+                                        ...props.tree[0].nodes,
+                                        {
+                                            id: (props.createdCases+1),
+                                            value: 'Test ' + (props.createdCases+1),
+                                            json:[{
+                                                "command": "Test "+(props.createdCases+1)
+                                            }],
+                                            json_id:[{
+                                                id:1,
+                                                command: {
+                                                    "command": "Test " + (props.createdCases + 1)
+                                                }
+                                            }]
+                                        }
+                                    ]
+                                }
+                            ],
+                            createdCases:props.createdCases+1,
+                            noOfCases:props.noOfCases+1,
+                            selectedCase:{
+                                id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
+                                json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
+                                json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                            },
+                        }
                     })
                 }
                 }>Add</Button>
@@ -148,13 +167,13 @@ export default function CaseTree(props){
                         const promises = [];
 
                         JSZip.loadAsync(e.target.files[0]).then(function (zip) {
-                            
+
                             zip.forEach(function (relativePath, zipEntry){
                                 promises.push(zip.file(zipEntry.name).async('string'));
                             });
 
                             Promise.all(promises).then(function (data) {
-                                
+
                                 let newNodes=[
                                     ...props.tree[0].nodes,
                                 ]
@@ -162,9 +181,10 @@ export default function CaseTree(props){
                                 console.log(props.createdCases);
                                 let last_jsObject=[];
                                 let last_new_json_id =[];
-                                
+                                let last_id=0
+
                                 for(const i in data){
-                                    
+
                                     const jsObject = JSON.parse(data[i]);
                                     console.log(jsObject);
 
@@ -183,22 +203,27 @@ export default function CaseTree(props){
                                         json_id:new_json_id,
                                     });
 
+                                    last_id=i;
                                     last_jsObject = jsObject;
                                     last_new_json_id = new_json_id;
                                 }
-                                props.setTree([
-                                    {
-                                        value: 'Test Cases',
-                                        nodes: newNodes
-                                    }
-                                ])
-                                props.setCreatedCases(props.createdCases+data.length);
-                                props.setNoOfCases(props.createdCases+data.length);
 
-                                props.setSelectedCase({
-                                    ...props.selectedCase,
-                                    json: last_jsObject,
-                                    json_id: last_new_json_id,
+                                props.dispatch({
+                                    data:{
+                                        tree:[
+                                            {
+                                                value: 'Test Cases',
+                                                nodes: newNodes
+                                            }
+                                        ],
+                                        createdCases:props.createdCases+data.length,
+                                        noOfCases:props.createdCases+data.length,
+                                        selectedCase:{
+                                            id:last_id,
+                                            json: last_jsObject,
+                                            json_id: last_new_json_id,
+                                        },
+                                    }
                                 })
                             }, function(err){
                             })
@@ -207,7 +232,7 @@ export default function CaseTree(props){
                     }
                     }
                 />
-                
+
             </Button>
             </ButtonGroup>
             <Dialog
@@ -224,7 +249,7 @@ export default function CaseTree(props){
                             Cancel
                         </Button>
                         <Button
-                        
+
                             onClick={handleConfirmClose}
                             color="primary"
                             autofocus
@@ -249,21 +274,32 @@ export default function CaseTree(props){
                         Cancel
                     </Button>
                     <Button onClick={()=>{
-                        for(let i=0; i < props.tree[0].nodes.length; i++) {
-
-                            if(props.tree[0].nodes[i].id===props.selectedCase.id){
-                                props.tree[0].nodes.splice(i,1);
+                        let newNodes=[...props.tree[0].nodes];
+                        let newNoOfCases=props.noOfCases
+                        for(let i=0; i < newNodes.length; i++) {
+                            if(newNodes[i].id===props.selectedCase.id){
+                                newNodes.splice(i,1);
                                 i--;
-                                props.setNoOfCases(props.noOfCases-1)
+                                newNoOfCases--
                             }
                         }
-
-                        props.setSelectedCase({
-                            ...props.selectedCase,
-                            id:props.tree[0].nodes[0].id,
-                            json:props.tree[0].nodes[0].json,
-                            json_id:props.tree[0].nodes[0].json_id
-                        });
+                        props.dispatch({
+                            data:{
+                                tree:[
+                                    {
+                                        value: 'Test Cases',
+                                        nodes: newNodes
+                                    }
+                                ],
+                                createdCases:props.createdCases,
+                                noOfCases:newNoOfCases,
+                                selectedCase:{
+                                    id:props.tree[0].nodes[0].id,
+                                    json:props.tree[0].nodes[0].json,
+                                    json_id:props.tree[0].nodes[0].json_id
+                                },
+                            }
+                        })
                         handleClose();
                     }}
                             color="secondary"
