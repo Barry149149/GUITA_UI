@@ -7,6 +7,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import {TextField} from "@material-ui/core";
+
+
 
 function descendingComparator(a, b, orderBy) {
     if(orderBy === 'name'||orderBy ==='id'){
@@ -103,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
     },
     table: {
-        minWidth: 500,
+        minWidth: 450,
     },
     visuallyHidden: {
         border: 0,
@@ -116,59 +121,34 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1,
     },
+    title: {
+        flex: '1 1 100%',
+    },
+    container: {
+        maxHeight: 650,
+    },
 }));
+
+function ResultTableToolbar(props){
+    const {classes,course,semester, assignment, setFilterCriteria}=props
+    return(
+        <Toolbar>
+            <Typography className={classes.title}>{semester+"-"+course+"-"+assignment}</Typography>
+            <TextField
+                label="Search"
+                onChange={(e)=>{
+                    setFilterCriteria(e.target.value)
+                }
+                }/>
+        </Toolbar>
+    )
+}
 
 export default function ResultTable(props) {
     const classes = useStyles();
-    const data = {
-        "courseName": "comp3021",
-        "assignment": 1,
-        "taskNumber": 4,
-        "result":[
-            {
-                "name": "Chan Tai Man",
-                "id": "32153221",
-                "scores": [20,20,30,40]
-            },
-            {
-                "name": "Chan Kai Man",
-                "id": "32155421",
-                "scores": [20,10,23,42]
-            },
-            {
-                "name": "Chan Sai Man",
-                "id": "32156421",
-                "scores": [20,22,30,42]
-            },
-            {
-                "name": "Chan Pai Man",
-                "id": "32155861",
-                "scores": [30,22,30,42]
-            },
-            {
-                "name": "Chan Qai Man",
-                "id": "32167521",
-                "scores": [20,50,30,23]
-            },
-            {
-                "name": "Chan Wai Man",
-                "id": "32155599",
-                "scores": [30,20,32,43]
-            },
-            {
-                "name": "Chan Gai Man",
-                "id": "32785521",
-                "scores": [20,20,23,34]
-            },
-            {
-                "name": "Chan Fai Man",
-                "id": "36755521",
-                "scores": [63,23,30,40]
-            }
-        ]
-    };
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('name');
+    const [filterCriteria, setFilterCriteria]=React.useState('')
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -182,50 +162,59 @@ export default function ResultTable(props) {
 
     return (
         <div className={classes.root}>
+            <ResultTableToolbar
+                course={props.resultData.courseName}
+                semester={props.resultData.semester}
+                assignment={props.resultData.assignment}
+                classes={classes}
+                setFilterCriteria={setFilterCriteria}
+            />
             <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        size='medium'
-                        aria-label="enhanced table"
-                    >
-                        <EnhancedTableHead
-                            classes={classes}
-                            order={order}
-                            orderBy={orderBy}
-                            onRequestSort={handleRequestSort}
-                            taskNumber={data.taskNumber}
-                        />
-                        <TableBody>
-                            {stableSort(data.result, getComparator(order, orderBy))
-                                .map((row, index) => {
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    let cell_taskScore=[]
-                                    for(let i=0;i<row.scores.length;i++){
-                                        cell_taskScore.push(<TableCell>{row.scores[i]}</TableCell>)
-                                    }
-                                    return (
-                                        <TableRow
-                                            hover
-                                            tabIndex={-1}
-                                            key={row.name}
-                                        >
-                                            <TableCell id={labelId} >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.scores.reduce((a,b)=>a+b)}
-                                            </TableCell>
-                                            {cell_taskScore}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <Table
+                    className={classes.table}
+                    aria-labelledby="tableTitle"
+                    size='medium'
+                    aria-label="enhanced table"
+                    stickyHeader
+                >
+                    <EnhancedTableHead
+                        classes={classes}
+                        order={order}
+                        orderBy={orderBy}
+                        onRequestSort={handleRequestSort}
+                        taskNumber={props.resultData.taskNumber}
+                    />
+                    <TableBody>
+                        {stableSort(props.resultData.result, getComparator(order, orderBy))
+                            .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
+                            .map((row, index) => {
+                                const labelId = `enhanced-table-checkbox-${index}`;
+                                let cell_taskScore=[]
+                                for(let i=0;i<row.scores.length;i++){
+                                    cell_taskScore.push(<TableCell>{row.scores[i]}</TableCell>)
+                                }
+                                return (
+                                    <TableRow
+                                        hover
+                                        tabIndex={-1}
+                                        key={row.name}
+                                    >
+                                        <TableCell id={labelId} >
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.id}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.scores.reduce((a,b)=>a+b)}
+                                        </TableCell>
+                                        {cell_taskScore}
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }
