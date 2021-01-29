@@ -11,9 +11,11 @@ import SubmitWarningDialog from "./dialog/SubmitWarning";
 import DrawerTab from "./tab/drawerTab";
 import PanelsContainer from "./tab/tabpanels/drawerPanels/panelsContainer";
 import TablePanel from "./tab/tabpanels/contentPanels/TablePanel";
-import ResultContainer from "./resultTable/ResultContainer";
 import JsonEditorPanel from "./tab/tabpanels/contentPanels/JsonEditorPanel";
 import GuitaAppBar from "./GuitaAppBar";
+import Paper from "@material-ui/core/Paper";
+import ResultTable from "./resultTable/ResultTable";
+import Container from "@material-ui/core/Container";
 
 const drawerWidth = 360;
 
@@ -394,11 +396,15 @@ export default function Editor() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
-            <ResultContainer
-                classes={classes}
-                resultData={resultData}
-                setResultData={setResultData}
-            />
+            <Container className={classes.resultContainer}>
+              {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
+                  <Paper className={classes.resultPaper}>
+                    <ResultTable
+                        resultData={resultData}
+                        setResultData={setResultData}
+                    />
+                  </Paper>:null}
+            </Container>
             :
             <React.Fragment>
               <JsonEditorPanel
