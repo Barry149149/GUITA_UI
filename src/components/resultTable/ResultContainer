@@ -1,0 +1,20 @@
+import Paper from "@material-ui/core/Paper";
+import ResultTable from "./ResultTable";
+import Container from "@material-ui/core/Container";
+import React from "react";
+
+
+export default function ResultContainer(props){
+    const {classes,resultData,setResultData}=props
+    return(
+        <Container className={classes.resultContainer}>
+            {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
+                <Paper className={classes.resultPaper}>
+                    <ResultTable
+                        resultData={resultData}
+                        setResultData={setResultData}
+                    />
+                </Paper>:null}
+        </Container>
+    )
+}

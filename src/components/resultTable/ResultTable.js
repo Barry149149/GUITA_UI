@@ -100,7 +100,7 @@ function EnhancedTableHead(props) {
     );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
         padding: '10px',
