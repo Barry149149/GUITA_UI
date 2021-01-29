@@ -2,7 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import useSWR from 'swr';
 
-const fetcher = async (url) => await axios(url).then(res => res.data);
+const fetcher = async (url) => await axios(url, {
+    method:'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    }
+}).then(res => res.data);
 
 /*{
     const fetchData = async (url) => {
@@ -23,7 +28,7 @@ export default function ResultRequest(props) {
         }
     );*/
 
-    const {data, error} = useSWR('https://72bf4f9d-02aa-44ed-8fc0-00868abc9d1a.mock.pstmn.io',fetcher,
+    const {data, error} = useSWR('https://en8ubg2ol35lj.x.pipedream.net',fetcher,
         /*{
             refreshInterval: 1000,
         }*/
@@ -47,8 +52,8 @@ export default function ResultRequest(props) {
     */
 
     return (
-        <ul>
+        <div>
             Complete
-        </ul>
+        </div>
     )
 }
