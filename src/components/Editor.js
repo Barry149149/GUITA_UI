@@ -3,41 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import SettingDialog from "./dialog/SettingDialog";
-import SettingsIcon from "@material-ui/icons/Settings";
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Grow from '@material-ui/core/Grow';
-import Button from '@material-ui/core/Button';
-import CommandTable from "./commandTable/CommandTable";
-import CommandForm from "./commandTable/commandForm/commandForm";
-import JsonEditor from "./jsonEditor/jsonEditor";
-import Tooltip from "@material-ui/core/Tooltip";
 import GuideTour from "./guideTour";
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import TuneIcon from '@material-ui/icons/Tune';
-import TabIcon from '@material-ui/icons/Tab';
 import clsx from 'clsx';
-import Configuration from "./tab/tabpanels/drawerPanels/ConfigPanel";
-import TabPanel from "./tab/tabpanels/Tabpanel";
-import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
-import ModePanel from "./tab/tabpanels/drawerPanels/ModePanel";
-import ResultPanel from "./tab/tabpanels/drawerPanels/ResultPanel";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import DescriptionIcon from '@material-ui/icons/Description';
-import PublishIcon from '@material-ui/icons/Publish';
 import SubmitConfirmDialog from "./dialog/SubmitCofirm";
 import SubmitWarningDialog from "./dialog/SubmitWarning";
-import Container from "@material-ui/core/Container";
-import ResultTable from "./resultTable/ResultTable";
-import UndoIcon from '@material-ui/icons/Undo';
-import RedoIcon from '@material-ui/icons/Redo';
+import DrawerTab from "./tab/drawerTab";
+import PanelsContainer from "./tab/tabpanels/drawerPanels/panelsContainer";
+import TablePanel from "./tab/tabpanels/contentPanels/TablePanel";
+import ResultContainer from "./resultTable/ResultContainer";
+import JsonEditorPanel from "./tab/tabpanels/contentPanels/JsonEditorPanel";
+import GuitaAppBar from "./GuitaAppBar";
 
 const drawerWidth = 360;
 
@@ -177,13 +153,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
 export default function Editor() {
 
   const classes = useStyles();
@@ -256,16 +225,9 @@ export default function Editor() {
   })
 
   const [tabValue, setTabValue] = useState(0);
-  const [cmdSchema,setCmdSchema]=useState({
-    command:'None',
-    schema: {
-      "type":"object",
-    },
-    formData:''
-  })
-  const [formData,setFormData]=useState({})
 
-  const [drawerValue, setDrawerValue] = React.useState(-1);
+
+  const [drawerValue, setDrawerValue] = useState(-1);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -312,10 +274,6 @@ export default function Editor() {
       setSubmitWarning(true);
     }
   }
-
-  React.useEffect(() => {
-    //console.log(state)
-  })
 
   function uploadFile(){
     let fData = new FormData();
@@ -385,41 +343,15 @@ export default function Editor() {
     <div className={classes.root}>
       {guide}
       <CssBaseline />
-      <AppBar position="absolute" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            GUITA Test Case Creator \ Test Case \ Test {state.present.selectedCase.id}
-          </Typography>
-          <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
-            <UndoIcon/>
-          </IconButton>
-          <IconButton color="inherit" disabled={state.future.length===0} onClick={()=>{dispatch({type:"REDO"})}}>
-            <RedoIcon/>
-          </IconButton>
-          <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
-            <PublishIcon />
-          </IconButton>
-          <IconButton
-              color="inherit"
-              onClick={()=>{setSettingsOpen(true)}}
-              id='button_setting'>
-            <SettingsIcon />
-          </IconButton>
-          <Tooltip
-              title="Start the tour again"
-              >
-            <IconButton
-                color="inherit"
-                id='button_help'
-                onClick={()=>{
-                  setGuideRun(true);
-                  setTour(0);
-                }}>
-              <HelpOutlineIcon/>
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </AppBar>
+      <GuitaAppBar
+          classes={classes}
+          state={state}
+          handleSubmit={handleSubmit}
+          dispatch={dispatch}
+          setSettingsOpen={setSettingsOpen}
+          setGuideRun={setGuideRun}
+          setTour={setTour}
+      />
       <Drawer
         variant="permanent"
         className={clsx(classes.drawer, {
@@ -433,83 +365,28 @@ export default function Editor() {
           }),
         }}
       >
-            <div className={classes.drawerContainer} >
-              <div id='Drawer'>
-                <Box p={4}/>
-                  <Tabs
-                      value={drawerValue}
-                      onChange={handleDrawerChange}
-                      indicatorColor="primary"
-                      textColor="primary"
-                      variant="fullWidth"
-                      orientation="vertical"
-                      className={classes.tab}
-                  >
-                    <Tooltip title="Configuration for grading" placement="right">
-                      <Tab
-                          aria-labelledby='tab_config'
-                          className={classes.tab}
-                          icon={<TuneIcon color='primary'/>}
-                          {...a11yProps(0)}
-                      />
-                    </Tooltip>
-                    <Tooltip title="Test Case List" placement="right">
-                    <Tab
-                        aria-labelledby='tab_cases'
-                        className={classes.tab}
-                        icon={<ListAltIcon color='primary'/>}
-                        {...a11yProps(1)}
-                    />
-                    </Tooltip>
-                    <Tooltip title="Mode of Cases' Editor" placement="right">
-                    <Tab
-                        aria-labelledby='tab_editorMode'
-                        className={classes.tab}
-                        icon={<TabIcon color='primary'/>}
-                        {...a11yProps(2)}
-                    />
-                    </Tooltip>
-                    <Tooltip title="Grading Result" placement="right">
-                    <Tab
-                        aria-labelledby='tab_result'
-                        className={classes.tab}
-                        icon={<DescriptionIcon color='primary'/>}
-                        {...a11yProps(3)}
-                    />
-                    </Tooltip>
-              </Tabs>
-
+        <div className={classes.drawerContainer} >
+          <div id='Drawer'>
+              <Box p={4}/>
+              <DrawerTab
+                  drawerValue={drawerValue}
+                  handleDrawerChange={handleDrawerChange}
+                  classes={classes}
+              />
           </div>
               <div style={{width:240}}>
                 {(drawerOpen)?
-                    <React.Fragment>
-                      <Box p={3}/>
-                      <Configuration
-                          drawerValue={drawerValue}
-                          config={config}
-                          setConfig={setConfig}
-
-                      />
-                      <TreePanel
-                          drawerValue={drawerValue}
-                          selectedCase={state.present.selectedCase}
-                          tree={state.present.tree}
-                          createdCases={state.present.createdCases}
-                          noOfCases={state.present.noOfCases}
-                          dispatch={dispatch}
-                      />
-                      <ModePanel
-                          drawerValue={drawerValue}
-                          tabValue={tabValue}
-                          setTabValue={setTabValue}
-                        />
-                      <ResultPanel
-                          resultData={resultData}
-                          setResultData={setResultData}
-                          drawerValue={drawerValue}
-                      />
-
-                    </React.Fragment>
+                    <PanelsContainer
+                        drawerValue={drawerValue}
+                        config={config}
+                        setConfig={setConfig}
+                        state={state}
+                        resultData={resultData}
+                        setResultData={setResultData}
+                        tabValue={tabValue}
+                        setTabValue={setTabValue}
+                        dispatch={dispatch}
+                    />
                   :null}
               </div>
           </div>
@@ -517,79 +394,28 @@ export default function Editor() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
-            <Container className={classes.resultContainer}>
-              {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
-              <Paper className={classes.resultPaper}>
-                <ResultTable
-                  resultData={resultData}
-                  setResultData={setResultData}
-                />
-              </Paper>:null}
-            </Container>
+            <ResultContainer
+                classes={classes}
+                resultData={resultData}
+                setResultData={setResultData}
+            />
             :
             <React.Fragment>
-            <TabPanel value={tabValue} index={0}>
-              <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid item className={classes.container} xs={10} id="jsonEditor" >
-                  <JsonEditor
-                      selectedCase={state.present.selectedCase}
-                      style={style}
-                      tree={state.present.tree}
-                      createdCases={state.present.createdCases}
-                      noOfCases={state.present.noOfCases}
-                      dispatch={dispatch}
-                  />
-                </Grid>
-              </Grid>
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <Grid container spacing={1} justify='center'>
-                <Grid item xs={(formOpen)?8:12}>
-                  <div id="commandTable">
-                    <CommandTable
-                        selectedCase={state.present.selectedCase}
-                        formOpen={formOpen}
-                        setFormOpen={setFormOpen}
-                        tree={state.present.tree}
-                        createdCases={state.present.createdCases}
-                        noOfCases={state.present.noOfCases}
-                        dispatch={dispatch}
-                    />
-                  </div>
-              </Grid>
-                {(formOpen)?
-                  <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
-                    <Grid item xs={(formOpen) ? 4 : 1}>
-                      <Paper id="commandForm">
-                        <Box pt={1}/>
-                        <Tooltip title="Close" style={{float: "right"}}>
-                          <Button onClick={() => {
-                            setFormOpen(false)
-                          }} variant='small'>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                              <path
-                                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
-                            </svg>
-                          </Button>
-                        </Tooltip>
-                        <CommandForm
-                            selectedCase={state.present.selectedCase}
-                            cmdSchema={cmdSchema}
-                            setCmdSchema={setCmdSchema}
-                            tree={state.present.tree}
-                            formData={formData}
-                            setFormData={setFormData}
-                            createdCases={state.present.createdCases}
-                            noOfCases={state.present.noOfCases}
-                            dispatch={dispatch}
-                        />
-                      </Paper>
-                    </Grid>
-                  </Grow>:null
-                }
-              </Grid>
-            </TabPanel>
-              </React.Fragment>
+              <JsonEditorPanel
+                  classes={classes}
+                  tabValue={tabValue}
+                  style={style}
+                  state={state}
+                  dispatch={dispatch}
+              />
+              <TablePanel
+                  tabValue={tabValue}
+                  formOpen={formOpen}
+                  state={state}
+                  setFormOpen={setFormOpen}
+                  dispatch={dispatch}
+              />
+            </React.Fragment>
             }
           <SettingDialog
               open={settingsOpen}

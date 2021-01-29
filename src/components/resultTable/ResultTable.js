@@ -100,7 +100,7 @@ function EnhancedTableHead(props) {
     );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         width: '100%',
         padding: '10px',
@@ -194,7 +194,7 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(props.resultData.result, getComparator(order, orderBy))
-                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_taskScore=[]
