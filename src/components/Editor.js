@@ -314,7 +314,7 @@ export default function Editor() {
   }
 
   React.useEffect(() => {
-    console.log(state)
+    //console.log(state)
   })
 
   function uploadFile(){

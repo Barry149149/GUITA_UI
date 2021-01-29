@@ -23,15 +23,15 @@ export default function ResultRequest(props) {
         }
     );*/
 
-    const {data, error} = useSWR('https://hn.algolia.com/api/v1/search?query=redux',fetcher,
-        {
+    const {data, error} = useSWR('https://72bf4f9d-02aa-44ed-8fc0-00868abc9d1a.mock.pstmn.io',fetcher,
+        /*{
             refreshInterval: 1000,
-        }
+        }*/
     );
 
     if (error) return <div>failed to load</div>
     if (!data) return <div>loading...</div>
-
+    if (data) console.log(data);
     /*
     useEffect(() => {
         const fetchData = async () => {
@@ -48,11 +48,7 @@ export default function ResultRequest(props) {
 
     return (
         <ul>
-            {data.hits.map(item => (
-                <li key={item.objectID}>
-                <a href={item.url}>{item.title}</a>
-                </li>
-            ))}
+            Complete
         </ul>
     )
 }

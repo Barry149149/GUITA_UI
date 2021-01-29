@@ -211,6 +211,8 @@ export default function CourseSelect(props) {
             >
                 Show
             </Button>
+            <br/>
+            <ResultRequest />
         </React.Fragment>
     )
 }
