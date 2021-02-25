@@ -164,7 +164,9 @@ export default function Editor() {
     driver:'',
     language:'',
     framework:'',
-    assignments:'',
+    assignment_id:'',
+    assignments:'', //submission batch
+    assignmentsName: '',
   });
 
   const [state ,dispatch]=useReducer(stateReducer,{
@@ -249,6 +251,9 @@ export default function Editor() {
     name: [],
   });
 
+  //this is for course management
+  const [courseList, setCourseList]= useState([]);
+
   //this is for result page
   const [resultData, setResultData]= useState({
     semester: null,
@@ -280,29 +285,62 @@ export default function Editor() {
   function uploadFile(){
     let fData = new FormData();
 
-      fData.append('driver', config.driver);
-      fData.append('language', config.language);
-      fData.append('framework',config.framework);
+    fData.append('driver', config.driver);
+    fData.append('language', config.language);
+    fData.append('framework',config.framework);
 
-      const name = [];
-      for(let index=0;index<state.present.tree[0].nodes.length;index++){
-        name.push(state.present.tree[0].nodes[index].value);
-        const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
-        const blob = new Blob([fileData],{type:'application/json'});
-        fData.append('testcases[]',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
-      }
-      console.log(name);
-      setFileName({
-        ...fileName,
-        name: name,
-      });
-      console.log(fileName.name);
-      fData.append('submission_file', config.assignments);
+    const name = [];
+    for(let index=0;index<state.present.tree[0].nodes.length;index++){
+      name.push(state.present.tree[0].nodes[index].value);
+      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
+      const blob = new Blob([fileData],{type:'application/json'});
+      fData.append('testcases[]',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
+    }
+    console.log(name);
+    setFileName({
+      ...fileName,
+      name: name,
+    });
+    console.log(fileName.name);
+    fData.append('submission_file', config.assignments);
+    
 
-      fetch('/api/v1/job', {
+    // (MOVED TO CourseTree)This is for assignment create
+    /*
+    //fetch('/api/v2/assignment', {transports: ['websocket']}, {
+      fetch('/api/v2/assignment', {
         method: 'POST',
-        body: fData,
-      }).then().catch();
+        body: JSON.stringify({"assignment_name": config.assignmentsName}),
+        headers: {
+          'content-type': 'application/json'
+        }
+      }).then(result => console.log(result)).catch(error => console.log(error));
+    */
+
+    // This is for testcase create
+    const tData = new FormData();
+    for(let index=0;index<state.present.tree[0].nodes.length;index++){
+      name.push(state.present.tree[0].nodes[index].value);
+      tData.append('testcase_name', 'testcase'+state.present.tree[0].nodes[index].id);
+      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
+      const blob = new Blob([fileData],{type:'application/json'});
+      tData.append('testcase_file',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
+    }
+
+    
+    fetch('/api/v2/assignment/'+config.assignment_id+'/testcase', {
+      method: 'POST',
+      body: tData,
+    }).then(result => console.log(result)).catch(error => console.log(error));
+    
+    // This is for submission zip
+    let aData = new FormData();
+    aData.append('submission_file', config.assignments);
+
+    fetch('/api/v2/assignment/'+config.assignment_id+'/submission_batch', {
+      method: 'POST',
+      body: aData,
+    }).then(result => console.log(result)).catch(error => console.log(error));
   }
 
   //this is for tour guide
@@ -328,17 +366,17 @@ export default function Editor() {
 
   if(tour<1){
     guide= <GuideTour
-    drawerValue={drawerValue}
-    drawerOpen={drawerOpen}
-    setDrawerOpen={setDrawerOpen}
-    setDrawerValue={setDrawerValue}
-    setTabValue={setTabValue}
-    setFormOpen={setFormOpen}
-    setRun={setGuideRun}
-    tour={tour}
-    setTour={setTour}
-    run={guideRun}
-/>;
+      drawerValue={drawerValue}
+      drawerOpen={drawerOpen}
+      setDrawerOpen={setDrawerOpen}
+      setDrawerValue={setDrawerValue}
+      setTabValue={setTabValue}
+      setFormOpen={setFormOpen}
+      setRun={setGuideRun}
+      tour={tour}
+      setTour={setTour}
+      run={guideRun}
+    />;
   }
 
   return (

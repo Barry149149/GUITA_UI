@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -6,7 +6,7 @@ import { resultSample } from '../../../docs/data';
 import {Select, MenuItem} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import ResultRequest from '../../resultTable/ResultRequest';
+//import ResultRequest from '../../resultTable/ResultRequest';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
 export default function CourseSelect(props) {
     const classes = useStyles();
 
+    const [fetched, setFetched] = useState(null);
+    const [fetchData, setFetchData] = useState([]);
+    const [serverAssignment, setServerAssignment] = useState(null);
     const [semester, setSemester] = useState(null);
     const [filterSemesterList, setFilterSemesterList] = useState([]);
     const [course, setCourse] = useState(null);
@@ -34,6 +37,40 @@ export default function CourseSelect(props) {
     const [filterResult, setFilterResult] = useState([]);
     const [assignmentOption, setAssignmentOption] = useState([]);
 
+    //const fetchDataClick = () => ResultRequest(fetchData, setFetchData);
+    const fetchDataClick = () => {
+        fetch('/api/v2/assignment', { 
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            const assignment = Array.from(new Set(data.map(result => result)));
+            setFetchData(assignment);
+            setFetched(true);
+        });
+    }
+    useEffect(() => {
+        fetch('/api/v2/assignment', { 
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            const assignment = Array.from(new Set(data.map(result => result)));
+            setFetchData(assignment);
+            setFetched(true);
+        });
+    }, [fetched]);
+
+
+    const handleServerAssignment = (event) => {
+        if(event.target.value){
+            setServerAssignment(event.target.value);
+        }
+    };
+
+    const handleServerResultShow = () => {
+        console.log(serverAssignment);
+    }
     const handleSemesterChange = (event) => {
         console.log(event.target.value);
         if(event.target.value){
@@ -101,8 +138,7 @@ export default function CourseSelect(props) {
         })
     }
 
-    React.useEffect(() => {
-    })
+    const hasServerAssignment = serverAssignment && serverAssignment !== null;
 
     const semesterOption = Array.from(new Set(resultSample.map(result => result.semester)));
 
@@ -114,14 +150,41 @@ export default function CourseSelect(props) {
 
     return(
         <React.Fragment>
-            <Button
+            <FormControl className={classes.formControl}>
+                <InputLabel>
+                    Server Assignments
+                </InputLabel>
+                <Select
+                    disabled={!fetched}
+                    onChange={handleServerAssignment}
+                    >
+                    <InputLabel>
+                        Assignments
+                    </InputLabel>
+                    <MenuItem key="" value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {fetchData.map((data) => {
+                        return (
+                            <MenuItem key={data.assignment_id} value={data.assignment_id}>
+                                {data.assignment_name}
+                            </MenuItem>
+                        )
+                    })
+                    }
+                </Select>
+                <FormHelperText>Select Assignment</FormHelperText>
+            </FormControl>
+            <br/>
+            <Button 
                 className={classes.button}
                 variant= 'outlined'
                 component='label'
-                color='primary'
-                onClick={ResultRequest}
+                color= 'primary'
+                disabled={!hasServerAssignment}
+                onClick={handleServerResultShow}    
             >
-                Fetch from Server
+                Show
             </Button>
             <br/>
             <FormControl className={classes.formControl}>

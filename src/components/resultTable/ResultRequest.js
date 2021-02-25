@@ -5,7 +5,7 @@ import useSWR from 'swr';
 const fetcher = async (url) => await axios(url, {
     method:'GET',
     headers: {
-        'Content-Type': 'application/json',
+        //'Content-Type': 'application/json',
     }
 }).then(res => res.data);
 
@@ -21,39 +21,28 @@ const fetcher = async (url) => await axios(url, {
 
 export default function ResultRequest(props) {
 
-    /*
-    const [data, setData] = useState(
-        {
-            hits: [],
+    fetch('/api/v2/assignment', { 
+        headers: {
+            'content-type': 'application/json'
         }
-    );*/
-
-    const {data, error} = useSWR('https://en8ubg2ol35lj.x.pipedream.net',fetcher,
-        /*{
+    }).then(response => response.json()).then(data => {
+        props.setFetchData({data});
+    });
+    /*
+    const {data, error} = useSWR('/api/v2/assingment',fetcher,
+        {
             refreshInterval: 1000,
-        }*/
+        }
     );
 
     if (error) return <div>failed to load</div>
     if (!data) return <div>loading...</div>
     if (data) console.log(data);
-    /*
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios(
-              'https://hn.algolia.com/api/v1/search?query=redux',
-            );
-       
-            setData(result.data);
-          };
-       
-        fetchData();
-    }, []);
-    */
 
     return (
         <div>
             Complete
         </div>
     )
+    */
 }

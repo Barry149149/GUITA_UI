@@ -5,6 +5,7 @@ import FrameworkSelect from "../../selectionBars/FrameworkSelect";
 import DriverSelect from "../../selectionBars/DriverSelect";
 import React, {useState} from "react";
 import TabPanel from "../Tabpanel";
+import CourseTree from "../../selectionBars/courseTree/CourseTree";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField"
 import {makeStyles} from "@material-ui/core/styles";
@@ -40,6 +41,11 @@ export default function Configuration(props){
         index={0} >
         <Title>Configuration</Title>
         <Divider/>
+        <br/>
+        <CourseTree
+            config={props.config}
+            setConfig={props.setConfig}
+        />
         <Box pt={3} />
         <div style={{height:50, paddingLeft:8}}>
             <TextField
@@ -72,6 +78,7 @@ export default function Configuration(props){
                         props.setConfig({
                             ...props.config,
                             assignments: e.target.files[0],
+                            assignmentsName: e.target.files[0].name,
                         });
 
                         setFile({
