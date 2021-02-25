@@ -256,10 +256,11 @@ export default function Editor() {
 
   //this is for result page
   const [resultData, setResultData]= useState({
-    semester: null,
-    courseName: null,
-    assignment: null,
+    // semester: null,
+    // courseName: null,
+    // assignment: null,
     taskNumber: null,
+    jobBatch: null,
     result: [],
   });
 
@@ -435,7 +436,7 @@ export default function Editor() {
         <div className={classes.appBarSpacer} />
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
-              {(resultData.semester&&resultData.courseName&&resultData.assignment&&resultData.taskNumber)?
+              {(resultData.jobBatch)?
                   <Paper className={classes.resultPaper}>
                     <ResultTable
                         resultData={resultData}

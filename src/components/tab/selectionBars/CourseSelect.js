@@ -49,14 +49,28 @@ export default function CourseSelect(props) {
             setFetched(true);
         });
     }
+
+    // useEffect(() => {
+    //     fetch('/api/v2/assignment', {
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         }
+    //     }).then(response => response.json()).then(data => {
+    //         const assignment = Array.from(new Set(data.map(result => result)));
+    //         setFetchData(assignment);
+    //         setFetched(true);
+    //     });
+    // }, [fetched]);
+
+
     useEffect(() => {
-        fetch('/api/v2/assignment', { 
+        fetch('/api/v2/job_batch', {
             headers: {
                 'content-type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
-            const assignment = Array.from(new Set(data.map(result => result)));
-            setFetchData(assignment);
+            // const assignment = Array.from(new Set(data.map(result => result)));
+            setFetchData(data);
             setFetched(true);
         });
     }, [fetched]);
@@ -70,6 +84,16 @@ export default function CourseSelect(props) {
 
     const handleServerResultShow = () => {
         console.log(serverAssignment);
+        fetch(`/api/v2/job_batch/${serverAssignment}/report`)
+          .then(x => x.json())
+          .then(data => {
+              props.setResultData({
+                  ...props.resultData,
+                  jobBatch: serverAssignment,
+                  taskNumber: data[0]["reports"].length,
+                  result: data,
+              })
+          })
     }
     const handleSemesterChange = (event) => {
         console.log(event.target.value);
@@ -152,7 +176,7 @@ export default function CourseSelect(props) {
         <React.Fragment>
             <FormControl className={classes.formControl}>
                 <InputLabel>
-                    Server Assignments
+                    Recent Jobs
                 </InputLabel>
                 <Select
                     disabled={!fetched}
@@ -166,8 +190,8 @@ export default function CourseSelect(props) {
                     </MenuItem>
                     {fetchData.map((data) => {
                         return (
-                            <MenuItem key={data.assignment_id} value={data.assignment_id}>
-                                {data.assignment_name}
+                            <MenuItem key={data.job_batch_id} value={data.job_batch_id}>
+                                {data.created_at}
                             </MenuItem>
                         )
                     })

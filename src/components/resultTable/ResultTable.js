@@ -66,10 +66,12 @@ function EnhancedTableHead(props) {
     }
 
     const headCells = [
-        { id: 'name', numeric: false,  label: 'Student Name' },
-        { id: 'id', numeric: false,  label: 'Student ID' },
-        { id: 'scoresSum', numeric: false,  label: 'Total Score' },
+        // { id: 'name', numeric: false,  label: 'Student Name' },
+        // { id: 'id', numeric: false,  label: 'Student ID' },
+        // { id: 'scoresSum', numeric: false,  label: 'Total Score' },
+        { id: 'jobId', numeric: false,  label: 'Job' },
         ...headCell_tasks,
+        { id: 'score', numeric: false, label: 'Score'}
     ];
 
     return (
@@ -171,9 +173,9 @@ export default function ResultTable(props) {
     return (
         <div className={classes.root}>
             <ResultTableToolbar
-                course={props.resultData.courseName}
-                semester={props.resultData.semester}
-                assignment={props.resultData.assignment}
+                course="COMP 2012H"
+                semester="Fall 2018"
+                assignment="PA4"
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
             />
@@ -194,29 +196,26 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(props.resultData.result, getComparator(order, orderBy))
-                                .filter(e=>(e.name.toLowerCase().includes(filterCriteria.toLowerCase())||e.id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .filter(e=>(e.job_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_taskScore=[]
-                                    for(let i=0;i<row.scores.length;i++){
-                                        cell_taskScore.push(<TableCell>{row.scores[i]}</TableCell>)
+                                    for(let i=0;i<row.reports.length;i++){
+                                        cell_taskScore.push(<TableCell>{row.reports[i].status}</TableCell>)
                                     }
                                     return (
                                         <TableRow
                                             hover
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.job_id}
                                         >
                                             <TableCell id={labelId} >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.scores.reduce((a,b)=>a+b)}
+                                                {row.job_id}
                                             </TableCell>
                                             {cell_taskScore}
+                                            <TableCell>
+                                                {row.reports[row.reports.length - 1].report_summary.score}
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
