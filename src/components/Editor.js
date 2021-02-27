@@ -16,6 +16,10 @@ import GuitaAppBar from "./GuitaAppBar";
 import Paper from "@material-ui/core/Paper";
 import ResultTable from "./resultTable/ResultTable";
 import Container from "@material-ui/core/Container";
+import StageTable from "./stageTable/stageTable";
+import Grid from "@material-ui/core/Grid"
+import StageForm from "./stageTable/stageForm";
+import Grow from "@material-ui/core/Grow";
 
 const drawerWidth = 360;
 
@@ -168,6 +172,8 @@ export default function Editor() {
     assignments:'', //submission batch
     assignmentsName: '',
   });
+  const [stage,setStage]=useState([])
+  const [createdStage,setCreatedStage]=useState(0)
 
   const [state ,dispatch]=useReducer(stateReducer,{
     past:[],
@@ -221,6 +227,7 @@ export default function Editor() {
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
+  const [stageFormOpen,setStageFormOpen]=useState(false)
 
   //this is for the editor
    const [style, setStyle] = useState({
@@ -434,6 +441,35 @@ export default function Editor() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        {(drawerValue===0)?
+            <div style={{padding:20}}>
+              <Grid container spacing={3} justify='center'>
+                <Grid item xs={(stageFormOpen)?9:12}>
+                  <StageTable
+                      stage={stage}
+                      setStage={setStage}
+                      stageFormOpen={stageFormOpen}
+                      setStageFormOpen={setStageFormOpen}
+                  />
+                </Grid>
+                {(stageFormOpen)?
+                    <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
+                      <Grid item xs={3}>
+                        <StageForm
+                            stage={stage}
+                            setStage={setStage}
+                            stageFormOpen={stageFormOpen}
+                            setStageFormOpen={setStageFormOpen}
+                            createdStage={createdStage}
+                            setCreatedStage={setCreatedStage}
+                            testcases={state.present.tree[0].nodes}
+                        />
+                      </Grid>
+                    </Grow>
+                    :null}
+              </Grid>
+            </div>
+            :<React.Fragment>
         {(drawerValue === 3)?
             <Container className={classes.resultContainer}>
               {(resultData.jobBatch)?
@@ -462,6 +498,7 @@ export default function Editor() {
               />
             </React.Fragment>
             }
+        </React.Fragment>}
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}
