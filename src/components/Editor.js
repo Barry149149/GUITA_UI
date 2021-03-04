@@ -20,6 +20,18 @@ import StageTable from "./stageTable/stageTable";
 import Grid from "@material-ui/core/Grid"
 import StageForm from "./stageTable/stageForm";
 import Grow from "@material-ui/core/Grow";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import CodeIcon from "@material-ui/icons/Code";
+import TableChartIcon from "@material-ui/icons/TableChart";
+import {Tooltip} from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import UndoIcon from "@material-ui/icons/Undo";
+import RedoIcon from "@material-ui/icons/Redo";
+import TabPanel from "./tab/tabpanels/Tabpanel";
+
 
 const drawerWidth = 360;
 
@@ -60,6 +72,11 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
+  },
+  toolbar2: {
+    paddingLeft: 20,
+    paddingRight: 24,
+    backgroundColor:'#FFFFFF'// keep right padding when drawer closed
   },
   toolbarIcon: {
     display: 'flex',
@@ -114,7 +131,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     display: 'flex',
     flexGrow: 1,
-
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -130,12 +146,14 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
+  paper2: {
+    padding: theme.spacing(2),
+  },
   fixedHeight: {
     height: 240,
   },
   tab:{
     display: 'flex',
-    backgroundColor: theme.palette.background.paper,
     minWidth: 60,
     width: 60,
   },
@@ -158,6 +176,12 @@ const useStyles = makeStyles((theme) => ({
     height:'100%'
   }
 }));
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
 
 export default function Editor() {
 
@@ -238,7 +262,7 @@ export default function Editor() {
   const [tabValue, setTabValue] = useState(0);
 
 
-  const [drawerValue, setDrawerValue] = useState(-1);
+  const [drawerValue, setDrawerValue] = useState(1);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -395,7 +419,6 @@ export default function Editor() {
           classes={classes}
           state={state}
           handleSubmit={handleSubmit}
-          dispatch={dispatch}
           setSettingsOpen={setSettingsOpen}
           setGuideRun={setGuideRun}
           setTour={setTour}
@@ -422,55 +445,114 @@ export default function Editor() {
                   classes={classes}
               />
           </div>
-              <div style={{width:240}}>
-                {(drawerOpen)?
-                    <PanelsContainer
-                        drawerValue={drawerValue}
-                        config={config}
-                        setConfig={setConfig}
-                        state={state}
-                        resultData={resultData}
-                        setResultData={setResultData}
-                        tabValue={tabValue}
-                        setTabValue={setTabValue}
-                        dispatch={dispatch}
-                    />
-                  :null}
+          <div style={{width:240}}>
+            {(drawerOpen)?
+                <PanelsContainer
+                    drawerValue={drawerValue}
+                    config={config}
+                    setConfig={setConfig}
+                    state={state}
+                    resultData={resultData}
+                    setResultData={setResultData}
+                    dispatch={dispatch}
+                />
+                :null}
               </div>
-          </div>
+        </div>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        {(drawerValue===0)?
-            <div style={{padding:20}}>
-              <Grid container spacing={3} justify='center'>
-                <Grid item xs={(stageFormOpen)?9:12}>
-                  <StageTable
-                      stage={stage}
-                      setStage={setStage}
-                      stageFormOpen={stageFormOpen}
-                      setStageFormOpen={setStageFormOpen}
-                  />
+
+            <TabPanel
+                value={drawerValue}
+                index={0}>
+                <Grid container spacing={3} justify='center'>
+                  <Grid item xs={(stageFormOpen)?9:12}>
+                    <StageTable
+                        stage={stage}
+                        setStage={setStage}
+                        stageFormOpen={stageFormOpen}
+                        setStageFormOpen={setStageFormOpen}
+                    />
+                  </Grid>
+                  {(stageFormOpen)?
+                      <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
+                        <Grid item xs={3}>
+                          <StageForm
+                              stage={stage}
+                              setStage={setStage}
+                              stageFormOpen={stageFormOpen}
+                              setStageFormOpen={setStageFormOpen}
+                              createdStage={createdStage}
+                              setCreatedStage={setCreatedStage}
+                              testcases={state.present.tree[0].nodes}
+                          />
+                        </Grid>
+                      </Grow>
+                      :null}
                 </Grid>
-                {(stageFormOpen)?
-                    <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                      <Grid item xs={3}>
-                        <StageForm
-                            stage={stage}
-                            setStage={setStage}
-                            stageFormOpen={stageFormOpen}
-                            setStageFormOpen={setStageFormOpen}
-                            createdStage={createdStage}
-                            setCreatedStage={setCreatedStage}
-                            testcases={state.present.tree[0].nodes}
-                        />
-                      </Grid>
-                    </Grow>
-                    :null}
-              </Grid>
-            </div>
-            :<React.Fragment>
-        {(drawerValue === 3)?
+            </TabPanel>
+
+        <TabPanel
+            value={drawerValue}
+            index={1}
+        >
+          <Paper className={classes.paper2}>
+            <Toolbar className={classes.toolbar2}>
+              <Typography className={classes.title} color="primary" variant="h5" component="div">
+                {(tabValue===0)?"JSON Code Editor":"Table & Form Mode"}
+              </Typography>
+              <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
+                <UndoIcon/>
+              </IconButton>
+              <IconButton color="inherit" disabled={state.future.length===0} onClick={()=>{dispatch({type:"REDO"})}}>
+                <RedoIcon/>
+              </IconButton>
+              <Tabs
+                  value={tabValue}
+                  onChange={(value,newValue) =>setTabValue(newValue)}
+                  indicatorColor="primary"
+                  centered={true}
+              >
+                <Tooltip title="CodeEditor">
+                  <Tab
+                      className={classes.tab}
+                      aria-label="tab_codeEditor"
+                      icon={<CodeIcon color="primary"/>}
+                      {...a11yProps(0)}
+                  />
+                </Tooltip>
+                <Tooltip title="Table Mode">
+                  <Tab
+                      className={classes.tab}
+                      aria-label="tab_tableView"
+                      icon={<TableChartIcon color="primary"/>}
+                      {...a11yProps(1)}
+                  />
+                </Tooltip>
+              </Tabs>
+            </Toolbar>
+            <JsonEditorPanel
+                classes={classes}
+                tabValue={tabValue}
+                style={style}
+                state={state}
+                dispatch={dispatch}
+            />
+            <TablePanel
+                tabValue={tabValue}
+                formOpen={formOpen}
+                state={state}
+                setFormOpen={setFormOpen}
+                dispatch={dispatch}
+            />
+          </Paper>
+        </TabPanel>
+
+        <TabPanel
+            value={drawerValue}
+            index={2}
+        >
             <Container className={classes.resultContainer}>
               {(resultData.jobBatch)?
                   <Paper className={classes.resultPaper}>
@@ -480,25 +562,9 @@ export default function Editor() {
                     />
                   </Paper>:null}
             </Container>
-            :
-            <React.Fragment>
-              <JsonEditorPanel
-                  classes={classes}
-                  tabValue={tabValue}
-                  style={style}
-                  state={state}
-                  dispatch={dispatch}
-              />
-              <TablePanel
-                  tabValue={tabValue}
-                  formOpen={formOpen}
-                  state={state}
-                  setFormOpen={setFormOpen}
-                  dispatch={dispatch}
-              />
-            </React.Fragment>
-            }
-        </React.Fragment>}
+        </TabPanel>
+
+
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}

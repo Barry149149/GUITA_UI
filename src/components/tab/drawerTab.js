@@ -24,7 +24,6 @@ export default function DrawerTab(props){
             textColor="primary"
             variant="fullWidth"
             orientation="vertical"
-            className={classes.tab}
         >
             <Tooltip title="Configuration for grading" placement="right">
                 <Tab
@@ -42,20 +41,12 @@ export default function DrawerTab(props){
                     {...a11yProps(1)}
                 />
             </Tooltip>
-            <Tooltip title="Mode of Cases' Editor" placement="right">
-                <Tab
-                    aria-labelledby='tab_editorMode'
-                    className={classes.tab}
-                    icon={<TabIcon color='primary'/>}
-                    {...a11yProps(2)}
-                />
-            </Tooltip>
             <Tooltip title="Grading Result" placement="right">
                 <Tab
                     aria-labelledby='tab_result'
                     className={classes.tab}
                     icon={<DescriptionIcon color='primary'/>}
-                    {...a11yProps(3)}
+                    {...a11yProps(2)}
                 />
             </Tooltip>
         </Tabs>

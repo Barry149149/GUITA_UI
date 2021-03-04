@@ -198,7 +198,7 @@ export default function CommandTable(props){
     const numSelected = selected.length;
 
     return (
-        <Paper>
+        <Paper elevation={3} >
             <Toolbar  className={clsx(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}>

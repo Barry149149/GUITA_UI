@@ -42,7 +42,7 @@ export default function TablePanel(props){
                 {(formOpen)?
                     <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
                         <Grid item xs={(formOpen) ? 4 : 1}>
-                            <Paper id="commandForm">
+                            <Paper id="commandForm" elevation={3} >
                                 <Box pt={1}/>
                                 <Tooltip title="Close" style={{float: "right"}}>
                                     <Button onClick={() => {

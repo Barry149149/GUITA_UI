@@ -24,11 +24,6 @@ export default function PanelsContainer(props){
                 noOfCases={state.present.noOfCases}
                 dispatch={dispatch}
             />
-            <ModePanel
-                drawerValue={drawerValue}
-                tabValue={tabValue}
-                setTabValue={setTabValue}
-            />
             <ResultPanel
                 resultData={resultData}
                 setResultData={setResultData}

@@ -35,7 +35,6 @@ export default function ModePanel(props){
                     value={props.tabValue}
                     onChange={handleChange}
                     indicatorColor="inherit"
-                    orientation="vertical"
                     centered={true}
                 >
                     <Tab

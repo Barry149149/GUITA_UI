@@ -2,14 +2,15 @@ import TabPanel from "../Tabpanel";
 import Grid from "@material-ui/core/Grid";
 import JsonEditor from "../../../jsonEditor/jsonEditor";
 import React from "react";
+import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 
 export default function JsonEditorPanel(props){
     const {classes,tabValue,style,state,dispatch}=props
 
     return(
         <TabPanel value={tabValue} index={0}>
-            <Grid  container spacing={2} justify='center' alignItems="stretch">
-                <Grid item className={classes.container} xs={10} id="jsonEditor" >
+                <Container item className={classes.container}  id="jsonEditor" >
                     <JsonEditor
                         selectedCase={state.present.selectedCase}
                         style={style}
@@ -18,8 +19,9 @@ export default function JsonEditorPanel(props){
                         noOfCases={state.present.noOfCases}
                         dispatch={dispatch}
                     />
-                </Grid>
-            </Grid>
+                </Container>
+            <Box pt={6}/>
+
         </TabPanel>
     )
 }

@@ -95,9 +95,6 @@ export default function JsonEditor(props){
             }
             }
         />
-        <Box pt={2}>
-            <Copyright />
-        </Box>
     </React.Fragment>)
 
 }

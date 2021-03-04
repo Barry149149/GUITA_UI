@@ -12,7 +12,7 @@ import React from "react";
 
 export default function GuitaAppBar(props){
 
-    const {classes,state,handleSubmit,dispatch,setSettingsOpen,setGuideRun,setTour}=props
+    const {classes,state,handleSubmit,setSettingsOpen,setGuideRun,setTour}=props
 
     return (
         <AppBar position="absolute" className={classes.appBar}>
@@ -20,12 +20,7 @@ export default function GuitaAppBar(props){
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                     GUITA Test Case Creator \ Test Case \ Test {state.present.selectedCase.id}
                 </Typography>
-                <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
-                    <UndoIcon/>
-                </IconButton>
-                <IconButton color="inherit" disabled={state.future.length===0} onClick={()=>{dispatch({type:"REDO"})}}>
-                    <RedoIcon/>
-                </IconButton>
+
                 <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
                     <PublishIcon />
                 </IconButton>
