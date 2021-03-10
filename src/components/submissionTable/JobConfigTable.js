@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import {TextField} from "@material-ui/core";
+import {Radio, TextField} from "@material-ui/core";
 import { AssignmentIndSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
@@ -81,6 +81,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
+                <TableCell/>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -130,6 +131,7 @@ export default function JobConfigTable(props) {
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false)
     const [configData, setConfigData]= useState([]);
+    const [selected,setSelected]=useState('')
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -187,6 +189,14 @@ export default function JobConfigTable(props) {
                                             tabIndex={-1}
                                             key={row.job_config_id}
                                         >
+                                            <TableCell>
+                                                <Radio
+                                                    checked={selected===row.job_batch_id}
+                                                    onChange={(e)=>{
+                                                        setSelected(row.job_batch_id)
+                                                    }}
+                                                />
+                                            </TableCell>
                                             <TableCell id={labelId} >
                                                 {row.job_config_id}
                                             </TableCell>

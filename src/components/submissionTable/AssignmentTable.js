@@ -10,6 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
+import {Radio} from "@material-ui/core"
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -78,6 +79,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
+                <TableCell/>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -127,6 +129,7 @@ export default function AssignmentTable(props) {
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);
+    const [selected, setSelected]= useState('')
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -188,6 +191,14 @@ export default function AssignmentTable(props) {
                                             tabIndex={-1}
                                             key={row.assignment_id}
                                         >
+                                            <TableCell>
+                                                <Radio
+                                                    checked={selected===row.assignment_id}
+                                                    onChange={(e)=>{
+                                                        setSelected(row.assignment_id)
+                                                    }}
+                                                />
+                                            </TableCell>
                                             <TableCell id={labelId} >
                                                 {row.assignment_id}
                                             </TableCell>
