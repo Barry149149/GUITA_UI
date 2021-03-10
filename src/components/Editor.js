@@ -176,8 +176,13 @@ const useStyles = makeStyles((theme) => ({
     height: 800
   },
   resultPaper:{
-    height:'100%'
-  }
+    height:'100%',
+    overflow: 'auto',
+  },
+  submissionContainer: {
+    display: 'flex',
+    flexGrow: 1,
+  },
 }));
 function a11yProps(index) {
   return {
@@ -568,21 +573,24 @@ export default function Editor() {
           value={drawerValue}
           index={2}
         >
-          <Container container>
-            <Paper paper>
+          <div className={classes.submissionContainer} style={{width:'100%'}}>
+            <div style={{width:'49%'}}>
+            <Paper>
               <AssignmentTable/>
             </Paper>
-            <Divider/>
-            <Paper paper>
+            </div>
+            <div style={{width:"2%"}}/>
+            <div style={{width:'49%'}}>
+            <Paper>
               <JobConfigTable/>
             </Paper>
-          </Container>
+            </div>
+          </div>
         </TabPanel>   
         <TabPanel
             value={drawerValue}
             index={3}
         >
-            <Container className={classes.resultContainer}>
 
                   <Paper className={classes.resultPaper}>
                     <ResultTable
@@ -590,7 +598,6 @@ export default function Editor() {
                         setResultData={setResultData}
                     />
                   </Paper>
-            </Container>
         </TabPanel>
 
           <SettingDialog
