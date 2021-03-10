@@ -10,7 +10,7 @@ export default function ResultPanel(props){
     <TabPanel
         id="tabPanel_config"
         value={props.drawerValue}
-        index={2} >
+        index={3} >
         <Title>Results</Title>
         <Divider/>
         <Box pt={1}/>
