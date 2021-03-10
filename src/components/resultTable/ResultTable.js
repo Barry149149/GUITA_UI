@@ -12,28 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
-    if(orderBy === 'jobBatchId'||orderBy ==='createdTime'||orderBy === 'assignName'||orderBy === 'jobConfigId'||orderBy === 'submitBatch'){
         if (b[orderBy] < a[orderBy]) {
             return -1;
         }
         if (b[orderBy] > a[orderBy]) {
             return 1;
         }
-    }else if(orderBy === 'scoresSum'){
-        if (b.scores.reduce((a,b)=>a+b)< a.scores.reduce((a,b)=>a+b)) {
-            return -1;
-        }
-        if (b.scores.reduce((a,b)=>a+b)> a.scores.reduce((a,b)=>a+b)) {
-            return 1;
-        }
-    }else{
-        if (b.scores[orderBy-1] < a.scores[orderBy-1]) {
-            return -1;
-        }
-        if (b.scores[orderBy-1] > a.scores[orderBy-1]) {
-            return 1;
-        }
-    }
     return 0;
 }
 

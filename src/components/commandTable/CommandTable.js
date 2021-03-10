@@ -46,6 +46,11 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flex: '1 1 100%',
     },
+    paper:{
+        overflowX:'auto',
+        overflow:'auto',
+        maxHeight:700,
+    },
     tableRow: {
         "&$selected, &$selected:hover": {
             backgroundColor: lighten(theme.palette.primary.light, 0.85),
@@ -98,6 +103,24 @@ export default function CommandTable(props){
             );
         }
         setOpen(newSelected);
+    }
+
+    const selectAll=()=>{
+        let newSelected=[]
+        if(selected.length>0){setSelected([]); return }
+        for(let i=0;i<props.selectedCase.json_id.length;i++){
+            newSelected.push(i+1)
+        }
+        setSelected(newSelected)
+    }
+
+    const openAll=()=>{
+        let newSelected=[]
+        if(open.length>0){setOpen([]); return }
+        for(let i=0;i<props.selectedCase.json_id.length;i++){
+            newSelected.push(i+1)
+        }
+        setOpen(newSelected)
     }
 
     const deleteSelected=()=>{
@@ -198,7 +221,7 @@ export default function CommandTable(props){
     const numSelected = selected.length;
 
     return (
-        <Paper elevation={3} >
+        <Paper elevation={3} className={classes.paper}>
             <Toolbar  className={clsx(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}>
@@ -242,10 +265,30 @@ export default function CommandTable(props){
             <Divider />
             <Table>
                 <TableHead>
-                    <TableRow>
-                        <TableCell align="center" padding="checkbox"/>
+                    <TableRow
+                        hover
+                        selected={props.selectedCase.json_id.length>0&&props.selectedCase.json_id.length===selected.length}
+                        aria-checked={props.selectedCase.json_id.length>0&&props.selectedCase.json_id.length===selected.length}
+                        className={classes.tableRow}
+                        classes={{selected: classes.selected}}
+                    >
+                        <TableCell padding="checkbox" >
+                            <Checkbox
+                                checked={props.selectedCase.json_id.length>0&&props.selectedCase.json_id.length===selected.length}
+                                color="primary"
+                                onChange={(event) => {
+                                    selectAll()
+                                }}
+                            />
+                        </TableCell>
                         <TableCell align="left"> Command </TableCell>
-                        <TableCell align="Right" />
+                        <TableCell align="right">
+                            <IconButton id="button_expandRow" size="small"
+                                        onClick={(e) => openAll() }>
+                                {(props.selectedCase.json_id.length>0&&props.selectedCase.json_id.length===open.length) ? <KeyboardArrowUpIcon/> :
+                                    <KeyboardArrowDownIcon/>}
+                            </IconButton>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <DragDropContext
