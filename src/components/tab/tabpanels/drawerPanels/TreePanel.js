@@ -10,7 +10,7 @@ export default function TreePanel(props){
         id="tabPanel_caseTree"
         value={props.drawerValue}
         index={1}>
-            <Title>Case Tree</Title>
+            <Title>Cases</Title>
             <Divider/>
             <CaseTree
                 selectedCase={props.selectedCase}

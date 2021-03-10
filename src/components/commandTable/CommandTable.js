@@ -100,6 +100,23 @@ export default function CommandTable(props){
         setOpen(newSelected);
     }
 
+    const selectAllOrClear = (event)=>{
+        let newSelected = [];
+        if(selected.length > 0) {setSelected(newSelected); return; }
+        for (let i=0;i<props.selectedCase.json_id.length;i++){
+            newSelected.push(i+1)
+        }
+        setSelected(newSelected)
+    }
+    const openAllOrClear = (event)=>{
+        let newOpen = [];
+        if(open.length > 0) {setOpen(newOpen); return; }
+        for (let i=0;i<props.selectedCase.json_id.length;i++){
+            newOpen.push(i+1)
+        }
+        setOpen(newOpen)
+    }
+
     const deleteSelected=()=>{
         let newJsonId=[], newJson=[]
         for(let i=0; i <props.selectedCase.json_id.length;i++) {
@@ -134,6 +151,7 @@ export default function CommandTable(props){
         })
 
         setSelected([])
+        setOpen([])
 
     }
 
@@ -243,9 +261,25 @@ export default function CommandTable(props){
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" padding="checkbox"/>
+                        <TableCell align="center" padding="checkbox">
+                            <Checkbox
+                                id='checkbox_commandTableRow'
+                                color="primary"
+                                checked={selected.length === props.selectedCase.json_id.length&&props.selectedCase.json_id.length>0}
+                                onChange={(event) => {
+                                    selectAllOrClear(event)
+                                    props.setFormOpen(false);
+                                }}
+                            />
+                        </TableCell>
                         <TableCell align="left"> Command </TableCell>
-                        <TableCell align="Right" />
+                        <TableCell align="Right">
+                            <IconButton id="button_expandRow" size="small"
+                                        onClick={(event) => {openAllOrClear(event)}}>
+                                {(open.length === props.selectedCase.json_id.length&&props.selectedCase.json_id.length>0) ? <KeyboardArrowUpIcon/> :
+                                    <KeyboardArrowDownIcon/>}
+                            </IconButton>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <DragDropContext
@@ -321,6 +355,7 @@ export default function CommandTable(props){
                                 selected={isItemSelected}
                                 className={classes.tableRow}
                                 classes={{selected: classes.selected}}
+
                                 ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -336,7 +371,14 @@ export default function CommandTable(props){
                                     }}
                                         />
                                     </TableCell>
-                                    <TableCell component="th" scope="row" align="left">
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                        align="left"
+                                        onClick={(e) => {
+                                            handleOpenClick(e, row.id)
+                                        }}
+                                    >
                                             {row.command.command}
                                     </TableCell>
                                     <TableCell align="right">
@@ -349,11 +391,11 @@ export default function CommandTable(props){
                             </TableRow>
                         )}
                         </Draggable>
-                        <TableRow
-                        selected={isItemSelected}
-                        className={classes.tableRow}
-                        classes={{ selected: classes.selected }}
-                        >
+                            <TableRow
+                            selected={isItemSelected}
+                            className={classes.tableRow}
+                            classes={{ selected: classes.selected }}
+                            >
                         <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                         <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
                         <Box margin={1}>
