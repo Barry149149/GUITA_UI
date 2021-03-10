@@ -5,6 +5,7 @@ import TuneIcon from "@material-ui/icons/Tune";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import TabIcon from "@material-ui/icons/Tab";
 import DescriptionIcon from "@material-ui/icons/Description";
+import PublishIcon from '@material-ui/icons/Publish';
 import React from "react";
 
 function a11yProps(index) {
@@ -41,14 +42,23 @@ export default function DrawerTab(props){
                     {...a11yProps(1)}
                 />
             </Tooltip>
+            <Tooltip title="Job Submission" placement="right">
+                <Tab
+                    aria-labelledby='tab_submit'
+                    className={classes.tab}
+                    icon={<PublishIcon color='primary'/>}
+                    {...a11yProps(2)}
+                    />
+            </Tooltip>
             <Tooltip title="Grading Result" placement="right">
                 <Tab
                     aria-labelledby='tab_result'
                     className={classes.tab}
                     icon={<DescriptionIcon color='primary'/>}
-                    {...a11yProps(2)}
+                    {...a11yProps(3)}
                 />
             </Tooltip>
+
         </Tabs>
 
     )

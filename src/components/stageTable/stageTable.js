@@ -4,7 +4,7 @@ import Table from '@material-ui/core/Table'
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
-import {TableBody} from "@material-ui/core";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TableBody} from "@material-ui/core";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {lighten, makeStyles} from "@material-ui/core/styles";
@@ -15,6 +15,9 @@ import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Grow from "@material-ui/core/Grow";
 import {PlaylistAdd} from "@material-ui/icons";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import IconButton from "@material-ui/core/IconButton";
+import {useForm} from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
 export default function StageTable(props){
     const classes = useStyles();
     const [selected,setSelected]=useState([])
+    const [create, setCreate]=useState(false)
+    const { register, handleSubmit } = useForm()
 
     const handleClick = (event, id) => {
         const selectedIndex = selected.indexOf(id);
@@ -77,6 +82,39 @@ export default function StageTable(props){
         }
         props.setStage(newStage)
         setSelected([])
+    }
+
+    const handleCreateOpen=()=>{
+        if(!create){
+            setCreate(true);
+        }
+    }
+
+    const handleCreateClose=()=>{
+        setCreate(false);
+    }
+
+    const createConfig=(data)=>{
+        if(!props.createConfig){
+            props.setCreateConfig(true)
+        }
+
+        fetch('/api/v2/job_config', {
+            method: 'POST',
+            body: JSON.stringify({"job_config_name": data.config}),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(result => {return result.json()}).then(data => {
+            //console.log(data)
+            // TODO: for each
+            fetch('/api/v2/job_config/'+data.job_config_id+'/job_stage', {
+                //method: 'POST',
+                //body: JSON.stringify({"stage_name":props.sta,"stage_config"})
+            }).then(result => console.log(result))
+        }).catch(error => console.log(error))
+
+        setCreate(false)
     }
 
     useEffect(()=>{
@@ -109,11 +147,16 @@ export default function StageTable(props){
                     </Tooltip>
                 ):(
                 <Tooltip title="Delete">
-                    <Button onClick={deleteSelected}>
+                    <IconButton color="inherit" onClick={deleteSelected} >
                         <DeleteIcon/>
-                    </Button>
+                    </IconButton>
                 </Tooltip>
                     )}
+                <Tooltip title="Create Job Config">
+                    <IconButton color="inherit" disabled={!(selected.length > 0)} onClick={handleCreateOpen} >   
+                        <CheckCircleIcon/>
+                    </IconButton>
+                </Tooltip>
             </Toolbar>
             <Table classes={classes.root}>
                 <TableHead>
@@ -159,6 +202,23 @@ export default function StageTable(props){
                     })}
                 </TableBody>
             </Table>
+            <Dialog open={create} onClose={handleCreateClose}>
+                    <DialogTitle>Create Job Configuration</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>Enter configuration name</DialogContentText>
+                        <form onSubmit={handleSubmit(createConfig)}>
+                            <input name="config" ref={register({ required: true })} />
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCreateClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSubmit(createConfig)} color="primary">
+                            Confirm
+                        </Button>
+                    </DialogActions>
+            </Dialog>
         </Paper>
     )
 }

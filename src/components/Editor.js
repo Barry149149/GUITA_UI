@@ -31,6 +31,9 @@ import IconButton from "@material-ui/core/IconButton";
 import UndoIcon from "@material-ui/icons/Undo";
 import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
+import AssignmentTable from './submissionTable/AssignmentTable';
+import JobConfigTable from './submissionTable/JobConfigTable';
+import {Divider} from "@material-ui/core";
 
 
 const drawerWidth = 360;
@@ -282,8 +285,8 @@ export default function Editor() {
     name: [],
   });
 
-  //this is for course management
-  const [courseList, setCourseList]= useState([]);
+  //this is for config management
+  const [createConfig, setCreateConfig]= useState(false);
 
   //this is for result page
   const [resultData, setResultData]= useState({
@@ -294,8 +297,16 @@ export default function Editor() {
     jobBatch: null,
     result: [],
   });
+  //this is for job batch result
+  //TODO: pass to result table
+  const [jobBatchData, setJobBatchData]= useState({
+    created_at: null,
+    job_batch_id: null,
+    jobs: [],
+  });
 
   //this is for zip submission
+  //TODO: clean submit function, put it in submission panel
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
       const name = [];
@@ -455,6 +466,8 @@ export default function Editor() {
                     resultData={resultData}
                     setResultData={setResultData}
                     dispatch={dispatch}
+                    createConfig={createConfig}
+                    setCreateConfig={setCreateConfig}
                 />
                 :null}
               </div>
@@ -473,6 +486,8 @@ export default function Editor() {
                         setStage={setStage}
                         stageFormOpen={stageFormOpen}
                         setStageFormOpen={setStageFormOpen}
+                        createConfig={createConfig}
+                        setCreateConfig={setCreateConfig}
                     />
                   </Grid>
                   {(stageFormOpen)?
@@ -500,7 +515,8 @@ export default function Editor() {
           <Paper className={classes.paper2}>
             <Toolbar className={classes.toolbar2}>
               <Typography className={classes.title} color="primary" variant="h5" component="div">
-                {(tabValue===0)?"JSON Code Editor":"Table & Form Mode"}
+                {(tabValue===0)?"JSON Code Editor ":"Table & Form Mode "}
+                 \ Test Case {state.present.selectedCase.id}
               </Typography>
               <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
                 <UndoIcon/>
@@ -548,22 +564,34 @@ export default function Editor() {
             />
           </Paper>
         </TabPanel>
-
+        <TabPanel
+          value={drawerValue}
+          index={2}
+        >
+          <Container container>
+            <Paper paper>
+              <AssignmentTable/>
+            </Paper>
+            <Divider/>
+            <Paper paper>
+              <JobConfigTable/>
+            </Paper>
+          </Container>
+        </TabPanel>   
         <TabPanel
             value={drawerValue}
-            index={2}
+            index={3}
         >
             <Container className={classes.resultContainer}>
-              {(resultData.jobBatch)?
+
                   <Paper className={classes.resultPaper}>
                     <ResultTable
                         resultData={resultData}
                         setResultData={setResultData}
                     />
-                  </Paper>:null}
+                  </Paper>
             </Container>
         </TabPanel>
-
 
           <SettingDialog
               open={settingsOpen}

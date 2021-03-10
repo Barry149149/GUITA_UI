@@ -18,7 +18,7 @@ export default function GuitaAppBar(props){
         <AppBar position="absolute" className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                    GUITA Test Case Creator \ Test Case \ Test {state.present.selectedCase.id}
+                    GUITA Test Case IDE
                 </Typography>
 
                 <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>

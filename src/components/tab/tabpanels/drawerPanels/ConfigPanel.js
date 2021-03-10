@@ -1,11 +1,8 @@
 import Title from "../../../Title";
 import {Divider} from "@material-ui/core";
-import LanguageSelect from "../../selectionBars/LanguageSelect";
-import FrameworkSelect from "../../selectionBars/FrameworkSelect";
-import DriverSelect from "../../selectionBars/DriverSelect";
 import React, {useState} from "react";
 import TabPanel from "../Tabpanel";
-import CourseTree from "../../selectionBars/courseTree/CourseTree";
+import CourseTree from "../../selectionBars/configSelect/ConfigCourse";
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField"
 import {makeStyles} from "@material-ui/core/styles";
@@ -91,22 +88,6 @@ export default function Configuration(props){
                 />
             </Button>
             <p style={{fontSize:12, color:'#888888'}}> Upload the Student Submission </p>
-        </div>
-        <Box pt={3} />
-        <div>
-            <LanguageSelect
-                config={props.config}
-                setConfig={props.setConfig}
-            />
-            <FrameworkSelect
-                config={props.config}
-                setConfig={props.setConfig}
-            />
-            <DriverSelect
-                config={props.config}
-                setConfig={props.setConfig}
-            />
-
         </div>
     </TabPanel>
     )
