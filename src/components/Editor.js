@@ -15,7 +15,6 @@ import JsonEditorPanel from "./tab/tabpanels/contentPanels/JsonEditorPanel";
 import GuitaAppBar from "./GuitaAppBar";
 import Paper from "@material-ui/core/Paper";
 import ResultTable from "./resultTable/ResultTable";
-import Container from "@material-ui/core/Container";
 import StageTable from "./stageTable/stageTable";
 import Grid from "@material-ui/core/Grid"
 import StageForm from "./stageTable/stageForm";
@@ -33,7 +32,6 @@ import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
-import {Divider} from "@material-ui/core";
 
 
 const drawerWidth = 360;
@@ -176,6 +174,10 @@ const useStyles = makeStyles((theme) => ({
     height: 800
   },
   resultPaper:{
+    height:'100%',
+    overflow: 'auto',
+  },
+  submissionPaper:{
     height:'100%',
     overflow: 'auto',
   },
@@ -575,13 +577,13 @@ export default function Editor() {
         >
           <div className={classes.submissionContainer} style={{width:'100%'}}>
             <div style={{width:'49%'}}>
-            <Paper>
+            <Paper className={classes.submissionPaper}>
               <AssignmentTable/>
             </Paper>
             </div>
             <div style={{width:"2%"}}/>
             <div style={{width:'49%'}}>
-            <Paper>
+            <Paper className={classes.submissionPaper}>
               <JobConfigTable/>
             </Paper>
             </div>

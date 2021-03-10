@@ -55,13 +55,11 @@ function stableSort(array, comparator) {
 }
 
 function descendingComparator(a, b, orderBy) {
-    if(orderBy === 'assignId'||orderBy ==='assignName'){
-        if (b[orderBy] < a[orderBy]) {
-            return -1;
-        }
-        if (b[orderBy] > a[orderBy]) {
-            return 1;
-        }
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
     }
     return 0;
 }
@@ -73,8 +71,8 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'assignId', numeric: false,  label: 'Assignment ID' },
-        { id: 'assignName', numeric: false, label: 'Assignment Name'}
+        { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
+        { id: 'assignment_name', numeric: false, label: 'Assignment Name'}
     ];
 
     return (
@@ -125,7 +123,7 @@ export default function AssignmentTable(props) {
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('assignId');
+    const [orderBy, setOrderBy] = useState('assignment_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);

@@ -56,14 +56,13 @@ function stableSort(array, comparator) {
 }
 
 function descendingComparator(a, b, orderBy) {
-    if(orderBy === 'jobConfigId'||orderBy ==='jobConfigName'||orderBy === 'createdAt'){
         if (b[orderBy] < a[orderBy]) {
             return -1;
         }
         if (b[orderBy] > a[orderBy]) {
             return 1;
         }
-    }
+
     return 0;
 }
 
@@ -74,9 +73,9 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'jobConfigId', numeric: false,  label: 'Job Config ID' },
-        { id: 'createdAt', numeric: false, label: 'Created at'},
-        { id: 'jobConfigName', numeric: false, label: 'Job Config Name'}
+        { id: 'job_config_id', numeric: false,  label: 'Job Config ID' },
+        { id: 'created_at', numeric: false, label: 'Created at'},
+        { id: 'job_config_name', numeric: false, label: 'Job Config Name'}
     ];
 
     return (
