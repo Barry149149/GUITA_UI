@@ -237,19 +237,8 @@ export default function Editor() {
       ],
       selectedCase:{
         id:1,
-        json: [
-          {
-            "command": 'Test 1'
-          }
-        ],
-        json_id:[
-          {
-            id:1,
-            command:{
-              "command":'Test1'
-            }
-          }
-        ]
+        json: [],
+        json_id:[]
       },
       createdCases: 1,
       noOfCases:1

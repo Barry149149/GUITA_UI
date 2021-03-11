@@ -282,6 +282,7 @@ export default function CommandTable(props){
                             />
                         </TableCell>
                         <TableCell align="left"> Command </TableCell>
+                        <TableCell align="left"> Description </TableCell>
                         <TableCell align="right">
                             <IconButton id="button_expandRow" size="small"
                                         onClick={(e) => openAll() }>
@@ -381,6 +382,9 @@ export default function CommandTable(props){
                                                         </TableCell>
                                                         <TableCell component="th" scope="row" align="left">
                                                             {row.command.command}
+                                                        </TableCell>
+                                                        <TableCell  align="left">
+                                                            {row.command.description}
                                                         </TableCell>
                                                         <TableCell align="right">
                                                             <IconButton id="button_expandRow" size="small"

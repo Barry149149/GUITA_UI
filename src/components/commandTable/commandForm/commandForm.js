@@ -1,7 +1,7 @@
 import {Box, Divider, FormControl, MenuItem, Select} from "@material-ui/core";
 import {commandList} from "../../../docs/commandList";
 import Form from "@rjsf/material-ui";
-import React from "react";
+import React, {useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Title from "../../Title"
 
@@ -20,6 +20,10 @@ const useStyles = makeStyles((theme)=>({
 
 export default function CommandForm(props){
     const classes = useStyles();
+
+    useEffect(()=>{
+        console.log(props.selectedCase)
+    })
 
     return (
 
@@ -60,6 +64,15 @@ export default function CommandForm(props){
                         props.setFormData(e.formData)
                     }}
                     onSubmit={(e)=>{
+                        let tempDescription={}
+                        if(typeof e.formData.description==='undefined'){
+                            if(typeof e.formData.setVariable!=='undefined') tempDescription ={description:e.formData.setVariable}
+                            else if(typeof e.formData.widgetName!=='undefined') tempDescription ={description:e.formData.widgetName}
+                            else if(typeof e.formData.widget!=='undefined') tempDescription ={description:e.formData.widget.value}
+                            else if(typeof e.formData.time!=='undefined') tempDescription ={description:e.formData.time}
+                            else if(typeof e.formData.value!=='undefined') tempDescription ={description:e.formData.value}
+                            else tempDescription ={description:''}
+                        }
                         if(props.cmdSchema.command==='None'){
                             return ;
                         }
@@ -70,7 +83,7 @@ export default function CommandForm(props){
                         newNodes.find(x=>x.id===props.selectedCase.id).json=[...props.selectedCase.json,
                             {
                             command:props.cmdSchema.command,
-                            ...e.formData
+                            ...e.formData,
                         }
                         ]
                         newNodes.find(x=>x.id===props.selectedCase.id).json_id=[
@@ -79,7 +92,8 @@ export default function CommandForm(props){
                                 id:(props.selectedCase.json.length+1),
                                 command:{
                                     command:props.cmdSchema.command,
-                                    ...e.formData
+                                    ...e.formData,
+                                    ...tempDescription
                                 }
                             }
                         ]
@@ -98,13 +112,14 @@ export default function CommandForm(props){
                                     ...props.selectedCase,
                                     json:[...props.selectedCase.json,{
                                         command:props.cmdSchema.command,
-                                        ...e.formData
+                                        ...e.formData,
                                     }],
                                     json_id:[...props.selectedCase.json_id,{
                                         id:(props.selectedCase.json.length+1),
                                         command:{
                                             command:props.cmdSchema.command,
-                                            ...e.formData
+                                            ...e.formData,
+                                            ...tempDescription
                                         }
                                     }]
                                 }
