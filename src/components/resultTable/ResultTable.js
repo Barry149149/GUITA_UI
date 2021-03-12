@@ -12,28 +12,13 @@ import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
-    if(orderBy === 'jobBatchId'||orderBy ==='createdTime'||orderBy === 'assignName'||orderBy === 'jobConfigId'||orderBy === 'submitBatch'){
-        if (b[orderBy] < a[orderBy]) {
-            return -1;
-        }
-        if (b[orderBy] > a[orderBy]) {
-            return 1;
-        }
-    }else if(orderBy === 'scoresSum'){
-        if (b.scores.reduce((a,b)=>a+b)< a.scores.reduce((a,b)=>a+b)) {
-            return -1;
-        }
-        if (b.scores.reduce((a,b)=>a+b)> a.scores.reduce((a,b)=>a+b)) {
-            return 1;
-        }
-    }else{
-        if (b.scores[orderBy-1] < a.scores[orderBy-1]) {
-            return -1;
-        }
-        if (b.scores[orderBy-1] > a.scores[orderBy-1]) {
-            return 1;
-        }
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
     }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+
     return 0;
 }
 
@@ -59,21 +44,21 @@ function EnhancedTableHead(props) {
         onRequestSort(event, property);
     };
 
-    let headCell_tasks=[]
+    /*let headCell_tasks=[]
 
     for(let i=0;i<taskNumber;i++) {
         headCell_tasks.push({ id:(i+1),numeric: false, label:'Task '+(i+1)});
-    }
+    }*/
 
     const headCells = [
         // { id: 'name', numeric: false,  label: 'Student Name' },
         // { id: 'id', numeric: false,  label: 'Student ID' },
         // { id: 'scoresSum', numeric: false,  label: 'Total Score' },
-        { id: 'jobBatchId', numeric: false,  label: 'Job Batch ID' },
-        { id: 'createdTime', numeric: false, label: 'Created Time'},
-        { id: 'assignName', numeric: false, label: 'Assignment Name'},
-        { id: 'jobConfigId', numeric: false, label: 'Job Config ID'},
-        { id: 'submitBatch', numeric: false, label: 'Submission Batch'}
+        { id: 'job_batch_id', numeric: false,  label: 'Job Batch ID' },
+        { id: 'created_at', numeric: false, label: 'Created At'},
+        { id: 'assignment_id', numeric: false, label: 'Assignment ID'},
+        { id: 'job_config_id', numeric: false, label: 'Job Config ID'},
+        { id: 'submit_batch_id', numeric: false, label: 'Submission Batch ID'}
     ];
 
     return (
@@ -154,6 +139,8 @@ export default function ResultTable(props) {
     const [orderBy, setOrderBy] = useState('jobBatchId');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [table, setTable] = useState('');
+    const [fetched, setFetched]= useState(false);
+    const [result, setResult]= useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -161,10 +148,22 @@ export default function ResultTable(props) {
         setOrderBy(property);
     };
 
-    useEffect(() => {
-        console.log(props.resultData);
-        console.log(filterCriteria);
-    })
+    useEffect(()=>{
+        //TODO: change to correct path
+        fetch('/api/v2/job_batch', {
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            console.log(data)
+            const array = []
+            for(const value of data){
+                array.push(value)
+            }
+            setResult(array)
+            setFetched(true)
+        });
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -174,6 +173,7 @@ export default function ResultTable(props) {
                 setFilterCriteria={setFilterCriteria}
             />
             <TableContainer className={classes.container}>
+                {(fetched)?
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
@@ -189,14 +189,15 @@ export default function ResultTable(props) {
                             taskNumber={props.resultData.taskNumber}
                         />
                         <TableBody>
-                            {stableSort(props.resultData.result, getComparator(order, orderBy))
+                            {stableSort(result, getComparator(order, orderBy))
                                 .filter(e=>(e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    /*
                                     let cell_taskScore=[]
                                     for(let i=0;i<row.reports.length;i++){
                                         cell_taskScore.push(<TableCell>{row.reports[i].status}</TableCell>)
-                                    }
+                                    }*/
                                     return (
                                         <TableRow
                                             hover
@@ -206,15 +207,24 @@ export default function ResultTable(props) {
                                             <TableCell id={labelId} >
                                                 {row.job_batch_id}
                                             </TableCell>
-                                            {cell_taskScore}
                                             <TableCell>
-                                                {row.reports[row.reports.length - 1].report_summary.score}
+                                                {row.created_at}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.assignment_id}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.job_config_id}
+                                            </TableCell>
+                                            <TableCell>
+                                                {row.submission_batch_id}
                                             </TableCell>
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
+                :null} 
                 </TableContainer>
         </div>
     );
