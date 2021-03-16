@@ -32,6 +32,7 @@ import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
+import JobTable from './resultTable/JobTable';
 
 
 const drawerWidth = 360;
@@ -592,22 +593,20 @@ export default function Editor() {
             index={3}
         >
                   <Paper className={classes.resultPaper}>
-                    {()=> {
-                      switch(resultStep) {
-                        case 1:
-                          return(<br/>)
-                        case 2:
-                          return(<br/>)
-                        default:
-                          return (<ResultTable
-                              resultData={resultData}
-                              setResultData={setResultData}
+                    {(resultStep === 0)?
+                    <ResultTable
                               setResultStep={setResultStep}
                               setJobData={setJobData}
-                          />)
-                      }
-                    }}
-                  </Paper>
+                              jobData={jobData}
+                          />:
+                          (resultStep===1)?
+                          <JobTable
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                              jobData={jobData}
+                          />:<p>hehe</p>
+                    }
+                    </Paper>
         </TabPanel>
 
           <SettingDialog
