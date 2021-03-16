@@ -95,15 +95,8 @@ export default function CaseTree(props){
                                         {
                                             id: (props.createdCases+1),
                                             value: 'Test ' + (props.createdCases+1),
-                                            json:[{
-                                                "command": "Test "+(props.createdCases+1)
-                                            }],
-                                            json_id:[{
-                                                id:1,
-                                                command: {
-                                                    "command": "Test " + (props.createdCases + 1)
-                                                }
-                                            }]
+                                            json:[],
+                                            json_id:[]
                                         }
                                     ]
                                 }

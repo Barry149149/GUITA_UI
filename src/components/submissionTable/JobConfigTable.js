@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -9,8 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import {TextField} from "@material-ui/core";
-import { AssignmentIndSharp } from '@material-ui/icons';
+import {Radio, TextField} from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -74,13 +74,14 @@ function EnhancedTableHead(props) {
 
     const headCells = [
         { id: 'job_config_id', numeric: false,  label: 'Job Config ID' },
-        { id: 'created_at', numeric: false, label: 'Created at'},
-        { id: 'job_config_name', numeric: false, label: 'Job Config Name'}
+        { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
+        { id: 'created_at', numeric: false, label: 'Created at'}
     ];
 
     return (
         <TableHead >
             <TableRow>
+                <TableCell/>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -123,13 +124,17 @@ function TableToolbar(props){
 }
 
 export default function JobConfigTable(props) {
+    const {jobBatch, setJobBatch}=props
+
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('assignId');
+    const [orderBy, setOrderBy] = useState('job_config_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false)
     const [configData, setConfigData]= useState([]);
+    const [selected,setSelected]=useState('')
+    const [selectedName, setSelectedName]=useState('');
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -153,6 +158,14 @@ export default function JobConfigTable(props) {
             setFetched(true)
         });
     }, []);
+
+    useEffect(()=>{
+        setJobBatch({
+            ...jobBatch,
+            job_config_id: selected,
+            job_config_name: selectedName
+        })
+    },[selected])
 
     return (
         <div className={classes.root}>
@@ -187,14 +200,24 @@ export default function JobConfigTable(props) {
                                             tabIndex={-1}
                                             key={row.job_config_id}
                                         >
-                                            <TableCell id={labelId} >
+                                            <TableCell>
+                                                <Radio
+                                                    color='primary'
+                                                    checked={selected===row.job_config_id}
+                                                    onChange={(e)=>{
+                                                        setSelected(row.job_config_id)
+                                                        setSelectedName(row.job_config_name)
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
                                                 {row.job_config_id}
                                             </TableCell>
                                             <TableCell>
-                                                {row.created_at}
+                                                {row.job_config_name}
                                             </TableCell>
                                             <TableCell>
-                                                {row.job_config_name}
+                                                {row.created_at}
                                             </TableCell>
                                         </TableRow>
                                     );

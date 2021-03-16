@@ -10,6 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
+import {Radio} from "@material-ui/core"
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -78,6 +79,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
+                <TableCell/>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -120,6 +122,7 @@ function TableToolbar(props){
 }
 
 export default function AssignmentTable(props) {
+    const {jobBatch, setJobBatch} = props
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
@@ -127,6 +130,8 @@ export default function AssignmentTable(props) {
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);
+    const [selected, setSelected]= useState('')
+    const [selectedName, setSelectedName]=useState('');
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -152,8 +157,12 @@ export default function AssignmentTable(props) {
     }, []);
 
     useEffect(()=>{
-        console.log(assignData)
-    },[])
+        setJobBatch({
+            ...jobBatch,
+            assignment_id: selected,
+            assignment_name: selectedName
+        })
+    },[selected])
     return (
         
         <div className={classes.root}>
@@ -188,7 +197,17 @@ export default function AssignmentTable(props) {
                                             tabIndex={-1}
                                             key={row.assignment_id}
                                         >
-                                            <TableCell id={labelId} >
+                                            <TableCell>
+                                                <Radio
+                                                    color='primary'
+                                                    checked={selected===row.assignment_id}
+                                                    onChange={(e)=>{
+                                                        setSelected(row.assignment_id)
+                                                        setSelectedName(row.assignment_name)
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>
                                                 {row.assignment_id}
                                             </TableCell>
                                             <TableCell>

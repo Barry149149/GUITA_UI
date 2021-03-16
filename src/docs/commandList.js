@@ -45,7 +45,8 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "widget":valTypeStruct("widget")
+                "widget":valTypeStruct("widget"),
+                "description":stringStruct("Description"),
             }
         }
     },
@@ -53,9 +54,14 @@ export const commandList=[
         command:"locateByWidgetName",
         schema: {
             "type":"object",
+            "required":[
+              "widgetName",
+              "setVariable",
+            ],
             "properties":{
                 "widgetName":stringStruct("Widget Name"),
-                "setVariable":stringStruct("set Variable")
+                "setVariable":stringStruct("set Variable"),
+                "description":stringStruct("Description"),
             }
 
         }
@@ -64,8 +70,12 @@ export const commandList=[
         command:"sleep",
         schema: {
             "type":"object",
+            "required":[
+                "time"
+            ],
             "properties":{
-                "time":intStruct("Sleep Time")
+                "time":intStruct("Sleep Time"),
+                "description":stringStruct("Description"),
             }
         }
     },
@@ -73,9 +83,14 @@ export const commandList=[
         command:"getText",
         schema: {
             "type": "object",
+            "required":[
+                "widget",
+                "setVariable",
+            ],
             "properties":{
                 "widget":valTypeStruct("widget"),
-                "setVariable":stringStruct("set Variable")
+                "setVariable":stringStruct("set Variable"),
+                "description":stringStruct("Description"),
             }
         }
     },
@@ -83,9 +98,14 @@ export const commandList=[
         command:"assertEqual",
         schema: {
             "type":"object",
+            "required":[
+                "valueRhs",
+
+            ],
             "properties":{
                 "valueLhs":valTypeStruct("Value Lhs"),
-                "valueRhs":stringStruct("Value Rhs")
+                "valueRhs":stringStruct("Value Rhs"),
+                "description":stringStruct("Description"),
             }
         }
     },
@@ -93,9 +113,14 @@ export const commandList=[
         command:"isVisible",
         schema: {
             "type": "object",
+            "required":[
+                "widget",
+                "setVariable",
+            ],
             "properties":{
                 "widget":valTypeStruct("widget"),
-                "setVariable":stringStruct("set Variable")
+                "setVariable":stringStruct("set Variable"),
+                "description":stringStruct("Description"),
             }
         }
     },
@@ -104,7 +129,8 @@ export const commandList=[
         schema: {
             "type": "object",
             "properties":{
-                "value":valTypeStruct("Asserted Value")
+                "value":valTypeStruct("Asserted Value"),
+                "description":stringStruct("Description"),
             }
         }
     },

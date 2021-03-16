@@ -237,19 +237,8 @@ export default function Editor() {
       ],
       selectedCase:{
         id:1,
-        json: [
-          {
-            "command": 'Test 1'
-          }
-        ],
-        json_id:[
-          {
-            id:1,
-            command:{
-              "command":'Test1'
-            }
-          }
-        ]
+        json: [],
+        json_id:[]
       },
       createdCases: 1,
       noOfCases:1
@@ -305,11 +294,13 @@ export default function Editor() {
     result: [],
   });
   //this is for job batch result
-  //TODO: pass to result table
-  const [jobBatchData, setJobBatchData]= useState({
-    created_at: null,
-    job_batch_id: null,
-    jobs: [],
+  const [jobBatch, setJobBatch]= useState({
+      assignment_id: null,
+      assignment_name: 'Assignment',
+      submission_batch_id: null,
+      zip_filename: 'Submission Batch',
+      job_config_id: null,
+      job_config_name: 'Job Config',
   });
 
   //this is for zip submission
@@ -475,6 +466,8 @@ export default function Editor() {
                     dispatch={dispatch}
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
+                    jobBatch={jobBatch}
+                    setJobBatch={setJobBatch}
                 />
                 :null}
               </div>
@@ -578,13 +571,19 @@ export default function Editor() {
           <div className={classes.submissionContainer} style={{width:'100%'}}>
             <div style={{width:'49%'}}>
             <Paper className={classes.submissionPaper}>
-              <AssignmentTable/>
+              <AssignmentTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
             </Paper>
             </div>
             <div style={{width:"2%"}}/>
             <div style={{width:'49%'}}>
             <Paper className={classes.submissionPaper}>
-              <JobConfigTable/>
+              <JobConfigTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
             </Paper>
             </div>
           </div>

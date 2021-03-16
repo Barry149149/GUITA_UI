@@ -8,7 +8,7 @@ import SubmitPanel from "./SubmitPanel";
 
 
 export default function PanelsContainer(props){
-    const {drawerValue,config,setConfig,state,resultData,setResultData,tabValue,setTabValue, dispatch, createConfig, setCreateConfig}=props
+    const {drawerValue,config,setConfig,state,resultData,setResultData,tabValue,setTabValue, dispatch, createConfig, setCreateConfig, jobBatch, setJobBatch}=props
     return (
         <React.Fragment>
             <Box p={3}/>
@@ -29,6 +29,8 @@ export default function PanelsContainer(props){
             />
             <SubmitPanel
                 drawerValue={drawerValue}
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
             />
             <ResultPanel
                 resultData={resultData}

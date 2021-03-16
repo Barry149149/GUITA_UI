@@ -91,6 +91,7 @@ export default function CourseSelect(props) {
 
     return(
         <React.Fragment>
+            {(false)?
             <FormControl className={classes.formControl}>
                 <InputLabel>
                     Recent Jobs
@@ -116,7 +117,9 @@ export default function CourseSelect(props) {
                 </Select>
                 <FormHelperText>Select Assignment</FormHelperText>
             </FormControl>
+            :null}
             <br/>
+            {(false)?
             <Button 
                 className={classes.button}
                 variant= 'outlined'
@@ -127,6 +130,7 @@ export default function CourseSelect(props) {
             >
                 Show
             </Button>
+            :null}
         </React.Fragment>
     )
 }

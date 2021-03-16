@@ -55,10 +55,10 @@ function EnhancedTableHead(props) {
         // { id: 'id', numeric: false,  label: 'Student ID' },
         // { id: 'scoresSum', numeric: false,  label: 'Total Score' },
         { id: 'job_batch_id', numeric: false,  label: 'Job Batch ID' },
+        { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
         { id: 'created_at', numeric: false, label: 'Created At'},
-        { id: 'assignment_id', numeric: false, label: 'Assignment ID'},
-        { id: 'job_config_id', numeric: false, label: 'Job Config ID'},
-        { id: 'submit_batch_id', numeric: false, label: 'Submission Batch ID'}
+        { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
+        { id: 'zip_filename', numeric: false, label: 'Submission Batch'}
     ];
 
     return (
@@ -150,7 +150,7 @@ export default function ResultTable(props) {
 
     useEffect(()=>{
         //TODO: change to correct path
-        fetch('/api/v2/job_batch', {
+        fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
             headers: {
                 'content-type': 'application/json'
             }
@@ -208,16 +208,16 @@ export default function ResultTable(props) {
                                                 {row.job_batch_id}
                                             </TableCell>
                                             <TableCell>
+                                                {row.assignment.assignment_name}
+                                            </TableCell>
+                                            <TableCell>
                                                 {row.created_at}
                                             </TableCell>
                                             <TableCell>
-                                                {row.assignment_id}
+                                                {row.job_config.job_config_name}
                                             </TableCell>
                                             <TableCell>
-                                                {row.job_config_id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.submission_batch_id}
+                                                {row.submission_batch.zip_filename}
                                             </TableCell>
                                         </TableRow>
                                     );

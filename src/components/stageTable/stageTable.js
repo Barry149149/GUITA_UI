@@ -18,7 +18,10 @@ import {PlaylistAdd} from "@material-ui/icons";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import IconButton from "@material-ui/core/IconButton";
 import {useForm} from "react-hook-form";
-
+import Collapse from "@material-ui/core/Collapse";
+import Box from "@material-ui/core/Box"
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 const useStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -43,14 +46,18 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     paper:{
-        overflowX:'auto'
+        overflowX:'auto',
+        overflow:'auto',
+        maxHeight:800,
     },
+    selected: {}
 }));
 
 
 export default function StageTable(props){
     const classes = useStyles();
     const [selected,setSelected]=useState([])
+    const [open,setOpen]=useState([])
     const [create, setCreate]=useState(false)
     const { register, handleSubmit } = useForm()
 
@@ -71,6 +78,43 @@ export default function StageTable(props){
             );
         }
         setSelected(newSelected);
+    }
+
+    const handleOpenClick=(event, id)=>{
+        const openedIndex = open.indexOf(id);
+        let newSelected = [];
+
+        if (openedIndex === -1) {
+            newSelected = newSelected.concat(open, id);
+        } else if (openedIndex === 0) {
+            newSelected = newSelected.concat(open.slice(1));
+        } else if (openedIndex === open.length - 1) {
+            newSelected = newSelected.concat(open.slice(0, -1));
+        } else if (openedIndex > 0) {
+            newSelected = newSelected.concat(
+                open.slice(0, openedIndex),
+                open.slice(openedIndex + 1),
+            );
+        }
+        setOpen(newSelected);
+    }
+
+    const selectAll=()=>{
+        let newSelected=[]
+        if(selected.length>0){setSelected([]); return }
+        for(let i=0;i<props.stage.length;i++){
+            newSelected.push(i)
+        }
+        setSelected(newSelected)
+    }
+
+    const openAll=()=>{
+        let newSelected=[]
+        if(open.length>0){setOpen([]); return }
+        for(let i=0;i<props.stage.length;i++){
+            newSelected.push(i)
+        }
+        setOpen(newSelected)
     }
 
     const deleteSelected=()=>{
@@ -121,6 +165,7 @@ export default function StageTable(props){
         console.log(selected)
     })
     const isSelected = (id) => selected.indexOf(id) !== -1;
+    const isOpen = (id) =>open.indexOf(id) !== -1;
 
     return(
         <Paper className={classes.paper}>
@@ -146,78 +191,141 @@ export default function StageTable(props){
                         </Grow>
                     </Tooltip>
                 ):(
-                <Tooltip title="Delete">
-                    <IconButton color="inherit" onClick={deleteSelected} >
-                        <DeleteIcon/>
-                    </IconButton>
-                </Tooltip>
-                    )}
+                    <Tooltip title="Delete">
+                        <IconButton color="inherit" onClick={deleteSelected} >
+                            <DeleteIcon/>
+                        </IconButton>
+                    </Tooltip>
+                )}
                 <Tooltip title="Create Job Config">
-                    <IconButton color="inherit" disabled={!(selected.length > 0)} onClick={handleCreateOpen} >   
-                        <CheckCircleIcon/>
-                    </IconButton>
+                    <Button
+                        variant= 'outlined'
+                        color= 'primary'
+                        onClick={handleCreateOpen}
+                        disabled={!(selected.length > 0)} >
+                        Create
+                    </Button>
                 </Tooltip>
             </Toolbar>
             <Table classes={classes.root}>
                 <TableHead>
-                    <TableRow>
-                        <TableCell padding="checkbox" />
+                    <TableRow
+                        hover
+                        selected={props.stage.length>0&&props.stage.length===selected.length}
+                        aria-checked={props.stage.length>0&&props.stage.length===selected.length}
+                        className={classes.tableRow}
+                        classes={{selected: classes.selected}}
+                    >
+                        <TableCell padding="checkbox" >
+                            <Checkbox
+                                checked={props.stage.length>0&&props.stage.length===selected.length}
+                                color="primary"
+                                onChange={(event) => {
+                                    selectAll()
+                                }}
+                            />
+                        </TableCell>
                         <TableCell align="left">Stage Name</TableCell>
-                        <TableCell align="left">Image</TableCell>
-                        <TableCell align="left">ExtraPath</TableCell>
-                        <TableCell align="left">JobType</TableCell>
-                        <TableCell align="left">MainClass</TableCell>
-                        <TableCell align="left">ProjectFile</TableCell>
-                        <TableCell align="left">Timeout</TableCell>
                         <TableCell align="left">Priority</TableCell>
                         <TableCell align="left">TestCaseID</TableCell>
+                        <TableCell align="right">
+                            <IconButton id="button_expandRow" size="small"
+                                        onClick={(e) => openAll() }>
+                                {(props.stage.length>0&&props.stage.length===open.length) ? <KeyboardArrowUpIcon/> :
+                                    <KeyboardArrowDownIcon/>}
+                            </IconButton>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {props.stage.map((row)=>{
                         const isItemSelected = isSelected(row.id);
+                        const isItemOpen=isOpen(row.id)
                         return(
-                            <TableRow>
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        id='checkbox_commandTableRow'
-                                        checked={isItemSelected}
-                                        color="primary"
-                                        onChange={(event) => {
-                                            handleClick(event, row.id)
-                                        }}
-                                    />
-                                </TableCell>
-                                {(row.json.stage_name)?<TableCell align="left">{row.json.stage_name}</TableCell>:<TableCell/>}
-                                {(row.json.image)?<TableCell align="left">{row.json.image}</TableCell>:<TableCell/>}
-                                {(row.json.extraPath)?<TableCell align="left">{row.json.extraPath}</TableCell>:<TableCell/>}
-                                {(row.json.jobType)?<TableCell align="left">{row.json.jobType}</TableCell>:<TableCell/>}
-                                {(row.json.mainClass)?<TableCell align="left">{row.json.mainClass}</TableCell>:<TableCell/>}
-                                {(row.json.projectFile)?<TableCell align="left">{row.json.projectFile}</TableCell>:<TableCell/>}
-                                {(row.json.stopTimeOut)?<TableCell align="left">{row.json.stopTimeOut}</TableCell>:<TableCell/>}
-                                {(row.json.priority)?<TableCell align="left">{row.json.priority}</TableCell>:<TableCell/>}
-                                {(row.json.testcase_id)?<TableCell align="left">{row.json.testcase_id}</TableCell>:<TableCell/>}
-                            </TableRow>
+                            <React.Fragment>
+                                <TableRow
+                                    hover
+                                    key={row.id}
+                                    aria-checked={isItemSelected}
+                                    selected={isItemSelected}
+                                    className={classes.tableRow}
+                                    classes={{selected: classes.selected}}
+                                >
+                                    <TableCell padding="checkbox">
+                                        <Checkbox
+                                            id='checkbox_commandTableRow'
+                                            checked={isItemSelected}
+                                            color="primary"
+                                            onChange={(event) => {
+                                                handleClick(event, row.id)
+                                            }}
+                                        />
+                                    </TableCell>
+                                    {(row.json.stage_name)?<TableCell align="left">{row.json.stage_name}</TableCell>:<TableCell/>}
+                                    {(row.json.priority)?<TableCell align="left">{row.json.priority}</TableCell>:<TableCell/>}
+                                    {(row.json.testcase_id)?<TableCell align="left">{row.json.testcase_id}</TableCell>:<TableCell/>}
+                                    <TableCell align="right">
+                                        <IconButton id="button_expandRow" size="small"
+                                                    onClick={(e) => handleOpenClick(e, row.id)}>
+                                            {isItemOpen ? <KeyboardArrowUpIcon/> :
+                                                <KeyboardArrowDownIcon/>}
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                        <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
+                                            <Box margin={1}>
+                                                <Typography variant="h6" gutterBottom component="div">
+                                                    Detail
+                                                </Typography>
+                                                <Table size="small" aria-label="purchases">
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell align="left">Image</TableCell>
+                                                            <TableCell align="left">ExtraPath</TableCell>
+                                                            <TableCell align="left">JobType</TableCell>
+                                                            <TableCell align="left">MainClass</TableCell>
+                                                            <TableCell align="left">ProjectFile</TableCell>
+                                                            <TableCell align="left">Timeout</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        <TableRow>
+                                                            {(row.json.image)?<TableCell align="left">{row.json.image}</TableCell>:<TableCell/>}
+                                                            {(row.json.extraPath)?<TableCell align="left">{row.json.extraPath}</TableCell>:<TableCell/>}
+                                                            {(row.json.jobType)?<TableCell align="left">{row.json.jobType}</TableCell>:<TableCell/>}
+                                                            {(row.json.mainClass)?<TableCell align="left">{row.json.mainClass}</TableCell>:<TableCell/>}
+                                                            {(row.json.projectFile)?<TableCell align="left">{row.json.projectFile}</TableCell>:<TableCell/>}
+                                                            {(row.json.stopTimeOut)?<TableCell align="left">{row.json.stopTimeOut}</TableCell>:<TableCell/>}
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </Box>
+                                        </Collapse>
+                                    </TableCell>
+                                </TableRow>
+                            </React.Fragment>
                         )
                     })}
                 </TableBody>
             </Table>
             <Dialog open={create} onClose={handleCreateClose}>
-                    <DialogTitle>Create Job Configuration</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>Enter configuration name</DialogContentText>
-                        <form onSubmit={handleSubmit(createConfig)}>
-                            <input name="config" ref={register({ required: true })} />
-                        </form>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCreateClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSubmit(createConfig)} color="primary">
-                            Confirm
-                        </Button>
-                    </DialogActions>
+                <DialogTitle>Create Job Configuration</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Enter configuration name</DialogContentText>
+                    <form onSubmit={handleSubmit(createConfig)}>
+                        <input name="config" ref={register({ required: true })} />
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit(createConfig)} color="primary">
+                        Confirm
+                    </Button>
+                </DialogActions>
             </Dialog>
         </Paper>
     )
