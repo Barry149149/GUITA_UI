@@ -1,4 +1,4 @@
-import React, {useState, useReducer} from 'react';
+import React, {useState, useReducer,useLayoutEffect, } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -182,10 +182,6 @@ const useStyles = makeStyles((theme) => ({
     height:'100%',
     overflow: 'auto',
   },
-  submissionContainer: {
-    display: 'flex',
-    flexGrow: 1,
-  },
 }));
 function a11yProps(index) {
   return {
@@ -194,9 +190,24 @@ function a11yProps(index) {
   };
 }
 
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
+
 export default function Editor() {
 
   const classes = useStyles();
+
+  const [width, height] = useWindowSize();
 
   //this is for the test case management
   const [config,setConfig] = useState({
@@ -252,6 +263,8 @@ export default function Editor() {
   const [formOpen,setFormOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
   const [stageFormOpen,setStageFormOpen]=useState(false)
+
+  const contentWidth= width-((drawerOpen)?360:80)
 
   //this is for the editor
    const [style, setStyle] = useState({
@@ -404,6 +417,7 @@ export default function Editor() {
   ] = useTourStickyState(0, "tour");
 
   let guide;
+
 
   if(tour<1){
     guide= <GuideTour
@@ -568,8 +582,12 @@ export default function Editor() {
           value={drawerValue}
           index={2}
         >
-          <div className={classes.submissionContainer} style={{width:'100%'}}>
-            <div style={{width:'49%'}}>
+          <div style={(contentWidth>960)?{
+            width:'100%',
+            display: 'flex',
+            flexGrow: 1,
+          }:{}}>
+            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
             <Paper className={classes.submissionPaper}>
               <AssignmentTable
                 jobBatch={jobBatch}
@@ -577,8 +595,8 @@ export default function Editor() {
               />
             </Paper>
             </div>
-            <div style={{width:"2%"}}/>
-            <div style={{width:'49%'}}>
+            <div style={(contentWidth>960)?{width:'2%'}:{height:20}}/>
+            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
             <Paper className={classes.submissionPaper}>
               <JobConfigTable
                 jobBatch={jobBatch}
