@@ -10,6 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
+import {Tooltip} from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -138,7 +139,6 @@ export default function ResultTable(props) {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('jobBatchId');
     const [filterCriteria, setFilterCriteria]= useState('')
-    const [table, setTable] = useState('');
     const [fetched, setFetched]= useState(false);
     const [result, setResult]= useState([]);
 
@@ -199,27 +199,31 @@ export default function ResultTable(props) {
                                         cell_taskScore.push(<TableCell>{row.reports[i].status}</TableCell>)
                                     }*/
                                     return (
-                                        <TableRow
-                                            hover
-                                            tabIndex={-1}
-                                            key={row.job_batch_id}
-                                        >
-                                            <TableCell id={labelId} >
-                                                {row.job_batch_id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.assignment.assignment_name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.created_at}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.job_config.job_config_name}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.submission_batch.zip_filename}
-                                            </TableCell>
-                                        </TableRow>
+                                        <Tooltip title={row.created_at}>
+                                            <TableRow
+                                                hover
+                                                tabIndex={-1}
+                                                key={row.job_batch_id}
+                                                onClick={()=>{
+                                                    //TODO:see if u need to change how to set (async or others)
+                                                    props.setJobData({})
+                                                    props.setResultStep(1)
+                                                }}
+                                            >
+                                                <TableCell id={labelId} >
+                                                    {row.job_batch_id}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.assignment.assignment_name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.job_config.job_config_name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.submission_batch.zip_filename}
+                                                </TableCell>
+                                            </TableRow>
+                                        </Tooltip>
                                     );
                                 })}
                         </TableBody>

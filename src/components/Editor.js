@@ -259,9 +259,8 @@ export default function Editor() {
   })
 
   const [tabValue, setTabValue] = useState(0);
-
-
   const [drawerValue, setDrawerValue] = useState(1);
+  const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -286,13 +285,13 @@ export default function Editor() {
 
   //this is for result page
   const [resultData, setResultData]= useState({
-    // semester: null,
-    // courseName: null,
-    // assignment: null,
     taskNumber: null,
     jobBatch: null,
     result: [],
   });
+
+  const [jobData, setJobData]= useState({})
+  const [stageData, setStageData]=useState({})
   //this is for job batch result
   const [jobBatch, setJobBatch]= useState({
       assignment_id: null,
@@ -592,12 +591,22 @@ export default function Editor() {
             value={drawerValue}
             index={3}
         >
-
                   <Paper className={classes.resultPaper}>
-                    <ResultTable
-                        resultData={resultData}
-                        setResultData={setResultData}
-                    />
+                    {()=> {
+                      switch(resultStep) {
+                        case 1:
+                          return(<br/>)
+                        case 2:
+                          return(<br/>)
+                        default:
+                          return (<ResultTable
+                              resultData={resultData}
+                              setResultData={setResultData}
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                          />)
+                      }
+                    }}
                   </Paper>
         </TabPanel>
 
