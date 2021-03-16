@@ -32,6 +32,7 @@ import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
+import JobTable from './resultTable/JobTable';
 
 
 const drawerWidth = 360;
@@ -259,9 +260,8 @@ export default function Editor() {
   })
 
   const [tabValue, setTabValue] = useState(0);
-
-
   const [drawerValue, setDrawerValue] = useState(1);
+  const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -286,19 +286,21 @@ export default function Editor() {
 
   //this is for result page
   const [resultData, setResultData]= useState({
-    // semester: null,
-    // courseName: null,
-    // assignment: null,
     taskNumber: null,
     jobBatch: null,
     result: [],
   });
+
+  const [jobData, setJobData]= useState({})
+  const [stageData, setStageData]=useState({})
   //this is for job batch result
-  //TODO: pass to result table
-  const [jobBatchData, setJobBatchData]= useState({
-    created_at: null,
-    job_batch_id: null,
-    jobs: [],
+  const [jobBatch, setJobBatch]= useState({
+      assignment_id: null,
+      assignment_name: 'Assignment',
+      submission_batch_id: null,
+      zip_filename: 'Submission Batch',
+      job_config_id: null,
+      job_config_name: 'Job Config',
   });
 
   //this is for zip submission
@@ -464,6 +466,8 @@ export default function Editor() {
                     dispatch={dispatch}
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
+                    jobBatch={jobBatch}
+                    setJobBatch={setJobBatch}
                 />
                 :null}
               </div>
@@ -567,13 +571,19 @@ export default function Editor() {
           <div className={classes.submissionContainer} style={{width:'100%'}}>
             <div style={{width:'49%'}}>
             <Paper className={classes.submissionPaper}>
-              <AssignmentTable/>
+              <AssignmentTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
             </Paper>
             </div>
             <div style={{width:"2%"}}/>
             <div style={{width:'49%'}}>
             <Paper className={classes.submissionPaper}>
-              <JobConfigTable/>
+              <JobConfigTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
             </Paper>
             </div>
           </div>
@@ -582,13 +592,21 @@ export default function Editor() {
             value={drawerValue}
             index={3}
         >
-
                   <Paper className={classes.resultPaper}>
+                    {(resultStep === 0)?
                     <ResultTable
-                        resultData={resultData}
-                        setResultData={setResultData}
-                    />
-                  </Paper>
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                              jobData={jobData}
+                          />:
+                          (resultStep===1)?
+                          <JobTable
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                              jobData={jobData}
+                          />:<p>hehe</p>
+                    }
+                    </Paper>
         </TabPanel>
 
           <SettingDialog

@@ -198,9 +198,13 @@ export default function StageTable(props){
                     </Tooltip>
                 )}
                 <Tooltip title="Create Job Config">
-                    <IconButton color="inherit" disabled={!(selected.length > 0)} onClick={handleCreateOpen} >
-                        <CheckCircleIcon/>
-                    </IconButton>
+                    <Button
+                        variant= 'outlined'
+                        color= 'primary'
+                        onClick={handleCreateOpen}
+                        disabled={!(selected.length > 0)} >
+                        Create
+                    </Button>
                 </Tooltip>
             </Toolbar>
             <Table classes={classes.root}>

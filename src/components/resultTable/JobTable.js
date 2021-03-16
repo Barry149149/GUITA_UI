@@ -11,6 +11,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 import {Tooltip} from "@material-ui/core";
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import IconButton from '@material-ui/core/IconButton';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -46,11 +48,7 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'job_batch_id', numeric: false, label: "Job Batch ID"},
-        { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
-        { id: 'created_at', numeric: false, label: 'Submitted At'},
-        { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
-        { id: 'zip_filename', numeric: false, label: 'Submission Batch'}
+        { id: 'job_id', numeric: false, label: 'Job ID'}
     ];
 
     return (
@@ -105,7 +103,7 @@ const useStyles = makeStyles(() => ({
     },
     container: {
         maxHeight: 650,
-    }
+    },
 }));
 
 function ResultTableToolbar(props){
@@ -113,6 +111,13 @@ function ResultTableToolbar(props){
 
     return(
         <Toolbar>
+            <IconButton
+                color="inherit"
+                onClick={()=>{
+                    props.setResultStep(0)
+                }}>
+                <KeyboardArrowLeftIcon/>
+            </IconButton>
             <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
             <TextField
                 label="Search"
@@ -124,13 +129,13 @@ function ResultTableToolbar(props){
     )
 }
 
-export default function ResultTable(props) {
+export default function JobTable(props) {
     const {setResultStep, setJobData, jobData} = props
 
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('job_batch_id');
+    const [orderBy, setOrderBy] = useState('job_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false);
     const [result, setResult]= useState([]);
@@ -141,31 +146,16 @@ export default function ResultTable(props) {
         setOrderBy(property);
     };
 
-    const handleRowClick = (event, row) => {
-        setJobData({
-            ...jobData, 
-            job_batch_id: row.job_batch_id,
-            assignment_name: row.assignment.assignment_name,
-            created_at: row.created_at
-        })
-        console.log(row)
-        setResultStep(1)
-    }
-
-    const hoveredStyle = {
-        cursor: 'pointer'
-    }
-
     useEffect(()=>{
         //TODO: change to correct path
-        fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
+        fetch('/api/v2/job_batch/'+jobData.job_batch_id, {
             headers: {
                 'content-type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
-            console.log(data)
+            console.log(data.jobs)
             const array = []
-            for(const value of data){
+            for(const value of data.jobs){
                 array.push(value)
             }
             setResult(array)
@@ -175,10 +165,12 @@ export default function ResultTable(props) {
 
     return (
         <div className={classes.root}>
+            
             <ResultTableToolbar
-                table= "Job Batch List"
+                table= {"Job List / " + jobData.assignment_name}
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
+                setResultStep={setResultStep}
             />
             <TableContainer className={classes.container}>
                 {(fetched)?
@@ -197,37 +189,21 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(result, getComparator(order, orderBy))
-                                .filter(e=>(e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .filter(e=>(e.job_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-                                        <Tooltip title={row.created_at}>
                                             <TableRow
                                                 hover
                                                 style={{cursor:'pointer'}}
                                                 tabIndex={-1}
-                                                key={row.job_batch_id}
-                                                onClick={(event) => {
-                                                    handleRowClick(event, row)
-                                                }}
+                                                key={row.job_id}
                                             >
-                                                <TableCell label={row.job_batch_id}>
-                                                    {row.job_batch_id}
+                                                <TableCell label={row.job_id}>
+                                                    {row.job_id}
                                                 </TableCell>
-                                                <TableCell>
-                                                    {row.assignment.assignment_name}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.created_at}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.job_config.job_config_name}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {row.submission_batch.zip_filename}
-                                                </TableCell>
+                                                
                                             </TableRow>
-                                        </Tooltip>
                                     );
                                 })}
                         </TableBody>

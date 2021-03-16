@@ -21,9 +21,6 @@ export default function GuitaAppBar(props){
                     GUITA Test Case IDE
                 </Typography>
 
-                <IconButton color="inherit" onClick={()=>{handleSubmit()}} id='button_fileUpload'>
-                    <PublishIcon />
-                </IconButton>
                 <IconButton
                     color="inherit"
                     onClick={()=>{setSettingsOpen(true)}}
