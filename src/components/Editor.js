@@ -613,7 +613,19 @@ export default function Editor() {
             index={3}
         >
                   <Paper className={classes.resultPaper}>
-                    <ReportTable/>
+                    {(resultStep === 0)?
+                        <ResultTable
+                            setResultStep={setResultStep}
+                            setJobData={setJobData}
+                            jobData={jobData}
+                        />:
+                        (resultStep===1)?
+                            <JobTable
+                                setResultStep={setResultStep}
+                                setJobData={setJobData}
+                                jobData={jobData}
+                            />:<ReportTable/>
+                    }
                     </Paper>
         </TabPanel>
 
@@ -639,18 +651,5 @@ export default function Editor() {
 }
 
 /*
-* {(resultStep === 0)?
-                    <ResultTable
-                              setResultStep={setResultStep}
-                              setJobData={setJobData}
-                              jobData={jobData}
-                          />:
-                          (resultStep===1)?
-                          <JobTable
-                              setResultStep={setResultStep}
-                              setJobData={setJobData}
-                              jobData={jobData}
-                          />:
-
-                    }
+*
 * */
