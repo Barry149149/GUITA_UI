@@ -33,6 +33,7 @@ import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
 import JobTable from './resultTable/JobTable';
+import ReportTable from './resultTable/resultReport/ReportTable';
 
 
 const drawerWidth = 360;
@@ -181,6 +182,7 @@ const useStyles = makeStyles((theme) => ({
   submissionPaper:{
     height:'100%',
     overflow: 'auto',
+
   },
 }));
 function a11yProps(index) {
@@ -611,19 +613,7 @@ export default function Editor() {
             index={3}
         >
                   <Paper className={classes.resultPaper}>
-                    {(resultStep === 0)?
-                    <ResultTable
-                              setResultStep={setResultStep}
-                              setJobData={setJobData}
-                              jobData={jobData}
-                          />:
-                          (resultStep===1)?
-                          <JobTable
-                              setResultStep={setResultStep}
-                              setJobData={setJobData}
-                              jobData={jobData}
-                          />:<p>hehe</p>
-                    }
+                    <ReportTable/>
                     </Paper>
         </TabPanel>
 
@@ -647,3 +637,20 @@ export default function Editor() {
     </div>
   );
 }
+
+/*
+* {(resultStep === 0)?
+                    <ResultTable
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                              jobData={jobData}
+                          />:
+                          (resultStep===1)?
+                          <JobTable
+                              setResultStep={setResultStep}
+                              setJobData={setJobData}
+                              jobData={jobData}
+                          />:
+
+                    }
+* */
