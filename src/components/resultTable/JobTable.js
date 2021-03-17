@@ -42,13 +42,21 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort } = props;
+    const { classes, order, orderBy, onRequestSort, result } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
 
+    let headCell_stage=[]
+
+    // TODO: Check valid length
+    for(let i=0;i<result[0].reports.length;i++) {
+        headCell_stage.push({ id:(i+1),numeric: false, label:'Stage '+(i+1)});
+    }
+
     const headCells = [
-        { id: 'job_id', numeric: false, label: 'Job ID'}
+        { id: 'job_id', numeric: false, label: 'Job ID'},
+        ...headCell_stage
     ];
 
     return (
@@ -146,16 +154,20 @@ export default function JobTable(props) {
         setOrderBy(property);
     };
 
+    const handleCellClick = (event, row) => {
+        
+    }
+
     useEffect(()=>{
         //TODO: change to correct path
-        fetch('/api/v2/job_batch/'+jobData.job_batch_id, {
+        fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
             headers: {
                 'content-type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
-            console.log(data.jobs)
+            console.log(data)
             const array = []
-            for(const value of data.jobs){
+            for(const value of data){
                 array.push(value)
             }
             setResult(array)
@@ -186,24 +198,32 @@ export default function JobTable(props) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
+                            result={result}
                         />
                         <TableBody>
                             {stableSort(result, getComparator(order, orderBy))
                                 .filter(e=>(e.job_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    let cell_stage=[]
+                                    for(let i=0; i<row.reports.length;i++){
+                                        cell_stage.push(<TableCell style={{cursor:'pointer'}} onClick={(event) => {
+                                            handleCellClick(event, row)
+                                        }}>{row.reports[i].status}</TableCell>)
+                                    }
                                     return (
-                                            <TableRow
-                                                hover
-                                                style={{cursor:'pointer'}}
-                                                tabIndex={-1}
-                                                key={row.job_id}
-                                            >
-                                                <TableCell label={row.job_id}>
-                                                    {row.job_id}
-                                                </TableCell>
-                                                
-                                            </TableRow>
+                                        <TableRow
+                                            hover
+                                            tabIndex={-1}
+                                            key={row.job_id}
+                                        >
+                                            {// TODO: Set onClick
+                                            }
+                                            <TableCell label={row.job_id}>
+                                                {row.job_id}
+                                            </TableCell>
+                                            {cell_stage}
+                                        </TableRow>
                                     );
                                 })}
                         </TableBody>

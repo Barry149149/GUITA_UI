@@ -200,6 +200,7 @@ export default function ResultTable(props) {
                                 .filter(e=>(e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    //const moment = require("moment-timezone");
                                     return (
                                         <Tooltip title={row.created_at}>
                                             <TableRow
