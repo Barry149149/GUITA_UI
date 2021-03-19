@@ -8,12 +8,6 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import PublishIcon from '@material-ui/icons/Publish';
 import React from "react";
 
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
 
 export default function DrawerTab(props){
     const {drawerValue, handleDrawerChange,classes}=props
@@ -31,15 +25,13 @@ export default function DrawerTab(props){
                     aria-labelledby='tab_config'
                     className={classes.tab}
                     icon={<TuneIcon color='primary'/>}
-                    {...a11yProps(0)}
-                />
+                    />
             </Tooltip>
             <Tooltip title="Test Case List" placement="right">
                 <Tab
                     aria-labelledby='tab_cases'
                     className={classes.tab}
                     icon={<ListAltIcon color='primary'/>}
-                    {...a11yProps(1)}
                 />
             </Tooltip>
             <Tooltip title="Job Submission" placement="right">
@@ -47,7 +39,6 @@ export default function DrawerTab(props){
                     aria-labelledby='tab_submit'
                     className={classes.tab}
                     icon={<PublishIcon color='primary'/>}
-                    {...a11yProps(2)}
                     />
             </Tooltip>
             <Tooltip title="Grading Result" placement="right">

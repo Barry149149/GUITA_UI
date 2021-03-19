@@ -32,7 +32,11 @@ import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 const drawerWidth = 360;
 
@@ -180,6 +184,9 @@ const useStyles = makeStyles((theme) => ({
   submissionPaper:{
     height:'100%',
     overflow: 'auto',
+    [theme.breakpoints.down(800)]:{
+      minWidth:600
+    }
   },
   submissionContainer: {
     display: 'flex',
@@ -567,46 +574,41 @@ export default function Editor() {
           value={drawerValue}
           index={2}
         >
-          <div className={classes.submissionContainer} style={{width:'100%'}}>
-            <div style={{width:'49%'}}>
+          <Grid container spacing={2}>
+            <Grid item lg={6} >
             <Paper className={classes.submissionPaper}>
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
               />
             </Paper>
-            </div>
-            <div style={{width:"2%"}}/>
-            <div style={{width:'49%'}}>
+            </Grid>
+            <Grid item lg={6}>
             <Paper className={classes.submissionPaper}>
               <JobConfigTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
               />
             </Paper>
-            </div>
-          </div>
-        </TabPanel>   
+            </Grid>
+          </Grid>
+        </TabPanel>
         <TabPanel
             value={drawerValue}
             index={3}
         >
                   <Paper className={classes.resultPaper}>
-                    {()=> {
-                      switch(resultStep) {
-                        case 1:
-                          return(<br/>)
-                        case 2:
-                          return(<br/>)
-                        default:
-                          return (<ResultTable
-                              resultData={resultData}
-                              setResultData={setResultData}
-                              setResultStep={setResultStep}
-                              setJobData={setJobData}
-                          />)
-                      }
-                    }}
+                    {(resultStep === 0) ?
+                        <ResultTable
+                            resultData={resultData}
+                            setResultData={setResultData}
+                            setResultStep={setResultStep}
+                            setJobData={setJobData}
+                        /> :
+                        (resultStep===1)?
+                            <p>haha</p>:
+                            <p>hehe</p>
+                    }
                   </Paper>
         </TabPanel>
 
