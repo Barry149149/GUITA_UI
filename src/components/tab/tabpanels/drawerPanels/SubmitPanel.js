@@ -36,6 +36,9 @@ export default function SubmitPanel(props){
         zip: null
     });
 
+    const handleSubmitJobBatch = () => {
+    }
+
     return (
     <TabPanel
         id="tabPanel_submit"
@@ -128,7 +131,7 @@ export default function SubmitPanel(props){
                 variant= 'outlined'
                 color= 'primary'
                 width={200}
-                onClick={()=>{}}>
+                onClick={handleSubmitJobBatch}>
                 Submit Job Batch
             </Button>
         </div>

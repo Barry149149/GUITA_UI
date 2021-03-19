@@ -65,7 +65,7 @@ export default function CommandForm(props){
                     }}
                     onSubmit={(e)=>{
                         let tempDescription={}
-                        if(typeof e.formData.description==='undefined'){
+                        if(typeof e.formData.description==='undefined'||!e.formData.description){
                             if(typeof e.formData.setVariable!=='undefined') tempDescription ={description:e.formData.setVariable}
                             else if(typeof e.formData.widgetName!=='undefined') tempDescription ={description:e.formData.widgetName}
                             else if(typeof e.formData.widget!=='undefined') tempDescription ={description:e.formData.widget.value}
@@ -84,6 +84,7 @@ export default function CommandForm(props){
                             {
                             command:props.cmdSchema.command,
                             ...e.formData,
+                            ...tempDescription
                         }
                         ]
                         newNodes.find(x=>x.id===props.selectedCase.id).json_id=[
@@ -113,6 +114,7 @@ export default function CommandForm(props){
                                     json:[...props.selectedCase.json,{
                                         command:props.cmdSchema.command,
                                         ...e.formData,
+                                        ...tempDescription
                                     }],
                                     json_id:[...props.selectedCase.json_id,{
                                         id:(props.selectedCase.json.length+1),

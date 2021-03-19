@@ -40,24 +40,15 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-    const { classes, order, orderBy, taskNumber, onRequestSort } = props;
+    const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
 
-    /*let headCell_tasks=[]
-
-    for(let i=0;i<taskNumber;i++) {
-        headCell_tasks.push({ id:(i+1),numeric: false, label:'Task '+(i+1)});
-    }*/
-
     const headCells = [
-        // { id: 'name', numeric: false,  label: 'Student Name' },
-        // { id: 'id', numeric: false,  label: 'Student ID' },
-        // { id: 'scoresSum', numeric: false,  label: 'Total Score' },
-        { id: 'job_batch_id', numeric: false,  label: 'Job Batch ID' },
+        { id: 'job_batch_id', numeric: false, label: "Job Batch ID"},
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
-        { id: 'created_at', numeric: false, label: 'Created At'},
+        { id: 'created_at', numeric: false, label: 'Submitted At'},
         { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
         { id: 'zip_filename', numeric: false, label: 'Submission Batch'}
     ];
@@ -114,7 +105,7 @@ const useStyles = makeStyles(() => ({
     },
     container: {
         maxHeight: 650,
-    },
+    }
 }));
 
 function ResultTableToolbar(props){
@@ -134,10 +125,12 @@ function ResultTableToolbar(props){
 }
 
 export default function ResultTable(props) {
+    const {setResultStep, setJobData, jobData} = props
+
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('jobBatchId');
+    const [orderBy, setOrderBy] = useState('job_batch_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false);
     const [result, setResult]= useState([]);
@@ -147,6 +140,17 @@ export default function ResultTable(props) {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    const handleRowClick = (event, row) => {
+        setJobData({
+            ...jobData, 
+            job_batch_id: row.job_batch_id,
+            assignment_name: row.assignment.assignment_name,
+            created_at: row.created_at
+        })
+        console.log(row)
+        setResultStep(1)
+    }
 
     useEffect(()=>{
         //TODO: change to correct path
@@ -186,35 +190,32 @@ export default function ResultTable(props) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            taskNumber={props.resultData.taskNumber}
                         />
                         <TableBody>
                             {stableSort(result, getComparator(order, orderBy))
                                 .filter(e=>(e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
-                                    /*
-                                    let cell_taskScore=[]
-                                    for(let i=0;i<row.reports.length;i++){
-                                        cell_taskScore.push(<TableCell>{row.reports[i].status}</TableCell>)
-                                    }*/
+                                    //const moment = require("moment-timezone");
                                     return (
                                         <Tooltip title={row.created_at}>
                                             <TableRow
                                                 hover
+                                                style={{cursor:'pointer'}}
                                                 tabIndex={-1}
                                                 key={row.job_batch_id}
-                                                onClick={()=>{
-                                                    //TODO:see if u need to change how to set (async or others)
-                                                    props.setJobData({})
-                                                    props.setResultStep(1)
+                                                onClick={(event) => {
+                                                    handleRowClick(event, row)
                                                 }}
                                             >
-                                                <TableCell id={labelId} >
+                                                <TableCell label={row.job_batch_id}>
                                                     {row.job_batch_id}
                                                 </TableCell>
                                                 <TableCell>
                                                     {row.assignment.assignment_name}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {row.created_at}
                                                 </TableCell>
                                                 <TableCell>
                                                     {row.job_config.job_config_name}

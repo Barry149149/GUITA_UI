@@ -1,4 +1,4 @@
-import React, {useState, useReducer} from 'react';
+import React, {useState, useReducer,useLayoutEffect, } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -37,6 +37,9 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import JobTable from './resultTable/JobTable';
+import ReportTable from './resultTable/resultReport/ReportTable';
+
 
 const drawerWidth = 360;
 
@@ -200,9 +203,24 @@ function a11yProps(index) {
   };
 }
 
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+}
+
 export default function Editor() {
 
   const classes = useStyles();
+
+  const [width, height] = useWindowSize();
 
   //this is for the test case management
   const [config,setConfig] = useState({
@@ -258,6 +276,8 @@ export default function Editor() {
   const [formOpen,setFormOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
   const [stageFormOpen,setStageFormOpen]=useState(false)
+
+  const contentWidth= width-((drawerOpen)?360:80)
 
   //this is for the editor
    const [style, setStyle] = useState({
@@ -411,6 +431,7 @@ export default function Editor() {
 
   let guide;
 
+
   if(tour<1){
     guide= <GuideTour
       drawerValue={drawerValue}
@@ -481,7 +502,6 @@ export default function Editor() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-
             <TabPanel
                 value={drawerValue}
                 index={0}>
@@ -574,42 +594,49 @@ export default function Editor() {
           value={drawerValue}
           index={2}
         >
-          <Grid container spacing={2}>
-            <Grid item lg={6} >
+
+          <div style={(contentWidth>960)?{
+            width:'100%',
+            display: 'flex',
+            flexGrow: 1,
+          }:{}}>
+            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
             <Paper className={classes.submissionPaper}>
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
               />
             </Paper>
-            </Grid>
-            <Grid item lg={6}>
+            </div>
+            <div style={(contentWidth>960)?{width:'2%'}:{height:20}}/>
+            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
             <Paper className={classes.submissionPaper}>
               <JobConfigTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
               />
             </Paper>
-            </Grid>
-          </Grid>
+            </div>
         </TabPanel>
         <TabPanel
             value={drawerValue}
             index={3}
         >
                   <Paper className={classes.resultPaper}>
-                    {(resultStep === 0) ?
+                    {(resultStep === 0)?
                         <ResultTable
-                            resultData={resultData}
-                            setResultData={setResultData}
                             setResultStep={setResultStep}
                             setJobData={setJobData}
-                        /> :
+                            jobData={jobData}
+                        />:
                         (resultStep===1)?
-                            <p>haha</p>:
-                            <p>hehe</p>
+                            <JobTable
+                                setResultStep={setResultStep}
+                                setJobData={setJobData}
+                                jobData={jobData}
+                            />:<ReportTable/>
                     }
-                  </Paper>
+                    </Paper>
         </TabPanel>
 
           <SettingDialog
@@ -632,3 +659,4 @@ export default function Editor() {
     </div>
   );
 }
+

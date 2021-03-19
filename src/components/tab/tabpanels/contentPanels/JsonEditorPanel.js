@@ -10,18 +10,15 @@ export default function JsonEditorPanel(props){
 
     return(
         <TabPanel value={tabValue} index={0}>
-                <Container item className={classes.container}  id="jsonEditor" >
-                    <JsonEditor
-                        selectedCase={state.present.selectedCase}
-                        style={style}
-                        tree={state.present.tree}
-                        createdCases={state.present.createdCases}
-                        noOfCases={state.present.noOfCases}
-                        dispatch={dispatch}
-                    />
-                </Container>
+            <JsonEditor
+                selectedCase={state.present.selectedCase}
+                style={style}
+                tree={state.present.tree}
+                createdCases={state.present.createdCases}
+                noOfCases={state.present.noOfCases}
+                dispatch={dispatch}
+            />
             <Box pt={6}/>
-
         </TabPanel>
     )
 }

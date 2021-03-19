@@ -134,7 +134,6 @@ export default function JobConfigTable(props) {
     const [fetched, setFetched]= useState(false)
     const [configData, setConfigData]= useState([]);
     const [selected,setSelected]=useState('')
-    const [selectedName, setSelectedName]=useState('');
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -158,14 +157,6 @@ export default function JobConfigTable(props) {
             setFetched(true)
         });
     }, []);
-
-    useEffect(()=>{
-        setJobBatch({
-            ...jobBatch,
-            job_config_id: selected,
-            job_config_name: selectedName
-        })
-    },[selected])
 
     return (
         <div className={classes.root}>
@@ -206,7 +197,11 @@ export default function JobConfigTable(props) {
                                                     checked={selected===row.job_config_id}
                                                     onChange={(e)=>{
                                                         setSelected(row.job_config_id)
-                                                        setSelectedName(row.job_config_name)
+                                                        setJobBatch({
+                                                            ...jobBatch,
+                                                            job_config_id: row.job_config_id,
+                                                            job_config_name: row.job_config_name
+                                                        })
                                                     }}
                                                 />
                                             </TableCell>

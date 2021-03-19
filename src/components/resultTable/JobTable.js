@@ -10,7 +10,82 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
-import {Radio} from "@material-ui/core"
+import {Tooltip} from "@material-ui/core";
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import IconButton from '@material-ui/core/IconButton';
+
+function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+
+    return 0;
+}
+
+function getComparator(order, orderBy) {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    return stabilizedThis.map((el) => el[0]);
+}
+
+function EnhancedTableHead(props) {
+    const { classes, order, orderBy, onRequestSort, result } = props;
+    const createSortHandler = (property) => (event) => {
+        onRequestSort(event, property);
+    };
+
+    let headCell_stage=[]
+
+    // TODO: Check valid length
+    for(let i=0;i<result[0].reports.length;i++) {
+        headCell_stage.push({ id:(i+1),numeric: false, label:'Stage '+(i+1)});
+    }
+
+    const headCells = [
+        { id: 'job_id', numeric: false, label: 'Job ID'},
+        ...headCell_stage
+    ];
+
+    return (
+        <TableHead >
+            <TableRow>
+                {headCells.map((headCell) => (
+                    <TableCell
+                        key={headCell.id}
+                        align={headCell.numeric ? 'right' : 'left'}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        <TableSortLabel
+                            active={orderBy === headCell.id}
+                            direction={orderBy === headCell.id ? order : 'asc'}
+                            onClick={createSortHandler(headCell.id)}
+                        >
+                            {headCell.label}
+                            {orderBy === headCell.id ? (
+                                <span className={classes.visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </span>
+                            ) : null}
+                        </TableSortLabel>
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
+}
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -39,78 +114,19 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    const headCells = [
-        { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
-        { id: 'assignment_name', numeric: false, label: 'Assignment Name'}
-    ];
-
-    return (
-        <TableHead >
-            <TableRow>
-                <TableCell/>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-function TableToolbar(props){
+function ResultTableToolbar(props){
     const {classes,table, setFilterCriteria}=props
 
     return(
         <Toolbar>
-            <Typography className={classes.title} color="primary" variant="h7" >{table}</Typography>
+            <IconButton
+                color="inherit"
+                onClick={()=>{
+                    props.setResultStep(0)
+                }}>
+                <KeyboardArrowLeftIcon/>
+            </IconButton>
+            <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
             <TextField
                 label="Search"
                 onChange={(e)=>{
@@ -121,16 +137,16 @@ function TableToolbar(props){
     )
 }
 
-export default function AssignmentTable(props) {
-    const {jobBatch, setJobBatch} = props
+export default function JobTable(props) {
+    const {setResultStep, setJobData, jobData} = props
+
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('assignment_id');
+    const [orderBy, setOrderBy] = useState('job_id');
     const [filterCriteria, setFilterCriteria]= useState('')
-    const [fetched, setFetched]= useState(false)
-    const [assignData, setAssignData]= useState([]);
-    const [selected, setSelected]= useState('')
+    const [fetched, setFetched]= useState(false);
+    const [result, setResult]= useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -138,9 +154,17 @@ export default function AssignmentTable(props) {
         setOrderBy(property);
     };
 
+    const handleCellClick = (event, row) => {
+        
+    }
+
+    const handleRowClick = (event, row) => {
+        setResultStep(2)
+    }
+    
     useEffect(()=>{
         //TODO: change to correct path
-        fetch('/api/v2/assignment', {
+        fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
             headers: {
                 'content-type': 'application/json'
             }
@@ -150,18 +174,19 @@ export default function AssignmentTable(props) {
             for(const value of data){
                 array.push(value)
             }
-            setAssignData(array)
+            setResult(array)
             setFetched(true)
         });
     }, []);
 
     return (
-        
         <div className={classes.root}>
-            <TableToolbar
-                table= "Assignments"
+            
+            <ResultTableToolbar
+                table= {"Job List / " + jobData.assignment_name}
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
+                setResultStep={setResultStep}
             />
             <TableContainer className={classes.container}>
                 {(fetched)?
@@ -177,45 +202,44 @@ export default function AssignmentTable(props) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
+                            result={result}
                         />
                         <TableBody>
-                            {stableSort(assignData, getComparator(order, orderBy))
-                                .filter(e=>(e.assignment_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
+                            {stableSort(result, getComparator(order, orderBy))
+                                .filter(e=>(e.job_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    let cell_stage=[]
+                                    for(let i=0; i<row.reports.length;i++){
+                                        cell_stage.push(<TableCell label={row.reports[i].stage_id} style={{cursor:'pointer'}} onClick={(event) => {
+                                            handleCellClick(event, row)
+                                        }}>{row.reports[i].status}</TableCell>)
+                                    }
                                     return (
                                         <TableRow
                                             hover
                                             tabIndex={-1}
-                                            key={row.assignment_id}
+                                            key={row.job_id}
+                                            
+                                            style={{cursor:'pointer'}}
+                                            onClick={(event) => {
+                                                // TODO: temp click, remove
+                                                handleRowClick(event, row)
+                                            }}
                                         >
-                                            <TableCell>
-                                                <Radio
-                                                    color='primary'
-                                                    checked={selected===row.assignment_id}
-                                                    onChange={(e)=>{
-                                                        setSelected(row.assignment_id)
-                                                        setJobBatch({
-                                                            ...jobBatch,
-                                                            assignment_id: row.assignment_id,
-                                                            assignment_name: row.assignment_name
-                                                        })
-                                                    }}
-                                                />
+                                            {// TODO: Set onClick
+                                            }
+                                            <TableCell label={row.job_id}>
+                                                {row.job_id}
                                             </TableCell>
-                                            <TableCell>
-                                                {row.assignment_id}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.assignment_name}
-                                            </TableCell>
+                                            {cell_stage}
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
-                :null}
-            </TableContainer>
+                :null} 
+                </TableContainer>
         </div>
     );
 }
