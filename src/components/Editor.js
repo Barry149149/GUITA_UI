@@ -280,16 +280,17 @@ export default function Editor() {
   })
 
   const [tabValue, setTabValue] = useState(0);
-  const [drawerValue, setDrawerValue] = useState(1);
+  const [drawerValue, setDrawerValue] = useState(0);
   const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue===newValue){
+    if(drawerValue===newValue && (newValue===0||newValue===2) ){
       setDrawerOpen(!drawerOpen)
     }else{
-      setDrawerOpen(true)
+      if(newValue===0||newValue===2) setDrawerOpen(true)
+      else setDrawerOpen(false)
     }
 
     setDrawerValue(newValue);
@@ -312,7 +313,7 @@ export default function Editor() {
   });
 
   const [jobData, setJobData]= useState({})
-  const [stageData, setStageData]=useState({})
+
   //this is for job batch result
   const [jobBatch, setJobBatch]= useState({
       assignment_id: null,
@@ -364,19 +365,6 @@ export default function Editor() {
     });
     console.log(fileName.name);
     fData.append('submission_file', config.assignments);
-    
-
-    // (MOVED TO CourseTree)This is for assignment create
-    /*
-    //fetch('/api/v2/assignment', {transports: ['websocket']}, {
-      fetch('/api/v2/assignment', {
-        method: 'POST',
-        body: JSON.stringify({"assignment_name": config.assignmentsName}),
-        headers: {
-          'content-type': 'application/json'
-        }
-      }).then(result => console.log(result)).catch(error => console.log(error));
-    */
 
     // This is for testcase create
     const tData = new FormData();
@@ -496,41 +484,9 @@ export default function Editor() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-            <TabPanel
-                value={drawerValue}
-                index={0}>
-                <Grid container spacing={3} justify='center'>
-                  <Grid item xs={(stageFormOpen)?9:12}>
-                    <StageTable
-                        stage={stage}
-                        setStage={setStage}
-                        stageFormOpen={stageFormOpen}
-                        setStageFormOpen={setStageFormOpen}
-                        createConfig={createConfig}
-                        setCreateConfig={setCreateConfig}
-                    />
-                  </Grid>
-                  {(stageFormOpen)?
-                      <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                        <Grid item xs={3}>
-                          <StageForm
-                              stage={stage}
-                              setStage={setStage}
-                              stageFormOpen={stageFormOpen}
-                              setStageFormOpen={setStageFormOpen}
-                              createdStage={createdStage}
-                              setCreatedStage={setCreatedStage}
-                              testcases={state.present.tree[0].nodes}
-                          />
-                        </Grid>
-                      </Grow>
-                      :null}
-                </Grid>
-            </TabPanel>
-
         <TabPanel
             value={drawerValue}
-            index={1}
+            index={0}
         >
           <Paper className={classes.paper2}>
             <Toolbar className={classes.toolbar2}>
@@ -585,6 +541,37 @@ export default function Editor() {
           </Paper>
         </TabPanel>
         <TabPanel
+            value={drawerValue}
+            index={1}>
+            <Grid container spacing={3} justify='center'>
+              <Grid item xs={(stageFormOpen)?9:12}>
+                <StageTable
+                    stage={stage}
+                    setStage={setStage}
+                    stageFormOpen={stageFormOpen}
+                    setStageFormOpen={setStageFormOpen}
+                    createConfig={createConfig}
+                    setCreateConfig={setCreateConfig}
+                />
+              </Grid>
+              {(stageFormOpen)?
+                  <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
+                    <Grid item xs={3}>
+                      <StageForm
+                          stage={stage}
+                          setStage={setStage}
+                          stageFormOpen={stageFormOpen}
+                          setStageFormOpen={setStageFormOpen}
+                          createdStage={createdStage}
+                          setCreatedStage={setCreatedStage}
+                          testcases={state.present.tree[0].nodes}
+                      />
+                    </Grid>
+                  </Grow>
+                  :null}
+            </Grid>
+        </TabPanel>
+        <TabPanel
           value={drawerValue}
           index={2}
         >
@@ -636,7 +623,6 @@ export default function Editor() {
                     }
                     </Paper>
         </TabPanel>
-
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}

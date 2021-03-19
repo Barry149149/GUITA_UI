@@ -18,16 +18,11 @@ const useStyles = makeStyles((theme)=>({
         width:80,
         maxWidth:80,
         minWidth:80,
-    },
-    detailBox:{
-        width:260,
-        maxWidth:260,
-        minWidth:260,
-    },
+    }
 }))
 
 export default function SubmitPanel(props){
-    const {drawerValue, jobBatch, setJobBatch}= props
+    const {drawerValue, jobBatch, setJobBatch, state}= props
 
     const classes = useStyles();
     
@@ -92,6 +87,7 @@ export default function SubmitPanel(props){
             </Button>
             <p style={{fontSize:12, color:'#888888'}}> Upload the Student Submission </p>
             <Box pt={3} />
+            <div style={{width:"100%"}}>
             <TextField
                 size="small"
                 className={classes.detailBox}
@@ -124,6 +120,7 @@ export default function SubmitPanel(props){
                 }}
                 variant="outlined"
             />
+            </div>
                 <br/>
             <Box pt={3} />
             <Button
