@@ -131,7 +131,6 @@ export default function AssignmentTable(props) {
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);
     const [selected, setSelected]= useState('')
-    const [selectedName, setSelectedName]=useState('');
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -156,13 +155,6 @@ export default function AssignmentTable(props) {
         });
     }, []);
 
-    useEffect(()=>{
-        setJobBatch({
-            ...jobBatch,
-            assignment_id: selected,
-            assignment_name: selectedName
-        })
-    },[selected])
     return (
         
         <div className={classes.root}>
@@ -203,7 +195,11 @@ export default function AssignmentTable(props) {
                                                     checked={selected===row.assignment_id}
                                                     onChange={(e)=>{
                                                         setSelected(row.assignment_id)
-                                                        setSelectedName(row.assignment_name)
+                                                        setJobBatch({
+                                                            ...jobBatch,
+                                                            assignment_id: row.assignment_id,
+                                                            assignment_name: row.assignment_name
+                                                        })
                                                     }}
                                                 />
                                             </TableCell>

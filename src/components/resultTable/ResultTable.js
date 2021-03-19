@@ -152,10 +152,6 @@ export default function ResultTable(props) {
         setResultStep(1)
     }
 
-    const hoveredStyle = {
-        cursor: 'pointer'
-    }
-
     useEffect(()=>{
         //TODO: change to correct path
         fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
