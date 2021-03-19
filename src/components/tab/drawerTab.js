@@ -26,7 +26,7 @@ export default function DrawerTab(props){
             variant="fullWidth"
             orientation="vertical"
         >
-            <Tooltip title="Test Case List" placement="right">
+            <Tooltip title="Test Case" placement="right">
                 <Tab
                     aria-labelledby='tab_cases'
                     className={classes.tab}
@@ -34,7 +34,7 @@ export default function DrawerTab(props){
                     {...a11yProps(0)}
                 />
             </Tooltip>
-            <Tooltip title="Configuration for grading" placement="right">
+            <Tooltip title="Job Config" placement="right">
                 <Tab
                     aria-labelledby='tab_config'
                     className={classes.tab}

@@ -10,7 +10,13 @@ import Box from "@material-ui/core/Box";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import {makeStyles} from '@material-ui/core/styles';
-import { ButtonGroup } from '@material-ui/core';
+import { ButtonGroup, Divider } from '@material-ui/core';
+import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
+import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import IconButton from '@material-ui/core/IconButton'
+import {Tooltip} from "@material-ui/core";
 
 const useStyles = makeStyles({
     button_container: {
@@ -51,39 +57,16 @@ export default function CaseTree(props){
 
     return (
         <div>
-            <div id="caseTree">
-            <MuiTreeView
-                tree={props.tree}
-                onLeafClick={e=>{
-                    if(e.id===props.selectedCase.id) return
-                    props.dispatch({
-                        data:{
-                            tree: props.tree,
-                            createdCases:props.createdCases,
-                            noOfCases:props.noOfCases,
-                            selectedCase:{
-                                id: e.id,
-                                json: props.tree[0].nodes.find(x=>x.id===e.id).json,
-                                json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
-                            }
-                        }
-                    })
-
-                }}
-            />
-            </div>
+            <Box pt={2}/>
             <ButtonGroup
                 className={classes.button_container}
                 id= 'button_caseTree'
-                width={200}
-                orientation='vertical'
             >
-            <Box pt={4} />
-            <Button
+            <Tooltip title="Add">
+            <IconButton
+                size="small"
                 id= 'button_add'
-                variant= 'outlined'
                 color= 'primary'
-                width={200}
                 onClick={()=>{
                     props.dispatch({
                         data:{
@@ -111,20 +94,22 @@ export default function CaseTree(props){
                         }
                     })
                 }
-                }>Add</Button>
-            <Button
+                }><AddIcon/></IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+            <IconButton
+                size="small"
                 id= 'button_delete'
-                variant= 'outlined'
                 color= 'primary'
-                width={200}
                 onClick={handleWarningOpen}>
-                Delete
-            </Button>
-            <Button
+                <RemoveIcon/>
+            </IconButton>
+            </Tooltip>
+            <Tooltip title="Download">
+            <IconButton
+                size="small"    
                 id= 'button_download'
-                variant= 'outlined'
                 color= 'primary'
-                width={200}
                 onClick={()=>{
                     const zip = new JSZip();
                     console.log(props.tree[0].nodes[0].json);
@@ -138,17 +123,18 @@ export default function CaseTree(props){
                     });
                 }
                 }>
-                Download
-            </Button>
-            <Button
+                <VerticalAlignBottomIcon/>
+            </IconButton>
+            </Tooltip>
+            <Tooltip title="Upload">
+            <IconButton
+                size="small"
                 id= 'button_upload'
-                variant= 'outlined'
                 component='label'
                 color= 'primary'
-                width={200}
                 onClick={()=>{}}
                 >
-                Upload
+                <VerticalAlignTopIcon/>
                 <input
                     type='file'
                     id='file'
@@ -227,8 +213,31 @@ export default function CaseTree(props){
                     }
                 />
 
-            </Button>
+            </IconButton>
+            </Tooltip>
             </ButtonGroup>
+            <Box id="caseTree">
+            <MuiTreeView
+                tree={props.tree}
+                onLeafClick={e=>{
+                    if(e.id===props.selectedCase.id) return
+                    props.dispatch({
+                        data:{
+                            tree: props.tree,
+                            createdCases:props.createdCases,
+                            noOfCases:props.noOfCases,
+                            selectedCase:{
+                                id: e.id,
+                                json: props.tree[0].nodes.find(x=>x.id===e.id).json,
+                                json_id: props.tree[0].nodes.find(x=>x.id===e.id).json_id,
+                            }
+                        }
+                    })
+
+                }}
+            />
+            </Box>
+            
             <Dialog
                 open={confirmOpen}
                 onClose={handleConfirmClose}

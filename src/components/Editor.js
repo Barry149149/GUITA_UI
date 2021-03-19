@@ -286,10 +286,11 @@ export default function Editor() {
   const [guideRun,setGuideRun] = useState(true);
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue===newValue){
+    if(drawerValue===newValue && (newValue===0||newValue===2) ){
       setDrawerOpen(!drawerOpen)
     }else{
-      setDrawerOpen(true)
+      if(newValue===0||newValue===2) setDrawerOpen(true)
+      else setDrawerOpen(false)
     }
 
     setDrawerValue(newValue);

@@ -31,6 +31,7 @@ export default function PanelsContainer(props){
                 drawerValue={drawerValue}
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
+                state={state}
             />
             <ResultPanel
                 resultData={resultData}
