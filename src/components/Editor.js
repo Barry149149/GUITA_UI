@@ -34,7 +34,12 @@ import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
 import JobTable from './resultTable/JobTable';
 import ReportTable from './resultTable/resultReport/ReportTable';
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 const drawerWidth = 360;
 
@@ -624,7 +629,10 @@ export default function Editor() {
                                 setResultStep={setResultStep}
                                 setJobData={setJobData}
                                 jobData={jobData}
-                            />:<ReportTable/>
+                            />:<ReportTable
+                              setResultStep={setResultStep}
+                              jobData={jobData}
+                            />
                     }
                     </Paper>
         </TabPanel>
