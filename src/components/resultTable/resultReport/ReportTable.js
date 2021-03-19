@@ -17,6 +17,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -88,10 +89,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 function ReportTableToolbar(props){
-    const {classes,table, result}=props
+    const {classes,table, result, setResultStep}=props
 
     return(
         <Toolbar>
+            <IconButton
+                color="inherit"
+                onClick={()=>{
+                    setResultStep(1)
+                }}>
+                <KeyboardArrowLeftIcon/>
+            </IconButton>
             <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
             <Typography variant="h7" >{result.summary.score+"/"+result.summary.maxScore}</Typography>
         </Toolbar>
@@ -145,6 +153,7 @@ export default function ReportTable(props) {
                 table="ResultTable"
                 classes={classes}
                 result={result}
+                setResultStep={props.setResultStep}
             />
             <TableContainer className={classes.container}>
                 {(fetched) ?
@@ -179,7 +188,7 @@ export default function ReportTable(props) {
                                             style={{cursor: 'pointer'}}
                                             tabIndex={-1}
                                             key={row.commandId}
-
+                                            onClick={(e) => handleOpenClick(e, row.commandId)}
                                         >
                                             <TableCell>
                                                 {row.commandId}

@@ -154,8 +154,11 @@ export default function JobTable(props) {
         setOrderBy(property);
     };
 
-    const handleCellClick = (event, row) => {
-        
+    const handleCellClick = (event, row, stage_id) => {
+        setJobData({
+            ...jobData,
+            stage_id: stage_id
+        })
     }
 
     const handleRowClick = (event, row) => {
@@ -212,7 +215,7 @@ export default function JobTable(props) {
                                     let cell_stage=[]
                                     for(let i=0; i<row.reports.length;i++){
                                         cell_stage.push(<TableCell label={row.reports[i].stage_id} style={{cursor:'pointer'}} onClick={(event) => {
-                                            handleCellClick(event, row)
+                                            handleCellClick(event, row, row.reports[i].stage_id)
                                         }}>{row.reports[i].status}</TableCell>)
                                     }
                                     return (
