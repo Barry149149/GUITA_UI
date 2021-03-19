@@ -9,6 +9,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import React from "react";
 
 
+
 export default function DrawerTab(props){
     const {drawerValue, handleDrawerChange,classes}=props
     return(
@@ -46,7 +47,6 @@ export default function DrawerTab(props){
                     aria-labelledby='tab_result'
                     className={classes.tab}
                     icon={<DescriptionIcon color='primary'/>}
-                    {...a11yProps(3)}
                 />
             </Tooltip>
 

@@ -32,19 +32,8 @@ import RedoIcon from "@material-ui/icons/Redo";
 import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
 import JobTable from './resultTable/JobTable';
 import ReportTable from './resultTable/resultReport/ReportTable';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 
 const drawerWidth = 360;
 
@@ -621,6 +610,7 @@ export default function Editor() {
                 setJobBatch={setJobBatch}
               />
             </Paper>
+            </div>
             </div>
         </TabPanel>
         <TabPanel

@@ -7,8 +7,6 @@ import {Router} from 'react-router-dom'
 // ========================================
 
 ReactDOM.render(
-    <Router>
-        <Editor/>
-    </Router>,
+        <Editor/>,
     document.getElementById('root')
 );
