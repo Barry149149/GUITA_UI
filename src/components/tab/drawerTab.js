@@ -26,19 +26,19 @@ export default function DrawerTab(props){
             variant="fullWidth"
             orientation="vertical"
         >
-            <Tooltip title="Configuration for grading" placement="right">
-                <Tab
-                    aria-labelledby='tab_config'
-                    className={classes.tab}
-                    icon={<TuneIcon color='primary'/>}
-                    {...a11yProps(0)}
-                />
-            </Tooltip>
             <Tooltip title="Test Case List" placement="right">
                 <Tab
                     aria-labelledby='tab_cases'
                     className={classes.tab}
                     icon={<ListAltIcon color='primary'/>}
+                    {...a11yProps(0)}
+                />
+            </Tooltip>
+            <Tooltip title="Configuration for grading" placement="right">
+                <Tab
+                    aria-labelledby='tab_config'
+                    className={classes.tab}
+                    icon={<TuneIcon color='primary'/>}
                     {...a11yProps(1)}
                 />
             </Tooltip>

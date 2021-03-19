@@ -12,13 +12,6 @@ export default function PanelsContainer(props){
     return (
         <React.Fragment>
             <Box p={3}/>
-            <Configuration
-                drawerValue={drawerValue}
-                config={config}
-                setConfig={setConfig}
-                createConfig={createConfig}
-                ssetCreateConfig={setCreateConfig}
-            />
             <TreePanel
                 drawerValue={drawerValue}
                 selectedCase={state.present.selectedCase}
@@ -26,6 +19,13 @@ export default function PanelsContainer(props){
                 createdCases={state.present.createdCases}
                 noOfCases={state.present.noOfCases}
                 dispatch={dispatch}
+            />
+            <Configuration
+                drawerValue={drawerValue}
+                config={config}
+                setConfig={setConfig}
+                createConfig={createConfig}
+                ssetCreateConfig={setCreateConfig}
             />
             <SubmitPanel
                 drawerValue={drawerValue}

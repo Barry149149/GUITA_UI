@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -8,10 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {makeStyles} from '@material-ui/core/styles';
 import {useForm} from "react-hook-form";
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import {Select, MenuItem} from '@material-ui/core';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import {PlaylistAdd} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -32,8 +28,6 @@ export default function CourseTree(props){
     const { register, handleSubmit } = useForm();
 
     const [createAssignment, setCreateAssignment] = useState(false);
-    const [fetched, setFetched] = useState(null);
-    const [fetchData, setFetchData] = useState([]);
 
     const handleCreateAssignmentOpen=()=>{
         setCreateAssignment(true);
@@ -54,37 +48,11 @@ export default function CourseTree(props){
         handleCreateAssignmentClose();
     }
 
-
-    const handleAssignment = (event) => {
-        if(event.target.value){
-            props.setConfig({
-                ...props.config,
-                assignment_id: event.target.value
-            });
-        }
-    };
-
-    useEffect(() => {
-        fetch('/api/v2/assignment', { 
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
-            const assignment = Array.from(new Set(data.map(result => result)));
-            setFetchData(assignment);
-            setFetched(true);
-            console.log(assignment);
-        }).catch(error => console.log(error));
-    }, [createAssignment]);
-
     return (
         <div>
             <Button
-                variant= 'outlined'
-                color= 'primary'
-                width={200}
                 onClick={handleCreateAssignmentOpen}>
-                Create Assignment
+                <PlaylistAdd/>
             </Button>
             <Dialog open={createAssignment} onClose={handleCreateAssignmentClose}>
             <DialogTitle>Create Assignment</DialogTitle>
@@ -103,32 +71,6 @@ export default function CourseTree(props){
             <Button onClick={handleSubmit(handleCreateAssignment)} color="primary">Confirm</Button>
             </DialogActions>
         </Dialog>
-        <br/>
-        <FormControl className={classes.formControl}>
-            <InputLabel>
-                Assignments
-            </InputLabel>
-            <Select
-                disabled={!fetched}
-                onChange={handleAssignment}
-                >
-                <InputLabel>
-                    Assignments
-                </InputLabel>
-                <MenuItem key="" value="">
-                    <em>None</em>
-                </MenuItem>
-                {fetchData.map((data) => {
-                    return (
-                        <MenuItem key={data.assignment_id} value={data.assignment_id}>
-                            {data.assignment_name}
-                        </MenuItem>
-                    )
-                })
-                }
-            </Select>
-            <FormHelperText>Select Assignment</FormHelperText>
-        </FormControl>
     </div>
     )
 

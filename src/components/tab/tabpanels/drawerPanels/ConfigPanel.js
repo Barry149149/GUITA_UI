@@ -39,10 +39,6 @@ export default function Configuration(props){
         <Title>Configuration</Title>
         <Divider/>
         <br/>
-        <CourseTree
-            config={props.config}
-            setConfig={props.setConfig}
-        />
     </TabPanel>
     )
 }
