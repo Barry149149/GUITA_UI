@@ -18,7 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-
+import Text from "recharts/lib/component/Text";
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -85,8 +85,194 @@ const useStyles = makeStyles(() => ({
     },
     container: {
         maxHeight: 650,
+    },
+    tableCell: {
+        padding: "0px 8px"
     }
 }));
+
+function Row(props){
+    const classes=useStyles()
+    const {row,isOpen, handleOpenClick}=props
+
+    const isItemOpened = isOpen(row.commandId)
+    const [open, setOpen] = useState({
+        result: false,
+        error: false
+    })
+
+    return (
+        <React.Fragment>
+            <TableRow
+                hover
+                style={{cursor: 'pointer'}}
+                tabIndex={-1}
+                key={row.commandId}
+                onClick={(e) => handleOpenClick(e, row.commandId)}
+            >
+                <TableCell>
+                    {row.commandId}
+                </TableCell>
+                <TableCell>
+                    {row.command}
+                </TableCell>
+                <TableCell>
+                    {row.score + "/" + row.maxScore}
+                </TableCell>
+                <TableCell align="right">
+                    <IconButton id="button_expandRow" size="small"
+                                onClick={(e) => handleOpenClick(e, row.commandId)}>
+                        {isItemOpened ? <KeyboardArrowUpIcon/> :
+                            <KeyboardArrowDownIcon/>}
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                    <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Detail:
+                            </Typography>
+                            <Table>
+                            {(row.parameters) ?
+                                <TableRow>
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        Parameters:
+                                    </Typography>
+                                    <Box border={1}
+                                         borderColor="grey.500"
+                                         style={{
+                                             minHeight: 60,
+                                             width: '100%',
+                                         }}>
+                                        <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
+                                            {JSON.stringify(row.parameters, null, 2)}
+                                        </pre>
+                                    </Box>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            {(row.driver) ?
+                                <TableRow>
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        Driver: {row.driver}
+                                    </Typography>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            {(row.setVariable) ?
+                                <TableRow>
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        setVariable: {row.setVariable}
+                                    </Typography>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            {(row.result) ?
+                                <TableRow
+                                    onClick={(e) => setOpen({
+                                        ...open,
+                                        result:!open.result
+                                    })}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        result: {row.result.value.toString()}
+                                    </Typography>
+                                    <Collapse in={open.result}>
+                                    <Box border={1} borderColor="grey.500"
+                                         style={{
+                                             minHeight: 60,
+                                             width: '100%',
+                                             minWidth:'100%'
+                                         }}>
+                                        <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
+                                            {JSON.stringify(row.result, null, 2).replace(/\\n/gm,"\n")}
+                                        </pre>
+                                    </Box>
+                                    </Collapse>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            {(row.errors.length) ?
+                                <TableRow
+                                    onClick={(e) => setOpen({
+                                        ...open,
+                                        error:open.error
+                                    })}
+                                    style={{
+                                        cursor: 'pointer',
+                                        }}
+                                >
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        errors:  {row.errors.map((err,index)=>(index+1)+") "+err.message)+","}
+                                    </Typography>
+                                    <Collapse in={open.error}>
+                                    <Box border={1} borderColor="grey.500"
+                                         style={{
+                                             minHeight: 60,
+                                             width: '100%',
+                                             minWidth:'100%'
+                                         }}>
+                                        <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
+                                            {row.errors.map((err,index)=>
+                                                JSON.stringify(err,null, 2).replace(/\\n/gm,"\n")
+                                            )}
+                                        </pre>
+                                    </Box>
+                                    </Collapse>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            {(row.screenshotPath) ?
+                                <TableRow>
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}
+                                    >
+                                    <Typography variant="h8" gutterBottom component="div">
+                                        Screenshot Path: {row.screenshotPath}
+                                    </Typography>
+                                    </TableCell>
+                                </TableRow>
+                                : null
+                            }
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
 
 function ReportTableToolbar(props){
     const {classes,table, result, setResultStep}=props
@@ -178,131 +364,13 @@ export default function ReportTable(props) {
                             </TableCell>
                         </TableHead>
                         <TableBody>
-                            {result.breakdown.map((row, index) => {
-                                const isItemOpened = isOpen(row.commandId)
-
-                                return (
-                                    <React.Fragment>
-                                        <TableRow
-                                            hover
-                                            style={{cursor: 'pointer'}}
-                                            tabIndex={-1}
-                                            key={row.commandId}
-                                            onClick={(e) => handleOpenClick(e, row.commandId)}
-                                        >
-                                            <TableCell>
-                                                {row.commandId}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.command}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.score + "/" + row.maxScore}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <IconButton id="button_expandRow" size="small"
-                                                            onClick={(e) => handleOpenClick(e, row.commandId)}>
-                                                    {isItemOpened ? <KeyboardArrowUpIcon/> :
-                                                        <KeyboardArrowDownIcon/>}
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
-                                                <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
-                                                    <Box margin={1}>
-                                                        <Typography variant="h6" gutterBottom component="div">
-                                                            Detail:
-                                                        </Typography>
-                                                        {(row.parameters) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    Parameters:
-                                                                </Typography>
-                                                                <Box border={1}
-                                                                     borderColor="grey.500"
-                                                                     style={{
-                                                                         minHeight: 60,
-                                                                         width: '100%',
-                                                                     }}>
-                                                                    <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
-                                                                    {JSON.stringify(row.parameters, null, 2)}
-                                                                    </pre>
-                                                                </Box>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                        {(row.driver) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    Driver: {row.driver}
-                                                                </Typography>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                        {(row.setVariable) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    setVariable: {row.setVariable}
-                                                                </Typography>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                        {(row.result) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    result:
-                                                                </Typography>
-                                                                <Box border={1} borderColor="grey.500"
-                                                                     style={{
-                                                                         minHeight: 60,
-                                                                         width: '100%',
-                                                                     }}>
-                                                                    <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
-                                                                    {JSON.stringify(row.result, null, 2)}
-                                                                    </pre>
-                                                                </Box>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                        {(row.errors.length) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    errors:
-                                                                </Typography>
-                                                                <Box border={1} borderColor="grey.500"
-                                                                     style={{
-                                                                         minHeight: 60,
-                                                                         width: '100%',
-                                                                     }}>
-                                                                    <pre style={{textAlign: 'left', padding:5 ,'white-space': 'pre-wrap'}}>
-                                                                    {JSON.stringify(row.errors, null, 2)}
-                                                                    </pre>
-                                                                </Box>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                        {(row.screenshotPath) ?
-                                                            <React.Fragment>
-                                                                <Typography variant="h8" gutterBottom component="div">
-                                                                    Screenshot Path: {row.screenshotPath}
-                                                                </Typography>
-                                                                <Divider/>
-                                                            </React.Fragment>
-                                                            : null
-                                                        }
-                                                    </Box>
-                                                </Collapse>
-                                            </TableCell>
-                                        </TableRow>
-                                    </React.Fragment>
-                                );
-                            })}
+                            {result.breakdown.map((row, index) =>
+                                <Row
+                                    row={row}
+                                    isOpen={isOpen}
+                                    handleOpenClick={handleOpenClick}
+                                />
+                            )}
                         </TableBody>
                     </Table>
                     : null}
