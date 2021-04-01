@@ -142,7 +142,7 @@ export default function StageTable(props){
         if(!props.createConfig){
             props.setCreateConfig(true)
         }
-
+        
         fetch('/api/v2/job_config', {
             method: 'POST',
             body: JSON.stringify({"job_config_name": data.config}),
@@ -152,17 +152,22 @@ export default function StageTable(props){
         }).then(result => {return result.json()}).then(data => {
             //console.log(data)
             // TODO: for each
-            fetch('/api/v2/job_config/'+data.job_config_id+'/job_stage', {
-                //method: 'POST',
-                //body: JSON.stringify({"stage_name":props.sta,"stage_config"})
-            }).then(result => console.log(result))
+            for(let i=0; i<selected.length; i++){
+                fetch('/api/v2/job_config/'+data.job_config_id+'/job_stage', {
+                    method: 'POST',
+                    body: JSON.stringify(props.stage[selected[i]].json),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(result => console.log(result))
+            }
         }).catch(error => console.log(error))
 
         setCreate(false)
     }
 
     useEffect(()=>{
-        console.log(selected)
+        console.log(props.stage)
     })
     const isSelected = (id) => selected.indexOf(id) !== -1;
     const isOpen = (id) =>open.indexOf(id) !== -1;
@@ -185,6 +190,7 @@ export default function StageTable(props){
                                 id='button_commandAdd'
                                 onClick={() => {
                                     props.setStageFormOpen(true)
+                                    props.setStageSelectOpen(false)
                                 }}>
                                 <PlaylistAdd/>
                             </Button>
@@ -197,6 +203,18 @@ export default function StageTable(props){
                         </IconButton>
                     </Tooltip>
                 )}
+                <Tooltip title="Open existing Job Config">
+                    <Button
+                        variant= 'outlined'
+                        color= 'primary'
+                        onClick={() => {
+                            props.setStageSelectOpen(true)
+                            props.setStageFormOpen(false)
+                        }}
+                    >
+                        Open
+                    </Button>
+                </Tooltip>
                 <Tooltip title="Create Job Config">
                     <Button
                         variant= 'outlined'
@@ -206,6 +224,7 @@ export default function StageTable(props){
                         Create
                     </Button>
                 </Tooltip>
+                
             </Toolbar>
             <Table classes={classes.root}>
                 <TableHead>

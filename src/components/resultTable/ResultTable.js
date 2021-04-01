@@ -211,21 +211,21 @@ export default function ResultTable(props) {
                                                 }}
                                             >
                                                 <TableCell label={row.job_batch_id}>
-                                                    {row.job_batch_id}
+                                                    {(row.job_batch_id !== null)?row.job_batch_id:null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.assignment.assignment_name}
+                                                    {(row.assignment !== null)?row.assignment.assignment_name:null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.created_at}
+                                                    {(row.created_at !== null)?row.created_at:null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {row.job_config.job_config_name}
+                                                    {(row.job_config !== null)?row.job_config.job_config_name:null}
                                                 </TableCell>
                                                 
                                                     
                                                 <TableCell>
-                                                    {row.submission_batch.zip_filename}
+                                                    {(row.submission_batch !== null)?row.submission_batch.zip_filename:null}
                                                 </TableCell>
                                                 
                                             </TableRow>

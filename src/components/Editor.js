@@ -39,6 +39,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
+import StageSelect from './stageTable/stageSelect';
 const drawerWidth = 360;
 
 function stateReducer(state, action){
@@ -274,6 +275,7 @@ export default function Editor() {
   const [formOpen,setFormOpen] = useState(false);
   const [drawerOpen,setDrawerOpen] = useState(false);
   const [stageFormOpen,setStageFormOpen]=useState(false)
+  const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
 
   const contentWidth= width-((drawerOpen)?360:80)
@@ -560,6 +562,8 @@ export default function Editor() {
                     setStage={setStage}
                     stageFormOpen={stageFormOpen}
                     setStageFormOpen={setStageFormOpen}
+                    stageSelectOpen={stageSelectOpen}
+                    setStageSelectOpen={setStageSelectOpen}
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
                 />
@@ -572,6 +576,21 @@ export default function Editor() {
                           setStage={setStage}
                           stageFormOpen={stageFormOpen}
                           setStageFormOpen={setStageFormOpen}
+                          createdStage={createdStage}
+                          setCreatedStage={setCreatedStage}
+                          testcases={state.present.tree[0].nodes}
+                      />
+                    </Grid>
+                  </Grow>
+                  :null}
+                {(stageSelectOpen)?
+                  <Grow in={stageSelectOpen} timeout={(stageSelectOpen) ? 1000 : 0}>
+                    <Grid item xs={3}>
+                      <StageSelect
+                          stage={stage}
+                          setStage={setStage}
+                          stageSelectOpen={stageSelectOpen}
+                          setStageSelectOpen={setStageSelectOpen}
                           createdStage={createdStage}
                           setCreatedStage={setCreatedStage}
                           testcases={state.present.tree[0].nodes}

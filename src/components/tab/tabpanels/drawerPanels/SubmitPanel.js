@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme)=>({
     }
 }))
 
+
 export default function SubmitPanel(props){
     const {drawerValue, jobBatch, setJobBatch, state}= props
 
@@ -31,25 +32,39 @@ export default function SubmitPanel(props){
         zip: null
     });
 
-    const handleSubmitJobBatch = () => {
+
+    const handleSubmitJobBatch = async () => {
         let aData = new FormData();
+
         aData.append('submission_file', file.zip);
 
-        fetch('/api/v2/assignment/'+jobBatch.assignment_id+'/submission_batch', {
+        // SubmissionBatch
+        const response = await fetch('/api/v2/assignment/'+jobBatch.assignment_id+'/submission_batch', {
             method: 'POST',
             body: aData,
-        }).then(result => {return result.json()}).then(data => {
-            setJobBatch({
-                ...jobBatch, 
-                submission_batch_id: data.submission_batch_id
-            })
+        });
+        const data = await response.json()
 
-        }).catch(error => console.log(error));
+        // Testcase
+        const tData = new FormData();
+        for(let index=0;index<state.present.tree[0].nodes.length;index++){
+            tData.append('testcase_name', 'testcase'+state.present.tree[0].nodes[index].id);
+            const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
+            const blob = new Blob([fileData],{type:'application/json'});
+            tData.append('testcase_file',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
+        }
+
+        fetch('/api/v2/assignment/'+jobBatch.assignment_id+'/testcase', {
+            method: 'POST',
+            body: tData,
+        }).then(result => console.log(result)).catch(error => console.log(error));
+
+        // JobBatch
         fetch('/api/v2/job_batch',{
             method: 'POST',
             body: JSON.stringify({
                 "assignment_id": jobBatch.assignment_id,
-                "submission_batch_id": jobBatch.submission_batch_id,
+                "submission_batch_id": data.submission_batch_id,
                 "job_config_id": jobBatch.job_config_id
             }),
             headers: {
