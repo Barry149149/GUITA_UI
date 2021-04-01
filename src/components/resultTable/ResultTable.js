@@ -49,9 +49,9 @@ function EnhancedTableHead(props) {
         { id: 'job_batch_id', numeric: false, label: "Job Batch ID"},
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
         { id: 'created_at', numeric: false, label: 'Submitted At'},
-        { id: 'job_config_name', numeric: false, label: 'Job Config Name'}
+        { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
         // TODO: get zip
-        //{ id: 'zip_filename', numeric: false, label: 'Submission Batch'}
+        { id: 'zip_filename', numeric: false, label: 'Submission Batch'}
     ];
 
     return (
@@ -135,6 +135,7 @@ export default function ResultTable(props) {
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false);
     const [result, setResult]= useState([]);
+    const [selected, setSelected]= useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -221,12 +222,12 @@ export default function ResultTable(props) {
                                                 <TableCell>
                                                     {row.job_config.job_config_name}
                                                 </TableCell>
-                                                {
-                                                    // TODO: get zip
-                                                //<TableCell>
-                                                //    {row.submission_batch.zip_filename}
-                                                //</TableCell>
-                                                }
+                                                
+                                                    
+                                                <TableCell>
+                                                    {row.submission_batch.zip_filename}
+                                                </TableCell>
+                                                
                                             </TableRow>
                                         </Tooltip>
                                     );

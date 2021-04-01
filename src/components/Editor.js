@@ -286,7 +286,7 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(2);
+  const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 

@@ -32,6 +32,32 @@ export default function SubmitPanel(props){
     });
 
     const handleSubmitJobBatch = () => {
+        let aData = new FormData();
+        aData.append('submission_file', file.zip);
+
+        fetch('/api/v2/assignment/'+jobBatch.assignment_id+'/submission_batch', {
+            method: 'POST',
+            body: aData,
+        }).then(result => {return result.json()}).then(data => {
+            setJobBatch({
+                ...jobBatch, 
+                submission_batch_id: data.submission_batch_id
+            })
+
+        }).catch(error => console.log(error));
+        fetch('/api/v2/job_batch',{
+            method: 'POST',
+            body: JSON.stringify({
+                "assignment_id": jobBatch.assignment_id,
+                "submission_batch_id": jobBatch.submission_batch_id,
+                "job_config_id": jobBatch.job_config_id
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(result => {return result.json()}).then(data => {
+            console.log(data)
+        })
     }
 
     return (
