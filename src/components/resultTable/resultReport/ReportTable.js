@@ -292,18 +292,36 @@ function ReportTableToolbar(props){
                 <KeyboardArrowLeftIcon/>
             </IconButton>
             <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
-            <Typography variant="h7" >{result.summary.score+"/"+result.summary.maxScore}</Typography>
+            
         </Toolbar>
     )
 }
 
 export default function ReportTable(props) {
+    const {setResultStep, jobData} = props
 
     const classes = useStyles();
 
-    const [fetched, setFetched] = useState(true);
-    const [result, setResult] = useState(resultSample);
+    const [fetched, setFetched] = useState(false);
+    const [result, setResult] = useState([]);
     const [open, setOpen] = useState([])
+
+    useEffect(()=>{
+        //TODO: change to correct path
+        fetch('/api/v2/job/'+jobData.job_id+'/report/'+jobData.stage_id, {
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            console.log(data)
+            const array = []
+            for(const value of data){
+                array.push(value)
+            }
+            setResult(array)
+            setFetched(true)
+        });
+    }, []);
 
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);

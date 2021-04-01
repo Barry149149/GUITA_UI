@@ -61,11 +61,13 @@ export default function CaseTree(props){
             <ButtonGroup
                 className={classes.button_container}
                 id= 'button_caseTree'
+                variant='outlined'
             >
             <Tooltip title="Add">
             <IconButton
                 size="small"
                 id= 'button_add'
+                variant='outlined'
                 color= 'primary'
                 onClick={()=>{
                     props.dispatch({
@@ -100,6 +102,7 @@ export default function CaseTree(props){
             <IconButton
                 size="small"
                 id= 'button_delete'
+                variant='outlined'
                 color= 'primary'
                 onClick={handleWarningOpen}>
                 <RemoveIcon/>
@@ -109,6 +112,7 @@ export default function CaseTree(props){
             <IconButton
                 size="small"    
                 id= 'button_download'
+                variant='outlined'
                 color= 'primary'
                 onClick={()=>{
                     const zip = new JSZip();
@@ -130,6 +134,7 @@ export default function CaseTree(props){
             <IconButton
                 size="small"
                 id= 'button_upload'
+                variant='outlined'
                 component='label'
                 color= 'primary'
                 onClick={()=>{}}
@@ -237,7 +242,7 @@ export default function CaseTree(props){
                 }}
             />
             </Box>
-            
+
             <Dialog
                 open={confirmOpen}
                 onClose={handleConfirmClose}

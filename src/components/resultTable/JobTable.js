@@ -157,8 +157,10 @@ export default function JobTable(props) {
     const handleCellClick = (event, row, stage_id) => {
         setJobData({
             ...jobData,
+            job_id: row.job_id,
             stage_id: stage_id
         })
+        setResultStep(2)
     }
 
     const handleRowClick = (event, row) => {

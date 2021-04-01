@@ -7,6 +7,12 @@ import TabIcon from "@material-ui/icons/Tab";
 import DescriptionIcon from "@material-ui/icons/Description";
 import PublishIcon from '@material-ui/icons/Publish';
 import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
 
 
@@ -49,7 +55,6 @@ export default function DrawerTab(props){
                     icon={<DescriptionIcon color='primary'/>}
                 />
             </Tooltip>
-
         </Tabs>
 
     )
