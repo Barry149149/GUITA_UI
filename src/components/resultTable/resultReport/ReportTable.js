@@ -304,7 +304,7 @@ export default function ReportTable(props) {
     const classes = useStyles();
 
     const [fetched, setFetched] = useState(false);
-    const [result, setResult] = useState([]]);
+    const [result, setResult] = useState([]);
     const [open, setOpen] = useState([])
 
     useEffect(()=>{
