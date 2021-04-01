@@ -7,6 +7,12 @@ import TabIcon from "@material-ui/icons/Tab";
 import DescriptionIcon from "@material-ui/icons/Description";
 import PublishIcon from '@material-ui/icons/Publish';
 import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
 function a11yProps(index) {
     return {
@@ -27,36 +33,36 @@ export default function DrawerTab(props){
             orientation="vertical"
         >
             <Tooltip title="Test Case" placement="right">
-                <Tab
-                    aria-labelledby='tab_cases'
-                    className={classes.tab}
-                    icon={<ListAltIcon color='primary'/>}
-                    {...a11yProps(0)}
-                />
+                    <Tab
+                        aria-labelledby='tab_cases'
+                        className={classes.tab}
+                        icon={<ListAltIcon color='primary'/>}
+                        {...a11yProps(0)}
+                    />
             </Tooltip>
             <Tooltip title="Job Config" placement="right">
-                <Tab
-                    aria-labelledby='tab_config'
-                    className={classes.tab}
-                    icon={<TuneIcon color='primary'/>}
-                    {...a11yProps(1)}
-                />
+                    <Tab
+                        aria-labelledby='tab_config'
+                        className={classes.tab}
+                        icon={<TuneIcon color='primary'/>}
+                        {...a11yProps(1)}
+                    />
             </Tooltip>
             <Tooltip title="Job Submission" placement="right">
-                <Tab
-                    aria-labelledby='tab_submit'
-                    className={classes.tab}
-                    icon={<PublishIcon color='primary'/>}
-                    {...a11yProps(2)}
+                    <Tab
+                        aria-labelledby='tab_submit'
+                        className={classes.tab}
+                        icon={<PublishIcon color='primary'/>}
+                        {...a11yProps(2)}
                     />
             </Tooltip>
             <Tooltip title="Grading Result" placement="right">
-                <Tab
-                    aria-labelledby='tab_result'
-                    className={classes.tab}
-                    icon={<DescriptionIcon color='primary'/>}
-                    {...a11yProps(3)}
-                />
+                    <Tab
+                        aria-labelledby='tab_result'
+                        className={classes.tab}
+                        icon={<DescriptionIcon color='primary'/>}
+                        {...a11yProps(3)}
+                    />
             </Tooltip>
 
         </Tabs>
