@@ -34,12 +34,6 @@ import AssignmentTable from './submissionTable/AssignmentTable';
 import JobConfigTable from './submissionTable/JobConfigTable';
 import JobTable from './resultTable/JobTable';
 import ReportTable from './resultTable/resultReport/ReportTable';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 
 const drawerWidth = 360;
 
@@ -187,7 +181,13 @@ const useStyles = makeStyles((theme) => ({
   submissionPaper:{
     height:'100%',
     overflow: 'auto',
-
+    [theme.breakpoints.down(800)]:{
+      minWidth:600
+    }
+  },
+  submissionContainer: {
+    display: 'flex',
+    flexGrow: 1,
   },
 }));
 function a11yProps(index) {
@@ -281,7 +281,7 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(0);
+  const [resultStep,setResultStep]=useState(2);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -575,6 +575,7 @@ export default function Editor() {
           value={drawerValue}
           index={2}
         >
+
           <div style={(contentWidth>960)?{
             width:'100%',
             display: 'flex',
@@ -597,8 +598,8 @@ export default function Editor() {
               />
             </Paper>
             </div>
-          </div>
-        </TabPanel>   
+            </div>
+        </TabPanel>
         <TabPanel
             value={drawerValue}
             index={3}
@@ -622,7 +623,6 @@ export default function Editor() {
                     }
                     </Paper>
         </TabPanel>
-
           <SettingDialog
               open={settingsOpen}
               setOpen={setSettingsOpen}
@@ -644,6 +644,3 @@ export default function Editor() {
   );
 }
 
-/*
-*
-* */

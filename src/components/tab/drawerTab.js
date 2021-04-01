@@ -14,12 +14,7 @@ import {
     Link
   } from "react-router-dom";
 
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
+
 
 export default function DrawerTab(props){
     const {drawerValue, handleDrawerChange,classes}=props
@@ -33,38 +28,33 @@ export default function DrawerTab(props){
             orientation="vertical"
         >
             <Tooltip title="Test Case" placement="right">
-                    <Tab
-                        aria-labelledby='tab_cases'
-                        className={classes.tab}
-                        icon={<ListAltIcon color='primary'/>}
-                        {...a11yProps(0)}
-                    />
+                <Tab
+                    aria-labelledby='tab_cases'
+                    className={classes.tab}
+                    icon={<ListAltIcon color='primary'/>}
+                />
             </Tooltip>
             <Tooltip title="Job Config" placement="right">
-                    <Tab
-                        aria-labelledby='tab_config'
-                        className={classes.tab}
-                        icon={<TuneIcon color='primary'/>}
-                        {...a11yProps(1)}
-                    />
+                <Tab
+                    aria-labelledby='tab_config'
+                    className={classes.tab}
+                    icon={<TuneIcon color='primary'/>}
+                />
             </Tooltip>
             <Tooltip title="Job Submission" placement="right">
-                    <Tab
-                        aria-labelledby='tab_submit'
-                        className={classes.tab}
-                        icon={<PublishIcon color='primary'/>}
-                        {...a11yProps(2)}
+                <Tab
+                    aria-labelledby='tab_submit'
+                    className={classes.tab}
+                    icon={<PublishIcon color='primary'/>}
                     />
             </Tooltip>
             <Tooltip title="Grading Result" placement="right">
-                    <Tab
-                        aria-labelledby='tab_result'
-                        className={classes.tab}
-                        icon={<DescriptionIcon color='primary'/>}
-                        {...a11yProps(3)}
-                    />
+                <Tab
+                    aria-labelledby='tab_result'
+                    className={classes.tab}
+                    icon={<DescriptionIcon color='primary'/>}
+                />
             </Tooltip>
-
         </Tabs>
 
     )
