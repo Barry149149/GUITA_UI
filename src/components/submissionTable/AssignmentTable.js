@@ -11,6 +11,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 import {Radio} from "@material-ui/core"
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {useForm} from "react-hook-form";
+import {PlaylistAdd} from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -106,11 +114,54 @@ function EnhancedTableHead(props) {
 }
 
 function TableToolbar(props){
-    const {classes,table, setFilterCriteria}=props
+    const {classes,table, setFilterCriteria, setFetched}=props
+    const { register, handleSubmit } = useForm();
+    const [createAssignment, setCreateAssignment] = useState(false);
+
+    const handleCreateAssignmentOpen=()=>{
+        setCreateAssignment(true);
+    }
+    const handleCreateAssignmentClose=()=>{
+        setCreateAssignment(false);
+        setFetched(false);
+    }
+
+    const handleCreateAssignment=(data)=>{
+        fetch('/api/v2/assignment', {
+            method: 'POST',
+            body: JSON.stringify({"assignment_name": data.assignmentName}),
+            headers: {
+              'content-type': 'application/json'
+            }
+          }).then(result => console.log(result)).catch(error => console.log(error));
+        console.log(data.assignmentName);
+        handleCreateAssignmentClose();
+    }
 
     return(
         <Toolbar>
             <Typography className={classes.title} color="primary" variant="h7" >{table}</Typography>
+            <Button
+                onClick={handleCreateAssignmentOpen}>
+                <PlaylistAdd/>
+            </Button>
+            <Dialog open={createAssignment} onClose={handleCreateAssignmentClose}>
+                <DialogTitle>Create Assignment</DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Enter assignment name.
+                </DialogContentText>
+                <form onSubmit={handleSubmit(handleCreateAssignment)}>
+                    <input name="assignmentName" ref={register({ required: true })} />
+                </form>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleCreateAssignmentClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleSubmit(handleCreateAssignment)} color="primary">Confirm</Button>
+                </DialogActions>
+            </Dialog>   
             <TextField
                 label="Search"
                 onChange={(e)=>{
@@ -131,7 +182,7 @@ export default function AssignmentTable(props) {
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);
     const [selected, setSelected]= useState('')
-    const [selectedName, setSelectedName]=useState('');
+    
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -154,15 +205,8 @@ export default function AssignmentTable(props) {
             setAssignData(array)
             setFetched(true)
         });
-    }, []);
+    }, [fetched]);
 
-    useEffect(()=>{
-        setJobBatch({
-            ...jobBatch,
-            assignment_id: selected,
-            assignment_name: selectedName
-        })
-    },[selected])
     return (
         
         <div className={classes.root}>
@@ -170,7 +214,9 @@ export default function AssignmentTable(props) {
                 table= "Assignments"
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
+                setFetched={setFetched}
             />
+            
             <TableContainer className={classes.container}>
                 {(fetched)?
                     <Table
@@ -203,7 +249,11 @@ export default function AssignmentTable(props) {
                                                     checked={selected===row.assignment_id}
                                                     onChange={(e)=>{
                                                         setSelected(row.assignment_id)
-                                                        setSelectedName(row.assignment_name)
+                                                        setJobBatch({
+                                                            ...jobBatch,
+                                                            assignment_id: row.assignment_id,
+                                                            assignment_name: row.assignment_name
+                                                        })
                                                     }}
                                                 />
                                             </TableCell>

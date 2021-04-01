@@ -154,10 +154,17 @@ export default function JobTable(props) {
         setOrderBy(property);
     };
 
-    const handleCellClick = (event, row) => {
-        
+    const handleCellClick = (event, row, stage_id) => {
+        setJobData({
+            ...jobData,
+            stage_id: stage_id
+        })
     }
 
+    const handleRowClick = (event, row) => {
+        setResultStep(2)
+    }
+    
     useEffect(()=>{
         //TODO: change to correct path
         fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
@@ -207,8 +214,8 @@ export default function JobTable(props) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_stage=[]
                                     for(let i=0; i<row.reports.length;i++){
-                                        cell_stage.push(<TableCell style={{cursor:'pointer'}} onClick={(event) => {
-                                            handleCellClick(event, row)
+                                        cell_stage.push(<TableCell label={row.reports[i].stage_id} style={{cursor:'pointer'}} onClick={(event) => {
+                                            handleCellClick(event, row, row.reports[i].stage_id)
                                         }}>{row.reports[i].status}</TableCell>)
                                     }
                                     return (
@@ -216,6 +223,12 @@ export default function JobTable(props) {
                                             hover
                                             tabIndex={-1}
                                             key={row.job_id}
+                                            
+                                            style={{cursor:'pointer'}}
+                                            onClick={(event) => {
+                                                // TODO: temp click, remove
+                                                handleRowClick(event, row)
+                                            }}
                                         >
                                             {// TODO: Set onClick
                                             }
