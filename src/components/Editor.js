@@ -645,9 +645,16 @@ export default function Editor() {
               submitWarning={submitWarning}
               setSubmitWarning={setSubmitWarning}
           />
+          <ReportImageDialog>
+
+          </ReportImageDialog>
       </main>
     </div>
   );
+}
+
+function ReportImageDialog(props){
+  const {path, open}=props
 }
 
 /*
