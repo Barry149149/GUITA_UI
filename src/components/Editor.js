@@ -40,6 +40,7 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
+
 const drawerWidth = 360;
 
 function stateReducer(state, action){
@@ -277,7 +278,7 @@ export default function Editor() {
   const [stageFormOpen,setStageFormOpen]=useState(false)
   const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
-
+  const [assignment, setAssignment] = useState(false);
   const contentWidth= width-((drawerOpen)?360:80)
 
   //this is for the editor
@@ -288,15 +289,15 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(0);
+  const [resultStep,setResultStep]=useState(3);
 
   const [guideRun,setGuideRun] = useState(true);
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue===newValue && (newValue===0||newValue===2) ){
+    if(drawerValue===newValue && (newValue===0||newValue===1) ){
       setDrawerOpen(!drawerOpen)
     }else{
-      if(newValue===0||newValue===2) setDrawerOpen(true)
+      if(newValue===0||newValue===1) setDrawerOpen(true)
       else setDrawerOpen(false)
     }
 
@@ -497,13 +498,36 @@ export default function Editor() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <TabPanel
+          value={drawerValue}
+          index={0}
+        >
+            
+            <Paper className={classes.submissionPaper}>
+              <AssignmentTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
+            </Paper>
+            
+            <div style={{height:20}}/>
+            
+            <Paper className={classes.submissionPaper}>
+              <JobConfigTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
+            </Paper>
+            
+            
+        </TabPanel>
+        <TabPanel
             value={drawerValue}
-            index={0}
+            index={1}
         >
           <Paper className={classes.paper2}>
             <Toolbar className={classes.toolbar2}>
               <Typography className={classes.title} color="primary" variant="h5" component="div">
-                {(tabValue===0)?"JSON Code Editor ":"Table & Form Mode "}
+                {(tabValue===0)?"Table & Form Mode ":"JSON Code Editor "}
                  \ Test Case {state.present.selectedCase.id}
               </Typography>
               <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
@@ -518,19 +542,19 @@ export default function Editor() {
                   indicatorColor="primary"
                   centered={true}
               >
-                <Tooltip title="CodeEditor">
-                  <Tab
-                      className={classes.tab}
-                      aria-label="tab_codeEditor"
-                      icon={<CodeIcon color="primary"/>}
-                      {...a11yProps(0)}
-                  />
-                </Tooltip>
                 <Tooltip title="Table Mode">
                   <Tab
                       className={classes.tab}
                       aria-label="tab_tableView"
                       icon={<TableChartIcon color="primary"/>}
+                      {...a11yProps(0)}
+                  />
+                </Tooltip>
+                <Tooltip title="CodeEditor">
+                  <Tab
+                      className={classes.tab}
+                      aria-label="tab_codeEditor"
+                      icon={<CodeIcon color="primary"/>}
                       {...a11yProps(1)}
                   />
                 </Tooltip>
@@ -554,7 +578,7 @@ export default function Editor() {
         </TabPanel>
         <TabPanel
             value={drawerValue}
-            index={1}>
+            index={2}>
             <Grid container spacing={3} justify='center'>
               <Grid item xs={(stageFormOpen)?9:12}>
                 <StageTable
@@ -599,35 +623,6 @@ export default function Editor() {
                   </Grow>
                   :null}
             </Grid>
-        </TabPanel>
-        <TabPanel
-          value={drawerValue}
-          index={2}
-        >
-
-          <div style={(contentWidth>960)?{
-            width:'100%',
-            display: 'flex',
-            flexGrow: 1,
-          }:{}}>
-            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
-            <Paper className={classes.submissionPaper}>
-              <AssignmentTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-              />
-            </Paper>
-            </div>
-            <div style={(contentWidth>960)?{width:'2%'}:{height:20}}/>
-            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
-            <Paper className={classes.submissionPaper}>
-              <JobConfigTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-              />
-            </Paper>
-            </div>
-            </div>
         </TabPanel>
         <TabPanel
             value={drawerValue}

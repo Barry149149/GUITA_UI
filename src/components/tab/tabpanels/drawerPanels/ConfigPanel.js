@@ -9,7 +9,7 @@ export default function Configuration(props){
     <TabPanel
         id="tabPanel_config"
         value={props.drawerValue}
-        index={1} >
+        index={2} >
         <Title>Configuration</Title>
         <Divider/>
         <br/>

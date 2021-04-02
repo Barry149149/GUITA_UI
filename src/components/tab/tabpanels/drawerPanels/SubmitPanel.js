@@ -79,7 +79,7 @@ export default function SubmitPanel(props){
     <TabPanel
         id="tabPanel_submit"
         value={props.drawerValue}
-        index={2} >
+        index={0} >
         <Title>Job Batch Submission</Title>
         <Divider/>
         <div style={{height:50, paddingLeft:8}}>

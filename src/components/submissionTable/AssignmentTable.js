@@ -81,7 +81,8 @@ function EnhancedTableHead(props) {
 
     const headCells = [
         { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
-        { id: 'assignment_name', numeric: false, label: 'Assignment Name'}
+        { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
+        { id: 'test_case', numeric: false, label: 'Test Case'}
     ];
 
     return (
@@ -134,7 +135,6 @@ function TableToolbar(props){
               'content-type': 'application/json'
             }
           }).then(result => console.log(result)).catch(error => console.log(error));
-        console.log(data.assignmentName);
         handleCreateAssignmentClose();
     }
 
@@ -262,6 +262,10 @@ export default function AssignmentTable(props) {
                                             </TableCell>
                                             <TableCell>
                                                 {row.assignment_name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {//refer to job table
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     );

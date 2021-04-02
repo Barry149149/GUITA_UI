@@ -24,7 +24,7 @@ export default function TablePanel(props){
     const [formData,setFormData]=useState({})
 
     return(
-        <TabPanel value={tabValue} index={1}>
+        <TabPanel value={tabValue} index={0}>
             <Grid container spacing={1} justify='center'>
                 <Grid item xs={(formOpen)?8:12}>
                     <div id="commandTable">

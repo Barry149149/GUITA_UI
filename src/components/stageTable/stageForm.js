@@ -149,6 +149,34 @@ export default function StageForm(props) {
                             }}
                         />
                     </div>
+                    {
+                        //TODO: Sync Assignmnet 
+                    }
+                    <FormControl className={classes.form}>
+                        <InputLabel>Assignment ID</InputLabel>
+                        <Select
+                            value={newStage.testcase_id}
+                            onChange={(e)=>{
+                                setNewStage({
+                                    ...newStage,
+                                    testcase_id: e.target.value
+                                    })
+                            }}
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {props.testcases.map((row)=>{
+                                return(
+                                <MenuItem value={row.id}>{row.value}</MenuItem>
+                                )
+                            })}
+                        </Select>
+
+                    </FormControl>
+                    {
+                        //TODO: Sync Test Case
+                    }
                     <FormControl className={classes.form}>
                         <InputLabel>Test Case ID</InputLabel>
                         <Select
