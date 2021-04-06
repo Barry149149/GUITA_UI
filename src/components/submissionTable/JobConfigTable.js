@@ -143,7 +143,9 @@ function TableToolbar(props){
         <Toolbar>
             <Typography className={classes.title} color="primary" variant="h7" >{table}</Typography>
             <Button
-                onClick={handleCreateJobConfigOpen}>
+                onClick={()=>{
+                    props.setDrawerValue(2);
+                }}>
                     <PlaylistAdd/>
             </Button>
             <Dialog open={createJobConfig} onClose={handleCreateJobConfigClose}>
@@ -174,7 +176,7 @@ function TableToolbar(props){
 }
 
 export default function JobConfigTable(props) {
-    const {jobBatch, setJobBatch}=props
+    const {jobBatch, setJobBatch, drawerValue, setDrawerValue, handleDrawerChange}=props
 
     const classes = useStyles();
 
@@ -215,6 +217,9 @@ export default function JobConfigTable(props) {
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
                 setFetched={setFetched}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
             />
             <TableContainer className={classes.container}>
                 {(fetched)?

@@ -320,7 +320,9 @@ export default function Editor() {
     result: [],
   });
 
-  const [jobData, setJobData]= useState({})
+  const [jobData, setJobData]= useState({
+    imgPath:[]
+  })
 
   //this is for job batch result
   const [jobBatch, setJobBatch]= useState({
@@ -334,7 +336,8 @@ export default function Editor() {
 
   const [reportImg, setReportImg]= useState({
     name:"",
-    path:""
+    path:"",
+    paths:[]
   });
 
   //this is for zip submission
@@ -515,6 +518,9 @@ export default function Editor() {
               <JobConfigTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
               />
             </Paper>
             
@@ -644,7 +650,10 @@ export default function Editor() {
                             <ReportTable
                               setResultStep={setResultStep}
                               jobData={jobData}
+                              setJobData={setJobData}
                               handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
+                              reportImg={reportImg}
+                              setReportImg={setReportImg}
                             />
                     }
                     </Paper>
@@ -669,7 +678,10 @@ export default function Editor() {
               open={imgDialogOpen}
               handleClose={()=>setImgDialogOpen(false)}
               title={reportImg.name}
-              imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+              jobData={jobData}
+              reportImg={reportImg}
+              setReportImg={setReportImg}
+              //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
           />
       </main>
     </div>
@@ -677,14 +689,14 @@ export default function Editor() {
 }
 
 function ReportImageDialog(props){
-  const {open ,imgPath, title, handleClose}=props
+  const {open, title, handleClose, jobData, reportImg, setReportImg}=props
   return(
       <Dialog
           open={open}
           onClose={handleClose}
           maxWidth='md'
       >
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle>{reportImg.paths[reportImg.path]}</DialogTitle>
         <div
             style={{
               display: 'flex',
@@ -692,15 +704,29 @@ function ReportImageDialog(props){
               margin:0
             }}
         >
-          <Button>
+          <Button onClick={()=>{
+            if(reportImg.path>0){
+              setReportImg({
+                ...reportImg,
+                path:reportImg.path-1,
+              })
+            }
+          }}>
             <KeyboardArrowLeftIcon/>
           </Button>
             <div style={{
               width: '100%',
             }}>
-              <img src={imgPath} width="100%" height="100%"/>
+              <img src={'/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/'+reportImg.paths[reportImg.path]} width="100%" height="100%"/>
             </div>
-          <Button>
+            <Button onClick={()=>{
+            if(reportImg.path<reportImg.paths.length){
+              setReportImg({
+                ...reportImg,
+                path:reportImg.path+1
+              })
+            }
+          }}>
             <KeyboardArrowRightIcon/>
           </Button>
         </div>

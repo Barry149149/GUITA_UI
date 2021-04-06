@@ -203,28 +203,6 @@ export default function StageTable(props){
                         </IconButton>
                     </Tooltip>
                 )}
-                <Tooltip title="Open existing Job Config">
-                    <Button
-                        variant= 'outlined'
-                        color= 'primary'
-                        onClick={() => {
-                            props.setStageSelectOpen(true)
-                            props.setStageFormOpen(false)
-                        }}
-                    >
-                        Open
-                    </Button>
-                </Tooltip>
-                <Tooltip title="Create Job Config">
-                    <Button
-                        variant= 'outlined'
-                        color= 'primary'
-                        onClick={handleCreateOpen}
-                        disabled={!(selected.length > 0)} >
-                        Create
-                    </Button>
-                </Tooltip>
-                
             </Toolbar>
             <Table classes={classes.root}>
                 <TableHead>

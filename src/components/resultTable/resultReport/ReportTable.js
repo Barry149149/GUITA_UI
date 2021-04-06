@@ -93,7 +93,7 @@ const useStyles = makeStyles(() => ({
 
 function Row(props){
     const classes=useStyles()
-    const {row,isOpen, handleOpenClick}=props
+    const {row,isOpen, handleOpenClick, jobData, setJobData, reportImg, setReportImg}=props
 
     const isItemOpened = isOpen(row.commandId)
     const [open, setOpen] = useState({
@@ -101,7 +101,6 @@ function Row(props){
         error: false
     })
 
-    
     return (
         <React.Fragment>
             <TableRow
@@ -255,7 +254,14 @@ function Row(props){
                             }
                             {(row.screenshotPath) ?
                                 <TableRow
-                                    onClick={props.handleImgDialogOpen}
+                                    onClick={()=>{
+                                        setReportImg({
+                                            ...reportImg,
+                                            name:row.screenshotPath,
+                                            path:reportImg.paths.indexOf(row.screenshotPath)
+                                        })
+                                        props.handleImgDialogOpen()
+                                    }}
                                     style={{
                                         cursor: 'pointer',
                                     }}
@@ -299,7 +305,7 @@ function ReportTableToolbar(props){
 }
 
 export default function ReportTable(props) {
-    const {setResultStep, jobData} = props
+    const {setResultStep, jobData, setJobData, reportImg, setReportImg} = props
 
     const classes = useStyles();
 
@@ -308,6 +314,7 @@ export default function ReportTable(props) {
     const [open, setOpen] = useState([])
 
     useEffect(()=>{
+        /*
         //TODO: change to correct path
         fetch('/api/v2/job/'+jobData.job_id+'/report/'+jobData.stage_id, {
             headers: {
@@ -321,9 +328,32 @@ export default function ReportTable(props) {
             }
             setResult(array)
             setFetched(true)
-        });
+
+            let paths = []
+            array.breakdown.map((row)=>{
+                if(typeof row.imgPath!=='undefined'&&row.imgPath) {
+                    paths.push(row.imgPath)
+                }
+            })
+
+            setReportImg({
+                paths: paths
+            })
+        });*/
+        let paths=[]
+        result.breakdown.map((row)=>{
+            if(typeof row.screenshotPath!=='undefined'&&row.screenshotPath){
+                paths.push(row.screenshotPath)
+            }
+        })
+        setReportImg({
+            paths:paths
+        })
     }, []);
 
+    useEffect(()=>{
+        console.log(reportImg.paths)
+    })
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);
         let newSelected = [];
@@ -392,8 +422,12 @@ export default function ReportTable(props) {
                                 <Row
                                     row={row}
                                     isOpen={isOpen}
+                                    jobData={jobData}
+                                    setJobData={setJobData}
                                     handleOpenClick={handleOpenClick}
                                     handleImgDialogOpen={props.handleImgDialogOpen}
+                                    reportImg={reportImg}
+                                    setReportImg={setReportImg}
                                 />
                             )}
                         </TableBody>

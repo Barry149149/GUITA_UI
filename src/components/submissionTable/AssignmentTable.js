@@ -82,7 +82,7 @@ function EnhancedTableHead(props) {
     const headCells = [
         { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
-        { id: 'test_case', numeric: false, label: 'Test Case'}
+        { id: 'test_case', numeric: false, label: 'Test Cases'}
     ];
 
     return (
@@ -182,6 +182,10 @@ export default function AssignmentTable(props) {
     const [fetched, setFetched]= useState(false)
     const [assignData, setAssignData]= useState([]);
     const [selected, setSelected]= useState('')
+    const [testcases, setTestcases]= useState({
+        assignment_id:[],
+        testcase:[]
+    })
     
 
     const handleRequestSort = (event, property) => {
@@ -199,9 +203,31 @@ export default function AssignmentTable(props) {
         }).then(response => response.json()).then(data => {
             console.log(data)
             const array = []
+            setTestcases({
+                assignment_id:[],
+                testcase:[]
+            })
             for(const value of data){
                 array.push(value)
+
+                fetch('/api/v2/assignment/'+value.assignment_id+'/testcase', {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(response => response.json()).then(row => {
+                    let tempAssignmentId = testcases.assignment_id;
+                    let tempTestcase = testcases.testcase;
+                    tempAssignmentId.push(row.assignment_id)
+                    tempTestcase.push(row.length);
+                    setTestcases({
+                        ...testcases,
+                        assignment_id:tempAssignmentId,
+                        testcase:tempTestcase
+                    });
+                    console.log(tempTestcase)
+                });
             }
+
             setAssignData(array)
             setFetched(true)
         });
@@ -237,6 +263,9 @@ export default function AssignmentTable(props) {
                                 .filter(e=>(e.assignment_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    let cell_testcase = [];
+                                    console.log(testcases.testcase);
+                                    (testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)] && testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)] != 0 )?cell_testcase.push(<TableCell>Total: {testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)]}</TableCell>):cell_testcase.push(<TableCell>Create New Test Case</TableCell>)
                                     return (
                                         <TableRow
                                             hover
@@ -263,10 +292,7 @@ export default function AssignmentTable(props) {
                                             <TableCell>
                                                 {row.assignment_name}
                                             </TableCell>
-                                            <TableCell>
-                                                {//refer to job table
-                                                }
-                                            </TableCell>
+                                                {cell_testcase}
                                         </TableRow>
                                     );
                                 })}
