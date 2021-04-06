@@ -243,19 +243,8 @@ export default function Editor() {
           nodes: [
             {id:1,
               value: 'Test 1',
-              json: [
-                {
-                  "command": 'Test 1'
-                }
-              ],
-              json_id:[
-                {
-                  id:1,
-                  command:{
-                    "command":'Test1'
-                  }
-                }
-              ]
+              json: [],
+              json_id:[]
             },
           ],
         },
