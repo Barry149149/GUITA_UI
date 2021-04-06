@@ -222,6 +222,7 @@ export default function Editor() {
 
   const [width, height] = useWindowSize();
 
+
   //this is for the test case management
   const [config,setConfig] = useState({
     driver:'',
@@ -430,7 +431,6 @@ export default function Editor() {
       run={guideRun}
     />;
   }
-
   return (
     <div className={classes.root}>
       {guide}
@@ -490,16 +490,13 @@ export default function Editor() {
           value={drawerValue}
           index={0}
         >
-            
             <Paper className={classes.submissionPaper}>
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
               />
             </Paper>
-            
             <div style={{height:20}}/>
-            
             <Paper className={classes.submissionPaper}>
               <JobConfigTable
                 jobBatch={jobBatch}
@@ -562,14 +559,22 @@ export default function Editor() {
                 state={state}
                 setFormOpen={setFormOpen}
                 dispatch={dispatch}
+                width={(drawerOpen)?(width-drawerWidth):width}
             />
           </Paper>
         </TabPanel>
         <TabPanel
             value={drawerValue}
             index={2}>
-            <Grid container spacing={3} justify='center'>
-              <Grid item xs={(stageFormOpen)?9:12}>
+          <div style={(width<1080)?{
+            width:'100%'
+          }:{
+            display: 'flex',
+            flexGrow: 1,
+            margin:0,
+            width:'100%',
+          }}>
+            <div id="commandTable" style={(contentWidth<1080)?{width:'100%'}:((!stageFormOpen)?{width:'100%'}:{width:'69%'})}>
                 <StageTable
                     stage={stage}
                     setStage={setStage}
@@ -580,10 +585,11 @@ export default function Editor() {
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
                 />
-              </Grid>
+              </div>
+            <div style={(contentWidth<1080)?{height:'20px'}:{width:'2%'}}/>
               {(stageFormOpen)?
                   <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                    <Grid item xs={3}>
+                    <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
                       <StageForm
                           stage={stage}
                           setStage={setStage}
@@ -593,7 +599,7 @@ export default function Editor() {
                           setCreatedStage={setCreatedStage}
                           testcases={state.present.tree[0].nodes}
                       />
-                    </Grid>
+                    </div>
                   </Grow>
                   :null}
                 {(stageSelectOpen)?
@@ -611,7 +617,7 @@ export default function Editor() {
                     </Grid>
                   </Grow>
                   :null}
-            </Grid>
+            </div>
         </TabPanel>
         <TabPanel
             value={drawerValue}
