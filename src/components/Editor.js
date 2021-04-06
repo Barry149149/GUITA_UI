@@ -592,7 +592,7 @@ export default function Editor() {
                     setCreateConfig={setCreateConfig}
                 />
               </div>
-            <div style={(contentWidth<1080)?{height:'20px'}:{width:'2%'}}/>
+            <div style={{height:'20px',width:'2%'}}/>
               {(stageFormOpen)?
                   <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
                     <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
