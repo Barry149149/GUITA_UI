@@ -25,9 +25,23 @@ export default function TablePanel(props){
 
     const [fetched, setFetched]=useState(false)
 
+    const [testcaseJson, setTestcaseJson]=useState([])
+
     useEffect(()=>{
         if(props.selectedAssignment){
             console.log(props.selectedAssignment)
+            fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
+            .then(data => {
+                console.log(data)
+                for(let i = 0;i<data.length; i++) {
+                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').then(response => response.json()).then( data => {
+                        console.log(data);
+                        let tempTestcase = testcaseJson;
+                        tempTestcase.push(data);
+                        setTestcaseJson(tempTestcase);
+                    })
+                }
+            })
         } else {
             setFetched(true)
         }
