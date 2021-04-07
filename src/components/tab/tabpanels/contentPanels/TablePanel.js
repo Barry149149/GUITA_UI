@@ -12,7 +12,7 @@ import React, {useState} from "react";
 
 
 export default function TablePanel(props){
-    const {tabValue,formOpen,state,setFormOpen,dispatch}=props
+    const {tabValue,formOpen,state,setFormOpen,dispatch,width}=props
 
     const [cmdSchema,setCmdSchema]=useState({
         command:'None',
@@ -24,10 +24,16 @@ export default function TablePanel(props){
     const [formData,setFormData]=useState({})
 
     return(
-        <TabPanel value={tabValue} index={1}>
-            <Grid container spacing={1} justify='center'>
-                <Grid item xs={(formOpen)?8:12}>
-                    <div id="commandTable">
+        <TabPanel value={tabValue} index={0}>
+            <div style={(width<1080)?{
+                width:'100%'
+            }:{
+                display: 'flex',
+                flexGrow: 1,
+                margin:0,
+                width:'100%',
+            }}>
+                    <div id="commandTable" style={(width<1080)?{width:'100%'}:((!formOpen)?{width:'100%'}:{width:'69%'})}>
                         <CommandTable
                             selectedCase={state.present.selectedCase}
                             formOpen={formOpen}
@@ -38,10 +44,11 @@ export default function TablePanel(props){
                             dispatch={dispatch}
                         />
                     </div>
-                </Grid>
                 {(formOpen)?
+                    <React.Fragment>
+                    <div style={(width<1080)?{height:'20px'}:{width:'2%'}}/>
                     <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
-                        <Grid item xs={(formOpen) ? 4 : 1}>
+                        <div style={(width<1080)?{width:'100%'}:{width:'29%'}}>
                             <Paper id="commandForm" elevation={3} >
                                 <Box pt={1}/>
                                 <Tooltip title="Close" style={{float: "right"}}>
@@ -66,10 +73,12 @@ export default function TablePanel(props){
                                     dispatch={dispatch}
                                 />
                             </Paper>
-                        </Grid>
-                    </Grow>:null
+                        </div>
+                    </Grow>
+                    </React.Fragment>
+                        :null
                 }
-            </Grid>
+            </div>
         </TabPanel>
     )
 }

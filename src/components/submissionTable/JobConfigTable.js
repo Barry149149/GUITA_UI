@@ -11,6 +11,14 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {Radio, TextField} from "@material-ui/core";
+import Button from '@material-ui/core/Button';
+import {PlaylistAdd} from "@material-ui/icons";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import {useForm} from "react-hook-form";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -108,11 +116,55 @@ function EnhancedTableHead(props) {
 }
 
 function TableToolbar(props){
-    const {classes,table, setFilterCriteria}=props
+    const {classes,table, setFilterCriteria, setFetched}=props
+    const { register, handleSubmit } = useForm();
+    const [createJobConfig, setCreateJobConfig] = useState(false);
+
+    const handleCreateJobConfigOpen=()=>{
+        setCreateJobConfig(true);
+    }
+    const handleCreateJobConfigClose=()=>{
+        setCreateJobConfig(false);
+        setFetched(false);
+    }
+
+    const handleCreateJobConfig=(data)=>{
+        fetch('/api/v2/job_config',{
+            method: 'POST',
+            body: JSON.stringify({"job_config_name": data.jobConfigName}),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(result => console.log(result)).catch(error => console.log(error));
+        handleCreateJobConfigClose();
+    }
 
     return(
         <Toolbar>
             <Typography className={classes.title} color="primary" variant="h7" >{table}</Typography>
+            <Button
+                onClick={()=>{
+                    props.setDrawerValue(2);
+                }}>
+                    <PlaylistAdd/>
+            </Button>
+            <Dialog open={createJobConfig} onClose={handleCreateJobConfigClose}>
+                <DialogTitle>Create Job Config</DialogTitle>
+                <DialogContent>
+                <DialogContentText>
+                    Enter config name.
+                </DialogContentText>
+                <form onSubmit={handleSubmit(handleCreateJobConfig)}>
+                    <input name="jobConfigName" ref={register({ required: true })} />
+                </form>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleCreateJobConfigClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">Confirm</Button>
+                </DialogActions>
+            </Dialog> 
             <TextField
                 label="Search"
                 onChange={(e)=>{
@@ -124,7 +176,7 @@ function TableToolbar(props){
 }
 
 export default function JobConfigTable(props) {
-    const {jobBatch, setJobBatch}=props
+    const {jobBatch, setJobBatch, drawerValue, setDrawerValue, handleDrawerChange}=props
 
     const classes = useStyles();
 
@@ -164,6 +216,10 @@ export default function JobConfigTable(props) {
                 table= "Job Configurations"
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
+                setFetched={setFetched}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
             />
             <TableContainer className={classes.container}>
                 {(fetched)?

@@ -27,6 +27,13 @@ export default function DrawerTab(props){
             variant="fullWidth"
             orientation="vertical"
         >
+            <Tooltip title="Job Submission" placement="right">
+                <Tab
+                    aria-labelledby='tab_submit'
+                    className={classes.tab}
+                    icon={<PublishIcon color='primary'/>}
+                    />
+            </Tooltip>
             <Tooltip title="Test Case" placement="right">
                 <Tab
                     aria-labelledby='tab_cases'
@@ -40,13 +47,6 @@ export default function DrawerTab(props){
                     className={classes.tab}
                     icon={<TuneIcon color='primary'/>}
                 />
-            </Tooltip>
-            <Tooltip title="Job Submission" placement="right">
-                <Tab
-                    aria-labelledby='tab_submit'
-                    className={classes.tab}
-                    icon={<PublishIcon color='primary'/>}
-                    />
             </Tooltip>
             <Tooltip title="Grading Result" placement="right">
                 <Tab

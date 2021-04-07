@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     paper:{
         overflowX:'auto',
         overflow:'auto',
+        height:500,
         maxHeight:700,
     },
     tableRow: {

@@ -89,9 +89,9 @@ export default function CaseTree(props){
                             createdCases:props.createdCases+1,
                             noOfCases:props.noOfCases+1,
                             selectedCase:{
-                                id: props.tree[0].nodes[props.tree[0].nodes.length-1].id,
-                                json: props.tree[0].nodes[props.tree[0].nodes.length-1].json,
-                                json_id: props.tree[0].nodes[props.tree[0].nodes.length-1].json_id,
+                                id: (props.createdCases+1),
+                                json: [],
+                                json_id: [],
                             },
                         }
                     })
@@ -223,6 +223,7 @@ export default function CaseTree(props){
             </ButtonGroup>
             <Box id="caseTree">
             <MuiTreeView
+                defaultExpanded
                 tree={props.tree}
                 onLeafClick={e=>{
                     if(e.id===props.selectedCase.id) return

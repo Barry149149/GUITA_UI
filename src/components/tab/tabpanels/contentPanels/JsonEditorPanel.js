@@ -9,7 +9,7 @@ export default function JsonEditorPanel(props){
     const {classes,tabValue,style,state,dispatch}=props
 
     return(
-        <TabPanel value={tabValue} index={0}>
+        <TabPanel value={tabValue} index={1}>
             <JsonEditor
                 selectedCase={state.present.selectedCase}
                 style={style}

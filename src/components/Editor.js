@@ -40,6 +40,7 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
+
 const drawerWidth = 360;
 
 function stateReducer(state, action){
@@ -227,6 +228,7 @@ export default function Editor() {
 
   const [width, height] = useWindowSize();
 
+
   //this is for the test case management
   const [config,setConfig] = useState({
     driver:'',
@@ -248,19 +250,8 @@ export default function Editor() {
           nodes: [
             {id:1,
               value: 'Test 1',
-              json: [
-                {
-                  "command": 'Test 1'
-                }
-              ],
-              json_id:[
-                {
-                  id:1,
-                  command:{
-                    "command":'Test1'
-                  }
-                }
-              ]
+              json: [],
+              json_id:[]
             },
           ],
         },
@@ -283,7 +274,7 @@ export default function Editor() {
   const [stageFormOpen,setStageFormOpen]=useState(false)
   const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
-
+  const [assignment, setAssignment] = useState(false);
   const contentWidth= width-((drawerOpen)?360:80)
 
   //this is for the editor
@@ -294,15 +285,15 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(0);
+  const [resultStep,setResultStep]=useState(3);
 
   const [guideRun,setGuideRun] = useState(true);
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue===newValue && (newValue===0||newValue===2) ){
+    if(drawerValue===newValue && (newValue===0||newValue===1) ){
       setDrawerOpen(!drawerOpen)
     }else{
-      if(newValue===0||newValue===2) setDrawerOpen(true)
+      if(newValue===0||newValue===1) setDrawerOpen(true)
       else setDrawerOpen(false)
     }
 
@@ -325,7 +316,9 @@ export default function Editor() {
     result: [],
   });
 
-  const [jobData, setJobData]= useState({})
+  const [jobData, setJobData]= useState({
+    imgPath:[]
+  })
 
   //this is for job batch result
   const [jobBatch, setJobBatch]= useState({
@@ -339,7 +332,8 @@ export default function Editor() {
 
   const [reportImg, setReportImg]= useState({
     name:"",
-    path:""
+    path:"",
+    paths:[]
   });
 
   //this is for zip submission
@@ -446,7 +440,6 @@ export default function Editor() {
       run={guideRun}
     />;
   }
-
   return (
     <div className={classes.root}>
       {guide}
@@ -503,13 +496,36 @@ export default function Editor() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <TabPanel
+          value={drawerValue}
+          index={0}
+        >
+            <Paper className={classes.submissionPaper}>
+              <AssignmentTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+              />
+            </Paper>
+            <div style={{height:20}}/>
+            <Paper className={classes.submissionPaper}>
+              <JobConfigTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
+              />
+            </Paper>
+            
+            
+        </TabPanel>
+        <TabPanel
             value={drawerValue}
-            index={0}
+            index={1}
         >
           <Paper className={classes.paper2}>
             <Toolbar className={classes.toolbar2}>
               <Typography className={classes.title} color="primary" variant="h5" component="div">
-                {(tabValue===0)?"JSON Code Editor ":"Table & Form Mode "}
+                {(tabValue===0)?"Table & Form Mode ":"JSON Code Editor "}
                  \ Test Case {state.present.selectedCase.id}
               </Typography>
               <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
@@ -524,19 +540,19 @@ export default function Editor() {
                   indicatorColor="primary"
                   centered={true}
               >
-                <Tooltip title="CodeEditor">
-                  <Tab
-                      className={classes.tab}
-                      aria-label="tab_codeEditor"
-                      icon={<CodeIcon color="primary"/>}
-                      {...a11yProps(0)}
-                  />
-                </Tooltip>
                 <Tooltip title="Table Mode">
                   <Tab
                       className={classes.tab}
                       aria-label="tab_tableView"
                       icon={<TableChartIcon color="primary"/>}
+                      {...a11yProps(0)}
+                  />
+                </Tooltip>
+                <Tooltip title="CodeEditor">
+                  <Tab
+                      className={classes.tab}
+                      aria-label="tab_codeEditor"
+                      icon={<CodeIcon color="primary"/>}
                       {...a11yProps(1)}
                   />
                 </Tooltip>
@@ -555,14 +571,22 @@ export default function Editor() {
                 state={state}
                 setFormOpen={setFormOpen}
                 dispatch={dispatch}
+                width={(drawerOpen)?(width-drawerWidth):width}
             />
           </Paper>
         </TabPanel>
         <TabPanel
             value={drawerValue}
-            index={1}>
-            <Grid container spacing={3} justify='center'>
-              <Grid item xs={(stageFormOpen)?9:12}>
+            index={2}>
+          <div style={(width<1080)?{
+            width:'100%'
+          }:{
+            display: 'flex',
+            flexGrow: 1,
+            margin:0,
+            width:'100%',
+          }}>
+            <div id="commandTable" style={(contentWidth<1080)?{width:'100%'}:((!stageFormOpen)?{width:'100%'}:{width:'69%'})}>
                 <StageTable
                     stage={stage}
                     setStage={setStage}
@@ -573,10 +597,11 @@ export default function Editor() {
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
                 />
-              </Grid>
+              </div>
+            <div style={(contentWidth<1080)?{height:'20px'}:{width:'2%'}}/>
               {(stageFormOpen)?
                   <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                    <Grid item xs={3}>
+                    <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
                       <StageForm
                           stage={stage}
                           setStage={setStage}
@@ -586,7 +611,7 @@ export default function Editor() {
                           setCreatedStage={setCreatedStage}
                           testcases={state.present.tree[0].nodes}
                       />
-                    </Grid>
+                    </div>
                   </Grow>
                   :null}
                 {(stageSelectOpen)?
@@ -604,35 +629,6 @@ export default function Editor() {
                     </Grid>
                   </Grow>
                   :null}
-            </Grid>
-        </TabPanel>
-        <TabPanel
-          value={drawerValue}
-          index={2}
-        >
-
-          <div style={(contentWidth>960)?{
-            width:'100%',
-            display: 'flex',
-            flexGrow: 1,
-          }:{}}>
-            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
-            <Paper className={classes.submissionPaper}>
-              <AssignmentTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-              />
-            </Paper>
-            </div>
-            <div style={(contentWidth>960)?{width:'2%'}:{height:20}}/>
-            <div style={(contentWidth>960)?{width:'49%'}:{width:'100%'}}>
-            <Paper className={classes.submissionPaper}>
-              <JobConfigTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-              />
-            </Paper>
-            </div>
             </div>
         </TabPanel>
         <TabPanel
@@ -655,7 +651,10 @@ export default function Editor() {
                             <ReportTable
                               setResultStep={setResultStep}
                               jobData={jobData}
+                              setJobData={setJobData}
                               handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
+                              reportImg={reportImg}
+                              setReportImg={setReportImg}
                             />
                     }
                     </Paper>
@@ -680,7 +679,10 @@ export default function Editor() {
               open={imgDialogOpen}
               handleClose={()=>setImgDialogOpen(false)}
               title={reportImg.name}
-              imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+              jobData={jobData}
+              reportImg={reportImg}
+              setReportImg={setReportImg}
+              //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
           />
       </main>
     </div>
@@ -688,14 +690,14 @@ export default function Editor() {
 }
 
 function ReportImageDialog(props){
-  const {open ,imgPath, title, handleClose}=props
+  const {open, title, handleClose, jobData, reportImg, setReportImg}=props
   return(
       <Dialog
           open={open}
           onClose={handleClose}
           maxWidth='md'
       >
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle>{reportImg.paths[reportImg.path]}</DialogTitle>
         <div
             style={{
               display: 'flex',
@@ -703,15 +705,29 @@ function ReportImageDialog(props){
               margin:0
             }}
         >
-          <Button>
+          <Button onClick={()=>{
+            if(reportImg.path>0){
+              setReportImg({
+                ...reportImg,
+                path:reportImg.path-1,
+              })
+            }
+          }}>
             <KeyboardArrowLeftIcon/>
           </Button>
             <div style={{
               width: '100%',
             }}>
-              <img src={imgPath} width="100%" height="100%"/>
+              <img src={'/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/'+reportImg.paths[reportImg.path]} width="100%" height="100%"/>
             </div>
-          <Button>
+            <Button onClick={()=>{
+            if(reportImg.path<reportImg.paths.length){
+              setReportImg({
+                ...reportImg,
+                path:reportImg.path+1
+              })
+            }
+          }}>
             <KeyboardArrowRightIcon/>
           </Button>
         </div>
