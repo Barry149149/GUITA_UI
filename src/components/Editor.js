@@ -279,7 +279,7 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(3);
+  const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -329,6 +329,9 @@ export default function Editor() {
     path:"",
     paths:[]
   });
+ 
+  const [selectedJobConfig, setSelectedJobConfig] = useState(0);
+  const [selectedAssignment, setSelectedAssignmnet]=useState(0);
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -497,6 +500,12 @@ export default function Editor() {
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
+                selectedAssignment={setAssignment}
+                setSelectedAssignment={setAssignment}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
+                setDrawerOpen={setDrawerOpen}
               />
             </Paper>
             <div style={{height:20}}/>
@@ -507,6 +516,8 @@ export default function Editor() {
                 drawerValue={drawerValue}
                 setDrawerValue={setDrawerValue}
                 handleDrawerChange={handleDrawerChange}
+                setSelectedJobConfig={setSelectedJobConfig}
+                setDrawerOpen={setDrawerOpen}
               />
             </Paper>
             
@@ -566,6 +577,7 @@ export default function Editor() {
                 setFormOpen={setFormOpen}
                 dispatch={dispatch}
                 width={(drawerOpen)?(width-drawerWidth):width}
+                selectedAssignment={selectedAssignment}
             />
           </Paper>
         </TabPanel>
@@ -590,6 +602,7 @@ export default function Editor() {
                     setStageSelectOpen={setStageSelectOpen}
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
+                    selectedJobConfig={selectedJobConfig}
                 />
               </div>
             <div style={(contentWidth<1080)?{height:'20px'}:{width:'2%'}}/>

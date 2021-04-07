@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 
@@ -22,6 +22,16 @@ export default function TablePanel(props){
         formData:''
     })
     const [formData,setFormData]=useState({})
+
+    const [fetched, setFetched]=useState(false)
+
+    useEffect(()=>{
+        if(props.selectedAssignment){
+            console.log(props.selectedAssignment)
+        } else {
+            console.log("NO")
+        }
+    })
 
     return(
         <TabPanel value={tabValue} index={0}>

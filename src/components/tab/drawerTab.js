@@ -6,6 +6,7 @@ import ListAltIcon from "@material-ui/icons/ListAlt";
 import TabIcon from "@material-ui/icons/Tab";
 import DescriptionIcon from "@material-ui/icons/Description";
 import PublishIcon from '@material-ui/icons/Publish';
+import HomeIcon from '@material-ui/icons/Home';
 import React from "react";
 import {
     BrowserRouter as Router,
@@ -31,7 +32,7 @@ export default function DrawerTab(props){
                 <Tab
                     aria-labelledby='tab_submit'
                     className={classes.tab}
-                    icon={<PublishIcon color='primary'/>}
+                    icon={<HomeIcon color='primary'/>}
                     />
             </Tooltip>
             <Tooltip title="Test Case" placement="right">

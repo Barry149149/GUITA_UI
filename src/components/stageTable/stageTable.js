@@ -60,6 +60,7 @@ export default function StageTable(props){
     const [open,setOpen]=useState([])
     const [create, setCreate]=useState(false)
     const { register, handleSubmit } = useForm()
+    const [fetched, setFetched] = useState(false)
 
     const handleClick = (event, id) => {
         const selectedIndex = selected.indexOf(id);
@@ -152,23 +153,44 @@ export default function StageTable(props){
         }).then(result => {return result.json()}).then(data => {
             //console.log(data)
             // TODO: for each
-            for(let i=0; i<selected.length; i++){
+            for(let i=0; i<props.stage.length; i++){
                 fetch('/api/v2/job_config/'+data.job_config_id+'/job_stage', {
                     method: 'POST',
-                    body: JSON.stringify(props.stage[selected[i]].json),
+                    body: JSON.stringify(props.stage[i].json),
                     headers: {
                         'content-type': 'application/json'
                     }
-                }).then(result => console.log(result))
+                })
             }
         }).catch(error => console.log(error))
 
         setCreate(false)
     }
+    const saveConfig=()=>{
+
+    }
 
     useEffect(()=>{
-        console.log(props.stage)
-    })
+        console.log(props.selectedJobConfig)
+        if(props.selectedJobConfig){
+            fetch('/api/v2/job_config/'+props.selectedJobConfig+'/job_stage',{
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                console.log(data)
+                const array = []
+                for(let i=0; i<data.length; i++){
+                    const item = {id: i, json: data[i]}
+                    array.push(item)
+                }
+                props.setStage(array)
+                setFetched(true)
+            });
+        } else{
+            props.setStage([]);
+            setFetched(true)};
+    },[])
     const isSelected = (id) => selected.indexOf(id) !== -1;
     const isOpen = (id) =>open.indexOf(id) !== -1;
 
@@ -183,6 +205,32 @@ export default function StageTable(props){
                     </Typography>):(<Typography className={classes.title} variant="h6" color="primary">
                     Stage Table
                 </Typography>)}
+                {(props.selectedJobConfig)?(
+                    <Tooltip title="Save">
+                    <Button
+                        id='button_commandSave'
+                        variant= 'outlined'
+                        color= 'primary'
+                        onClick={() => {
+                            
+                        }}>
+                        Save
+                    </Button>
+                    </Tooltip>
+                ):(
+                    <Tooltip title="Submit New Job Config">
+                    <Button
+                        id='button_commandSubmit'
+                        variant= 'outlined'
+                        color= 'primary'
+                        onClick={() => {
+                            setCreate(true);
+                        }}>
+                        Submit
+                    </Button>
+                    </Tooltip>
+                )
+                }
                 {!(selected.length > 0) ?(
                     <Tooltip title="Add">
                         <Grow in={!(props.stageFormOpen||selected.length >0)}>
@@ -204,6 +252,7 @@ export default function StageTable(props){
                     </Tooltip>
                 )}
             </Toolbar>
+            {(fetched)?
             <Table classes={classes.root}>
                 <TableHead>
                     <TableRow
@@ -307,10 +356,11 @@ export default function StageTable(props){
                     })}
                 </TableBody>
             </Table>
+            :null}
             <Dialog open={create} onClose={handleCreateClose}>
-                <DialogTitle>Create Job Configuration</DialogTitle>
+                <DialogTitle>Submit New Job Configurations</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Enter configuration name</DialogContentText>
+                    <DialogContentText>Enter config name</DialogContentText>
                     <form onSubmit={handleSubmit(createConfig)}>
                         <input name="config" ref={register({ required: true })} />
                     </form>

@@ -35,6 +35,8 @@ export default function TreePanel(props){
         value={props.drawerValue}
         index={1}>
             <Title>Test Cases</Title>
+            <Divider/>
+            <Box pt={3} />
             <TextField
                 size="small"
                 className={classes.readOnlyBox}
@@ -73,8 +75,8 @@ export default function TreePanel(props){
                 />
             </Button>
             <p style={{fontSize:12, color:'#888888'}}> Select the Image Zip (Applicable to all Test Cases)</p>
-            <Box pt={3} />
-            <Divider/>
+            
+            
             <CaseTree
                 selectedCase={props.selectedCase}
                 tree={props.tree}

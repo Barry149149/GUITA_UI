@@ -169,19 +169,21 @@ export default function JobTable(props) {
     
     useEffect(()=>{
         //TODO: change to correct path
-        fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
-            console.log(data)
-            const array = []
-            for(const value of data){
-                array.push(value)
-            }
-            setResult(array)
-            setFetched(true)
-        });
+        if(jobData.job_batch_id){
+            fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                console.log(data)
+                const array = []
+                for(const value of data){
+                    array.push(value)
+                }
+                setResult(array)
+                setFetched(true)
+            });
+        }
     }, []);
 
     return (

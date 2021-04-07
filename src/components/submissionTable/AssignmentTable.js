@@ -19,6 +19,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {useForm} from "react-hook-form";
 import {PlaylistAdd} from "@material-ui/icons";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -173,7 +174,10 @@ function TableToolbar(props){
 }
 
 export default function AssignmentTable(props) {
-    const {jobBatch, setJobBatch} = props
+    const {jobBatch, setJobBatch, selectedAssignment, setSelectedAssignment,drawerValue,
+    setDrawerValue,
+    handleDrawerChange,
+    setDrawerOpen} = props
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
@@ -185,7 +189,7 @@ export default function AssignmentTable(props) {
     const [testcases, setTestcases]= useState({
         assignment_id:[],
         testcase:[]
-    })
+    });
     
 
     const handleRequestSort = (event, property) => {
@@ -194,43 +198,71 @@ export default function AssignmentTable(props) {
         setOrderBy(property);
     };
 
+    const handleCellClick = (assignment_id) =>{
+        console.log(assignment_id);
+        setSelectedAssignment(assignment_id);
+        setDrawerOpen(true);
+        setDrawerValue(1);
+        
+    }
+
     useEffect(()=>{
         //TODO: change to correct path
+        const url = '/api/v2/assignment';
+
         fetch('/api/v2/assignment', {
             headers: {
-                'content-type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
-            console.log(data)
-            const array = []
-            setTestcases({
-                assignment_id:[],
-                testcase:[]
+                'conten-type': 'application/json'
+            }}).then((response)=>response.json()).then((data)=>{
+                setAssignData(data)
+                setFetched(true)
             })
-            for(const value of data){
-                array.push(value)
+            /*
+        (async()=>{
+        let results;
+        try{
+            const repos = await 
+                setAssignData([...repos])
+            const responses = await Promise.all(
+                repos.map((item) => {
+                    return fetch(
+                        '/api/v2/assignment/'+item.assignment_id+'/testcase',{
+                            headers: {
+                                'content-type': 'application/json'
+                            }
+                        }
+                    );
+                })
+            );
 
-                fetch('/api/v2/assignment/'+value.assignment_id+'/testcase', {
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(response => response.json()).then(row => {
-                    let tempAssignmentId = testcases.assignment_id;
-                    let tempTestcase = testcases.testcase;
-                    tempAssignmentId.push(row.assignment_id)
-                    tempTestcase.push(row.length);
-                    setTestcases({
-                        ...testcases,
-                        assignment_id:tempAssignmentId,
-                        testcase:tempTestcase
-                    });
-                    console.log(tempTestcase)
-                });
+            const filteredResponses = responses.filter((res)=>res.status === 200);
+            results = Promise.all(
+                filteredResponses.map(async(fr) => {
+                    const row = await fr.json();
+                return {
+                    row: row
+                };
+                })
+            );
+        } catch (err) {
+            console.log("Error: ", err);
+        }
+
+        results.then((s)=>{
+            let tempLength =[]
+            let tempAssignment=[]
+            for(let i=0; i<s.length; i++){
+                console.log(s[i].row[0])
+                //tempLength.push(value.length)
             }
-
-            setAssignData(array)
+            setTestcases({
+                ...testcases,
+                testcase:tempLength
+            })
             setFetched(true)
-        });
+        })
+        
+    })();*/
     }, [fetched]);
 
     return (
@@ -264,8 +296,37 @@ export default function AssignmentTable(props) {
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_testcase = [];
-                                    console.log(testcases.testcase);
-                                    (testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)] && testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)] != 0 )?cell_testcase.push(<TableCell>Total: {testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)]}</TableCell>):cell_testcase.push(<TableCell>Create New Test Case</TableCell>)
+                                   
+                                    cell_testcase.push(
+                                        <TableCell>
+                                        <Button    
+                                            id='button_commandSave'
+                                            color= 'primary'
+                                            onClick={(e)=>{
+                                                handleCellClick(row.assignment_id)
+                                            }}>
+                                                <AddCircleOutlineIcon/>
+                                            </Button>
+                                            </TableCell>)
+                                            /*
+                                    if(testcases[row.assignment_id-1].length){
+                                        cell_testcase.push(
+                                            <TableCell>Total: {testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)]}</TableCell>
+                                            )
+                                    } else {
+                                    cell_testcase.push(
+                                    <TableCell>
+                                    <Button    
+                                        id='button_commandSave'
+                                        variant= 'outlined'
+                                        color= 'primary'
+                                        onClick={() => {
+                                            
+                                        }}>
+                                            Create New Test Cases
+                                        </Button>
+                                        </TableCell>)
+                                    }*/ 
                                     return (
                                         <TableRow
                                             hover
