@@ -199,7 +199,7 @@ function Row(props){
                                         className={classes.tableCell}
                                     >
                                     <Typography variant="h8" gutterBottom component="div">
-                                        result: {row.result.value.toString()}
+                                        result: {(row.result.value === null)?'null':row.result.value.toString()}
                                     </Typography>
                                     <Collapse in={open.result}>
                                     <Box border={1} borderColor="grey.500"
@@ -309,51 +309,41 @@ export default function ReportTable(props) {
 
     const classes = useStyles();
 
-    const [fetched, setFetched] = useState(true);
-    const [result, setResult] = useState(resultSample);
+    const [fetched, setFetched] = useState(false);
+    const [result, setResult] = useState([]);
     const [open, setOpen] = useState([])
 
     useEffect(()=>{
-        /*
+        
         //TODO: change to correct path
-        fetch('/api/v2/job/'+jobData.job_id+'/report/'+jobData.stage_id, {
+        fetch('/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/report.json', {
             headers: {
                 'content-type': 'application/json'
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => response.json()).then(async(data) => {
             console.log(data)
-            const array = []
-            for(const value of data){
-                array.push(value)
-            }
-            setResult(array)
-            setFetched(true)
 
-            let paths = []
-            array.breakdown.map((row)=>{
-                if(typeof row.imgPath!=='undefined'&&row.imgPath) {
-                    paths.push(row.imgPath)
+            let paths=[]
+            if(typeof data.breakdown!=='undefined'){
+            data.breakdown.map((row)=>{
+                if(typeof row.screenshotPath!=='undefined'&&row.screenshotPath){
+                    paths.push(row.screenshotPath)
                 }
             })
-
             setReportImg({
-                paths: paths
-            })
-        });*/
-        let paths=[]
-        result.breakdown.map((row)=>{
-            if(typeof row.screenshotPath!=='undefined'&&row.screenshotPath){
-                paths.push(row.screenshotPath)
-            }
-        })
-        setReportImg({
-            paths:paths
-        })
-    }, []);
+                paths:paths
+            })}
 
+            setResult(data)
+            setFetched(true)
+        });
+        
+    }, []);
+/*
     useEffect(()=>{
         console.log(reportImg.paths)
     })
+ */   
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);
         let newSelected = [];
@@ -379,10 +369,12 @@ export default function ReportTable(props) {
             setOpen([]);
             return
         }
-        for (let i = 0; i < result.breakdown.length; i++) {
-            newSelected.push(i + 1)
+        if(typeof result.breakdown!=='undefined'){
+            for (let i = 0; i < result.breakdown.length; i++) {
+                newSelected.push(i + 1)
+            }
+            setOpen(newSelected)
         }
-        setOpen(newSelected)
     }
 
     const isOpen = (id) => open.indexOf(id) !== -1;
@@ -411,12 +403,13 @@ export default function ReportTable(props) {
                             <TableCell align="right">
                                 <IconButton id="button_expandRow" size="small"
                                             onClick={(e) => openAll()}>
-                                    {(result.breakdown.length > 0 && result.breakdown.length === open.length) ?
+                                    {(typeof result.breakdown!=='undefined' && result.breakdown.length > 0 && result.breakdown.length === open.length) ?
                                         <KeyboardArrowUpIcon/> :
                                         <KeyboardArrowDownIcon/>}
                                 </IconButton>
                             </TableCell>
                         </TableHead>
+                        {(typeof result.breakdown!=='undefined')?
                         <TableBody>
                             {result.breakdown.map((row, index) =>
                                 <Row
@@ -430,7 +423,8 @@ export default function ReportTable(props) {
                                     setReportImg={setReportImg}
                                 />
                             )}
-                        </TableBody>
+                        </TableBody>:null
+                        }
                     </Table>
                     : null}
             </TableContainer>

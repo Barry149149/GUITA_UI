@@ -144,6 +144,7 @@ function TableToolbar(props){
             <Typography className={classes.title} color="primary" variant="h7" >{table}</Typography>
             <Button
                 onClick={()=>{
+                    props.setDrawerOpen(false);
                     props.setDrawerValue(2);
                 }}>
                     <PlaylistAdd/>
@@ -164,7 +165,7 @@ function TableToolbar(props){
                 </Button>
                 <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">Confirm</Button>
                 </DialogActions>
-            </Dialog> 
+            </Dialog>
             <TextField
                 label="Search"
                 onChange={(e)=>{
@@ -176,7 +177,7 @@ function TableToolbar(props){
 }
 
 export default function JobConfigTable(props) {
-    const {jobBatch, setJobBatch, drawerValue, setDrawerValue, handleDrawerChange}=props
+    const {jobBatch, setJobBatch, drawerValue, setDrawerValue, handleDrawerChange, setSelectedJobConfig,setDrawerOpen}=props
 
     const classes = useStyles();
 
@@ -210,6 +211,14 @@ export default function JobConfigTable(props) {
         });
     }, []);
 
+    const handleCellClick = (job_config_id) =>{
+        console.log(job_config_id)
+        setSelectedJobConfig(job_config_id);
+        setDrawerOpen(false);
+        setDrawerValue(2);
+        
+    }
+
     return (
         <div className={classes.root}>
             <TableToolbar
@@ -220,6 +229,7 @@ export default function JobConfigTable(props) {
                 drawerValue={drawerValue}
                 setDrawerValue={setDrawerValue}
                 handleDrawerChange={handleDrawerChange}
+                setDrawerOpen={setDrawerOpen}
             />
             <TableContainer className={classes.container}>
                 {(fetched)?
@@ -261,13 +271,25 @@ export default function JobConfigTable(props) {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell hover
+                                                style={{cursor:'pointer'}}
+                                                onClick={(e)=>{
+                                                handleCellClick(row.job_config_id)}
+                                            }>
                                                 {row.job_config_id}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell hover
+                                                style={{cursor:'pointer'}}
+                                                onClick={(e)=>{
+                                                handleCellClick(row.job_config_id)}
+                                            }>
                                                 {row.job_config_name}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell hover
+                                                style={{cursor:'pointer'}}
+                                                onClick={(e)=>{
+                                                handleCellClick(row.job_config_id)}
+                                            }>
                                                 {row.created_at}
                                             </TableCell>
                                         </TableRow>

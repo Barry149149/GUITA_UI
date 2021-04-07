@@ -100,3 +100,26 @@ export default function JsonEditor(props) {
             />
         </React.Fragment>)
 }
+
+/*
+    let new_json_id = []
+    for (let i = 0; i < e.jsObject.length; i++) {
+                            let tempDescription={}
+                            if(typeof e.jsObject[i].description==='undefined') {
+                                if(typeof e.jsObject[i].setVariable!=='undefined') tempDescription ={description:e.jsObject[i].setVariable}
+                                else if(typeof e.jsObject[i].widgetName!=='undefined') tempDescription ={description:e.jsObject[i].widgetName}
+                                else if(typeof e.jsObject[i].widget!=='undefined') tempDescription ={description:e.jsObject[i].widget.value}
+                                else if(typeof e.jsObject[i].time!=='undefined') tempDescription ={description:e.jsObject[i].time}
+                                else if(typeof e.jsObject[i].value!=='undefined') tempDescription ={description:e.jsObject[i].value}
+                                else tempDescription={description: ' '}
+                            }
+                            new_json_id.push({
+                                id: (i + 1),
+                                command: {
+                                    ...e.jsObject[i],
+                                    ...tempDescription,
+                                },
+
+                            })
+                        }
+ */

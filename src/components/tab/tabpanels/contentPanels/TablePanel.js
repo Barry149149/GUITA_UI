@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 
@@ -23,6 +23,30 @@ export default function TablePanel(props){
     })
     const [formData,setFormData]=useState({})
 
+    const [fetched, setFetched]=useState(false)
+
+    const [testcaseJson, setTestcaseJson]=useState([])
+
+    useEffect(()=>{
+        if(props.selectedAssignment){
+            console.log(props.selectedAssignment)
+            fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
+            .then(data => {
+                console.log(data)
+                for(let i = 0;i<data.length; i++) {
+                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').then(response => response.json()).then( data => {
+                        console.log(data);
+                        let tempTestcase = testcaseJson;
+                        tempTestcase.push(data);
+                        setTestcaseJson(tempTestcase);
+                    })
+                }
+            })
+        } else {
+            setFetched(true)
+        }
+    },[fetched])
+
     return(
         <TabPanel value={tabValue} index={0}>
             <div style={(width<1080)?{
@@ -33,6 +57,7 @@ export default function TablePanel(props){
                 margin:0,
                 width:'100%',
             }}>
+               {(fetched)?
                     <div id="commandTable" style={(width<1080)?{width:'100%'}:((!formOpen)?{width:'100%'}:{width:'69%'})}>
                         <CommandTable
                             selectedCase={state.present.selectedCase}
@@ -44,6 +69,7 @@ export default function TablePanel(props){
                             dispatch={dispatch}
                         />
                     </div>
+                    :null}
                 {(formOpen)?
                     <React.Fragment>
                     <div style={(width<1080)?{height:'20px'}:{width:'2%'}}/>

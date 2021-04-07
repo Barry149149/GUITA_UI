@@ -1,5 +1,5 @@
 import React, {useState, useReducer,useLayoutEffect, } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {lighten, makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -41,7 +41,7 @@ import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
 
-const drawerWidth = 360;
+const drawerWidth = 440;
 
 function stateReducer(state, action){
   const {past, present, future} = state;
@@ -62,6 +62,12 @@ function stateReducer(state, action){
         past: [...past,present],
         present: next,
         future: newFuture
+      }
+    case 'SET':
+      return{
+        past:[],
+        present: action.data,
+        future: []
       }
     default:
       if(present===action.data) return state
@@ -127,9 +133,9 @@ const useStyles = makeStyles((theme) => ({
       duration: 100,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(8) + 1,
+    width: theme.spacing(16) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(8) + 1,
+      width: theme.spacing(16) + 1,
     },
   },
   drawerPaper: {
@@ -160,10 +166,19 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  tab2:{
+    display: 'flex',
+    minWidth: 120,
+    width: 120,
+    "&$selected": {
+      backgroundColor: lighten(theme.palette.primary.light, 0.85),
+    }
+  },
   tab:{
     display: 'flex',
-    minWidth: 60,
-    width: 60,
+    minWidth: 80,
+    width: 80,
+
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -195,6 +210,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
   },
+  selected:{}
 }));
 function a11yProps(index) {
   return {
@@ -232,6 +248,7 @@ export default function Editor() {
     assignments:'', //submission batch
     assignmentsName: '',
   });
+  const [selectedConfig, setSelectedConfig]=useState([])
   const [stage,setStage]=useState([])
   const [createdStage,setCreatedStage]=useState(0)
 
@@ -279,7 +296,7 @@ export default function Editor() {
 
   const [tabValue, setTabValue] = useState(0);
   const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(3);
+  const [resultStep,setResultStep]=useState(0);
 
   const [guideRun,setGuideRun] = useState(true);
 
@@ -329,6 +346,9 @@ export default function Editor() {
     path:"",
     paths:[]
   });
+ 
+  const [selectedJobConfig, setSelectedJobConfig] = useState(0);
+  const [selectedAssignment, setSelectedAssignment]=useState(0);
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -497,20 +517,17 @@ export default function Editor() {
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
-              />
-            </Paper>
-            <div style={{height:20}}/>
-            <Paper className={classes.submissionPaper}>
-              <JobConfigTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
+                selectedAssignment={selectedAssignment}
+                setSelectedAssignment={setSelectedAssignment}
                 drawerValue={drawerValue}
                 setDrawerValue={setDrawerValue}
                 handleDrawerChange={handleDrawerChange}
+                setDrawerOpen={setDrawerOpen}
+                setSelectedJobConfig={setSelectedJobConfig}
+                selectedConfig={selectedConfig}
+                setSelectedConfig={setSelectedConfig}
               />
             </Paper>
-            
-            
         </TabPanel>
         <TabPanel
             value={drawerValue}
@@ -566,6 +583,7 @@ export default function Editor() {
                 setFormOpen={setFormOpen}
                 dispatch={dispatch}
                 width={(drawerOpen)?(width-drawerWidth):width}
+                selectedAssignment={selectedAssignment}
             />
           </Paper>
         </TabPanel>
@@ -590,6 +608,7 @@ export default function Editor() {
                     setStageSelectOpen={setStageSelectOpen}
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
+                    selectedJobConfig={selectedJobConfig}
                 />
               </div>
             <div style={{height:'20px',width:'2%'}}/>

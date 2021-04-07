@@ -85,31 +85,7 @@ export default function StageForm(props) {
                     </FormControl>
                     <br/>
                     <FormControl className={classes.form} required={true}>
-                        <Typography id="stageForm_slider" gutterBottom>
-                            Priority:
-                        </Typography>
-                        <Grid container spacing={1} alignItems="center">
-                            <Grid item xs>
-                                <Slider
-                                    className={classes.slider}
-                                    id="stage_priority"
-                                    label="Priority"
-                                    value={newStage.priority}
-                                    step={1}
-                                    marks
-                                    min={0}
-                                    max={50}
-                                    valueLabelDisplay="auto"
-                                    defaultValue={0}
-                                    onChange={(e, v) => (
-                                        setNewStage({
-                                            ...newStage,
-                                            priority: v
-                                        })
-                                    )}
-                                />
-                            </Grid>
-                            <Grid item>
+                        Priority:
                                 <Input
                                     className={classes.input}
                                     value={newStage.priority}
@@ -128,8 +104,6 @@ export default function StageForm(props) {
                                         'aria-labelledby': 'input-slider',
                                     }}
                                 />
-                            </Grid>
-                        </Grid>
                     </FormControl>
                     <div style={{paddingLeft: 7, paddingRight: 7}}>
                         <Typography id="stageForm_slider" gutterBottom>
