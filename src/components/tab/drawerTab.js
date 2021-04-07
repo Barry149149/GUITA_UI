@@ -8,6 +8,10 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import PublishIcon from '@material-ui/icons/Publish';
 import HomeIcon from '@material-ui/icons/Home';
 import React from "react";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import {
     BrowserRouter as Router,
     Switch,
@@ -20,43 +24,53 @@ import {
 export default function DrawerTab(props){
     const {drawerValue, handleDrawerChange,classes}=props
     return(
-        <Tabs
-            value={drawerValue}
-            onChange={handleDrawerChange}
-            indicatorColor="primary"
-            textColor="primary"
+        <List
+            component="nav"
             variant="fullWidth"
             orientation="vertical"
         >
-            <Tooltip title="Job Submission" placement="right">
-                <Tab
+                <ListItem
                     aria-labelledby='tab_submit'
-                    className={classes.tab}
-                    icon={<HomeIcon color='primary'/>}
-                    />
-            </Tooltip>
-            <Tooltip title="Test Case" placement="right">
-                <Tab
-                    aria-labelledby='tab_cases'
-                    className={classes.tab}
-                    icon={<ListAltIcon color='primary'/>}
-                />
-            </Tooltip>
-            <Tooltip title="Job Config" placement="right">
-                <Tab
-                    aria-labelledby='tab_config'
-                    className={classes.tab}
-                    icon={<TuneIcon color='primary'/>}
-                />
-            </Tooltip>
-            <Tooltip title="Grading Result" placement="right">
-                <Tab
-                    aria-labelledby='tab_result'
-                    className={classes.tab}
-                    icon={<DescriptionIcon color='primary'/>}
-                />
-            </Tooltip>
-        </Tabs>
+                    button
+                    className={{root:classes.tab2, selected: classes.selected}}
+                    selected={drawerValue===0}
+                    aria-checked={drawerValue===0}
+                    onClick={(event)=>{handleDrawerChange(event,0)}}
+                    >
+                    <ListItemText primary="HomePage" />
+                </ListItem>
+                <ListItem
+                    aria-labelledby='tab_submit'
+                    button
+                    className={{root:classes.tab2, selected: classes.selected}}
+                    selected={drawerValue===1}
+                    aria-checked={drawerValue===1}
+                    onClick={(event)=>{handleDrawerChange(event,1)}}
+                >
+                    <ListItemText primary="TestCase" />
+                </ListItem>
+                <ListItem
+                    aria-labelledby='tab_submit'
+                    button
+                    className={{root:classes.tab2, selected: classes.selected}}
+                    selected={drawerValue===2}
+                    aria-checked={drawerValue===2}
+                    onClick={(event)=>{handleDrawerChange(event,2)}}
+                >
+                    <ListItemText primary="JobConfig" />
+                </ListItem>
+                <ListItem
+                    aria-labelledby='tab_submit'
+                    button
+                    className={{root:classes.tab2, selected: classes.selected}}
+                    selected={drawerValue===3}
+                    aria-checked={drawerValue===3}
+                    onClick={(event)=>{handleDrawerChange(event,3)}}
+                >
+                    <ListItemText primary="Result" />
+                </ListItem>
+
+        </List>
 
     )
 }
