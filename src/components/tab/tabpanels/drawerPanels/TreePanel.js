@@ -64,6 +64,7 @@ export default function TreePanel(props){
                     hidden
 
                     onChange={(e)=>{
+                        //TODO: submit img zip
                         setFile({
                             ...file,
                             zip_filename: e.target.files[0].name,

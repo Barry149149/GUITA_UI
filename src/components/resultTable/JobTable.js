@@ -190,7 +190,7 @@ export default function JobTable(props) {
         <div className={classes.root}>
             
             <ResultTableToolbar
-                table= {"Job List / " + jobData.assignment_name}
+                table= {jobData.assignment_name}
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
                 setResultStep={setResultStep}

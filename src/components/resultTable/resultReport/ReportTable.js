@@ -382,7 +382,7 @@ export default function ReportTable(props) {
     return (
         <div className={classes.root}>
             <ReportTableToolbar
-                table="ResultTable"
+                table={jobData.assignment_name + ' \\ Stage ' + jobData.stage_id}
                 classes={classes}
                 result={result}
                 setResultStep={props.setResultStep}
