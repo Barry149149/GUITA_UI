@@ -220,7 +220,8 @@ export default function JobTable(props) {
                                     for(let i=0; i<row.reports.length;i++){
                                         cell_stage.push(<TableCell label={row.reports[i].stage_id} style={{cursor:'pointer'}} onClick={(event) => {
                                             handleCellClick(event, row, row.reports[i].stage_id)
-                                        }}>{row.reports[i].status}</TableCell>)
+                                        }}>{// TODO: add cell for stages after failed
+                                            (typeof row.reports[i].status!=='undefined')?row.reports[i].status:''}</TableCell>)
                                     }
                                     return (
                                         <TableRow
@@ -229,10 +230,6 @@ export default function JobTable(props) {
                                             key={row.job_id}
                                             
                                             style={{cursor:'pointer'}}
-                                            onClick={(event) => {
-                                                // TODO: temp click, remove
-                                                handleRowClick(event, row)
-                                            }}
                                         >
                                             {// TODO: Set onClick
                                             }

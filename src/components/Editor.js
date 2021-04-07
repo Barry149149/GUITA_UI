@@ -296,7 +296,9 @@ export default function Editor() {
       if(newValue===0||newValue===1) setDrawerOpen(true)
       else setDrawerOpen(false)
     }
-
+    if(drawerValue===newValue && newValue===3){
+      setResultStep(0);
+    }
     setDrawerValue(newValue);
   };
 
