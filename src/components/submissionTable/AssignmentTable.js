@@ -20,6 +20,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {useForm} from "react-hook-form";
 import {PlaylistAdd} from "@material-ui/icons";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -81,9 +84,7 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
-        { id: 'test_case', numeric: false, label: 'Test Cases'}
     ];
 
     return (
@@ -110,6 +111,10 @@ function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell align="left">
+                    Configuration
+                </TableCell>
+                <TableCell/>
             </TableRow>
         </TableHead>
     );
@@ -189,7 +194,14 @@ export default function AssignmentTable(props) {
     const [testcases, setTestcases]= useState({
         assignment_id:[],
         testcase:[]
-    });
+
+    })
+    const [configData, setConfigData]= useState([]);
+
+
+    //this one is for temp use
+
+    const [selectedConfig, setConfig]=useState([])
     
 
     const handleRequestSort = (event, property) => {
@@ -212,58 +224,16 @@ export default function AssignmentTable(props) {
 
         fetch('/api/v2/assignment', {
             headers: {
-                'conten-type': 'application/json'
-            }}).then((response)=>response.json()).then((data)=>{
-                setAssignData(data)
-                setFetched(true)
-            })
-            /*
-        (async()=>{
-        let results;
-        try{
-            const repos = await 
-                setAssignData([...repos])
-            const responses = await Promise.all(
-                repos.map((item) => {
-                    return fetch(
-                        '/api/v2/assignment/'+item.assignment_id+'/testcase',{
-                            headers: {
-                                'content-type': 'application/json'
-                            }
-                        }
-                    );
-                })
-            );
-
-            const filteredResponses = responses.filter((res)=>res.status === 200);
-            results = Promise.all(
-                filteredResponses.map(async(fr) => {
-                    const row = await fr.json();
-                return {
-                    row: row
-                };
-                })
-            );
-        } catch (err) {
-            console.log("Error: ", err);
-        }
-
-        results.then((s)=>{
-            let tempLength =[]
-            let tempAssignment=[]
-            for(let i=0; i<s.length; i++){
-                console.log(s[i].row[0])
-                //tempLength.push(value.length)
+                'content-type': 'application/json'
             }
-            setTestcases({
-                ...testcases,
-                testcase:tempLength
-            })
+        }).then(response => response.json()).then(data => {
+            setAssignData(data)
             setFetched(true)
         })
         
-    })();*/
     }, [fetched]);
+
+    console.log(selectedConfig)
 
     return (
         
@@ -348,12 +318,34 @@ export default function AssignmentTable(props) {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {row.assignment_id}
-                                            </TableCell>
-                                            <TableCell>
                                                 {row.assignment_name}
                                             </TableCell>
-                                                {cell_testcase}
+                                            <TableCell>
+                                                <FormControl>
+                                                    <Select
+                                                        native
+                                                        value={selectedConfig[index].name}
+                                                        onChange={(event,property)=>{
+                                                            if(event.target.value<0){
+
+                                                            }else {
+                                                                const entry = index;
+                                                                let newSelectedConfig = [...selectedConfig];
+                                                                newSelectedConfig[entry] = event.target.value
+                                                                setConfig([...newSelectedConfig])
+                                                            }
+                                                        }}
+                                                    >
+                                                        <option aria-label="None" value="" />
+                                                        {configData.map((row,index)=>{
+                                                            return(
+                                                                <option key={row.job_config_id} value={{id:row.job_config_id,name:row.job_config_name}}>{row.job_config_name}</option>
+                                                            )
+                                                        })}
+                                                        <option aria-label="Create New Config" value="-2">Create new</option>
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
