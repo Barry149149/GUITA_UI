@@ -238,6 +238,7 @@ export default function Editor() {
     assignments:'', //submission batch
     assignmentsName: '',
   });
+  const [selectedConfig, setSelectedConfig]=useState([])
   const [stage,setStage]=useState([])
   const [createdStage,setCreatedStage]=useState(0)
 
@@ -512,6 +513,9 @@ export default function Editor() {
                 setDrawerValue={setDrawerValue}
                 handleDrawerChange={handleDrawerChange}
                 setDrawerOpen={setDrawerOpen}
+                setSelectedJobConfig={setSelectedJobConfig}
+                selectedConfig={selectedConfig}
+                setSelectedConfig={setSelectedConfig}
               />
             </Paper>
         </TabPanel>

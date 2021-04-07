@@ -23,6 +23,11 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -49,7 +54,13 @@ const useStyles = makeStyles(() => ({
     container: {
         maxHeight: 650,
     },
+    editButton:{
+        maxWidth:30,
+        height:20
+    }
 }));
+
+
 
 function getComparator(order, orderBy) {
     return order === 'desc'
@@ -176,7 +187,11 @@ export default function AssignmentTable(props) {
     const {jobBatch, setJobBatch, selectedAssignment, setSelectedAssignment,drawerValue,
     setDrawerValue,
     handleDrawerChange,
-    setDrawerOpen} = props
+    setDrawerOpen,
+    setSelectedJobConfig,
+        selectedConfig,
+        setSelectedConfig
+    } = props
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
@@ -195,10 +210,28 @@ export default function AssignmentTable(props) {
 
     //this one is for temp use
 
-    const [selectedConfig, setConfig]=useState([])
+
 
     const { register, handleSubmit } = useForm();
     const [createJobConfig, setCreateJobConfig] = useState(false);
+
+    const [open,setOpen]=useState({
+        id:-1,
+        anchor:null
+    })
+
+    const handleOpenClick=(event, id)=>{
+        setOpen({
+            id:id,
+            anchor: event.currentTarget
+        })
+    }
+    const handleCloseClick=()=> {
+        setOpen({
+            ...open,
+            id:-1
+        })
+    }
 
     const handleCreateJobConfigOpen=()=>{
         setCreateJobConfig(true);
@@ -230,7 +263,7 @@ export default function AssignmentTable(props) {
         setSelectedAssignment(assignment_id);
         setDrawerOpen(true);
         setDrawerValue(1);
-        
+
     }
 
     useEffect(()=>{
@@ -250,7 +283,7 @@ export default function AssignmentTable(props) {
                     name:""
                 })
             }
-            setConfig([...emptyconfig])
+            setSelectedConfig([...emptyconfig])
             setFetched(true)
         })
         fetch('/api/v2/job_config', {
@@ -266,11 +299,13 @@ export default function AssignmentTable(props) {
             setConfigData(array)
             setFetched(true)
         });
-        
+
     }, [fetched]);
 
+    console.log(open)
+
     return (
-        
+
         <div className={classes.root}>
             <TableToolbar
                 table= "Assignments"
@@ -278,7 +313,7 @@ export default function AssignmentTable(props) {
                 setFilterCriteria={setFilterCriteria}
                 setFetched={setFetched}
             />
-            
+
             <TableContainer className={classes.container}>
                 {(fetched)?
                     <Table
@@ -300,10 +335,10 @@ export default function AssignmentTable(props) {
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_testcase = [];
-                                   
+
                                     cell_testcase.push(
                                         <TableCell>
-                                        <Button    
+                                        <Button
                                             id='button_commandSave'
                                             color= 'primary'
                                             onClick={(e)=>{
@@ -320,18 +355,18 @@ export default function AssignmentTable(props) {
                                     } else {
                                     cell_testcase.push(
                                     <TableCell>
-                                    <Button    
+                                    <Button
                                         id='button_commandSave'
                                         variant= 'outlined'
                                         color= 'primary'
                                         onClick={() => {
-                                            
+
                                         }}>
                                             Create New Test Cases
                                         </Button>
                                         </TableCell>)
                                     }*/
-                                    console.log(selectedConfig[index])
+                                    const isItemOpened = (open.id===row.assignment_id)
                                     return (
                                         <TableRow
                                             hover
@@ -360,38 +395,65 @@ export default function AssignmentTable(props) {
                                                 <FormControl>
                                                     <Select
                                                         native
-                                                        value={selectedConfig[index].id}
+                                                        value={(typeof selectedConfig[index].id==='undefined')?0:selectedConfig[index].id}
                                                         onChange={(event,property)=>{
-                                                            if(event.target.value<0){
+                                                            if(event.target.value<-1){
                                                                 handleCreateJobConfigOpen()
                                                             }else {
+
                                                                 const entry = index;
                                                                 let newSelectedConfig = [...selectedConfig];
                                                                 newSelectedConfig[entry] = {
                                                                     id:event.target.value,
-                                                                    name:configData.find(x=>x.job_config_id==event.target.value).job_config_name
+                                                                    name:(event.target.value!=-1)?configData.find(x=>x.job_config_id==event.target.value).job_config_name:''
                                                                 }
-                                                                setConfig([...newSelectedConfig])
+                                                                setSelectedConfig([...newSelectedConfig])
+
                                                                 if(jobBatch.assignment_id===row.assignment_id){
                                                                     setJobBatch({
                                                                         ...jobBatch,
                                                                         job_config_id:event.target.value,
-                                                                        job_config_name:configData.find(x=>x.job_config_id==event.target.value).job_config_name
+                                                                        job_config_name:(event.target.value!=-1)?configData.find(x=>x.job_config_id==event.target.value).job_config_name:""
                                                                     })
                                                                 }
+                                                                setSelectedJobConfig(event.target.value);
                                                             }
                                                         }}
                                                     >
-                                                        <option aria-label="None" value="" />
+                                                        <option aria-label="None" value={-1} />
                                                         {configData.map((row,index)=>{
                                                             return(
                                                                 <option key={row.job_config_id} value={row.job_config_id}>{row.job_config_name}</option>
                                                             )
                                                         })}
-                                                        <option aria-label="Create New Config" value="-2">Create new</option>
+                                                        <Divider/>
+                                                        <option aria-label="Create New Config" value={-2}>Create new Config</option>
                                                     </Select>
-                                                    <Typography variant="h8" color='primary'>Edit</Typography>
+                                                    <Button
+                                                        onClick={()=>{
+                                                            props.setDrawerOpen(false);
+                                                            props.setDrawerValue(2);
+                                                        }}
+                                                        className={classes.editButton} disabled={selectedConfig[index].id===-1}><Typography variant="h8" color='primary'>Edit</Typography></Button>
                                                 </FormControl>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <IconButton
+                                                    onClick={(e)=>{
+                                                        handleOpenClick(e,row.assignment_id)
+                                                }}
+                                                    >
+                                                    <MoreVertIcon/>
+                                                </IconButton>
+                                                <Menu
+                                                    open={isItemOpened}
+                                                    keepMounted
+                                                    anchorEl={open.anchor}
+                                                    onClose={(e)=>handleCloseClick(e,row.assignment_id)}
+                                                >
+                                                    <MenuItem onClick={(e)=>handleCloseClick(e,row.assignment_id)}>Edit Test</MenuItem>
+                                                    <MenuItem onClick={(e)=>handleCloseClick(e,row.assignment_id)}>Submit</MenuItem>
+                                                </Menu>
                                             </TableCell>
                                         </TableRow>
                                     );
