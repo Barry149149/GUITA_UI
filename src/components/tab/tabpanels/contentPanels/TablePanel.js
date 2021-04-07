@@ -29,9 +29,9 @@ export default function TablePanel(props){
         if(props.selectedAssignment){
             console.log(props.selectedAssignment)
         } else {
-            console.log("NO")
+            setFetched(true)
         }
-    })
+    },[fetched])
 
     return(
         <TabPanel value={tabValue} index={0}>
@@ -43,6 +43,7 @@ export default function TablePanel(props){
                 margin:0,
                 width:'100%',
             }}>
+               {(fetched)?
                     <div id="commandTable" style={(width<1080)?{width:'100%'}:((!formOpen)?{width:'100%'}:{width:'69%'})}>
                         <CommandTable
                             selectedCase={state.present.selectedCase}
@@ -54,6 +55,7 @@ export default function TablePanel(props){
                             dispatch={dispatch}
                         />
                     </div>
+                    :null}
                 {(formOpen)?
                     <React.Fragment>
                     <div style={(width<1080)?{height:'20px'}:{width:'2%'}}/>

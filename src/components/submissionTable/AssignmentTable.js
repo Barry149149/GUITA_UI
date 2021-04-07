@@ -254,7 +254,7 @@ export default function AssignmentTable(props) {
         
     }, [fetched]);
 
-    console.log(selectedConfig)
+    //console.log(selectedConfig)
 
     return (
         
@@ -329,6 +329,7 @@ export default function AssignmentTable(props) {
                                                     color='primary'
                                                     checked={selected===row.assignment_id}
                                                     onChange={(e)=>{
+                                                        setSelectedAssignment(row.assignment_id)
                                                         setSelected(row.assignment_id)
                                                         setJobBatch({
                                                             ...jobBatch,
@@ -347,6 +348,7 @@ export default function AssignmentTable(props) {
                                                         native
                                                         value={selectedConfig[index].name}
                                                         onChange={(event,property)=>{
+                                                            
                                                             if(event.target.value<0){
 
                                                             }else {
@@ -360,7 +362,7 @@ export default function AssignmentTable(props) {
                                                         <option aria-label="None" value="" />
                                                         {configData.map((row,index)=>{
                                                             return(
-                                                                <option key={row.job_config_id} value={{id:row.job_config_id,name:row.job_config_name}}>{row.job_config_name}</option>
+                                                                <option key={row.job_config_id} value={row.job_config_id}>{row.job_config_name}</option>
                                                             )
                                                         })}
                                                         <option aria-label="Create New Config" value="-2">Create new</option>
