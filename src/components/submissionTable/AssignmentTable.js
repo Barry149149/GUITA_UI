@@ -139,6 +139,9 @@ function TableToolbar(props){
     const handleCreateAssignmentOpen=()=>{
         setCreateAssignment(true);
     }
+    const handleCreateAssignmentCancelClose=()=>{
+        setCreateAssignment(false);
+    }
     const handleCreateAssignmentClose=()=>{
         setCreateAssignment(false);
         setFetched(false);
@@ -162,7 +165,7 @@ function TableToolbar(props){
                 onClick={handleCreateAssignmentOpen}>
                 <PlaylistAdd/>
             </Button>
-            <Dialog open={createAssignment} onClose={handleCreateAssignmentClose}>
+            <Dialog open={createAssignment}>
                 <DialogTitle>Create Assignment</DialogTitle>
                 <DialogContent>
                 <DialogContentText>
@@ -173,7 +176,7 @@ function TableToolbar(props){
                 </form>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={handleCreateAssignmentClose} color="primary">
+                <Button onClick={handleCreateAssignmentCancelClose} color="primary">
                     Cancel
                 </Button>
                 <Button onClick={handleSubmit(handleCreateAssignment)} color="primary">Confirm</Button>
@@ -184,7 +187,7 @@ function TableToolbar(props){
 }
 
 export default function AssignmentTable(props) {
-    const {jobBatch, setJobBatch, selectedAssignment, setSelectedAssignment,drawerValue,
+    const {jobBatch, setJobBatch, selectedAssignment, setSelectedAssignment,drawerValue, setSelectedAssignmentName,setSelectedJobConfigName,
     setDrawerValue,
     handleDrawerChange,
     setDrawerOpen,
@@ -226,6 +229,14 @@ export default function AssignmentTable(props) {
             anchor: event.currentTarget
         })
     }
+    const handleEditClick=(event, id, name)=>{
+        setSelectedAssignment(id);
+        setSelectedAssignmentName(name);
+        props.setDrawerOpen(true);
+        props.setDrawerValue(1);
+        handleCloseClick(event, id);
+    }
+
     const handleCloseClick=()=> {
         setOpen({
             ...open,
@@ -235,6 +246,9 @@ export default function AssignmentTable(props) {
 
     const handleCreateJobConfigOpen=()=>{
         setCreateJobConfig(true);
+    }
+    const handleCreateJobConfigCancelClose=()=>{
+        setCreateJobConfig(false);
     }
     const handleCreateJobConfigClose=()=>{
         setCreateJobConfig(false);
@@ -291,7 +305,6 @@ export default function AssignmentTable(props) {
                 'content-type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
-            console.log(data)
             const array = []
             for(const value of data){
                 array.push(value)
@@ -430,6 +443,7 @@ export default function AssignmentTable(props) {
                                                     </Select>
                                                     <Button
                                                         onClick={()=>{
+                                                            setSelectedJobConfigName(selectedConfig[index].name)
                                                             props.setDrawerOpen(false);
                                                             props.setDrawerValue(2);
                                                         }}
@@ -450,7 +464,7 @@ export default function AssignmentTable(props) {
                                                     anchorEl={open.anchor}
                                                     onClose={(e)=>handleCloseClick(e,row.assignment_id)}
                                                 >
-                                                    <MenuItem onClick={(e)=>handleCloseClick(e,row.assignment_id)}>Edit Test</MenuItem>
+                                                    <MenuItem onClick={(e)=>handleEditClick(e,row.assignment_id,row.assignment_name)}>Edit Test</MenuItem>
                                                     <MenuItem onClick={(e)=>handleCloseClick(e,row.assignment_id)}>Submit</MenuItem>
                                                 </Menu>
                                             </TableCell>
@@ -461,7 +475,7 @@ export default function AssignmentTable(props) {
                     </Table>
                 :null}
             </TableContainer>
-            <Dialog open={createJobConfig} onClose={handleCreateJobConfigClose}>
+            <Dialog open={createJobConfig}>
                 <DialogTitle>Create Job Config</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -472,7 +486,7 @@ export default function AssignmentTable(props) {
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCreateJobConfigClose} color="primary">
+                    <Button onClick={handleCreateJobConfigCancelClose} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">Confirm</Button>

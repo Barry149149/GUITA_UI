@@ -203,6 +203,7 @@ export default function StageTable(props){
                     <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
                         {selected.length} selected
                     </Typography>):(<Typography className={classes.title} variant="h6" color="primary">
+                    {(props.selectedJobConfigName !== '')?(props.selectedJobConfigName+' / '):null}
                     Stage Table
                 </Typography>)}
                 {(props.selectedJobConfig)?(

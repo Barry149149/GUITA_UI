@@ -37,7 +37,7 @@ export default function DrawerTab(props){
                     aria-checked={drawerValue===0}
                     onClick={(event)=>{handleDrawerChange(event,0)}}
                     >
-                    <ListItemText primary="HomePage" />
+                    <ListItemText color="primary" primary="HomePage" />
                 </ListItem>
                 <ListItem
                     aria-labelledby='tab_submit'
