@@ -62,6 +62,12 @@ function stateReducer(state, action){
         present: next,
         future: newFuture
       }
+    case 'SET':
+      return{
+        past:[],
+        present: action.data,
+        future: []
+      }
     default:
       if(present===action.data) return state
         return{
