@@ -285,7 +285,6 @@ export default function Editor() {
   const [stageFormOpen,setStageFormOpen]=useState(false)
   const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
-  const [assignment, setAssignment] = useState(false);
   const contentWidth= width-((drawerOpen)?360:80)
 
   //this is for the editor
@@ -307,7 +306,9 @@ export default function Editor() {
       if(newValue===0||newValue===1) setDrawerOpen(true)
       else setDrawerOpen(false)
     }
-
+    if(drawerValue===newValue && newValue===3){
+      setResultStep(0);
+    }
     setDrawerValue(newValue);
   };
 
@@ -348,7 +349,9 @@ export default function Editor() {
   });
  
   const [selectedJobConfig, setSelectedJobConfig] = useState(0);
+  const [selectedJobConfigName, setSelectedJobConfigName] = useState('');
   const [selectedAssignment, setSelectedAssignment]=useState(0);
+  const [selectedAssignmentName, setSelectedAssignmentName]=useState('');
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -526,6 +529,8 @@ export default function Editor() {
                 setSelectedJobConfig={setSelectedJobConfig}
                 selectedConfig={selectedConfig}
                 setSelectedConfig={setSelectedConfig}
+                setSelectedAssignmentName={setSelectedAssignmentName}
+                setSelectedJobConfigName={setSelectedJobConfigName}
               />
             </Paper>
         </TabPanel>
@@ -536,7 +541,7 @@ export default function Editor() {
           <Paper className={classes.paper2}>
             <Toolbar className={classes.toolbar2}>
               <Typography className={classes.title} color="primary" variant="h5" component="div">
-                {(tabValue===0)?"Table & Form Mode ":"JSON Code Editor "}
+                {(selectedAssignmentName !== '')?selectedAssignmentName:((tabValue===0)?"Table & Form Mode ":"JSON Code Editor ")}
                  \ Test Case {state.present.selectedCase.id}
               </Typography>
               <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
@@ -609,6 +614,7 @@ export default function Editor() {
                     createConfig={createConfig}
                     setCreateConfig={setCreateConfig}
                     selectedJobConfig={selectedJobConfig}
+                    selectedJobConfigName={selectedJobConfigName}
                 />
               </div>
             <div style={{height:'20px',width:'2%'}}/>
