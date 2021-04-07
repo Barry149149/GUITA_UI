@@ -1,5 +1,5 @@
 import React, {useState, useReducer,useLayoutEffect, } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {lighten, makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -41,7 +41,7 @@ import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
 
-const drawerWidth = 360;
+const drawerWidth = 440;
 
 function stateReducer(state, action){
   const {past, present, future} = state;
@@ -133,9 +133,9 @@ const useStyles = makeStyles((theme) => ({
       duration: 100,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(8) + 1,
+    width: theme.spacing(16) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(8) + 1,
+      width: theme.spacing(16) + 1,
     },
   },
   drawerPaper: {
@@ -166,10 +166,19 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  tab2:{
+    display: 'flex',
+    minWidth: 120,
+    width: 120,
+    "&$selected": {
+      backgroundColor: lighten(theme.palette.primary.light, 0.85),
+    }
+  },
   tab:{
     display: 'flex',
-    minWidth: 60,
-    width: 60,
+    minWidth: 80,
+    width: 80,
+
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -201,6 +210,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexGrow: 1,
   },
+  selected:{}
 }));
 function a11yProps(index) {
   return {
