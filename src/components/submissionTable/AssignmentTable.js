@@ -228,8 +228,29 @@ export default function AssignmentTable(props) {
             }
         }).then(response => response.json()).then(data => {
             setAssignData(data)
+            let emptyconfig=[];
+            for(let i=0;i<data.length;i++){
+                emptyconfig.push({
+                    id:-1,
+                    name:""
+                })
+            }
+            setConfig([...emptyconfig])
             setFetched(true)
         })
+        fetch('/api/v2/job_config', {
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            console.log(data)
+            const array = []
+            for(const value of data){
+                array.push(value)
+            }
+            setConfigData(array)
+            setFetched(true)
+        });
         
     }, [fetched]);
 

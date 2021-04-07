@@ -514,20 +514,6 @@ export default function Editor() {
                 setDrawerOpen={setDrawerOpen}
               />
             </Paper>
-            <div style={{height:20}}/>
-            <Paper className={classes.submissionPaper}>
-              <JobConfigTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-                drawerValue={drawerValue}
-                setDrawerValue={setDrawerValue}
-                handleDrawerChange={handleDrawerChange}
-                setSelectedJobConfig={setSelectedJobConfig}
-                setDrawerOpen={setDrawerOpen}
-              />
-            </Paper>
-            
-            
         </TabPanel>
         <TabPanel
             value={drawerValue}
