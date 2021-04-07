@@ -199,7 +199,7 @@ function Row(props){
                                         className={classes.tableCell}
                                     >
                                     <Typography variant="h8" gutterBottom component="div">
-                                        result: {row.result.value.toString()}
+                                        result: {(row.result.value === null)?'null':row.result.value.toString()}
                                     </Typography>
                                     <Collapse in={open.result}>
                                     <Box border={1} borderColor="grey.500"
@@ -316,15 +316,15 @@ export default function ReportTable(props) {
     useEffect(()=>{
         
         //TODO: change to correct path
-        fetch('/api/v2/job/'+jobData.job_id+'/report/'+jobData.stage_id, {
+        fetch('/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/report.json', {
             headers: {
                 'content-type': 'application/json'
             }
-        }).then(response => response.json()).then(data => {
+        }).then(response => response.json()).then(async(data) => {
             console.log(data)
 
             let paths=[]
-            if(typeof result.breakdown!=='undefined'){
+            if(typeof data.breakdown!=='undefined'){
             data.breakdown.map((row)=>{
                 if(typeof row.screenshotPath!=='undefined'&&row.screenshotPath){
                     paths.push(row.screenshotPath)
@@ -339,10 +339,11 @@ export default function ReportTable(props) {
         });
         
     }, []);
-
+/*
     useEffect(()=>{
         console.log(reportImg.paths)
     })
+ */   
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);
         let newSelected = [];

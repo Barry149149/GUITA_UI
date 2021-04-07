@@ -338,7 +338,7 @@ export default function Editor() {
   });
  
   const [selectedJobConfig, setSelectedJobConfig] = useState(0);
-  const [selectedAssignment, setSelectedAssignmnet]=useState(0);
+  const [selectedAssignment, setSelectedAssignment]=useState(0);
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -507,8 +507,8 @@ export default function Editor() {
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
-                selectedAssignment={setAssignment}
-                setSelectedAssignment={setAssignment}
+                selectedAssignment={selectedAssignment}
+                setSelectedAssignment={setSelectedAssignment}
                 drawerValue={drawerValue}
                 setDrawerValue={setDrawerValue}
                 handleDrawerChange={handleDrawerChange}

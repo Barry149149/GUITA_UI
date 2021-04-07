@@ -302,8 +302,6 @@ export default function AssignmentTable(props) {
 
     }, [fetched]);
 
-    console.log(open)
-
     return (
 
         <div className={classes.root}>
@@ -378,6 +376,7 @@ export default function AssignmentTable(props) {
                                                     color='primary'
                                                     checked={selected===row.assignment_id}
                                                     onChange={(e)=>{
+                                                        setSelectedAssignment(row.assignment_id)
                                                         setSelected(row.assignment_id)
                                                         setJobBatch({
                                                             ...jobBatch,
@@ -395,7 +394,7 @@ export default function AssignmentTable(props) {
                                                 <FormControl>
                                                     <Select
                                                         native
-                                                        value={(typeof selectedConfig[index].id==='undefined')?0:selectedConfig[index].id}
+                                                        value={(typeof selectedConfig[index].id==='undefined'||!selectedConfig[index].id)?0:selectedConfig[index].id}
                                                         onChange={(event,property)=>{
                                                             if(event.target.value<-1){
                                                                 handleCreateJobConfigOpen()
