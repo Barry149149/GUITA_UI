@@ -167,13 +167,7 @@ function TableToolbar(props){
                 </Button>
                 <Button onClick={handleSubmit(handleCreateAssignment)} color="primary">Confirm</Button>
                 </DialogActions>
-            </Dialog>   
-            <TextField
-                label="Search"
-                onChange={(e)=>{
-                    setFilterCriteria(e.target.value)
-                }
-                }/>
+            </Dialog>
         </Toolbar>
     )
 }
@@ -202,7 +196,28 @@ export default function AssignmentTable(props) {
     //this one is for temp use
 
     const [selectedConfig, setConfig]=useState([])
-    
+
+    const { register, handleSubmit } = useForm();
+    const [createJobConfig, setCreateJobConfig] = useState(false);
+
+    const handleCreateJobConfigOpen=()=>{
+        setCreateJobConfig(true);
+    }
+    const handleCreateJobConfigClose=()=>{
+        setCreateJobConfig(false);
+        setFetched(false);
+    }
+
+    const handleCreateJobConfig=(data)=>{
+        fetch('/api/v2/job_config', {
+            method: 'POST',
+            body: JSON.stringify({"job_config_name": data.jobConfigName}),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(result => console.log(result)).catch(error => console.log(error));
+        handleCreateJobConfigClose();
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -253,9 +268,7 @@ export default function AssignmentTable(props) {
         });
         
     }, [fetched]);
-
-    //console.log(selectedConfig)
-
+    
     return (
         
         <div className={classes.root}>
@@ -317,7 +330,8 @@ export default function AssignmentTable(props) {
                                             Create New Test Cases
                                         </Button>
                                         </TableCell>)
-                                    }*/ 
+                                    }*/
+                                    console.log(selectedConfig[index])
                                     return (
                                         <TableRow
                                             hover
@@ -334,7 +348,8 @@ export default function AssignmentTable(props) {
                                                         setJobBatch({
                                                             ...jobBatch,
                                                             assignment_id: row.assignment_id,
-                                                            assignment_name: row.assignment_name
+                                                            assignment_name: row.assignment_name,
+                                                            job_config_id:selectedConfig[index].id
                                                         })
                                                     }}
                                                 />
@@ -346,16 +361,26 @@ export default function AssignmentTable(props) {
                                                 <FormControl>
                                                     <Select
                                                         native
-                                                        value={selectedConfig[index].name}
+                                                        value={selectedConfig[index].id}
                                                         onChange={(event,property)=>{
                                                             
                                                             if(event.target.value<0){
-
+                                                                handleCreateJobConfigOpen()
                                                             }else {
                                                                 const entry = index;
                                                                 let newSelectedConfig = [...selectedConfig];
-                                                                newSelectedConfig[entry] = event.target.value
+                                                                newSelectedConfig[entry] = {
+                                                                    id:event.target.value,
+                                                                    name:configData.find(x=>x.job_config_id==event.target.value).job_config_name
+                                                                }
                                                                 setConfig([...newSelectedConfig])
+                                                                if(jobBatch.assignment_id===row.assignment_id){
+                                                                    setJobBatch({
+                                                                        ...jobBatch,
+                                                                        job_config_id:event.target.value,
+                                                                        job_config_name:configData.find(x=>x.job_config_id==event.target.value).job_config_name
+                                                                    })
+                                                                }
                                                             }
                                                         }}
                                                     >
@@ -367,6 +392,7 @@ export default function AssignmentTable(props) {
                                                         })}
                                                         <option aria-label="Create New Config" value="-2">Create new</option>
                                                     </Select>
+                                                    <Typography variant="h8" color='primary'>Edit</Typography>
                                                 </FormControl>
                                             </TableCell>
                                         </TableRow>
@@ -376,6 +402,24 @@ export default function AssignmentTable(props) {
                     </Table>
                 :null}
             </TableContainer>
+            <Dialog open={createJobConfig} onClose={handleCreateJobConfigClose}>
+                <DialogTitle>Create Job Config</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter Job Config name.
+                    </DialogContentText>
+                    <form onSubmit={handleSubmit(handleCreateJobConfig)}>
+                        <input name="jobConfigName" ref={register({ required: true })} />
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCreateJobConfigClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">Confirm</Button>
+                </DialogActions>
+            </Dialog>
         </div>
+
     );
 }
