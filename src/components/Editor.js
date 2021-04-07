@@ -740,7 +740,7 @@ function ReportImageDialog(props){
               <img src={'/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/'+reportImg.paths[reportImg.path]} width="100%" height="100%"/>
             </div>
             <Button onClick={()=>{
-            if(reportImg.path<reportImg.paths.length){
+            if(reportImg.path<reportImg.paths.length-1){
               setReportImg({
                 ...reportImg,
                 path:reportImg.path+1
