@@ -19,6 +19,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {useForm} from "react-hook-form";
 import {PlaylistAdd} from "@material-ui/icons";
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -80,9 +83,7 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'assignment_id', numeric: false,  label: 'Assignment ID' },
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
-        { id: 'test_case', numeric: false, label: 'Test Cases'}
     ];
 
     return (
@@ -109,6 +110,10 @@ function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell align="left">
+                    Configuration
+                </TableCell>
+                <TableCell/>
             </TableRow>
         </TableHead>
     );
@@ -186,6 +191,12 @@ export default function AssignmentTable(props) {
         assignment_id:[],
         testcase:[]
     })
+    const [configData, setConfigData]= useState([]);
+
+
+    //this one is for temp use
+
+    const [selectedConfig, setConfig]=useState([])
     
 
     const handleRequestSort = (event, property) => {
@@ -201,7 +212,6 @@ export default function AssignmentTable(props) {
                 'content-type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
-            console.log(data)
             const array = []
             setTestcases({
                 assignment_id:[],
@@ -224,14 +234,33 @@ export default function AssignmentTable(props) {
                         assignment_id:tempAssignmentId,
                         testcase:tempTestcase
                     });
-                    console.log(tempTestcase)
+                });
+                fetch('/api/v2/job_config', {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(response => response.json()).then(data => {
+                    const array = []
+                    for(const value of data){
+                        array.push(value)
+                    }
+                    setConfigData([...array])
+                    setFetched(true)
                 });
             }
 
-            setAssignData(array)
+            setAssignData([...array])
+            //set this as the no of row of assignment table
+            let emptyConfig=[]
+            for(let i=0;i<array.length;i++){
+                emptyConfig.push({id:-1, name:' '})
+            }
+            setConfig([...emptyConfig])
             setFetched(true)
         });
     }, [fetched]);
+
+    console.log(selectedConfig)
 
     return (
         
@@ -287,12 +316,34 @@ export default function AssignmentTable(props) {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                {row.assignment_id}
-                                            </TableCell>
-                                            <TableCell>
                                                 {row.assignment_name}
                                             </TableCell>
-                                                {cell_testcase}
+                                            <TableCell>
+                                                <FormControl>
+                                                    <Select
+                                                        native
+                                                        value={selectedConfig[index].name}
+                                                        onChange={(event,property)=>{
+                                                            if(event.target.value<0){
+
+                                                            }else {
+                                                                const entry = index;
+                                                                let newSelectedConfig = [...selectedConfig];
+                                                                newSelectedConfig[entry] = event.target.value
+                                                                setConfig([...newSelectedConfig])
+                                                            }
+                                                        }}
+                                                    >
+                                                        <option aria-label="None" value="" />
+                                                        {configData.map((row,index)=>{
+                                                            return(
+                                                                <option key={row.job_config_id} value={{id:row.job_config_id,name:row.job_config_name}}>{row.job_config_name}</option>
+                                                            )
+                                                        })}
+                                                        <option aria-label="Create New Config" value="-2">Create new</option>
+                                                    </Select>
+                                                </FormControl>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}

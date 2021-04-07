@@ -503,6 +503,9 @@ export default function Editor() {
               <AssignmentTable
                 jobBatch={jobBatch}
                 setJobBatch={setJobBatch}
+                drawerValue={drawerValue}
+                setDrawerValue={setDrawerValue}
+                handleDrawerChange={handleDrawerChange}
               />
             </Paper>
             <div style={{height:20}}/>
