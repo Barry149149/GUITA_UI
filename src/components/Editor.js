@@ -337,6 +337,7 @@ export default function Editor() {
     jobBatch: null,
     result: [],
   });
+  const [result, setResult]= useState([]);
 
   const [jobData, setJobData]= useState({
     imgPath:[]
@@ -593,7 +594,7 @@ export default function Editor() {
                                   icon={<TableChartIcon color="primary"/>}
                                   {...a11yProps(0)}
                                   component={Link}
-                                  to={'/testcase/'+row.assignment_name}
+                                  to={'/testcase/'+row.assignment_id+'/'+row.assignment_name}
                               />
                             </Tooltip>
                             <Tooltip title="CodeEditor">
@@ -603,7 +604,7 @@ export default function Editor() {
                                   icon={<CodeIcon color="primary"/>}
                                   {...a11yProps(1)}
                                   component={Link}
-                                  to={'/testcase/'+row.assignment_name+'/jsoneditor'}
+                                  to={'/testcase/'+row.assignment_id+'/'+row.assignment_name+'/jsoneditor'}
                               />
                             </Tooltip>
                           </Tabs>
@@ -696,16 +697,19 @@ export default function Editor() {
               </Box>
             </Route>
               )}
-            <Route exact path='/result'>
+
               <Box p={3}>
                       <Paper className={classes.resultPaper}>
-                        {(resultStep === 0)?
-                            <ResultTable
+                        <Route exact path='/result'>
+                          {(resultStep===0)?
+                          <ResultTable
                                 setResultStep={setResultStep}
                                 setJobData={setJobData}
                                 jobData={jobData}
+                                result={result}
+                                setResult={setResult}
                             />:
-                            (resultStep===1)?
+                              (resultStep===1)?
                                 <JobTable
                                     setResultStep={setResultStep}
                                     setJobData={setJobData}
@@ -718,11 +722,11 @@ export default function Editor() {
                                   handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
                                   reportImg={reportImg}
                                   setReportImg={setReportImg}
-                                />
-                        }
+                                />}
+                        </Route>
                         </Paper>
               </Box>
-            </Route>
+
               <SettingDialog
                   open={settingsOpen}
                   setOpen={setSettingsOpen}
@@ -803,5 +807,36 @@ function ReportImageDialog(props){
       </Dialog>
   )
 }
+/*
+                      <Route exact path='/result'>
+                            <ResultTable
+                                setResultStep={setResultStep}
+                                setJobData={setJobData}
+                                jobData={jobData}
+                                result={result}
+                                setResult={setResult}
+                            />
+                        </Route>
+                        {result.map((row)=>
+                            <Route exact path={'/result/jobbatch/'+row.job_batch_id}>
+                            <JobTable
+                            setResultStep={setResultStep}
+                            setJobData={setJobData}
+                            jobData={jobData}
+                            />
+                            </Route>
+                        )}
+                        {jobData.map(row=>
+                            <Route exact path={'/result/jobbatch/'+jobData.job_batch_id+'/job/'+row.job_id+'/stage/'}>
+                                <ReportTable
+                                  setResultStep={setResultStep}
+                                  jobData={jobData}
+                                  setJobData={setJobData}
+                                  handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
+                                  reportImg={reportImg}
+                                  setReportImg={setReportImg}
+                                />
+                            </Route>
+                                )}*/
 
 

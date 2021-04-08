@@ -218,17 +218,24 @@ export default function JobTable(props) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     let cell_stage=[]
                                     for(let i=0; i<row.reports.length;i++){
-                                        cell_stage.push(<TableCell label={row.reports[i].stage_id} style={{cursor:'pointer'}} onClick={(event) => {
-                                            handleCellClick(event, row, row.reports[i].stage_id)
-                                        }}>{// TODO: add cell for stages after failed
-                                            (typeof row.reports[i].status!=='undefined')?row.reports[i].status:''}</TableCell>)
-                                    }
+                                        cell_stage.push(
+                                            <TableCell
+                                                label={row.reports[i].stage_id}
+                                                style={{cursor:'pointer'}}
+                                                to={'/'}
+                                                onClick={(event) => {
+                                                    handleCellClick(event, row, row.reports[i].stage_id)
+                                                }}>
+                                                {// TODO: add cell for stages after failed
+                                                    (typeof row.reports[i].status!=='undefined')?row.reports[i].status:''
+                                                }
+                                            </TableCell>
+                                        )}
                                     return (
                                         <TableRow
                                             hover
                                             tabIndex={-1}
                                             key={row.job_id}
-                                            
                                             style={{cursor:'pointer'}}
                                         >
                                             {// TODO: Set onClick

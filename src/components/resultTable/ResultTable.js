@@ -11,6 +11,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import {TextField} from "@material-ui/core";
 import {Tooltip} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -126,16 +127,15 @@ function ResultTableToolbar(props){
 }
 
 export default function ResultTable(props) {
-    const {setResultStep, setJobData, jobData} = props
+    const {setResultStep, setJobData, jobData, result, setResult} = props
 
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('job_batch_id');
-    const [filterCriteria, setFilterCriteria]= useState('')
-    const [fetched, setFetched]= useState(false);
-    const [result, setResult]= useState([]);
-    const [selected, setSelected]= useState([]);
+    const [filterCriteria, setFilterCriteria] = useState('')
+    const [fetched, setFetched] = useState(false);
+    const [selected, setSelected] = useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -145,7 +145,7 @@ export default function ResultTable(props) {
 
     const handleRowClick = (event, row) => {
         setJobData({
-            ...jobData, 
+            ...jobData,
             job_batch_id: row.job_batch_id,
             assignment_name: row.assignment.assignment_name,
             created_at: row.created_at
@@ -154,7 +154,7 @@ export default function ResultTable(props) {
         setResultStep(1)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         //TODO: change to correct path
         fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
             headers: {
@@ -163,7 +163,7 @@ export default function ResultTable(props) {
         }).then(response => response.json()).then(data => {
             console.log(data)
             const array = []
-            for(const value of data){
+            for (const value of data) {
                 array.push(value)
             }
             setResult(array)
@@ -174,12 +174,12 @@ export default function ResultTable(props) {
     return (
         <div className={classes.root}>
             <ResultTableToolbar
-                table= "Job Batch List"
+                table="Job Batch List"
                 classes={classes}
                 setFilterCriteria={setFilterCriteria}
             />
             <TableContainer className={classes.container}>
-                {(fetched)?
+                {(fetched) ?
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
@@ -195,7 +195,7 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(result, getComparator(order, orderBy))
-                                .filter(e=>(e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .filter(e => (e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     //const moment = require("moment-timezone");
@@ -203,39 +203,39 @@ export default function ResultTable(props) {
                                         <Tooltip title={row.created_at}>
                                             <TableRow
                                                 hover
-                                                style={{cursor:'pointer'}}
+                                                style={{cursor: 'pointer'}}
                                                 tabIndex={-1}
                                                 key={row.job_batch_id}
+                                                to={'/result/jobbatch/' + row.job_batch_id}
+                                                command={Link}
                                                 onClick={(event) => {
                                                     handleRowClick(event, row)
                                                 }}
                                             >
                                                 <TableCell label={row.job_batch_id}>
-                                                    {(row.job_batch_id !== null)?row.job_batch_id:null}
+                                                    {(row.job_batch_id !== null) ? row.job_batch_id : null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(row.assignment !== null)?row.assignment.assignment_name:null}
+                                                    {(row.assignment !== null) ? row.assignment.assignment_name : null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(row.created_at !== null)?row.created_at:null}
+                                                    {(row.created_at !== null) ? row.created_at : null}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {(row.job_config !== null)?row.job_config.job_config_name:null}
+                                                    {(row.job_config !== null) ? row.job_config.job_config_name : null}
                                                 </TableCell>
-                                                
-                                                    
                                                 <TableCell>
-                                                    {(row.submission_batch !== null)?row.submission_batch.zip_filename:null}
+                                                    {(row.submission_batch !== null) ? row.submission_batch.zip_filename : null}
                                                 </TableCell>
-                                                
+
                                             </TableRow>
                                         </Tooltip>
                                     );
                                 })}
                         </TableBody>
                     </Table>
-                :null} 
-                </TableContainer>
+                    : null}
+            </TableContainer>
         </div>
     );
 }
