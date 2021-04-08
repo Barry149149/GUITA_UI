@@ -449,7 +449,7 @@ export default function AssignmentTable(props) {
                                                     </Select>
                                                     <Button
                                                         component={Link}
-                                                        path={'/config/'+selectedConfig[index].id+'/'+selectedConfig[index].name}
+                                                        to={'/config/'+selectedConfig[index].id+'/'+selectedConfig[index].name}
                                                         onClick={() => {
                                                             setSelectedJobConfigName(selectedConfig[index].name)
                                                             props.setLastEditedJobConfig({id:selectedConfig[index].id, name:selectedConfig[index].name})
