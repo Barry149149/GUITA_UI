@@ -1,4 +1,4 @@
-import React, {useState, useReducer,useLayoutEffect, } from 'react';
+import React, {useState, useReducer,useLayoutEffect, useEffect} from 'react';
 import {lighten, makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -40,6 +40,11 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
+import {BrowserRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom';
+import SubmitPanel from "./tab/tabpanels/drawerPanels/SubmitPanel";
+import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
+import { useHistory } from 'react-router-dom'
+
 
 const drawerWidth = 440;
 
@@ -232,12 +237,12 @@ function useWindowSize() {
   return size;
 }
 
+
 export default function Editor() {
 
   const classes = useStyles();
 
   const [width, height] = useWindowSize();
-
 
   //this is for the test case management
   const [config,setConfig] = useState({
@@ -259,7 +264,8 @@ export default function Editor() {
         {
           value: 'Test Cases',
           nodes: [
-            {id:1,
+            {
+              id:1,
               value: 'Test 1',
               json: [],
               json_id:[]
@@ -278,10 +284,14 @@ export default function Editor() {
     future:[]
   })
 
+  const [node,setNode]=useState([])
+
+  const [assignData, setAssignData] = useState([]);
+
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
-  const [drawerOpen,setDrawerOpen] = useState(false);
+  const [drawerOpen,setDrawerOpen] = useState(true);
   const [stageFormOpen,setStageFormOpen]=useState(false)
   const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
@@ -435,6 +445,10 @@ export default function Editor() {
     return [value, setValue];
   }
 
+  useEffect(()=>{
+    console.log(node)
+  })
+
   const [
     tour,
     setTour
@@ -458,253 +472,274 @@ export default function Editor() {
     />;
   }
   return (
-    <div className={classes.root}>
-      {guide}
-      <CssBaseline />
-      <GuitaAppBar
-          classes={classes}
-          state={state}
-          handleSubmit={handleSubmit}
-          setSettingsOpen={setSettingsOpen}
-          setGuideRun={setGuideRun}
-          setTour={setTour}
-      />
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: drawerOpen,
-          [classes.drawerClose]: !drawerOpen,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: drawerOpen,
-            [classes.drawerClose]: !drawerOpen,
-          }),
-        }}
-      >
-        <div className={classes.drawerContainer} >
-          <div id='Drawer'>
-              <Box p={4}/>
-              <DrawerTab
-                  drawerValue={drawerValue}
-                  handleDrawerChange={handleDrawerChange}
-                  classes={classes}
-              />
-          </div>
-          <div style={{width:240}}>
-            {(drawerOpen)?
-                <PanelsContainer
+      <Router>
+        <div className={classes.root}>
+          {guide}
+          <CssBaseline />
+          <GuitaAppBar
+              classes={classes}
+              state={state}
+              handleSubmit={handleSubmit}
+              setSettingsOpen={setSettingsOpen}
+              setGuideRun={setGuideRun}
+              setTour={setTour}
+          />
+          <Drawer
+            variant="permanent"
+            className={clsx(classes.drawer, {
+              [classes.drawerOpen]: drawerOpen,
+              [classes.drawerClose]: !drawerOpen,
+            })}
+            classes={{
+              paper: clsx({
+                [classes.drawerOpen]: drawerOpen,
+                [classes.drawerClose]: !drawerOpen,
+              }),
+            }}
+          >
+            <div className={classes.drawerContainer} >
+              <div id='Drawer'>
+                  <Box p={4}/>
+                  <DrawerTab
+                      drawerValue={drawerValue}
+                      classes={classes}
+                  />
+              </div>
+              <div style={{width:240}}>
+                <Box p={3}/>
+                <SubmitPanel
                     drawerValue={drawerValue}
-                    config={config}
-                    setConfig={setConfig}
-                    state={state}
-                    resultData={resultData}
-                    setResultData={setResultData}
-                    dispatch={dispatch}
-                    createConfig={createConfig}
-                    setCreateConfig={setCreateConfig}
                     jobBatch={jobBatch}
                     setJobBatch={setJobBatch}
+                    state={state}
                 />
-                :null}
-              </div>
-        </div>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <TabPanel
-          value={drawerValue}
-          index={0}
-        >
-            <Paper className={classes.submissionPaper}>
-              <AssignmentTable
-                jobBatch={jobBatch}
-                setJobBatch={setJobBatch}
-                selectedAssignment={selectedAssignment}
-                setSelectedAssignment={setSelectedAssignment}
-                drawerValue={drawerValue}
-                setDrawerValue={setDrawerValue}
-                handleDrawerChange={handleDrawerChange}
-                setDrawerOpen={setDrawerOpen}
-                setSelectedJobConfig={setSelectedJobConfig}
-                selectedConfig={selectedConfig}
-                setSelectedConfig={setSelectedConfig}
-                setSelectedAssignmentName={setSelectedAssignmentName}
-                setSelectedJobConfigName={setSelectedJobConfigName}
-              />
-            </Paper>
-        </TabPanel>
-        <TabPanel
-            value={drawerValue}
-            index={1}
-        >
-          <Paper className={classes.paper2}>
-            <Toolbar className={classes.toolbar2}>
-              <Typography className={classes.title} color="primary" variant="h5" component="div">
-                {(selectedAssignmentName !== '')?selectedAssignmentName:((tabValue===0)?"Table & Form Mode ":"JSON Code Editor ")}
-                 \ Test Case {state.present.selectedCase.id}
-              </Typography>
-              <IconButton color="inherit" disabled={state.past.length===0} onClick={()=>{dispatch({type:"UNDO"})}} >
-                <UndoIcon/>
-              </IconButton>
-              <IconButton color="inherit" disabled={state.future.length===0} onClick={()=>{dispatch({type:"REDO"})}}>
-                <RedoIcon/>
-              </IconButton>
-              <Tabs
-                  value={tabValue}
-                  onChange={(value,newValue) =>setTabValue(newValue)}
-                  indicatorColor="primary"
-                  centered={true}
-              >
-                <Tooltip title="Table Mode">
-                  <Tab
-                      className={classes.tab}
-                      aria-label="tab_tableView"
-                      icon={<TableChartIcon color="primary"/>}
-                      {...a11yProps(0)}
-                  />
-                </Tooltip>
-                <Tooltip title="CodeEditor">
-                  <Tab
-                      className={classes.tab}
-                      aria-label="tab_codeEditor"
-                      icon={<CodeIcon color="primary"/>}
-                      {...a11yProps(1)}
-                  />
-                </Tooltip>
-              </Tabs>
-            </Toolbar>
-            <JsonEditorPanel
-                classes={classes}
-                tabValue={tabValue}
-                style={style}
-                state={state}
-                dispatch={dispatch}
-            />
-            <TablePanel
-                tabValue={tabValue}
-                formOpen={formOpen}
-                state={state}
-                setFormOpen={setFormOpen}
-                dispatch={dispatch}
-                width={(drawerOpen)?(width-drawerWidth):width}
-                selectedAssignment={selectedAssignment}
-            />
-          </Paper>
-        </TabPanel>
-        <TabPanel
-            value={drawerValue}
-            index={2}>
-          <div style={(width<1080)?{
-            width:'100%'
-          }:{
-            display: 'flex',
-            flexGrow: 1,
-            margin:0,
-            width:'100%',
-          }}>
-            <div id="commandTable" style={(contentWidth<1080)?{width:'100%'}:((!stageFormOpen)?{width:'100%'}:{width:'69%'})}>
-                <StageTable
-                    stage={stage}
-                    setStage={setStage}
-                    stageFormOpen={stageFormOpen}
-                    setStageFormOpen={setStageFormOpen}
-                    stageSelectOpen={stageSelectOpen}
-                    setStageSelectOpen={setStageSelectOpen}
-                    createConfig={createConfig}
-                    setCreateConfig={setCreateConfig}
-                    selectedJobConfig={selectedJobConfig}
-                    selectedJobConfigName={selectedJobConfigName}
-                />
-              </div>
-            <div style={{height:'20px',width:'2%'}}/>
-              {(stageFormOpen)?
-                  <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                    <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
-                      <StageForm
-                          stage={stage}
-                          setStage={setStage}
-                          stageFormOpen={stageFormOpen}
-                          setStageFormOpen={setStageFormOpen}
-                          createdStage={createdStage}
-                          setCreatedStage={setCreatedStage}
-                          testcases={state.present.tree[0].nodes}
+                {assignData.map((row)=>{
+                  if (drawerOpen) return (
+                      <TreePanel
+                          drawerValue={drawerValue}
+                          selectedCase={state.present.selectedCase}
+                          tree={state.present.tree}
+                          createdCases={state.present.createdCases}
+                          noOfCases={state.present.noOfCases}
+                          dispatch={dispatch}
+                          pathname={row.assignment_name}
                       />
-                    </div>
-                  </Grow>
-                  :null}
-                {(stageSelectOpen)?
-                  <Grow in={stageSelectOpen} timeout={(stageSelectOpen) ? 1000 : 0}>
-                    <Grid item xs={3}>
-                      <StageSelect
-                          stage={stage}
-                          setStage={setStage}
-                          stageSelectOpen={stageSelectOpen}
-                          setStageSelectOpen={setStageSelectOpen}
-                          createdStage={createdStage}
-                          setCreatedStage={setCreatedStage}
-                          testcases={state.present.tree[0].nodes}
-                      />
-                    </Grid>
-                  </Grow>
-                  :null}
+                      )
+                })}
+              </div>
             </div>
-        </TabPanel>
-        <TabPanel
-            value={drawerValue}
-            index={3}
-        >
-                  <Paper className={classes.resultPaper}>
-                    {(resultStep === 0)?
-                        <ResultTable
-                            setResultStep={setResultStep}
-                            setJobData={setJobData}
-                            jobData={jobData}
-                        />:
-                        (resultStep===1)?
-                            <JobTable
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Route exact path='/'>
+              <Box p={3}>
+                <Paper className={classes.submissionPaper}>
+                  <AssignmentTable
+                    jobBatch={jobBatch}
+                    setJobBatch={setJobBatch}
+                    selectedAssignment={selectedAssignment}
+                    setSelectedAssignment={setSelectedAssignment}
+                    drawerValue={drawerValue}
+                    setDrawerValue={setDrawerValue}
+                    handleDrawerChange={handleDrawerChange}
+                    setDrawerOpen={setDrawerOpen}
+                    setSelectedJobConfig={setSelectedJobConfig}
+                    selectedConfig={selectedConfig}
+                    setSelectedConfig={setSelectedConfig}
+                    setSelectedAssignmentName={setSelectedAssignmentName}
+                    setSelectedJobConfigName={setSelectedJobConfigName}
+                    assignData={assignData}
+                    setAssignData={setAssignData}
+                  />
+                </Paper>
+              </Box>
+            </Route>
+            {assignData.map((row)=> {
+              return(
+                  <Route path={'/testcase/'+row.assignment_name}>
+                    <Box p={3}>
+                      <Paper className={classes.paper2}>
+                        <Toolbar className={classes.toolbar2}>
+                          <Typography className={classes.title} color="primary" variant="h5" component="div">
+                            {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
+                            \ Test Case {state.present.selectedCase.id}
+                          </Typography>
+                          <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
+                            dispatch({type: "UNDO"})
+                          }}>
+                            <UndoIcon/>
+                          </IconButton>
+                          <IconButton color="inherit" disabled={state.future.length === 0} onClick={() => {
+                            dispatch({type: "REDO"})
+                          }}>
+                            <RedoIcon/>
+                          </IconButton>
+                          <Tabs
+                              value={tabValue}
+                              onChange={(value, newValue) => setTabValue(newValue)}
+                              indicatorColor="primary"
+                              centered={true}
+                          >
+                            <Tooltip title="Table Mode">
+                              <Tab
+                                  className={classes.tab}
+                                  aria-label="tab_tableView"
+                                  icon={<TableChartIcon color="primary"/>}
+                                  {...a11yProps(0)}
+                                  component={Link}
+                                  to={'/testcase/'+row.assignment_name}
+                              />
+                            </Tooltip>
+                            <Tooltip title="CodeEditor">
+                              <Tab
+                                  className={classes.tab}
+                                  aria-label="tab_codeEditor"
+                                  icon={<CodeIcon color="primary"/>}
+                                  {...a11yProps(1)}
+                                  component={Link}
+                                  to={'/testcase/'+row.assignment_name+'/jsoneditor'}
+                              />
+                            </Tooltip>
+                          </Tabs>
+                        </Toolbar>
+                        <JsonEditorPanel
+                            classes={classes}
+                            tabValue={tabValue}
+                            style={style}
+                            state={state}
+                            dispatch={dispatch}
+                            pathname={row.assignment_name}
+                        />
+                        <TablePanel
+                            tabValue={tabValue}
+                            formOpen={formOpen}
+                            state={state}
+                            setFormOpen={setFormOpen}
+                            dispatch={dispatch}
+                            width={(drawerOpen) ? (width - drawerWidth) : width}
+                            selectedAssignment={selectedAssignment}
+                            pathname={row.assignment_name}
+                            setNode={setNode}
+                        />
+                      </Paper>
+                    </Box>
+                  </Route>
+                   )
+                  }
+                )}
+            <Route exact path='/config'>
+              <Box p={3}>
+              <div style={(width<1080)?{
+                width:'100%'
+              }:{
+                display: 'flex',
+                flexGrow: 1,
+                margin:0,
+                width:'100%',
+              }}>
+                <div id="commandTable" style={(contentWidth<1080)?{width:'100%'}:((!stageFormOpen)?{width:'100%'}:{width:'69%'})}>
+                    <StageTable
+                        stage={stage}
+                        setStage={setStage}
+                        stageFormOpen={stageFormOpen}
+                        setStageFormOpen={setStageFormOpen}
+                        stageSelectOpen={stageSelectOpen}
+                        setStageSelectOpen={setStageSelectOpen}
+                        createConfig={createConfig}
+                        setCreateConfig={setCreateConfig}
+                        selectedJobConfig={selectedJobConfig}
+                        selectedJobConfigName={selectedJobConfigName}
+                    />
+                  </div>
+                <div style={{height:'20px',width:'2%'}}/>
+                  {(stageFormOpen)?
+                      <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
+                        <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
+                          <StageForm
+                              stage={stage}
+                              setStage={setStage}
+                              stageFormOpen={stageFormOpen}
+                              setStageFormOpen={setStageFormOpen}
+                              createdStage={createdStage}
+                              setCreatedStage={setCreatedStage}
+                              testcases={state.present.tree[0].nodes}
+                          />
+                        </div>
+                      </Grow>
+                      :null}
+                    {(stageSelectOpen)?
+                      <Grow in={stageSelectOpen} timeout={(stageSelectOpen) ? 1000 : 0}>
+                        <Grid item xs={3}>
+                          <StageSelect
+                              stage={stage}
+                              setStage={setStage}
+                              stageSelectOpen={stageSelectOpen}
+                              setStageSelectOpen={setStageSelectOpen}
+                              createdStage={createdStage}
+                              setCreatedStage={setCreatedStage}
+                              testcases={state.present.tree[0].nodes}
+                          />
+                        </Grid>
+                      </Grow>
+                      :null}
+                </div>
+              </Box>
+            </Route>
+            <Route exact path='/result'>
+              <Box p={3}>
+                      <Paper className={classes.resultPaper}>
+                        {(resultStep === 0)?
+                            <ResultTable
                                 setResultStep={setResultStep}
                                 setJobData={setJobData}
                                 jobData={jobData}
                             />:
-                            <ReportTable
-                              setResultStep={setResultStep}
-                              jobData={jobData}
-                              setJobData={setJobData}
-                              handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
-                              reportImg={reportImg}
-                              setReportImg={setReportImg}
-                            />
-                    }
-                    </Paper>
-        </TabPanel>
-          <SettingDialog
-              open={settingsOpen}
-              setOpen={setSettingsOpen}
-              style={style}
-              setStyle={setStyle}
-          />
-          <SubmitConfirmDialog
-              submitConfirm={submitConfirm}
-              setSubmitConfirm={setSubmitConfirm}
-              uploadFile={uploadFile}
-              fileName={fileName}
-          />
-          <SubmitWarningDialog
-              submitWarning={submitWarning}
-              setSubmitWarning={setSubmitWarning}
-          />
-          <ReportImageDialog
-              open={imgDialogOpen}
-              handleClose={()=>setImgDialogOpen(false)}
-              title={reportImg.name}
-              jobData={jobData}
-              reportImg={reportImg}
-              setReportImg={setReportImg}
-              //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
-          />
-      </main>
-    </div>
+                            (resultStep===1)?
+                                <JobTable
+                                    setResultStep={setResultStep}
+                                    setJobData={setJobData}
+                                    jobData={jobData}
+                                />:
+                                <ReportTable
+                                  setResultStep={setResultStep}
+                                  jobData={jobData}
+                                  setJobData={setJobData}
+                                  handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
+                                  reportImg={reportImg}
+                                  setReportImg={setReportImg}
+                                />
+                        }
+                        </Paper>
+              </Box>
+            </Route>
+              <SettingDialog
+                  open={settingsOpen}
+                  setOpen={setSettingsOpen}
+                  style={style}
+                  setStyle={setStyle}
+              />
+              <SubmitConfirmDialog
+                  submitConfirm={submitConfirm}
+                  setSubmitConfirm={setSubmitConfirm}
+                  uploadFile={uploadFile}
+                  fileName={fileName}
+              />
+              <SubmitWarningDialog
+                  submitWarning={submitWarning}
+                  setSubmitWarning={setSubmitWarning}
+              />
+              <ReportImageDialog
+                  open={imgDialogOpen}
+                  handleClose={()=>setImgDialogOpen(false)}
+                  title={reportImg.name}
+                  jobData={jobData}
+                  reportImg={reportImg}
+                  setReportImg={setReportImg}
+                  //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+              />
+          </main>
+        </div>
+      </Router>
   );
 }
 
@@ -724,7 +759,9 @@ function ReportImageDialog(props){
               margin:0
             }}
         >
-          <Button onClick={()=>{
+          <Button
+              disabled={0===reportImg.path}
+              onClick={()=>{
             if(reportImg.path>0){
               setReportImg({
                 ...reportImg,
@@ -739,7 +776,9 @@ function ReportImageDialog(props){
             }}>
               <img src={'/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/'+reportImg.paths[reportImg.path]} width="100%" height="100%"/>
             </div>
-            <Button onClick={()=>{
+            <Button
+                disabled={reportImg.paths.length-1===reportImg.path}
+                onClick={()=>{
             if(reportImg.path<reportImg.paths.length){
               setReportImg({
                 ...reportImg,

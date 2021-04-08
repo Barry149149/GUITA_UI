@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField"
 import {makeStyles} from "@material-ui/core/styles";
 import Box from '@material-ui/core/Box';
+import {Route} from "react-router-dom";
 
 const useStyles = makeStyles((theme)=>({
     readOnlyBox:{
@@ -76,10 +77,8 @@ export default function SubmitPanel(props){
     }
 
     return (
-    <TabPanel
-        id="tabPanel_submit"
-        value={props.drawerValue}
-        index={0} >
+        <Route exact path='/'>
+            <Box p={3}>
         <Title>Job Batch Submission</Title>
         <Divider/>
         <div style={{height:50, paddingLeft:8}}>
@@ -173,6 +172,7 @@ export default function SubmitPanel(props){
                 Submit Job Batch
             </Button>
         </div>
-    </TabPanel>
+            </Box>
+        </Route>
     )
 }

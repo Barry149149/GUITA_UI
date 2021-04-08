@@ -12,6 +12,7 @@ import JSZip from "jszip";
 import VerticalAlignBottomIcon from "@material-ui/icons/VerticalAlignBottom";
 import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import { saveAs } from 'file-saver';
+import {Route} from "react-router-dom";
 
 const useStyles = makeStyles((theme)=>({
     readOnlyBox:{
@@ -34,10 +35,8 @@ export default function TreePanel(props){
         zip: null
     });
     return (
-        <TabPanel
-        id="tabPanel_caseTree"
-        value={props.drawerValue}
-        index={1}>
+        <Route path={'/testcase/'+props.pathname}>
+            <Box p={3}>
             <Title>Test Cases</Title>
             <Divider/>
             <CaseTree
@@ -50,7 +49,7 @@ export default function TreePanel(props){
             <div style={{
                 position: 'absolute',
                 bottom: 30,
-                left: 85
+                left: 150
             }}>
             <Button
                 className={classes.uploadButton}
@@ -196,6 +195,7 @@ export default function TreePanel(props){
                     </Button>
                 <p style={{fontSize:12, color:'#888888'}}>Download a Zip of Test Cases JSON to local</p>
             </div>
-        </TabPanel>
+            </Box>
+        </Route>
     )
 }

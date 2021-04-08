@@ -8,6 +8,8 @@ import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
 import React, {useEffect, useState} from "react";
+import {Route} from "react-router-dom";
+import * as R from "ramda"
 
 
 
@@ -28,27 +30,57 @@ export default function TablePanel(props){
     const [testcaseJson, setTestcaseJson]=useState([])
 
     useEffect(()=>{
+        let newNodes=new Array()
         if(props.selectedAssignment){
             console.log(props.selectedAssignment)
             fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
             .then(data => {
                 console.log(data)
                 for(let i = 0;i<data.length; i++) {
-                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').then(response => response.json()).then( data => {
-                        console.log(data);
-                        let tempTestcase = testcaseJson;
-                        tempTestcase.push(data);
-                        setTestcaseJson(tempTestcase);
+                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').
+                    then(response => response.json()).
+                    then( data => {
+                        let json=[...data];
+                        let json_id=[];
+                        for(let i=0;i<data.length; i++){
+                            json_id.push({
+                                    id:i,
+                                    command:json[i]
+                            })
+                        }
+                        newNodes.push({
+                            id:(i+1),
+                            value:'Test'+(i+1),
+                            json:[...json],
+                            json_id:[...json_id]
+                        })
                     })
                 }
+                console.log(newNodes)
+                dispatch({
+                    type:'SET',
+                    data: {
+                        tree:[
+                            {
+                                value: props.pathname,
+                                nodes: [...newNodes],
+                            },
+                        ],
+                        selectedCase:{...newNodes[0]},
+                        createdCases: data.length,
+                        noOfCases:data.length,}
+                })
+                console.log(state)
+                props.setNode([...newNodes])
             })
         } else {
             setFetched(true)
         }
+        console.log(state)
     },[fetched])
 
     return(
-        <TabPanel value={tabValue} index={0}>
+        <Route path={'/testcase/'+props.pathname}>
             <div style={(width<1080)?{
                 width:'100%'
             }:{
@@ -105,6 +137,6 @@ export default function TablePanel(props){
                         :null
                 }
             </div>
-        </TabPanel>
+        </Route>
     )
 }

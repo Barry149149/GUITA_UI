@@ -4,12 +4,13 @@ import JsonEditor from "../../../jsonEditor/jsonEditor";
 import React from "react";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import {Route} from "react-router-dom";
 
 export default function JsonEditorPanel(props){
     const {classes,tabValue,style,state,dispatch}=props
 
     return(
-        <TabPanel value={tabValue} index={1}>
+        <Route path={'/testcase/'+props.pathname+'/jsoneditor'}>
             <JsonEditor
                 selectedCase={state.present.selectedCase}
                 style={style}
@@ -19,6 +20,6 @@ export default function JsonEditorPanel(props){
                 dispatch={dispatch}
             />
             <Box pt={6}/>
-        </TabPanel>
+        </Route>
     )
 }
