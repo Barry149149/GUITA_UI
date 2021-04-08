@@ -108,120 +108,14 @@ export default function CaseTree(props){
                 <RemoveIcon/>
             </IconButton>
             </Tooltip>
-            <Tooltip title="Download">
-            <IconButton
-                size="small"    
-                id= 'button_download'
-                variant='outlined'
-                color= 'primary'
-                onClick={()=>{
-                    const zip = new JSZip();
-                    console.log(props.tree[0].nodes[0].json);
-                    for(const index in props.tree[0].nodes){
-                        const fileData = JSON.stringify(props.tree[0].nodes[index].json);
-                        zip.file('testcase'+props.tree[0].nodes[index].id+'.json', fileData);
-                    }
-                    zip.generateAsync({type:"blob"})
-                    .then(function(content) {
-                        saveAs(content, "testcases.zip");
-                    });
-                }
-                }>
-                <VerticalAlignBottomIcon/>
-            </IconButton>
-            </Tooltip>
-            <Tooltip title="Upload">
-            <IconButton
-                size="small"
-                id= 'button_upload'
-                variant='outlined'
-                component='label'
-                color= 'primary'
-                onClick={()=>{}}
-                >
-                <VerticalAlignTopIcon/>
-                <input
-                    type='file'
-                    id='file'
-                    name='file'
-                    accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
-                    // TODO: Chrome accept also i.e. pptx, docx, xlsx, other browsers work fine
-                    hidden
 
-                    onChange={(e)=>{
-                        const promises = [];
-
-                        JSZip.loadAsync(e.target.files[0]).then(function (zip) {
-
-                            zip.forEach(function (relativePath, zipEntry){
-                                promises.push(zip.file(zipEntry.name).async('string'));
-                            });
-
-                            Promise.all(promises).then(function (data) {
-
-                                let newNodes=[
-                                    ...props.tree[0].nodes,
-                                ]
-                                console.log(data.length);
-                                console.log(props.createdCases);
-                                let last_jsObject=[];
-                                let last_new_json_id =[];
-                                let last_id=0
-
-                                for(const i in data){
-
-                                    const jsObject = JSON.parse(data[i]);
-                                    console.log(jsObject);
-
-                                    let new_json_id=[];
-                                    for(let j=0;j<jsObject.length;j++) {
-                                        new_json_id.push({
-                                            id:(j+1),
-                                            command:jsObject[j],
-                                        })
-                                    }
-
-                                    newNodes.push({
-                                        id: (props.createdCases+parseInt(i)+1),
-                                        value: 'Test ' + (props.createdCases+parseInt(i)+1),
-                                        json:jsObject,
-                                        json_id:new_json_id,
-                                    });
-
-                                    last_id=i;
-                                    last_jsObject = jsObject;
-                                    last_new_json_id = new_json_id;
-                                }
-
-                                props.dispatch({
-                                    data:{
-                                        tree:[
-                                            {
-                                                value: 'Test Cases',
-                                                nodes: newNodes
-                                            }
-                                        ],
-                                        createdCases:props.createdCases+data.length,
-                                        noOfCases:props.createdCases+data.length,
-                                        selectedCase:{
-                                            id:last_id,
-                                            json: last_jsObject,
-                                            json_id: last_new_json_id,
-                                        },
-                                    }
-                                })
-                            }, function(err){
-                            })
-                        });
-                        e.target.value = null;
-                    }
-                    }
-                />
-
-            </IconButton>
-            </Tooltip>
             </ButtonGroup>
-            <Box id="caseTree">
+            <div style={{
+                overflow: 'auto',
+                maxHeight: 400,
+                height: 400,
+                width: 270
+            }}>
             <MuiTreeView
                 defaultExpanded
                 tree={props.tree}
@@ -242,8 +136,7 @@ export default function CaseTree(props){
 
                 }}
             />
-            </Box>
-
+            </div>
             <Dialog
                 open={confirmOpen}
                 onClose={handleConfirmClose}

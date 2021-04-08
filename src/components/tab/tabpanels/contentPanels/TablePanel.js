@@ -8,7 +8,8 @@ import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
 import React, {useEffect, useState} from "react";
-
+import {Route} from "react-router-dom";
+import * as R from "ramda"
 
 
 export default function TablePanel(props){
@@ -31,24 +32,87 @@ export default function TablePanel(props){
         if(props.selectedAssignment){
             console.log(props.selectedAssignment)
             fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
-            .then(data => {
+            .then(async data => {
+                let newNodes=new Array()
                 console.log(data)
+                if(data==[]){
+                    dispatch({
+                        type:'SET',
+                        data:{
+                            tree:[
+                                {
+                                    value: props.pathname,
+                                    nodes: [
+                                        {
+                                            id:1,
+                                            value: 'Test 1',
+                                            json: [],
+                                            json_id:[]
+                                        },
+                                    ],
+                                },
+                            ],
+                            selectedCase:{
+                                id:1,
+                                json: [],
+                                json_id:[]
+                            },
+                            createdCases: 1,
+                            noOfCases:1
+                        }
+
+                    })
+                    return
+                }
                 for(let i = 0;i<data.length; i++) {
-                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').then(response => response.json()).then( data => {
-                        console.log(data);
-                        let tempTestcase = testcaseJson;
-                        tempTestcase.push(data);
-                        setTestcaseJson(tempTestcase);
+                    let { json , json_id } = await fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').
+                    then(response => response.json()).
+                    then( data => {
+                        let json=[...data];
+                        let json_id=[];
+                        for(let i=0;i<data.length; i++){
+                            json_id.push({
+                                    id:i,
+                                    command:json[i]
+                            })
+                        }
+                        return {json, json_id}
+
+                    })
+                    newNodes.push({
+                        id:(i+1),
+                        value:'Test'+(i+1),
+                        json:[...json],
+                        json_id:[...json_id]
                     })
                 }
+                if(newNodes.length == 0) return
+                console.log(newNodes)
+                dispatch({
+                    type:'SET',
+                    data: {
+                        tree:[
+                            {
+                                value: props.pathname,
+                                nodes: [...newNodes],
+                            },
+                        ],
+                        selectedCase:{...newNodes[0]},
+                        createdCases: data.length,
+                        noOfCases:data.length,}
+                })
+                props.setNode([...newNodes])
             })
+            setFetched(true)
         } else {
             setFetched(true)
         }
+        console.log(state)
     },[fetched])
 
     return(
-        <TabPanel value={tabValue} index={0}>
+
+        <Route exact path={'/testcase/'+props.pathid+'/'+props.pathname}>
             <div style={(width<1080)?{
                 width:'100%'
             }:{
@@ -105,6 +169,6 @@ export default function TablePanel(props){
                         :null
                 }
             </div>
-        </TabPanel>
+        </Route>
     )
 }

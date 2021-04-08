@@ -62,12 +62,11 @@ export default function JsonEditor(props) {
                                 else tempDescription={description: ' '}
                             }
                             new_json_id.push({
-                                id: (i + 1),
+                                id: i,
                                 command: {
                                     ...e.jsObject[i],
                                     ...tempDescription,
                                 },
-
                             })
                         }
 

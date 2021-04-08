@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        backgroundColor:'#FFFFFF'
     },
     highlight:
         theme.palette.type === 'light'
@@ -51,8 +52,10 @@ const useStyles = makeStyles((theme) => ({
         overflow:'auto',
         height:500,
         maxHeight:700,
+        backgroundColor:'#DDDDDD'
     },
     tableRow: {
+        backgroundColor:'#FFFFFF',
         "&$selected, &$selected:hover": {
             backgroundColor: lighten(theme.palette.primary.light, 0.85),
         }
