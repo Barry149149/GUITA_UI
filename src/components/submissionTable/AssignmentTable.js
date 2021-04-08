@@ -300,13 +300,14 @@ export default function AssignmentTable(props) {
                 })
             }
             setSelectedConfig([...emptyConfig])
-            setFetched(true)
+            
+            return fetch('/api/v2/job_config', {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            });
         })
-        fetch('/api/v2/job_config', {
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
+        .then(response => response.json()).then(data => {
             const array = []
             for (const value of data) {
                 array.push(value)

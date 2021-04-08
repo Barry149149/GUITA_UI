@@ -790,7 +790,7 @@ function ReportImageDialog(props){
             <Button
                 disabled={reportImg.paths.length-1===reportImg.path}
                 onClick={()=>{
-            if(reportImg.path<reportImg.paths.length){
+            if(reportImg.path<reportImg.paths.length-1){
               setReportImg({
                 ...reportImg,
                 path:reportImg.path+1
