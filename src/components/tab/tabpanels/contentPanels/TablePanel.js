@@ -12,7 +12,6 @@ import {Route} from "react-router-dom";
 import * as R from "ramda"
 
 
-
 export default function TablePanel(props){
     const {tabValue,formOpen,state,setFormOpen,dispatch,width}=props
 
@@ -30,14 +29,43 @@ export default function TablePanel(props){
     const [testcaseJson, setTestcaseJson]=useState([])
 
     useEffect(()=>{
-        let newNodes=new Array()
         if(props.selectedAssignment){
             console.log(props.selectedAssignment)
             fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
-            .then(data => {
+            .then(async data => {
+                let newNodes=new Array()
                 console.log(data)
+                if(data==[]){
+                    dispatch({
+                        type:'SET',
+                        data:{
+                            tree:[
+                                {
+                                    value: props.pathname,
+                                    nodes: [
+                                        {
+                                            id:1,
+                                            value: 'Test 1',
+                                            json: [],
+                                            json_id:[]
+                                        },
+                                    ],
+                                },
+                            ],
+                            selectedCase:{
+                                id:1,
+                                json: [],
+                                json_id:[]
+                            },
+                            createdCases: 1,
+                            noOfCases:1
+                        }
+
+                    })
+                    return
+                }
                 for(let i = 0;i<data.length; i++) {
-                    fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').
+                    let { json , json_id } = await fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').
                     then(response => response.json()).
                     then( data => {
                         let json=[...data];
@@ -48,14 +76,17 @@ export default function TablePanel(props){
                                     command:json[i]
                             })
                         }
-                        newNodes.push({
-                            id:(i+1),
-                            value:'Test'+(i+1),
-                            json:[...json],
-                            json_id:[...json_id]
-                        })
+                        return {json, json_id}
+
+                    })
+                    newNodes.push({
+                        id:(i+1),
+                        value:'Test'+(i+1),
+                        json:[...json],
+                        json_id:[...json_id]
                     })
                 }
+                if(newNodes.length == 0) return
                 console.log(newNodes)
                 dispatch({
                     type:'SET',
@@ -70,9 +101,9 @@ export default function TablePanel(props){
                         createdCases: data.length,
                         noOfCases:data.length,}
                 })
-                console.log(state)
                 props.setNode([...newNodes])
             })
+            setFetched(true)
         } else {
             setFetched(true)
         }
@@ -80,7 +111,8 @@ export default function TablePanel(props){
     },[fetched])
 
     return(
-        <Route path={'/testcase/'+props.pathname}>
+
+        <Route exact path={'/testcase/'+props.pathid+'/'+props.pathname}>
             <div style={(width<1080)?{
                 width:'100%'
             }:{

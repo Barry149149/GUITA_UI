@@ -40,7 +40,6 @@ export default function DrawerTab(props){
                 <ListItem
                     button
                     className={{root:classes.tab2, selected: classes.selected}}
-                    selected={drawerValue===0}
                     aria-checked={drawerValue===0}
                     selected={location.pathname=='/'}
                     component={Link}
@@ -51,29 +50,28 @@ export default function DrawerTab(props){
                 <ListItem
                     button
                     className={{root:classes.tab2, selected: classes.selected}}
-                    selected={drawerValue===1}
                     aria-checked={drawerValue===1}
-                    selected={location.pathname=='/testcase'}
+                    disabled={props.selectedAssignment==-1}
+                    selected={location.pathname=='/testcase/'+props.selectedAssignment+'/'+props.selectedAssignmentName}
                     component={Link}
-                    to={'/testcase'}
+                    to={'/testcase/'+props.selectedAssignment+'/'+props.selectedAssignmentName}
                 >
                     <ListItemText primary="TestCase" />
                 </ListItem>
                 <ListItem
                     button
                     className={{root:classes.tab2, selected: classes.selected}}
-                    selected={drawerValue===2}
                     aria-checked={drawerValue===2}
-                    selected={location.pathname=='/config'}
+                    selected={location.pathname=='/config/'+props.lastEditedJobConfig.id+'/'+props.lastEditedJobConfig.name}
+                    disabled={props.lastEditedJobConfig.id==-1}
                     component={Link}
-                    to={'/config'}
+                    to={'/config/'+props.lastEditedJobConfig.id+'/'+props.lastEditedJobConfig.name}
                 >
                     <ListItemText primary="JobConfig" />
                 </ListItem>
                 <ListItem
                     button
                     className={{root:classes.tab2, selected: classes.selected}}
-                    selected={drawerValue===3}
                     aria-checked={drawerValue===3}
                     selected={location.pathname=='/result'}
                     component={Link}

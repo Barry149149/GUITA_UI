@@ -341,6 +341,7 @@ export default function Editor() {
   const [jobData, setJobData]= useState({
     imgPath:[]
   })
+  const [configData, setConfigData] = useState([]);
 
   //this is for job batch result
   const [jobBatch, setJobBatch]= useState({
@@ -358,10 +359,11 @@ export default function Editor() {
     paths:[]
   });
  
-  const [selectedJobConfig, setSelectedJobConfig] = useState(0);
+  const [selectedJobConfig, setSelectedJobConfig] = useState(-1);
   const [selectedJobConfigName, setSelectedJobConfigName] = useState('');
-  const [selectedAssignment, setSelectedAssignment]=useState(0);
+  const [selectedAssignment, setSelectedAssignment]=useState(-1);
   const [selectedAssignmentName, setSelectedAssignmentName]=useState('');
+  const [lastEditedJobConfig, setLastEditedJobConfig] = useState({id:-1,name:''});
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -503,6 +505,9 @@ export default function Editor() {
                   <DrawerTab
                       drawerValue={drawerValue}
                       classes={classes}
+                      selectedAssignment={selectedAssignment}
+                      selectedAssignmentName={selectedAssignmentName}
+                      lastEditedJobConfig={lastEditedJobConfig}
                   />
               </div>
               <div style={{width:240}}>
@@ -523,6 +528,7 @@ export default function Editor() {
                           noOfCases={state.present.noOfCases}
                           dispatch={dispatch}
                           pathname={row.assignment_name}
+                          pathid={row.assignment_id}
                       />
                       )
                 })}
@@ -537,12 +543,8 @@ export default function Editor() {
                   <AssignmentTable
                     jobBatch={jobBatch}
                     setJobBatch={setJobBatch}
-                    selectedAssignment={selectedAssignment}
                     setSelectedAssignment={setSelectedAssignment}
-                    drawerValue={drawerValue}
-                    setDrawerValue={setDrawerValue}
                     handleDrawerChange={handleDrawerChange}
-                    setDrawerOpen={setDrawerOpen}
                     setSelectedJobConfig={setSelectedJobConfig}
                     selectedConfig={selectedConfig}
                     setSelectedConfig={setSelectedConfig}
@@ -550,13 +552,17 @@ export default function Editor() {
                     setSelectedJobConfigName={setSelectedJobConfigName}
                     assignData={assignData}
                     setAssignData={setAssignData}
+                    setLastEditedJobConfig={setLastEditedJobConfig}
+                    configData={configData}
+                    setConfigData={setConfigData}
                   />
                 </Paper>
               </Box>
             </Route>
             {assignData.map((row)=> {
               return(
-                  <Route path={'/testcase/'+row.assignment_name}>
+                  <React.Fragment>
+                  <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
                     <Box p={3}>
                       <Paper className={classes.paper2}>
                         <Toolbar className={classes.toolbar2}>
@@ -609,6 +615,7 @@ export default function Editor() {
                             state={state}
                             dispatch={dispatch}
                             pathname={row.assignment_name}
+                            pathid={row.assignment_id}
                         />
                         <TablePanel
                             tabValue={tabValue}
@@ -620,14 +627,17 @@ export default function Editor() {
                             selectedAssignment={selectedAssignment}
                             pathname={row.assignment_name}
                             setNode={setNode}
+                            pathid={row.assignment_id}
                         />
                       </Paper>
                     </Box>
                   </Route>
+                  </React.Fragment>
                    )
                   }
                 )}
-            <Route exact path='/config'>
+            {configData.map(row=>
+            <Route exact path={'/config/'+row.job_config_id+'/'+row.job_config_name}>
               <Box p={3}>
               <div style={(width<1080)?{
                 width:'100%'
@@ -685,6 +695,7 @@ export default function Editor() {
                 </div>
               </Box>
             </Route>
+              )}
             <Route exact path='/result'>
               <Box p={3}>
                       <Paper className={classes.resultPaper}>

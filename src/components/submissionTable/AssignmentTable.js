@@ -192,18 +192,16 @@ export default function AssignmentTable(props) {
     const {
         jobBatch,
         setJobBatch,
-        selectedAssignment,
         setSelectedAssignment,
-        drawerValue,
         setSelectedAssignmentName,
         setSelectedJobConfigName,
-        setDrawerValue,
-        setDrawerOpen,
         setSelectedJobConfig,
         selectedConfig,
         setSelectedConfig,
         assignData,
-        setAssignData
+        setAssignData,
+        configData,
+        setConfigData
     } = props
     const classes = useStyles();
 
@@ -218,7 +216,7 @@ export default function AssignmentTable(props) {
         testcase: []
 
     })
-    const [configData, setConfigData] = useState([]);
+
 
 
     //this one is for temp use
@@ -451,9 +449,10 @@ export default function AssignmentTable(props) {
                                                     </Select>
                                                     <Button
                                                         component={Link}
-                                                        path={'/config'}
+                                                        path={'/config/'+selectedConfig[index].id+'/'+selectedConfig[index].name}
                                                         onClick={() => {
                                                             setSelectedJobConfigName(selectedConfig[index].name)
+                                                            props.setLastEditedJobConfig({id:selectedConfig[index].id, name:selectedConfig[index].name})
                                                         }}
                                                         className={classes.editButton}
                                                         disabled={selectedConfig[index].id === -1}>
@@ -478,7 +477,7 @@ export default function AssignmentTable(props) {
                                                     <MenuItem
                                                         onClick={(e) => handleEditClick(e, row.assignment_id, row.assignment_name)}
                                                         component={Link}
-                                                        to={'/testcase/' + row.assignment_name}
+                                                        to={'/testcase/' +row.assignment_id+'/'+ row.assignment_name}
                                                     >
                                                         Edit Test
                                                     </MenuItem>

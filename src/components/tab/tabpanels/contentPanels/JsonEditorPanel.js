@@ -10,7 +10,8 @@ export default function JsonEditorPanel(props){
     const {classes,tabValue,style,state,dispatch}=props
 
     return(
-        <Route path={'/testcase/'+props.pathname+'/jsoneditor'}>
+
+        <Route path={'/testcase/'+props.pathid+'/'+props.pathname+'/jsoneditor'}>
             <JsonEditor
                 selectedCase={state.present.selectedCase}
                 style={style}

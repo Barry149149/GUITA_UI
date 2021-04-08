@@ -35,7 +35,7 @@ export default function TreePanel(props){
         zip: null
     });
     return (
-        <Route path={'/testcase/'+props.pathname}>
+        <Route path={'/testcase/'+props.pathid+'/'+props.pathname}>
             <Box p={3}>
             <Title>Test Cases</Title>
             <Divider/>

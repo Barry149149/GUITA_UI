@@ -67,7 +67,6 @@ export default function JsonEditor(props) {
                                     ...e.jsObject[i],
                                     ...tempDescription,
                                 },
-
                             })
                         }
 
