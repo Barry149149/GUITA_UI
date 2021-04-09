@@ -12,6 +12,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import Typography from "@material-ui/core/Typography";
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -45,7 +47,7 @@ export default function DrawerTab(props){
                     component={Link}
                     to={'/'}
                     >
-                    <ListItemText color="primary" primary="HomePage" />
+                    <ListItemText disableTypography primary={<Typography color="primary" style={{ 'font-family': 'Segoe UI', 'font-weight':'bold'}}>Home</Typography>} />
                 </ListItem>
                 <ListItem
                     button
@@ -56,7 +58,7 @@ export default function DrawerTab(props){
                     component={Link}
                     to={'/testcase/'+props.selectedAssignment+'/'+props.selectedAssignmentName}
                 >
-                    <ListItemText primary="TestCase" />
+                    <ListItemText disableTypography primary={<Typography color="primary"  style={{ 'font-family': 'Segoe UI', 'font-weight':'bold'}}>Test Case</Typography>} />
                 </ListItem>
                 <ListItem
                     button
@@ -67,7 +69,7 @@ export default function DrawerTab(props){
                     component={Link}
                     to={'/config/'+props.lastEditedJobConfig.id+'/'+props.lastEditedJobConfig.name}
                 >
-                    <ListItemText primary="JobConfig" />
+                    <ListItemText disableTypography primary={<Typography color="primary"  style={{ 'font-family': 'Segoe UI', 'font-weight':'bold'}}>Job Config</Typography>} />
                 </ListItem>
                 <ListItem
                     button
@@ -77,7 +79,7 @@ export default function DrawerTab(props){
                     component={Link}
                     to={'/result'}
                 >
-                    <ListItemText primary="Result" />
+                    <ListItemText disableTypography primary={<Typography  color="primary" style={{ 'font-family': 'Segoe UI', 'font-weight':'bold'}}>Result</Typography>} />
                 </ListItem>
         </List>
         </nav>

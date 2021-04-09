@@ -563,13 +563,12 @@ export default function Editor() {
             {assignData.map((row)=> {
               return(
                   <React.Fragment>
-                  <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
+                  <Route path={['/testcase/'+row.assignment_id+'/'+row.assignment_name, '/testcase/' +row.assignment_id+'/'+ row.assignment_name+'/jsoneditor']}>
                     <Box p={3}>
                       <Paper className={classes.paper2}>
                         <Toolbar className={classes.toolbar2}>
                           <Typography className={classes.title} color="primary" variant="h5" component="div">
-                            {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
-                            \ Test Case {state.present.selectedCase.id}
+                            {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")} / Test Case {state.present.selectedCase.id}
                           </Typography>
                           <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
                             dispatch({type: "UNDO"})

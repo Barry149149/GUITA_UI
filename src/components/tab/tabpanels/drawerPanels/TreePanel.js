@@ -192,7 +192,7 @@ export default function TreePanel(props){
                                 });
                         }
                         }>
-                        Download Test Case File
+                        Download Test Cases File
                     </Button>
                 <p style={{fontSize:12, color:'#888888'}}>Download a Zip of Test Cases JSON to local</p>
             </div>

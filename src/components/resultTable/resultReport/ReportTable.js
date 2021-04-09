@@ -117,7 +117,7 @@ function Row(props){
                     {row.command}
                 </TableCell>
                 <TableCell>
-                    {row.score + "/" + row.maxScore}
+                    {row.score + "\\" + row.maxScore}
                 </TableCell>
                 <TableCell align="right">
                     <IconButton id="button_expandRow" size="small"
