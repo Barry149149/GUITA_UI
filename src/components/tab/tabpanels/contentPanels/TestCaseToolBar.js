@@ -110,7 +110,13 @@ export default function TestCaseToolBar(props){
 
     return(
         <React.Fragment>
-            <Prompt when={true} message="Are you sure you want to leave?" />
+            <Prompt when={true} message={p=> {
+                if(p.pathname.includes('/testcase/'+assignId+'/'+assignName)) {
+                    return true
+                }else {
+                    return "All unsaved changes will be lost."
+                }
+            }} />
         <Toolbar className={classes.toolbar2}>
         <Typography className={classes.title} color="primary" variant="h5" component="div">
             {(assignName !== '') ? assignName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")} / Test Case {state.present.selectedCase.id}
