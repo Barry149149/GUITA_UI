@@ -43,6 +43,7 @@ import StageSelect from './stageTable/stageSelect';
 import {BrowserRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom';
 import SubmitPanel from "./tab/tabpanels/drawerPanels/SubmitPanel";
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
+import Slider from "@material-ui/core/Slider"
 import { useHistory } from 'react-router-dom'
 
 
@@ -338,6 +339,7 @@ export default function Editor() {
     result: [],
   });
   const [result, setResult]= useState([]);
+  const [job, setJob]= useState([]);
 
   const [jobData, setJobData]= useState({
     imgPath:[]
@@ -560,82 +562,78 @@ export default function Editor() {
                 </Paper>
               </Box>
             </Route>
-            {assignData.map((row)=> {
-              return(
-                  <React.Fragment>
-                  <Route path={['/testcase/'+row.assignment_id+'/'+row.assignment_name, '/testcase/' +row.assignment_id+'/'+ row.assignment_name+'/jsoneditor']}>
-                    <Box p={3}>
-                      <Paper className={classes.paper2}>
-                        <Toolbar className={classes.toolbar2}>
-                          <Typography className={classes.title} color="primary" variant="h5" component="div">
-                            {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")} / Test Case {state.present.selectedCase.id}
-                          </Typography>
-                          <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
-                            dispatch({type: "UNDO"})
-                          }}>
-                            <UndoIcon/>
-                          </IconButton>
-                          <IconButton color="inherit" disabled={state.future.length === 0} onClick={() => {
-                            dispatch({type: "REDO"})
-                          }}>
-                            <RedoIcon/>
-                          </IconButton>
-                          <Tabs
-                              value={tabValue}
-                              onChange={(value, newValue) => setTabValue(newValue)}
-                              indicatorColor="primary"
-                              centered={true}
-                          >
-                            <Tooltip title="Table Mode">
-                              <Tab
-                                  className={classes.tab}
-                                  aria-label="tab_tableView"
-                                  icon={<TableChartIcon color="primary"/>}
-                                  {...a11yProps(0)}
-                                  component={Link}
-                                  to={'/testcase/'+row.assignment_id+'/'+row.assignment_name}
+            {assignData.map((row)=>
+                  <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
+                          <Box p={3}>
+                            <Paper className={classes.paper2}>
+                              <Toolbar className={classes.toolbar2}>
+                                <Typography className={classes.title} color="primary" variant="h5" component="div">
+                                  {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
+                                  / Test Case {state.present.selectedCase.id}
+                                </Typography>
+                                <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
+                                  dispatch({type: "UNDO"})
+                                }}>
+                                  <UndoIcon/>
+                                </IconButton>
+                                <IconButton color="inherit" disabled={state.future.length === 0} onClick={() => {
+                                  dispatch({type: "REDO"})
+                                }}>
+                                  <RedoIcon/>
+                                </IconButton>
+                                <Tabs
+                                    value={tabValue}
+                                    onChange={(value, newValue) => setTabValue(newValue)}
+                                    indicatorColor="primary"
+                                    centered={true}
+                                >
+                                  <Tooltip title="Table Mode">
+                                    <Tab
+                                        className={classes.tab}
+                                        aria-label="tab_tableView"
+                                        icon={<TableChartIcon color="primary"/>}
+                                        {...a11yProps(0)}
+                                        component={Link}
+                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name}
+                                    />
+                                  </Tooltip>
+                                  <Tooltip title="CodeEditor">
+                                    <Tab
+                                        className={classes.tab}
+                                        aria-label="tab_codeEditor"
+                                        icon={<CodeIcon color="primary"/>}
+                                        {...a11yProps(1)}
+                                        component={Link}
+                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name+'/jsoneditor'}
+                                    />
+                                  </Tooltip>
+                                </Tabs>
+                              </Toolbar>
+                              <JsonEditorPanel
+                                  classes={classes}
+                                  tabValue={tabValue}
+                                  style={style}
+                                  state={state}
+                                  dispatch={dispatch}
+                                  pathname={row.assignment_name}
+                                  pathid={row.assignment_id}
                               />
-                            </Tooltip>
-                            <Tooltip title="CodeEditor">
-                              <Tab
-                                  className={classes.tab}
-                                  aria-label="tab_codeEditor"
-                                  icon={<CodeIcon color="primary"/>}
-                                  {...a11yProps(1)}
-                                  component={Link}
-                                  to={'/testcase/'+row.assignment_id+'/'+row.assignment_name+'/jsoneditor'}
+                              <TablePanel
+                                  tabValue={tabValue}
+                                  formOpen={formOpen}
+                                  state={state}
+                                  setFormOpen={setFormOpen}
+                                  dispatch={dispatch}
+                                  width={(drawerOpen) ? (width - drawerWidth) : width}
+                                  selectedAssignment={selectedAssignment}
+                                  pathname={row.assignment_name}
+                                  setNode={setNode}
+                                  pathid={row.assignment_id}
                               />
-                            </Tooltip>
-                          </Tabs>
-                        </Toolbar>
-                        <JsonEditorPanel
-                            classes={classes}
-                            tabValue={tabValue}
-                            style={style}
-                            state={state}
-                            dispatch={dispatch}
-                            pathname={row.assignment_name}
-                            pathid={row.assignment_id}
-                        />
-                        <TablePanel
-                            tabValue={tabValue}
-                            formOpen={formOpen}
-                            state={state}
-                            setFormOpen={setFormOpen}
-                            dispatch={dispatch}
-                            width={(drawerOpen) ? (width - drawerWidth) : width}
-                            selectedAssignment={selectedAssignment}
-                            pathname={row.assignment_name}
-                            setNode={setNode}
-                            pathid={row.assignment_id}
-                        />
-                      </Paper>
-                    </Box>
+                            </Paper>
+                          </Box>
                   </Route>
-                  </React.Fragment>
-                   )
-                  }
-                )}
+            )}
             {configData.map(row=>
             <Route exact path={'/config/'+row.job_config_id+'/'+row.job_config_name}>
               <Box p={3}>
@@ -699,30 +697,38 @@ export default function Editor() {
 
               <Box p={3}>
                       <Paper className={classes.resultPaper}>
+                        <Switch>
                         <Route exact path='/result'>
-                          {(resultStep===0)?
                           <ResultTable
                                 setResultStep={setResultStep}
                                 setJobData={setJobData}
                                 jobData={jobData}
                                 result={result}
                                 setResult={setResult}
-                            />:
-                              (resultStep===1)?
-                                <JobTable
-                                    setResultStep={setResultStep}
-                                    setJobData={setJobData}
-                                    jobData={jobData}
-                                />:
-                                <ReportTable
-                                  setResultStep={setResultStep}
-                                  jobData={jobData}
-                                  setJobData={setJobData}
-                                  handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
-                                  reportImg={reportImg}
-                                  setReportImg={setReportImg}
-                                />}
+                            />
                         </Route>
+                          <Route exact path={'/result/job batch/:jobBatchId'}>
+                            <JobTable
+                                setResultStep={setResultStep}
+                                setJobData={setJobData}
+                                jobData={jobData}
+                                job={job}
+                                setJob={setJob}
+                            />
+                          </Route>
+                          <Route path={'/result/job/:jobId/stage/:stageId'}>
+                            <ReportTable
+                                setResultStep={setResultStep}
+                                jobData={jobData}
+                                setJobData={setJobData}
+                                handleImgDialogOpen={() => {
+                                  setImgDialogOpen(true)
+                                }}
+                                reportImg={reportImg}
+                                setReportImg={setReportImg}
+                            />
+                          </Route>
+                        </Switch>
                         </Paper>
               </Box>
 
@@ -765,6 +771,11 @@ function ReportImageDialog(props){
           onClose={handleClose}
           maxWidth='md'
       >
+        <div
+          style={{
+            overflow:'hidden'
+          }}
+        >
         <DialogTitle>{reportImg.paths[reportImg.path]}</DialogTitle>
         <div
             style={{
@@ -802,6 +813,27 @@ function ReportImageDialog(props){
           }}>
             <KeyboardArrowRightIcon/>
           </Button>
+        </div>
+        <div style={{
+          width: '90%',
+          paddingLeft:20
+        }}>
+          <Slider
+              defaultValue={reportImg.path}
+              step={1}
+              marks
+              min={0}
+              max={reportImg.paths.length-1}
+              onChange={(e,value)=>{
+                setReportImg({
+                  ...reportImg,
+                  path:value
+                })
+
+              }}
+              valueLabelDisplay="auto"
+          />
+        </div>
         </div>
       </Dialog>
   )

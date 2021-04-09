@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import Text from "recharts/lib/component/Text";
+import {useParams} from "react-router-dom";
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -291,20 +292,14 @@ function ReportTableToolbar(props){
 
     return(
         <Toolbar>
-            <IconButton
-                color="inherit"
-                onClick={()=>{
-                    setResultStep(1)
-                }}>
-                <KeyboardArrowLeftIcon/>
-            </IconButton>
             <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
-            
         </Toolbar>
     )
 }
 
 export default function ReportTable(props) {
+    let {jobId,stageId} = useParams()
+
     const {setResultStep, jobData, setJobData, reportImg, setReportImg} = props
 
     const classes = useStyles();
