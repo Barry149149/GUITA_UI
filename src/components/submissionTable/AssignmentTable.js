@@ -205,7 +205,8 @@ export default function AssignmentTable(props) {
         assignData,
         setAssignData,
         configData,
-        setConfigData
+        setConfigData,
+        state
     } = props
     const classes = useStyles();
 
@@ -213,8 +214,8 @@ export default function AssignmentTable(props) {
     const [orderBy, setOrderBy] = useState('assignment_id');
     const [filterCriteria, setFilterCriteria] = useState('')
     const [fetched, setFetched] = useState(false)
-
-    const [selected, setSelected] = useState('')
+    const [indexed, setIndexed] = useState(0)
+    const [selected, setSelected] = useState(0)
     const [testcases, setTestcases] = useState({
         assignment_id: [],
         testcase: []
@@ -298,6 +299,20 @@ export default function AssignmentTable(props) {
             body:aData
         });
         const data = await response.json()
+
+        fetch('/api/v2/job_batch',{
+            method: 'POST',
+            body: JSON.stringify({
+                "assignment_id": selected,
+                "submission_batch_id": data.submission_batch_id,
+                "job_config_id": selectedConfig[indexed].id
+            }),
+            headers:{
+                'content-type': 'application/json'
+            }
+        }).then(result => result.json()).then(data => {
+            console.log(data)
+        })
     }
 
     useEffect(() => {
@@ -496,6 +511,8 @@ export default function AssignmentTable(props) {
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={(e) => {
+                                                            setSelected(row.assignment_id)
+                                                            setIndexed(index)
                                                             handleCloseClick(e, row.assignment_id)
                                                             setSubmitDialog(open)
                                                         }}>Submit</MenuItem>
@@ -560,7 +577,7 @@ export default function AssignmentTable(props) {
                         <Button
                             disabled={file.zip_filename==null}
                             onClick={()=>{
-
+                                handleJobBatchSubmit();
                                 setSubmitDialog(false)
                             }}
                         >

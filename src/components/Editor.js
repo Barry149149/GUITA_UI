@@ -558,6 +558,7 @@ export default function Editor() {
                           configData={configData}
                           setConfigData={setConfigData}
                           setDrawerOpen={setDrawerOpen}
+                          state={state}
                         />
                   </Route>
                   <Route path={'/testcase/:assignId/:assignName'}>

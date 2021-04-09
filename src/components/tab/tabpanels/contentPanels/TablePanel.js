@@ -33,7 +33,7 @@ export default function TablePanel(props){
             .then(async data => {
                 console.log(data)
                 let newNodes=new Array()
-                if(data==[]){
+                if(data.length==0){
                     dispatch({
                         type:'SET',
                         data:{
