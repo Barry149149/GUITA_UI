@@ -15,7 +15,7 @@ export default function TablePanel(props){
 
     let {assignId,assignName}=useParams()
 
-    const {tabValue,formOpen,state,setFormOpen,dispatch,width}=props
+    const {tabValue,formOpen,state,setFormOpen,dispatch,width,testcaseFetched}=props
 
     const [cmdSchema,setCmdSchema]=useState({
         command:'None',
@@ -26,7 +26,7 @@ export default function TablePanel(props){
     })
     const [formData,setFormData]=useState({})
     const [fetched, setFetched]=useState(false)
-
+/*
     useEffect(()=>{
         if(assignId){
             fetch('/api/v2/assignment/'+assignId+'/testcase').then(response => response.json())
@@ -106,7 +106,7 @@ export default function TablePanel(props){
         } else {
             setFetched(true)
         }
-    },[fetched])
+    },[fetched])*/
 
     return(
             <div style={(width<1080)?{
@@ -117,7 +117,7 @@ export default function TablePanel(props){
                 margin:0,
                 width:'100%',
             }}>
-               {(fetched)?
+               {(testcaseFetched)?
                     <div id="commandTable" style={(width<1080)?{width:'100%'}:((!formOpen)?{width:'100%'}:{width:'69%'})}>
                         <CommandTable
                             selectedCase={state.present.selectedCase}

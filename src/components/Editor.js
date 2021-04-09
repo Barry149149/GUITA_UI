@@ -371,6 +371,7 @@ export default function Editor() {
   const [selectedAssignment, setSelectedAssignment]=useState(-1);
   const [selectedAssignmentName, setSelectedAssignmentName]=useState('');
   const [lastEditedJobConfig, setLastEditedJobConfig] = useState({id:-1,name:''});
+  const [testcaseFetched,setTestcaseFetched] = useState(false);
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -559,6 +560,7 @@ export default function Editor() {
                           setConfigData={setConfigData}
                           setDrawerOpen={setDrawerOpen}
                           state={state}
+                          setTestcaseFetched={setTestcaseFetched}
                         />
                   </Route>
                   <Route path={'/testcase/:assignId/:assignName'}>
@@ -570,6 +572,8 @@ export default function Editor() {
                       setTabValue={setTabValue}
                       state={state}
                       setDrawerOpen={setDrawerOpen}
+                      testcaseFetched={testcaseFetched}
+                      setTestcaseFetched={setTestcaseFetched}
                   />
                   </Route>
                   <Route exact path={'/testcase/:assignId/:assignName/jsoneditor'}>
@@ -591,6 +595,7 @@ export default function Editor() {
                       width={(drawerOpen) ? (width - drawerWidth) : width}
                       selectedAssignment={selectedAssignment}
                       setNode={setNode}
+                      testcaseFetched={testcaseFetched}
                   />
                   </Route>
                 <Route exact path={'/config/:configId/:configName'}>

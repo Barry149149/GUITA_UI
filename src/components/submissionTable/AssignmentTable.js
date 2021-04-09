@@ -206,7 +206,8 @@ export default function AssignmentTable(props) {
         setAssignData,
         configData,
         setConfigData,
-        state
+        state,
+        setTestcaseFetched
     } = props
     const classes = useStyles();
 
@@ -244,6 +245,7 @@ export default function AssignmentTable(props) {
         })
     }
     const handleEditClick = (event, id, name) => {
+        setTestcaseFetched(false);
         setSelectedAssignment(id);
         setSelectedAssignmentName(name);
         handleCloseClick(event, id);
