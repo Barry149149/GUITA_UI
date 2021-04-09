@@ -25,7 +25,6 @@ export default function TablePanel(props){
         formData:''
     })
     const [formData,setFormData]=useState({})
-    const [fetched, setFetched]=useState(false)
 /*
     useEffect(()=>{
         if(assignId){

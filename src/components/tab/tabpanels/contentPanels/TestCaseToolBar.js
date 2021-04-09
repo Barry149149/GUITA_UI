@@ -6,17 +6,20 @@ import Tabs from "@material-ui/core/Tabs";
 import {Tooltip} from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import TableChartIcon from "@material-ui/icons/TableChart";
-import {Link} from "react-router-dom";
+import {Link, Prompt} from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
 import Toolbar from "@material-ui/core/Toolbar";
-import React, {useEffect} from "react";
-import {useParams} from "react-router-dom"
+import React, {useEffect, useState} from "react";
+import {useParams, useLocation} from "react-router-dom"
+import PropTypes from "prop-types";
 
 export default function TestCaseToolBar(props){
 
     const {classes,tabValue,selectedAssignmentName,dispatch,setTabValue,state,setDrawerOpen,testcaseFetched,setTestcaseFetched}=props
 
     let {assignId,assignName}=useParams()
+    const location = useLocation();
+
 
     useEffect(()=>{
         setDrawerOpen(true)
@@ -106,6 +109,8 @@ export default function TestCaseToolBar(props){
     },[testcaseFetched])
 
     return(
+        <React.Fragment>
+            <Prompt when={true} message="Are you sure you want to leave?" />
         <Toolbar className={classes.toolbar2}>
         <Typography className={classes.title} color="primary" variant="h5" component="div">
             {(assignName !== '') ? assignName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")} / Test Case {state.present.selectedCase.id}
@@ -121,9 +126,9 @@ export default function TestCaseToolBar(props){
             <RedoIcon/>
         </IconButton>
         <Tabs
-            value={tabValue}
-            onChange={(value, newValue) => setTabValue(newValue)}
+            value={location.pathname.includes('jsoneditor')?1:0}
             indicatorColor="primary"
+            textColor="primary"
             centered={true}
         >
             <Tooltip title="Table Mode">
@@ -146,5 +151,6 @@ export default function TestCaseToolBar(props){
             </Tooltip>
         </Tabs>
     </Toolbar>
+        </React.Fragment>
     )
 }

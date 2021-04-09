@@ -4,6 +4,9 @@ import React,{useEffect} from "react";
 
 
 export default function JsonEditor(props) {
+    useEffect(() => {
+        return console.log(props.tree)
+    })
 
 
     return (
@@ -51,21 +54,23 @@ export default function JsonEditor(props) {
                         }
 
                         //TODO:Dont know why add description automatically will cause crash
+
                         for (let i = 0; i < e.jsObject.length; i++) {
-                            let tempDescription={}
+                            let tempDescription=null
                             if(typeof e.jsObject[i].description==='undefined') {
-                                if(typeof e.jsObject[i].setVariable!=='undefined') tempDescription ={description:e.jsObject[i].setVariable}
-                                else if(typeof e.jsObject[i].widgetName!=='undefined') tempDescription ={description:e.jsObject[i].widgetName}
-                                else if(typeof e.jsObject[i].widget!=='undefined') tempDescription ={description:e.jsObject[i].widget.value}
-                                else if(typeof e.jsObject[i].time!=='undefined') tempDescription ={description:e.jsObject[i].time}
-                                else if(typeof e.jsObject[i].value!=='undefined') tempDescription ={description:e.jsObject[i].value}
-                                else tempDescription={description: ' '}
+                                if(typeof e.jsObject[i].setVariable!=='undefined') tempDescription =e.jsObject[i].setVariable
+                                else if(typeof e.jsObject[i].widgetName!=='undefined') tempDescription =e.jsObject[i].widgetName
+                                else if(typeof e.jsObject[i].widget!=='undefined') tempDescription =e.jsObject[i].widget.value
+                                else if(typeof e.jsObject[i].time!=='undefined') tempDescription =e.jsObject[i].time
+                                else if(typeof e.jsObject[i].value!=='undefined') tempDescription = e.jsObject[i].value
+                                else tempDescription=' '
                             }
+                            console.log(tempDescription)
                             new_json_id.push({
                                 id: i,
                                 command: {
                                     ...e.jsObject[i],
-                                    ...tempDescription,
+                                    description:(tempDescription==null)?e.jsObject[i].description:JSON.stringify(tempDescription).replace(/\"/g, ""),
                                 },
                             })
                         }

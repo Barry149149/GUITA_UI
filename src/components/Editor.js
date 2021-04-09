@@ -15,23 +15,7 @@ import JsonEditorPanel from "./tab/tabpanels/contentPanels/JsonEditorPanel";
 import GuitaAppBar from "./GuitaAppBar";
 import Paper from "@material-ui/core/Paper";
 import ResultTable from "./resultTable/ResultTable";
-import StageTable from "./stageTable/stageTable";
-import Grid from "@material-ui/core/Grid"
-import StageForm from "./stageTable/stageForm";
-import Grow from "@material-ui/core/Grow";
-import Typography from "@material-ui/core/Typography";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import CodeIcon from "@material-ui/icons/Code";
-import TableChartIcon from "@material-ui/icons/TableChart";
-import {Tooltip} from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import UndoIcon from "@material-ui/icons/Undo";
-import RedoIcon from "@material-ui/icons/Redo";
-import TabPanel from "./tab/tabpanels/Tabpanel";
 import AssignmentTable from './submissionTable/AssignmentTable';
-import JobConfigTable from './submissionTable/JobConfigTable';
 import JobTable from './resultTable/JobTable';
 import ReportTable from './resultTable/resultReport/ReportTable';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -39,15 +23,11 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
-import StageSelect from './stageTable/stageSelect';
 import {BrowserRouter as Router, Switch, Route, Link, useLocation, useParams} from 'react-router-dom';
-import SubmitPanel from "./tab/tabpanels/drawerPanels/SubmitPanel";
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
 import Slider from "@material-ui/core/Slider"
-import { useHistory } from 'react-router-dom'
 import StagePage from "./page/stage";
-import TestCasePageTable from "./page/TestCasePageTable";
-import TestCasePageJsEditor from "./page/TestCasePageJsEditor";
+
 import TestCaseToolBar from "./tab/tabpanels/contentPanels/TestCaseToolBar";
 
 const drawerWidth = 440;
