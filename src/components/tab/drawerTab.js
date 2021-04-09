@@ -45,7 +45,7 @@ export default function DrawerTab(props){
                     component={Link}
                     to={'/'}
                     >
-                    <ListItemText color="primary" primary="HomePage" />
+                    <ListItemText color="primary" primary="Home" />
                 </ListItem>
                 <ListItem
                     button

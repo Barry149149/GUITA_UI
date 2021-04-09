@@ -13,6 +13,7 @@ import {TextField} from "@material-ui/core";
 import {Tooltip} from "@material-ui/core";
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import IconButton from '@material-ui/core/IconButton';
+import {Link, useParams} from 'react-router-dom'
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -119,13 +120,6 @@ function ResultTableToolbar(props){
 
     return(
         <Toolbar>
-            <IconButton
-                color="inherit"
-                onClick={()=>{
-                    props.setResultStep(0)
-                }}>
-                <KeyboardArrowLeftIcon/>
-            </IconButton>
             <Typography className={classes.title} color="primary" variant="h6" >{table}</Typography>
             <TextField
                 label="Search"
@@ -138,7 +132,10 @@ function ResultTableToolbar(props){
 }
 
 export default function JobTable(props) {
-    const {setResultStep, setJobData, jobData} = props
+
+    let {jobBatchId} = useParams()
+
+    const {setResultStep, setJobData, jobData,job,setJob} = props
 
     const classes = useStyles();
 
@@ -146,7 +143,7 @@ export default function JobTable(props) {
     const [orderBy, setOrderBy] = useState('job_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false);
-    const [result, setResult]= useState([]);
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -160,7 +157,7 @@ export default function JobTable(props) {
             job_id: row.job_id,
             stage_id: stage_id
         })
-        setResultStep(2)
+        console.log("haha, I have been clicked")
     }
 
     const handleRowClick = (event, row) => {
@@ -180,7 +177,7 @@ export default function JobTable(props) {
                 for(const value of data){
                     array.push(value)
                 }
-                setResult(array)
+                setJob(array)
                 setFetched(true)
             });
         }
@@ -209,10 +206,10 @@ export default function JobTable(props) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            result={result}
+                            result={job}
                         />
                         <TableBody>
-                            {stableSort(result, getComparator(order, orderBy))
+                            {stableSort(job, getComparator(order, orderBy))
                                 .filter(e=>(e.job_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -222,7 +219,8 @@ export default function JobTable(props) {
                                             <TableCell
                                                 label={row.reports[i].stage_id}
                                                 style={{cursor:'pointer'}}
-                                                to={'/'}
+                                                to={'/result/job/'+row.job_id+'/stage/'+row.reports[i].stage_id}
+                                                component={Link}
                                                 onClick={(event) => {
                                                     handleCellClick(event, row, row.reports[i].stage_id)
                                                 }}>

@@ -101,7 +101,6 @@ export default function TablePanel(props){
                         createdCases: data.length,
                         noOfCases:data.length,}
                 })
-                props.setNode([...newNodes])
             })
             setFetched(true)
         } else {

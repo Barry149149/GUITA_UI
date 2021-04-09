@@ -169,6 +169,7 @@ export default function ResultTable(props) {
             setResult(array)
             setFetched(true)
         });
+
     }, []);
 
     return (
@@ -206,8 +207,8 @@ export default function ResultTable(props) {
                                                 style={{cursor: 'pointer'}}
                                                 tabIndex={-1}
                                                 key={row.job_batch_id}
-                                                to={'/result/jobbatch/' + row.job_batch_id}
-                                                command={Link}
+                                                to={'/result/job batch/'+row.job_batch_id}
+                                                component={Link}
                                                 onClick={(event) => {
                                                     handleRowClick(event, row)
                                                 }}
