@@ -465,6 +465,7 @@ export default function AssignmentTable(props) {
                                                         </option>
                                                     </Select>
                                                     <Button
+                                                        disabled={selectedConfig[index].id===-1}
                                                         component={Link}
                                                         to={'/config/'+selectedConfig[index].id+'/'+selectedConfig[index].name}
                                                         onClick={() => {

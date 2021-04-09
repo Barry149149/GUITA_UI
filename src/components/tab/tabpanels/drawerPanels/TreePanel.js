@@ -196,7 +196,7 @@ export default function TreePanel(props){
                                 });
                         }
                         }>
-                        Download Test Case File
+                        Download Test Cases File
                     </Button>
             </div>
             </Box>

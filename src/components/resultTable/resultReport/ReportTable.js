@@ -118,7 +118,7 @@ function Row(props){
                     {row.command}
                 </TableCell>
                 <TableCell>
-                    {row.score + "/" + row.maxScore}
+                    {row.score + "\\" + row.maxScore}
                 </TableCell>
                 <TableCell align="right">
                     <IconButton id="button_expandRow" size="small"
@@ -334,11 +334,11 @@ export default function ReportTable(props) {
         });
         
     }, []);
-/*
+
     useEffect(()=>{
-        console.log(reportImg.paths)
+        console.log(jobData)
     })
- */   
+    
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);
         let newSelected = [];
