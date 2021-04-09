@@ -166,8 +166,8 @@ export default function JobTable(props) {
     
     useEffect(()=>{
         //TODO: change to correct path
-        if(jobData.job_batch_id){
-            fetch('/api/v2/job_batch/'+jobData.job_batch_id+'/report', {
+        if(jobBatchId){
+            fetch('/api/v2/job_batch/'+jobBatchId+'/report', {
                 headers: {
                     'content-type': 'application/json'
                 }
@@ -178,6 +178,26 @@ export default function JobTable(props) {
                     array.push(value)
                 }
                 setJob(array)
+
+                return fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                })
+            }).then(response => response.json()).then(data => {
+                for(let i = 0, numData = data.length; i < numData; i++){
+                    console.log(data[i].job_batch_id)
+                    if(data[i].job_batch_id == jobBatchId)
+                        {
+                            return data[i].assignment.assignment_name;
+                        }
+                }
+            }).then(result => {
+                setJobData({
+                    ...jobData,
+                    assignment_name: result
+                })
+                
                 setFetched(true)
             });
         }

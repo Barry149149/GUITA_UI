@@ -707,7 +707,7 @@ export default function Editor() {
                                 setResult={setResult}
                             />
                         </Route>
-                          <Route exact path={'/result/job batch/:jobBatchId'}>
+                          <Route exact path={'/result/job batch/:jobBatchId'} component={JobTable}>
                             <JobTable
                                 setResultStep={setResultStep}
                                 setJobData={setJobData}

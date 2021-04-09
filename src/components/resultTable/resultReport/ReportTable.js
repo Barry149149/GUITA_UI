@@ -306,12 +306,12 @@ export default function ReportTable(props) {
 
     const [fetched, setFetched] = useState(false);
     const [result, setResult] = useState([]);
-    const [open, setOpen] = useState([])
+    const [open, setOpen] = useState([]);
 
     useEffect(()=>{
-        
+        let jobBatchId = 0;
         //TODO: change to correct path
-        fetch('/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/report.json', {
+        fetch('/uploads/job/'+jobId+'/report/'+stageId+'/report.json', {
             headers: {
                 'content-type': 'application/json'
             }
@@ -330,9 +330,37 @@ export default function ReportTable(props) {
             })}
 
             setResult(data)
+
+            return fetch('/api/v2/job/'+jobId, {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+        })/*.then(response => response.json()).then(data => {
+            jobBatchId=data.job_batch_id
+            return fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
+                headers: {
+                    'content-type': 'application/json'
+                }
+            });
+        }).then(response => response.json()).then(data => {
+            console.log(jobBatchId)
+            for(let i = 0, numData = data.length; i < numData; i++){
+                console.log(data[i].job_batch_id)
+                if(data[i].job_batch_id == jobBatchId)
+                    {
+                        return data[i].assignment.assignment_name;
+                    }
+            }
+        }).then(result => {
+            setJobData({
+                ...jobData,
+                assignment_name: result
+            })
+            
             setFetched(true)
-        });
-        
+        });*/
+        setFetched(true)
     }, []);
 
     useEffect(()=>{
@@ -377,7 +405,7 @@ export default function ReportTable(props) {
     return (
         <div className={classes.root}>
             <ReportTableToolbar
-                table={jobData.assignment_name + ' \\ Stage ' + jobData.stage_id}
+                table={'Job Table \\ Stage ' + stageId}
                 classes={classes}
                 result={result}
                 setResultStep={props.setResultStep}

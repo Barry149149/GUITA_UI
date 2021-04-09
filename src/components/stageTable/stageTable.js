@@ -22,6 +22,9 @@ import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box"
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import { useLocation } from "react-router-dom";
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -61,6 +64,11 @@ export default function StageTable(props){
     const [create, setCreate]=useState(false)
     const { register, handleSubmit } = useForm()
     const [fetched, setFetched] = useState(false)
+
+    const location = useLocation()
+    useEffect(() => {
+        console.log(location)
+    })
 
     const handleClick = (event, id) => {
         const selectedIndex = selected.indexOf(id);

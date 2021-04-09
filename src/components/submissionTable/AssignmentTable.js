@@ -217,7 +217,7 @@ export default function AssignmentTable(props) {
 
     })
 
-
+    
 
     //this one is for temp use
 
@@ -388,22 +388,6 @@ export default function AssignmentTable(props) {
                                             tabIndex={-1}
                                             key={row.assignment_id}
                                         >
-                                            <TableCell>
-                                                <Radio
-                                                    color='primary'
-                                                    checked={selected === row.assignment_id}
-                                                    onChange={(e) => {
-                                                        setSelectedAssignment(row.assignment_id)
-                                                        setSelected(row.assignment_id)
-                                                        setJobBatch({
-                                                            ...jobBatch,
-                                                            assignment_id: row.assignment_id,
-                                                            assignment_name: row.assignment_name,
-                                                            job_config_id: selectedConfig[index].id
-                                                        })
-                                                    }}
-                                                />
-                                            </TableCell>
                                             <TableCell>
                                                 {row.assignment_name}
                                             </TableCell>
