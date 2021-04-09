@@ -13,6 +13,11 @@ import VerticalAlignBottomIcon from "@material-ui/icons/VerticalAlignBottom";
 import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import { saveAs } from 'file-saver';
 import {Route, useParams} from "react-router-dom";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme)=>({
     readOnlyBox:{
@@ -36,7 +41,9 @@ export default function TreePanel(props){
         zip_filename: null,
         zip: null
     });
+
     return (
+        <React.Fragment>
 
             <Box p={3}>
             <Title>Test Cases</Title>
@@ -201,5 +208,7 @@ export default function TreePanel(props){
                     </Button>
             </div>
             </Box>
+
+        </React.Fragment>
     )
 }

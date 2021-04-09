@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MuiTreeView from 'material-ui-treeview';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,6 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton'
 import {Tooltip} from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles({
     button_container: {
@@ -32,6 +33,8 @@ export default function CaseTree(props){
     const [open, setOpen]= React.useState(false);
     const [warningOpen, setWarningOpen] = React.useState(false);
     const [confirmOpen, setConfirmOpen] = React.useState(false);
+    const [addOpen,setAddOpen]=React.useState(false)
+    const [caseName,setCaseName]=useState('')
 
     const handleWarningOpen=()=>{
         if(props.tree[0].nodes.length<=1){
@@ -69,34 +72,8 @@ export default function CaseTree(props){
                 id= 'button_add'
                 variant='outlined'
                 color= 'primary'
-                onClick={()=>{
-                    props.dispatch({
-                        data:{
-                            tree:[
-                                {
-                                    value: 'Test Cases',
-                                    nodes: [
-                                        ...props.tree[0].nodes,
-                                        {
-                                            id: (props.createdCases+1),
-                                            value: 'Test ' + (props.createdCases+1),
-                                            json:[],
-                                            json_id:[]
-                                        }
-                                    ]
-                                }
-                            ],
-                            createdCases:props.createdCases+1,
-                            noOfCases:props.noOfCases+1,
-                            selectedCase:{
-                                id: (props.createdCases+1),
-                                json: [],
-                                json_id: [],
-                            },
-                        }
-                    })
-                }
-                }><AddIcon/></IconButton>
+                onClick={()=>setAddOpen(true)}
+                ><AddIcon/></IconButton>
             </Tooltip>
             <Tooltip title="Delete">
             <IconButton
@@ -225,6 +202,57 @@ export default function CaseTree(props){
                     <Button onClick={handleWarningClose} color="primary">
                         Close
                     </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={addOpen}>
+                <DialogTitle>Add new test case</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Please input the name for the new test case</DialogContentText>
+                    Name:
+                    <TextField
+                        onChange={(e)=>{
+                            setCaseName(e.target.value)
+                        }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        disabled={caseName==false}
+                        onClick={()=>{
+                            props.dispatch({
+                                data:{
+                                    tree:[
+                                        {
+                                            value: 'Test Cases',
+                                            nodes: [
+                                                ...props.tree[0].nodes,
+                                                {
+                                                    id: (props.createdCases+1),
+                                                    value: caseName,
+                                                    json:[],
+                                                    json_id:[]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    createdCases:props.createdCases+1,
+                                    noOfCases:props.noOfCases+1,
+                                    selectedCase:{
+                                        id: (props.createdCases+1),
+                                        json: [],
+                                        json_id: [],
+                                    },
+                                }
+                            })
+                            setAddOpen(false)
+                        }
+                        }
+                    >
+                        Submit
+                    </Button>
+                    <Button
+                        onClick={()=>setAddOpen(false)}
+                    >Cancel</Button>
                 </DialogActions>
             </Dialog>
         </div>
