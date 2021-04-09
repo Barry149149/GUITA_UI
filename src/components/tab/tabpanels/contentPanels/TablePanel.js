@@ -63,26 +63,28 @@ export default function TablePanel(props){
                     return
                 }
                 for(let i = 0;i<data.length; i++) {
-                    let { json , json_id } = await fetch('/uploads/assignment/'+assignId+'/testcase/'+data[i].testcase_id+'.json').
-                    then(response => response.json()).
-                    then( data => {
-                        let json=[...data];
-                        let json_id=[];
-                        for(let i=0;i<data.length; i++){
-                            json_id.push({
-                                    id:i,
-                                    command:json[i]
-                            })
-                        }
-                        return {json, json_id}
+                    if(data[i].testcase_name!==null){
+                        let { json , json_id } = await fetch('/uploads/assignment/'+assignId+'/testcase/'+data[i].testcase_id+'.json').
+                        then(response => response.json()).
+                        then( data => {
+                            let json=[...data];
+                            let json_id=[];
+                            for(let i=0;i<data.length; i++){
+                                json_id.push({
+                                        id:i,
+                                        command:json[i]
+                                })
+                            }
+                            return {json, json_id}
 
-                    })
-                    newNodes.push({
-                        id:(i+1),
-                        value:'Test'+(i+1),
-                        json:[...json],
-                        json_id:[...json_id]
-                    })
+                        })
+                        newNodes.push({
+                            id:(i+1),
+                            value:'Test'+(i+1),
+                            json:[...json],
+                            json_id:[...json_id]
+                        })
+                    }
                 }
                 if(newNodes.length == 0) return
                 console.log(newNodes)

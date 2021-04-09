@@ -288,6 +288,18 @@ export default function AssignmentTable(props) {
         setSelectedAssignment(assignment_id);
     }
 
+    const handleJobBatchSubmit = async() => {
+        let aData = new FormData();
+
+        aData.append('submission_file', file.zip);
+
+        const response = await fetch('/api/v2/assignmnet/'+jobBatch.assignment_id+'/submission_batch',{
+            method: 'POST',
+            body:aData
+        });
+        const data = await response.json()
+    }
+
     useEffect(() => {
         //TODO: change to correct path
         props.setDrawerOpen(false)
@@ -524,6 +536,7 @@ export default function AssignmentTable(props) {
                         id= 'button_upload'
                         component='label'
                         variant='outlined'
+                        color='primary'
                         onClick={()=>{}}
                     >
                         Upload Student Submission
@@ -547,10 +560,7 @@ export default function AssignmentTable(props) {
                         <Button
                             disabled={file.zip_filename==null}
                             onClick={()=>{
-                                setFile({
-                                    zip_filename:null,
-                                    zip:null
-                                })
+
                                 setSubmitDialog(false)
                             }}
                         >
