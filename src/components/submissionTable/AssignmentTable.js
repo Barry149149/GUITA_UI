@@ -126,10 +126,9 @@ function EnhancedTableHead(props) {
                 <TableCell align="left">
                     Configuration
                 </TableCell>
-                <TableCell align="left">
-                    Student Submission
+                <TableCell align='right'>
+                    Options
                 </TableCell>
-                <TableCell/>
             </TableRow>
         </TableHead>
     );
@@ -235,6 +234,7 @@ export default function AssignmentTable(props) {
         id: -1,
         anchor: null
     })
+    const [submitDialog,setSubmitDialog]=useState(false)
 
     const handleOpenClick = (event, id) => {
         setOpen({
@@ -461,18 +461,6 @@ export default function AssignmentTable(props) {
                                                     </Button>
                                                 </FormControl>
                                             </TableCell>
-                                            <TableCell>
-                                                <TextField
-                                                    size="small"
-                                                    className={classes.readOnlyBox}
-                                                    label=""
-                                                    value={(typeof file[index].zip_filename==='undefined'||file[index].zip_filename===undefined)?'':file[index].zip_filename}
-                                                    InputProps={{
-                                                        readOnly: true,
-                                                    }}
-                                                    variant="outlined"
-                                                />
-                                            </TableCell>
                                             <TableCell align="right">
                                                 <IconButton
                                                     onClick={(e) => {
@@ -495,36 +483,10 @@ export default function AssignmentTable(props) {
                                                         Edit Test Cases
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={(e) => handleCloseClick(e, row.assignment_id)}>Submit</MenuItem>
-                                                    <MenuItem
-                                                        onClick={()=>{}}
-                                                    >
-                                                        <Button
-                                                            className={classes.uploadButton}
-                                                            id= 'button_upload'
-                                                            component='label'
-                                                            onClick={()=>{}}
-                                                        >
-                                                        Upload Student Submission
-                                                        <input
-                                                            type='file'
-                                                            id='file'
-                                                            name='file'
-                                                            accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
-                                                            hidden
-                                                            onChange={(e)=>{
-                                                                let tempFile=file
-                                                                tempFile[index]={
-                                                                    ...tempFile[index],
-                                                                    zip_filename:e.target.files[0].name,
-                                                                    zip:e.target.files[0]
-                                                                }
-                                                                setFile([...tempFile]);
-                                                                e.target.value=null;
-                                                            }}
-                                                        />
-                                                        </Button>
-                                                        </MenuItem>
+                                                        onClick={(e) => {
+                                                            handleCloseClick(e, row.assignment_id)
+                                                            setSubmitDialog(open)
+                                                        }}>Submit</MenuItem>
                                                 </Menu>
                                             </TableCell>
                                         </TableRow>
@@ -550,6 +512,57 @@ export default function AssignmentTable(props) {
                     </Button>
                     <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">Confirm</Button>
                 </DialogActions>
+            </Dialog>
+            <Dialog open={submitDialog}>
+                <DialogTitle>Submit Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please upload student submission upon submit the job batch
+                    </DialogContentText>
+                    <Button
+                        className={classes.uploadButton}
+                        id= 'button_upload'
+                        component='label'
+                        variant='outlined'
+                        onClick={()=>{}}
+                    >
+                        Upload Student Submission
+                        <input
+                            type='file'
+                            id='file'
+                            name='file'
+                            accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
+                            hidden
+                            onChange={(e)=>{
+                                setFile({
+                                    zip_filename:e.target.files[0].name,
+                                    zip:e.target.files[0]
+                                });
+                                e.target.value=null;
+                            }}
+                        />
+                    </Button>
+                    {file.zip_filename==null?' no files uploaded':file.zip_filename}
+                    <DialogActions>
+                        <Button
+                            disabled={file.zip_filename==null}
+                            onClick={()=>{
+                                setFile({
+                                    zip_filename:null,
+                                    zip:null
+                                })
+                                setSubmitDialog(false)
+                            }}
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            onClick={()=>setSubmitDialog(false)}
+                        >
+                            Cancel
+                        </Button>
+                    </DialogActions>
+                </DialogContent>
             </Dialog>
         </div>
     );
