@@ -46,7 +46,8 @@ export default function TreePanel(props){
                 tree={props.tree}
                 createdCases={props.createdCases}
                 noOfCases={props.noOfCases}
-                dispatch={props.dispatch}/>
+                dispatch={props.dispatch}
+                assignment_name={assignment_name}/>
             <Box pt={3} />
             <div style={{
                 position: 'absolute',

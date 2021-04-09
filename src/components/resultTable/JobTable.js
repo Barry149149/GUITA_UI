@@ -135,7 +135,7 @@ export default function JobTable(props) {
 
     let {jobBatchId} = useParams()
 
-    const {setResultStep, setJobData, jobData,job,setJob} = props
+    const {setResultStep, setJobData, jobData,job,setJob,setDrawerOpen} = props
 
     const classes = useStyles();
 
@@ -166,6 +166,7 @@ export default function JobTable(props) {
     
     useEffect(()=>{
         //TODO: change to correct path
+        setDrawerOpen(false)
         if(jobBatchId){
             fetch('/api/v2/job_batch/'+jobBatchId+'/report', {
                 headers: {

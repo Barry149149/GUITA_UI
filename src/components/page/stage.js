@@ -4,7 +4,7 @@ import StageForm from "../stageTable/stageForm";
 import Grid from "@material-ui/core/Grid";
 import StageSelect from "../stageTable/stageSelect";
 import Box from "@material-ui/core/Box";
-import React from "react";
+import React, { useEffect } from "react";
 import {useParams} from 'react-router-dom'
 
 export default function StagePage(props){
@@ -26,9 +26,13 @@ export default function StagePage(props){
         selectedJobConfigName,
         createdStage,
         setCreatedStage,
-        state
+        state,
+        setDrawerOpen
     }=props
 
+    useEffect(()=>{
+        setDrawerOpen(false)
+    })
     return(
         <Box p={3}>
             <div style={(width<1080)?{
@@ -51,6 +55,8 @@ export default function StagePage(props){
                         setCreateConfig={setCreateConfig}
                         selectedJobConfig={selectedJobConfig}
                         selectedJobConfigName={selectedJobConfigName}
+                        configId={configId}
+                        configName={configName}
                     />
                 </div>
                 <div style={{height:'20px',width:'2%'}}/>

@@ -25,25 +25,21 @@ export default function TablePanel(props){
         formData:''
     })
     const [formData,setFormData]=useState({})
-
     const [fetched, setFetched]=useState(false)
 
-    const [testcaseJson, setTestcaseJson]=useState([])
-
     useEffect(()=>{
-        if(props.selectedAssignment){
-            console.log(props.selectedAssignment)
-            fetch('/api/v2/assignment/'+props.selectedAssignment+'/testcase').then(response => response.json())
+        if(assignId){
+            fetch('/api/v2/assignment/'+assignId+'/testcase').then(response => response.json())
             .then(async data => {
-                let newNodes=new Array()
                 console.log(data)
+                let newNodes=new Array()
                 if(data==[]){
                     dispatch({
                         type:'SET',
                         data:{
                             tree:[
                                 {
-                                    value: props.pathname,
+                                    value: assignName,
                                     nodes: [
                                         {
                                             id:1,
@@ -67,7 +63,7 @@ export default function TablePanel(props){
                     return
                 }
                 for(let i = 0;i<data.length; i++) {
-                    let { json , json_id } = await fetch('/uploads/assignment/'+props.selectedAssignment+'/testcase/'+data[i].testcase_id+'.json').
+                    let { json , json_id } = await fetch('/uploads/assignment/'+assignId+'/testcase/'+data[i].testcase_id+'.json').
                     then(response => response.json()).
                     then( data => {
                         let json=[...data];
@@ -95,7 +91,7 @@ export default function TablePanel(props){
                     data: {
                         tree:[
                             {
-                                value: props.pathname,
+                                value: assignName,
                                 nodes: [...newNodes],
                             },
                         ],
@@ -108,7 +104,6 @@ export default function TablePanel(props){
         } else {
             setFetched(true)
         }
-        console.log(state)
     },[fetched])
 
     return(

@@ -300,7 +300,7 @@ function ReportTableToolbar(props){
 export default function ReportTable(props) {
     let {jobId,stageId} = useParams()
 
-    const {setResultStep, jobData, setJobData, reportImg, setReportImg} = props
+    const {setResultStep, jobData, setJobData, reportImg, setReportImg, setDrawerOpen} = props
 
     const classes = useStyles();
 
@@ -309,6 +309,7 @@ export default function ReportTable(props) {
     const [open, setOpen] = useState([]);
 
     useEffect(()=>{
+        setDrawerOpen(false)
         let jobBatchId = 0;
         //TODO: change to correct path
         fetch('/uploads/job/'+jobId+'/report/'+stageId+'/report.json', {
@@ -336,7 +337,7 @@ export default function ReportTable(props) {
                     'content-type': 'application/json'
                 }
             })
-        })/*.then(response => response.json()).then(data => {
+        }).then(response => response.json()).then(data => {
             jobBatchId=data.job_batch_id
             return fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
                 headers: {
@@ -359,8 +360,7 @@ export default function ReportTable(props) {
             })
             
             setFetched(true)
-        });*/
-        setFetched(true)
+        });
     }, []);
 
     useEffect(()=>{
@@ -405,7 +405,7 @@ export default function ReportTable(props) {
     return (
         <div className={classes.root}>
             <ReportTableToolbar
-                table={'Job Table \\ Stage ' + stageId}
+                table={jobData.assignment_name + ' / Stage ' + stageId}
                 classes={classes}
                 result={result}
                 setResultStep={props.setResultStep}

@@ -607,6 +607,7 @@ export default function Editor() {
                       createdStage={createdStage}
                       setCreatedStage={setCreatedStage}
                       state={state}
+                      setDrawerOpen={setDrawerOpen}
                   />
                 </Route>
                         <Switch>
@@ -627,6 +628,7 @@ export default function Editor() {
                                 jobData={jobData}
                                 job={job}
                                 setJob={setJob}
+                                setDrawerOpen={setDrawerOpen}
                             />
                           </Route>
                           <Route path={'/result/job/:jobId/stage/:stageId'}>
@@ -639,6 +641,7 @@ export default function Editor() {
                                 }}
                                 reportImg={reportImg}
                                 setReportImg={setReportImg}
+                                setDrawerOpen={setDrawerOpen}
                             />
                           </Route>
                         </Switch>

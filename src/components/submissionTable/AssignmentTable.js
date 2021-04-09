@@ -103,7 +103,6 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
-                <TableCell/>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -493,7 +492,7 @@ export default function AssignmentTable(props) {
                                                         component={Link}
                                                         to={'/testcase/' +row.assignment_id+'/'+ row.assignment_name}
                                                     >
-                                                        Edit Test
+                                                        Edit Test Cases
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={(e) => handleCloseClick(e, row.assignment_id)}>Submit</MenuItem>

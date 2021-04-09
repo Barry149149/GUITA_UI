@@ -179,9 +179,9 @@ export default function StageTable(props){
     }
 
     useEffect(()=>{
-        console.log(props.selectedJobConfig)
-        if(props.selectedJobConfig){
-            fetch('/api/v2/job_config/'+props.selectedJobConfig+'/job_stage',{
+        //console.log(props.selectedJobConfig)
+        if(props.configId){
+            fetch('/api/v2/job_config/'+props.configId+'/job_stage',{
                 headers: {
                     'content-type': 'application/json'
                 }
@@ -211,7 +211,7 @@ export default function StageTable(props){
                     <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
                         {selected.length} selected
                     </Typography>):(<Typography className={classes.title} variant="h6" color="primary">
-                    {(props.selectedJobConfigName !== '')?(props.selectedJobConfigName+' / '):null}
+                    {(props.configName !== '')?(props.configName+' / '):null}
                     Stage Table
                 </Typography>)}
                 {(props.selectedJobConfig)?(

@@ -26,7 +26,7 @@ export default function TestCasePageTable(props){
                 <Toolbar className={classes.toolbar2}>
                     <Typography className={classes.title} color="primary" variant="h5" component="div">
                         {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
-                        \ Test Case {state.present.selectedCase.id}
+                         / Test Case {state.present.selectedCase.id}
                     </Typography>
                     <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
                         dispatch({type: "UNDO"})
