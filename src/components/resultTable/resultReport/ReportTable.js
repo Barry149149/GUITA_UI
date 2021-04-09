@@ -339,11 +339,11 @@ export default function ReportTable(props) {
         });
         
     }, []);
-/*
+
     useEffect(()=>{
-        console.log(reportImg.paths)
+        console.log(jobData)
     })
- */   
+    
     const handleOpenClick = (event, id) => {
         const openedIndex = open.indexOf(id);
         let newSelected = [];
