@@ -8,11 +8,13 @@ import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
 import React, {useEffect, useState} from "react";
-import {Route} from "react-router-dom";
-import * as R from "ramda"
+import {Route, useParams} from "react-router-dom";
 
 
 export default function TablePanel(props){
+
+    let {assignId,assignName}=useParams()
+
     const {tabValue,formOpen,state,setFormOpen,dispatch,width}=props
 
     const [cmdSchema,setCmdSchema]=useState({
@@ -110,8 +112,6 @@ export default function TablePanel(props){
     },[fetched])
 
     return(
-
-        <Route exact path={'/testcase/'+props.pathid+'/'+props.pathname}>
             <div style={(width<1080)?{
                 width:'100%'
             }:{
@@ -168,6 +168,5 @@ export default function TablePanel(props){
                         :null
                 }
             </div>
-        </Route>
     )
 }

@@ -11,7 +11,6 @@ export default function JsonEditorPanel(props){
 
     return(
 
-        <Route path={'/testcase/'+props.pathid+'/'+props.pathname+'/jsoneditor'}>
             <JsonEditor
                 selectedCase={state.present.selectedCase}
                 style={style}
@@ -20,7 +19,5 @@ export default function JsonEditorPanel(props){
                 noOfCases={state.present.noOfCases}
                 dispatch={dispatch}
             />
-            <Box pt={6}/>
-        </Route>
     )
 }

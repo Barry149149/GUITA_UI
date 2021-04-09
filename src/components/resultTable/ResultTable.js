@@ -156,6 +156,7 @@ export default function ResultTable(props) {
 
     useEffect(() => {
         //TODO: change to correct path
+        props.setDrawerOpen(false)
         fetch('/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true', {
             headers: {
                 'content-type': 'application/json'

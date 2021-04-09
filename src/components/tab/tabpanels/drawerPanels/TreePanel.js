@@ -12,7 +12,7 @@ import JSZip from "jszip";
 import VerticalAlignBottomIcon from "@material-ui/icons/VerticalAlignBottom";
 import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import { saveAs } from 'file-saver';
-import {Route} from "react-router-dom";
+import {Route, useParams} from "react-router-dom";
 
 const useStyles = makeStyles((theme)=>({
     readOnlyBox:{
@@ -30,12 +30,14 @@ const useStyles = makeStyles((theme)=>({
 export default function TreePanel(props){
     const classes = useStyles();
 
+    let {assignment_id,assignment_name}=useParams()
+
     const [file, setFile] = useState({
         zip_filename: null,
         zip: null
     });
     return (
-        <Route path={'/testcase/'+props.pathid+'/'+props.pathname}>
+
             <Box p={3}>
             <Title>Test Cases</Title>
             <Divider/>
@@ -59,7 +61,7 @@ export default function TreePanel(props){
                 color= 'primary'
                 onClick={()=>{}}
             >
-                Browse
+                Upload Image file
                 <input
                     type='file'
                     id='file'
@@ -79,9 +81,9 @@ export default function TreePanel(props){
                     }
                 />
             </Button>
-            <pr style={{fontSize:16, color:'#666666'}}>  {(file.zip_filename)?file.zip_filename:'No file selected'}</pr>
+            <pr style={{fontSize:14, color:'#666666'}}>  {(file.zip_filename)?file.zip_filename:'No file selected'}</pr>
             <p style={{fontSize:12, color:'#888888'}}>
-                Choose a Images ZIP for all test cases (optional)
+                Upload a ZIP of png files for Image Comparisons
             </p>
             <Box pt={1} />
                 <Button
@@ -172,7 +174,9 @@ export default function TreePanel(props){
                         }
                     />
                 </Button>
-                <p style={{fontSize:12, color:'#888888'}}>Choose a Zip of Test Cases JSON from local</p>
+                <p style={{fontSize:12, color:'#888888'}}>All test case file should placed under the root of ZIP</p>
+                <Divider/>
+                <Box pt={1} />
                     <Button
                         className={classes.uploadButton}
                         size="small"
@@ -194,9 +198,7 @@ export default function TreePanel(props){
                         }>
                         Download Test Case File
                     </Button>
-                <p style={{fontSize:12, color:'#888888'}}>Download a Zip of Test Cases JSON to local</p>
             </div>
             </Box>
-        </Route>
     )
 }
