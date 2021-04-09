@@ -296,7 +296,7 @@ export default function Editor() {
   //this is for the open of the corresponding entry
   const [settingsOpen,setSettingsOpen] = useState(false);
   const [formOpen,setFormOpen] = useState(false);
-  const [drawerOpen,setDrawerOpen] = useState(true);
+  const [drawerOpen,setDrawerOpen] = useState(false);
   const [stageFormOpen,setStageFormOpen]=useState(false)
   const [stageSelectOpen, setStageSelectOpen]=useState(false)
   const [imgDialogOpen,setImgDialogOpen] = useState(false);
@@ -732,9 +732,9 @@ function ReportImageDialog(props){
           paddingLeft:20
         }}>
           <Slider
-              defaultValue={reportImg.path}
+              value={reportImg.path+1}
               step={1}
-              marks
+              marksf
               min={0}
               max={reportImg.paths.length-1}
               onChange={(e,value)=>{
