@@ -40,12 +40,15 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import StageSelect from './stageTable/stageSelect';
-import {BrowserRouter as Router, Switch, Route, Link, useLocation} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Link, useLocation, useParams} from 'react-router-dom';
 import SubmitPanel from "./tab/tabpanels/drawerPanels/SubmitPanel";
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
 import Slider from "@material-ui/core/Slider"
 import { useHistory } from 'react-router-dom'
-
+import StagePage from "./page/stage";
+import TestCasePageTable from "./page/TestCasePageTable";
+import TestCasePageJsEditor from "./page/TestCasePageJsEditor";
+import TestCaseToolBar from "./tab/tabpanels/contentPanels/TestCaseToolBar";
 
 const drawerWidth = 440;
 
@@ -242,6 +245,7 @@ function useWindowSize() {
 export default function Editor() {
 
   const classes = useStyles();
+
 
   const [width, height] = useWindowSize();
 
@@ -515,14 +519,8 @@ export default function Editor() {
               </div>
               <div style={{width:240}}>
                 <Box p={3}/>
-                <SubmitPanel
-                    drawerValue={drawerValue}
-                    jobBatch={jobBatch}
-                    setJobBatch={setJobBatch}
-                    state={state}
-                />
-                {assignData.map((row)=>{
-                  if (drawerOpen) return (
+                {(drawerOpen)?
+                    <Route path={'/testcase/:assignment_id/:assignment_name'}>
                       <TreePanel
                           drawerValue={drawerValue}
                           selectedCase={state.present.selectedCase}
@@ -530,173 +528,87 @@ export default function Editor() {
                           createdCases={state.present.createdCases}
                           noOfCases={state.present.noOfCases}
                           dispatch={dispatch}
-                          pathname={row.assignment_name}
-                          pathid={row.assignment_id}
                       />
-                      )
-                })}
+                    </Route>
+                      :
+                    null
+                }
               </div>
             </div>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            <Route exact path='/'>
-              <Box p={3}>
-                <Paper className={classes.submissionPaper}>
-                  <AssignmentTable
-                    jobBatch={jobBatch}
-                    setJobBatch={setJobBatch}
-                    setSelectedAssignment={setSelectedAssignment}
-                    handleDrawerChange={handleDrawerChange}
-                    setSelectedJobConfig={setSelectedJobConfig}
-                    selectedConfig={selectedConfig}
-                    setSelectedConfig={setSelectedConfig}
-                    setSelectedAssignmentName={setSelectedAssignmentName}
-                    setSelectedJobConfigName={setSelectedJobConfigName}
-                    assignData={assignData}
-                    setAssignData={setAssignData}
-                    setLastEditedJobConfig={setLastEditedJobConfig}
-                    configData={configData}
-                    setConfigData={setConfigData}
-                  />
-                </Paper>
-              </Box>
-            </Route>
-            {assignData.map((row)=>
-                  <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
-                          <Box p={3}>
-                            <Paper className={classes.paper2}>
-                              <Toolbar className={classes.toolbar2}>
-                                <Typography className={classes.title} color="primary" variant="h5" component="div">
-                                  {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
-                                  / Test Case {state.present.selectedCase.id}
-                                </Typography>
-                                <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
-                                  dispatch({type: "UNDO"})
-                                }}>
-                                  <UndoIcon/>
-                                </IconButton>
-                                <IconButton color="inherit" disabled={state.future.length === 0} onClick={() => {
-                                  dispatch({type: "REDO"})
-                                }}>
-                                  <RedoIcon/>
-                                </IconButton>
-                                <Tabs
-                                    value={tabValue}
-                                    onChange={(value, newValue) => setTabValue(newValue)}
-                                    indicatorColor="primary"
-                                    centered={true}
-                                >
-                                  <Tooltip title="Table Mode">
-                                    <Tab
-                                        className={classes.tab}
-                                        aria-label="tab_tableView"
-                                        icon={<TableChartIcon color="primary"/>}
-                                        {...a11yProps(0)}
-                                        component={Link}
-                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name}
-                                    />
-                                  </Tooltip>
-                                  <Tooltip title="CodeEditor">
-                                    <Tab
-                                        className={classes.tab}
-                                        aria-label="tab_codeEditor"
-                                        icon={<CodeIcon color="primary"/>}
-                                        {...a11yProps(1)}
-                                        component={Link}
-                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name+'/jsoneditor'}
-                                    />
-                                  </Tooltip>
-                                </Tabs>
-                              </Toolbar>
-                              <JsonEditorPanel
-                                  classes={classes}
-                                  tabValue={tabValue}
-                                  style={style}
-                                  state={state}
-                                  dispatch={dispatch}
-                                  pathname={row.assignment_name}
-                                  pathid={row.assignment_id}
-                              />
-                              <TablePanel
-                                  tabValue={tabValue}
-                                  formOpen={formOpen}
-                                  state={state}
-                                  setFormOpen={setFormOpen}
-                                  dispatch={dispatch}
-                                  width={(drawerOpen) ? (width - drawerWidth) : width}
-                                  selectedAssignment={selectedAssignment}
-                                  pathname={row.assignment_name}
-                                  setNode={setNode}
-                                  pathid={row.assignment_id}
-                              />
-                            </Paper>
-                          </Box>
-                  </Route>
-            )}
-            {configData.map(row=>
-            <Route exact path={'/config/'+row.job_config_id+'/'+row.job_config_name}>
-              <Box p={3}>
-              <div style={(width<1080)?{
-                width:'100%'
-              }:{
-                display: 'flex',
-                flexGrow: 1,
-                margin:0,
-                width:'100%',
-              }}>
-                <div id="commandTable" style={(contentWidth<1080)?{width:'100%'}:((!stageFormOpen)?{width:'100%'}:{width:'69%'})}>
-                    <StageTable
-                        stage={stage}
-                        setStage={setStage}
-                        stageFormOpen={stageFormOpen}
-                        setStageFormOpen={setStageFormOpen}
-                        stageSelectOpen={stageSelectOpen}
-                        setStageSelectOpen={setStageSelectOpen}
-                        createConfig={createConfig}
-                        setCreateConfig={setCreateConfig}
-                        selectedJobConfig={selectedJobConfig}
-                        selectedJobConfigName={selectedJobConfigName}
-                    />
-                  </div>
-                <div style={{height:'20px',width:'2%'}}/>
-                  {(stageFormOpen)?
-                      <Grow in={stageFormOpen} timeout={(stageFormOpen) ? 1000 : 0}>
-                        <div style={(contentWidth<1080)?{width:'100%'}:{width:'29%'}}>
-                          <StageForm
-                              stage={stage}
-                              setStage={setStage}
-                              stageFormOpen={stageFormOpen}
-                              setStageFormOpen={setStageFormOpen}
-                              createdStage={createdStage}
-                              setCreatedStage={setCreatedStage}
-                              testcases={state.present.tree[0].nodes}
-                          />
-                        </div>
-                      </Grow>
-                      :null}
-                    {(stageSelectOpen)?
-                      <Grow in={stageSelectOpen} timeout={(stageSelectOpen) ? 1000 : 0}>
-                        <Grid item xs={3}>
-                          <StageSelect
-                              stage={stage}
-                              setStage={setStage}
-                              stageSelectOpen={stageSelectOpen}
-                              setStageSelectOpen={setStageSelectOpen}
-                              createdStage={createdStage}
-                              setCreatedStage={setCreatedStage}
-                              testcases={state.present.tree[0].nodes}
-                          />
-                        </Grid>
-                      </Grow>
-                      :null}
-                </div>
-              </Box>
-            </Route>
-              )}
+            <Box p={3}>
+              <Paper className={classes.paper2}>
+                  <Route exact path='/'>
 
-              <Box p={3}>
-                      <Paper className={classes.resultPaper}>
+                        <AssignmentTable
+                          jobBatch={jobBatch}
+                          setJobBatch={setJobBatch}
+                          setSelectedAssignment={setSelectedAssignment}
+                          handleDrawerChange={handleDrawerChange}
+                          setSelectedJobConfig={setSelectedJobConfig}
+                          selectedConfig={selectedConfig}
+                          setSelectedConfig={setSelectedConfig}
+                          setSelectedAssignmentName={setSelectedAssignmentName}
+                          setSelectedJobConfigName={setSelectedJobConfigName}
+                          assignData={assignData}
+                          setAssignData={setAssignData}
+                          setLastEditedJobConfig={setLastEditedJobConfig}
+                          configData={configData}
+                          setConfigData={setConfigData}
+                          setDrawerOpen={setDrawerOpen}
+                        />
+                  </Route>
+                  <Route path={'/testcase/:assignId/:assignName'}>
+                  <TestCaseToolBar
+                      classes={classes}
+                      tabValue={tabValue}
+                      selectedAssignmentName={selectedAssignmentName}
+                      dispatch={dispatch}
+                      setTabValue={setTabValue}
+                      state={state}
+                      setDrawerOpen={setDrawerOpen}
+                  />
+                  </Route>
+                  <Route exact path={'/testcase/:assignId/:assignName/jsoneditor'}>
+                  <JsonEditorPanel
+                      classes={classes}
+                      tabValue={tabValue}
+                      style={style}
+                      state={state}
+                      dispatch={dispatch}
+                  />
+                  </Route>
+                  <Route exact path={'/testcase/:assignId/:assignName'}>
+                  <TablePanel
+                      tabValue={tabValue}
+                      formOpen={formOpen}
+                      state={state}
+                      setFormOpen={setFormOpen}
+                      dispatch={dispatch}
+                      width={(drawerOpen) ? (width - drawerWidth) : width}
+                      selectedAssignment={selectedAssignment}
+                      setNode={setNode}
+                  />
+                  </Route>
+                <Route exact path={'/config/:configId/:configName'}>
+                  <StagePage
+                      stage={stage}
+                      setStage={setStage}
+                      stageFormOpen={stageFormOpen}
+                      setStageFormOpen={setStageFormOpen}
+                      stageSelectOpen={stageSelectOpen}
+                      setStageSelectOpen={setStageSelectOpen}
+                      createConfig={createConfig}
+                      setCreateConfig={setCreateConfig}
+                      selectedJobConfig={selectedJobConfig}
+                      selectedJobConfigName={selectedJobConfigName}
+                      createdStage={createdStage}
+                      setCreatedStage={setCreatedStage}
+                      state={state}
+                  />
+                </Route>
                         <Switch>
                         <Route exact path='/result'>
                           <ResultTable
@@ -705,6 +617,7 @@ export default function Editor() {
                                 jobData={jobData}
                                 result={result}
                                 setResult={setResult}
+                                setDrawerOpen={setDrawerOpen}
                             />
                         </Route>
                           <Route exact path={'/result/job batch/:jobBatchId'} component={JobTable}>
@@ -839,35 +752,95 @@ function ReportImageDialog(props){
   )
 }
 /*
-                      <Route exact path='/result'>
-                            <ResultTable
-                                setResultStep={setResultStep}
-                                setJobData={setJobData}
-                                jobData={jobData}
-                                result={result}
-                                setResult={setResult}
-                            />
-                        </Route>
-                        {result.map((row)=>
-                            <Route exact path={'/result/jobbatch/'+row.job_batch_id}>
-                            <JobTable
-                            setResultStep={setResultStep}
-                            setJobData={setJobData}
-                            jobData={jobData}
-                            />
-                            </Route>
-                        )}
-                        {jobData.map(row=>
-                            <Route exact path={'/result/jobbatch/'+jobData.job_batch_id+'/job/'+row.job_id+'/stage/'}>
-                                <ReportTable
-                                  setResultStep={setResultStep}
-                                  jobData={jobData}
-                                  setJobData={setJobData}
-                                  handleImgDialogOpen={()=>{setImgDialogOpen(true)}}
-                                  reportImg={reportImg}
-                                  setReportImg={setReportImg}
-                                />
-                            </Route>
-                                )}*/
+                      {assignData.map((row)=>
+                  <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
+                          <Box p={3}>
+                            <Paper className={classes.paper2}>
+                              <Toolbar className={classes.toolbar2}>
+                                <Typography className={classes.title} color="primary" variant="h5" component="div">
+                                  {(selectedAssignmentName !== '') ? selectedAssignmentName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")}
+                                  / Test Case {state.present.selectedCase.id}
+                                </Typography>
+                                <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {
+                                  dispatch({type: "UNDO"})
+                                }}>
+                                  <UndoIcon/>
+                                </IconButton>
+                                <IconButton color="inherit" disabled={state.future.length === 0} onClick={() => {
+                                  dispatch({type: "REDO"})
+                                }}>
+                                  <RedoIcon/>
+                                </IconButton>
+                                <Tabs
+                                    value={tabValue}
+                                    onChange={(value, newValue) => setTabValue(newValue)}
+                                    indicatorColor="primary"
+                                    centered={true}
+                                >
+                                  <Tooltip title="Table Mode">
+                                    <Tab
+                                        className={classes.tab}
+                                        aria-label="tab_tableView"
+                                        icon={<TableChartIcon color="primary"/>}
+                                        {...a11yProps(0)}
+                                        component={Link}
+                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name}
+                                    />
+                                  </Tooltip>
+                                  <Tooltip title="CodeEditor">
+                                    <Tab
+                                        className={classes.tab}
+                                        aria-label="tab_codeEditor"
+                                        icon={<CodeIcon color="primary"/>}
+                                        {...a11yProps(1)}
+                                        component={Link}
+                                        to={'/testcase/'+row.assignment_id+'/'+row.assignment_name+'/jsoneditor'}
+                                    />
+                                  </Tooltip>
+                                </Tabs>
+                              </Toolbar>
+                              <JsonEditorPanel
+                                  classes={classes}
+                                  tabValue={tabValue}
+                                  style={style}
+                                  state={state}
+                                  dispatch={dispatch}
+                                  pathname={row.assignment_name}
+                                  pathid={row.assignment_id}
+                              />
+                              <TablePanel
+                                  tabValue={tabValue}
+                                  formOpen={formOpen}
+                                  state={state}
+                                  setFormOpen={setFormOpen}
+                                  dispatch={dispatch}
+                                  width={(drawerOpen) ? (width - drawerWidth) : width}
+                                  selectedAssignment={selectedAssignment}
+                                  pathname={row.assignment_name}
+                                  setNode={setNode}
+                                  pathid={row.assignment_id}
+                              />
+                            </Paper>
+                          </Box>
+                  </Route>
+            )}*/
 
 
+/*
+* <Route path={'/testcase/:assignId/:assignName'}>
+              <TestCasePageTable
+                  classes={classes}
+                  selectedAssignmentName={selectedAssignmentName}
+                  state={state}
+                  dispatch={dispatch}
+                  tabValue={tabValue}
+                  setTabValue={setTabValue()}
+                  width={width}
+                  formOpen={formOpen}
+                  setFormOpen={setFormOpen()}
+                  selectedAssignment={selectedAssignment}
+                  drawerOpen={drawerOpen}
+                  drawerWidth={drawerWidth}
+              />
+            </Route>
+* */

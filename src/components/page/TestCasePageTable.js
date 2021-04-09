@@ -9,17 +9,16 @@ import Tabs from "@material-ui/core/Tabs";
 import {Tooltip} from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import TableChartIcon from "@material-ui/icons/TableChart";
-import {Link, Route,useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import CodeIcon from "@material-ui/icons/Code";
-import JsonEditorPanel from "../tab/tabpanels/contentPanels/JsonEditorPanel";
 import TablePanel from "../tab/tabpanels/contentPanels/TablePanel";
 import React from "react";
 
-export default function TestCasePage(props){
+export default function TestCasePageTable(props){
 
     let {assignId,assignName}=useParams()
 
-    const {classes,selectedAssignmentName,state,dispatch,tabValue,setTabValue, width, formOpen,setFormOpen,selectedAssignment,drawerOpen,drawerWidth,style}=props
+    const {classes,selectedAssignmentName,state,dispatch,tabValue,setTabValue, width, formOpen,setFormOpen,selectedAssignment,drawerOpen,drawerWidth}=props
 
     return(
         <Box p={3}>
@@ -65,16 +64,6 @@ export default function TestCasePage(props){
                         </Tooltip>
                     </Tabs>
                 </Toolbar>
-                <Route path={'/testcase/'+assignId+'/'+assignName+'/jsoneditor'}>
-                    <JsonEditorPanel
-                        classes={classes}
-                        tabValue={tabValue}
-                        style={style}
-                        state={state}
-                        dispatch={dispatch}
-                    />
-                </Route>
-                <Route exact path={'/testcase/'+assignId+'/'+assignName}>
                 <TablePanel
                     tabValue={tabValue}
                     formOpen={formOpen}
@@ -85,7 +74,6 @@ export default function TestCasePage(props){
                     selectedAssignment={selectedAssignment}
 
                 />
-                </Route>
             </Paper>
         </Box>
     )

@@ -127,6 +127,9 @@ function EnhancedTableHead(props) {
                 <TableCell align="left">
                     Configuration
                 </TableCell>
+                <TableCell align="left">
+                    Student Submission
+                </TableCell>
                 <TableCell/>
             </TableRow>
         </TableHead>
@@ -137,6 +140,7 @@ function TableToolbar(props){
     const {classes,table, setFilterCriteria, setFetched}=props
     const { register, handleSubmit } = useForm();
     const [createAssignment, setCreateAssignment] = useState(false);
+
 
     const handleCreateAssignmentOpen=()=>{
         setCreateAssignment(true);
@@ -159,6 +163,8 @@ function TableToolbar(props){
           }).then(result => console.log(result)).catch(error => console.log(error));
         handleCreateAssignmentClose();
     }
+
+
 
     return(
         <Toolbar>
@@ -216,6 +222,7 @@ export default function AssignmentTable(props) {
         testcase: []
 
     })
+    const [file, setFile] = useState([]);
 
     
 
@@ -284,6 +291,7 @@ export default function AssignmentTable(props) {
 
     useEffect(() => {
         //TODO: change to correct path
+        props.setDrawerOpen(false)
         const url = '/api/v2/assignment';
 
         fetch('/api/v2/assignment', {
@@ -293,13 +301,19 @@ export default function AssignmentTable(props) {
         }).then(response => response.json()).then(data => {
             setAssignData(data)
             let emptyConfig = [];
+            let emptyZIP=[]
             for (let i = 0; i < data.length; i++) {
                 emptyConfig.push({
                     id: -1,
                     name: ""
                 })
+                emptyZIP.push({
+                    zip_filename: null,
+                    zip: null
+                })
             }
             setSelectedConfig([...emptyConfig])
+            setFile([...emptyZIP])
             
             return fetch('/api/v2/job_config', {
                 headers: {
@@ -409,6 +423,8 @@ export default function AssignmentTable(props) {
                                                                 }
                                                                 setSelectedConfig([...newSelectedConfig])
 
+                                                                //Todo:Remember to setJobBatch on sumbit
+
                                                                 if (jobBatch.assignment_id === row.assignment_id) {
                                                                     setJobBatch({
                                                                         ...jobBatch,
@@ -446,6 +462,18 @@ export default function AssignmentTable(props) {
                                                     </Button>
                                                 </FormControl>
                                             </TableCell>
+                                            <TableCell>
+                                                <TextField
+                                                    size="small"
+                                                    className={classes.readOnlyBox}
+                                                    label=""
+                                                    value={(typeof file[index].zip_filename==='undefined'||file[index].zip_filename===undefined)?'':file[index].zip_filename}
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                    variant="outlined"
+                                                />
+                                            </TableCell>
                                             <TableCell align="right">
                                                 <IconButton
                                                     onClick={(e) => {
@@ -469,6 +497,35 @@ export default function AssignmentTable(props) {
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={(e) => handleCloseClick(e, row.assignment_id)}>Submit</MenuItem>
+                                                    <MenuItem
+                                                        onClick={()=>{}}
+                                                    >
+                                                        <Button
+                                                            className={classes.uploadButton}
+                                                            id= 'button_upload'
+                                                            component='label'
+                                                            onClick={()=>{}}
+                                                        >
+                                                        Upload Student Submission
+                                                        <input
+                                                            type='file'
+                                                            id='file'
+                                                            name='file'
+                                                            accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
+                                                            hidden
+                                                            onChange={(e)=>{
+                                                                let tempFile=file
+                                                                tempFile[index]={
+                                                                    ...tempFile[index],
+                                                                    zip_filename:e.target.files[0].name,
+                                                                    zip:e.target.files[0]
+                                                                }
+                                                                setFile([...tempFile]);
+                                                                e.target.value=null;
+                                                            }}
+                                                        />
+                                                        </Button>
+                                                        </MenuItem>
                                                 </Menu>
                                             </TableCell>
                                         </TableRow>
