@@ -24,7 +24,7 @@ export default function TestCaseToolBar(props){
 
     return(
         <Toolbar className={classes.toolbar2}>
-        <Typography className={classes.title} color="primary" variant="h5" component="div">
+        <Typography className={classes.title} color="primary" variant="h6" component="div">
             {(assignName !== '') ? assignName : ((tabValue === 0) ? "Table & Form Mode " : "JSON Code Editor ")} / Test Case {state.present.selectedCase.id}
         </Typography>
         <IconButton color="inherit" disabled={state.past.length === 0} onClick={() => {

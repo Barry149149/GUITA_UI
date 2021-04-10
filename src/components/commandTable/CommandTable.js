@@ -225,7 +225,7 @@ export default function CommandTable(props){
     const numSelected = selected.length;
 
     return (
-        <Paper elevation={3} className={classes.paper}>
+        <div className={classes.paper}>
             <Toolbar  className={clsx(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}>
@@ -233,7 +233,7 @@ export default function CommandTable(props){
                         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
                             {numSelected} selected
                         </Typography>):
-                    (<Typography className={classes.title} variant="h6" color="primary">
+                    (<Typography className={classes.title} variant="h7" color="primary">
                         Command Table
                     </Typography>)
                 }
@@ -384,8 +384,8 @@ export default function CommandTable(props){
                                                                 }}
                                                             />
                                                         </TableCell>
-                                                        <TableCell component="th" scope="row" align="left">
-                                                            {row.command.command}
+                                                        <TableCell scope="row" align="left" >
+                                                            <p style={{fontSize:12,color:'#888888'}}>{row.command.command}</p>
                                                         </TableCell>
                                                         <TableCell  align="left">
                                                             {row.command.description}
@@ -465,7 +465,7 @@ export default function CommandTable(props){
                     </Droppable>
                 </DragDropContext>
             </Table>
-        </Paper>
+        </div>
     )
 }
 

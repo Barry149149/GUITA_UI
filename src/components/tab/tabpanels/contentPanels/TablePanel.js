@@ -8,7 +8,9 @@ import Button from "@material-ui/core/Button";
 import CommandForm from "../../../commandTable/commandForm/commandForm";
 import TabPanel from "../Tabpanel";
 import React, {useEffect, useState} from "react";
+import {makeStyles} from "@material-ui/core";
 import {Route, useParams} from "react-router-dom";
+
 
 
 export default function TablePanel(props){
@@ -134,7 +136,7 @@ export default function TablePanel(props){
                     <React.Fragment>
                     <div style={(width<1080)?{height:'20px'}:{width:'2%'}}/>
                     <Grow in={formOpen} timeout={(formOpen) ? 1000 : 0}>
-                        <div style={(width<1080)?{width:'100%'}:{width:'29%'}}>
+                        <div style={(width<1080)?{width:'100%'}:{width:'29%' }}>
                             <Paper id="commandForm" elevation={3} >
                                 <Box pt={1}/>
                                 <Tooltip title="Close" style={{float: "right"}}>

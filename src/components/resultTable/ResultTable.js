@@ -14,12 +14,20 @@ import {Tooltip} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
 function descendingComparator(a, b, orderBy) {
+    if(orderBy=='created_at'){
+        if (Date.parse(b[orderBy]) < Date.parse(a[orderBy])) {
+            return -1;
+        }
+        if (Date.parse(b[orderBy]) > Date.parse(a[orderBy])) {
+            return 1;
+        }
+    }else{
     if (b[orderBy] < a[orderBy]) {
         return -1;
     }
     if (b[orderBy] > a[orderBy]) {
         return 1;
-    }
+    }}
 
     return 0;
 }
