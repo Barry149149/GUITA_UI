@@ -29,7 +29,7 @@ export default function DrawerTab(props){
     const location=useLocation()
 
     useEffect(()=>{
-        console.log(location)
+        //console.log(location)
     })
     return(
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

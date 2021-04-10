@@ -1,23 +1,14 @@
 import Title from "../../../Title";
 import {ButtonGroup, Divider, Tooltip} from "@material-ui/core";
 import CaseTree from "../../testCaseTree/CaseTree";
-import TabPanel from "../Tabpanel";
 import React, { useEffect, useState } from "react";
 import Button from '@material-ui/core/Button';
-import TextField from "@material-ui/core/TextField"
 import {makeStyles} from "@material-ui/core/styles";
 import Box from '@material-ui/core/Box';
-import IconButton from "@material-ui/core/IconButton";
 import JSZip from "jszip";
-import VerticalAlignBottomIcon from "@material-ui/icons/VerticalAlignBottom";
-import VerticalAlignTopIcon from "@material-ui/icons/VerticalAlignTop";
 import { saveAs } from 'file-saver';
-import {Route, useParams} from "react-router-dom";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {Prompt, Route, useParams} from "react-router-dom";
+import NavigationBlocker from '../../../Prompt/Warning';
 
 const useStyles = makeStyles((theme)=>({
     readOnlyBox:{
@@ -41,6 +32,8 @@ export default function TreePanel(props){
         zip_filename: null,
         zip: null
     });
+
+
 
     return (
         <React.Fragment>

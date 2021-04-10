@@ -25,7 +25,7 @@ import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
 import {BrowserRouter as Router, Switch, Route, Link, useLocation, useParams} from 'react-router-dom';
 import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
 import Slider from "@material-ui/core/Slider"
-import StagePage from "./page/stage";
+import StagePage from "./page/stage"
 import TestCaseToolBar from "./tab/tabpanels/contentPanels/TestCaseToolBar";
 import Container from "@material-ui/core/Container";
 
@@ -351,6 +351,7 @@ export default function Editor() {
   const [selectedAssignment, setSelectedAssignment]=useState(-1);
   const [selectedAssignmentName, setSelectedAssignmentName]=useState('');
   const [lastEditedJobConfig, setLastEditedJobConfig] = useState({id:-1,name:''});
+  const [testcaseFetched,setTestcaseFetched] = useState(false);
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -539,6 +540,8 @@ export default function Editor() {
                           configData={configData}
                           setConfigData={setConfigData}
                           setDrawerOpen={setDrawerOpen}
+                          state={state}
+                          setTestcaseFetched={setTestcaseFetched}
                         />
                   </Route>
                   <Route path={'/testcase/:assignId/:assignName'}>
@@ -552,6 +555,7 @@ export default function Editor() {
                       setDrawerOpen={setDrawerOpen}
                       fetch={testCaseFetched}
                       setFetched={setTestCaseFetched}
+
                   />
                   </Route>
                   <Route exact path={'/testcase/:assignId/:assignName/jsoneditor'}>
