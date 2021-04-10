@@ -20,6 +20,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import Text from "recharts/lib/component/Text";
 import {useParams} from "react-router-dom";
+import {CheckCircle} from "@material-ui/icons";
+import CancelIcon from '@material-ui/icons/Cancel';
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -118,7 +120,8 @@ function Row(props){
                     {row.command}
                 </TableCell>
                 <TableCell>
-                    {row.score + "\\" + row.maxScore}
+                    {(row.score==row.maxScore)?<CheckCircle style={{ color: 'green' }}/>:
+                        <CancelIcon color='secondary'/>}
                 </TableCell>
                 <TableCell align="right">
                     <IconButton id="button_expandRow" size="small"
@@ -136,6 +139,13 @@ function Row(props){
                                 Detail:
                             </Typography>
                             <Table>
+                                <TableRow>
+                                    <TableCell
+                                        size="small"
+                                        className={classes.tableCell}>
+                                        Score: {row.score+'/'+row.maxScore}
+                                    </TableCell>
+                                </TableRow>
                             {(row.parameters) ?
                                 <TableRow>
                                     <TableCell
@@ -422,7 +432,7 @@ export default function ReportTable(props) {
                         <TableHead>
                             <TableCell>Command ID</TableCell>
                             <TableCell>Command</TableCell>
-                            <TableCell>Score</TableCell>
+                            <TableCell>Result</TableCell>
                             <TableCell align="right">
                                 <IconButton id="button_expandRow" size="small"
                                             onClick={(e) => openAll()}>

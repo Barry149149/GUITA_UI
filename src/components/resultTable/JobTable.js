@@ -14,6 +14,9 @@ import {Tooltip} from "@material-ui/core";
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import IconButton from '@material-ui/core/IconButton';
 import {Link, useParams} from 'react-router-dom'
+import {CheckCircle} from "@material-ui/icons";
+import CancelIcon from '@material-ui/icons/Cancel';
+import Button from "@material-ui/core/Button";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -66,7 +69,7 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
+                        align="center"
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -113,6 +116,7 @@ const useStyles = makeStyles(() => ({
     container: {
         maxHeight: 650,
     },
+
 }));
 
 function ResultTableToolbar(props){
@@ -143,6 +147,9 @@ export default function JobTable(props) {
     const [orderBy, setOrderBy] = useState('job_id');
     const [filterCriteria, setFilterCriteria]= useState('')
     const [fetched, setFetched]= useState(false);
+    let maxCol=0
+
+
 
 
     const handleRequestSort = (event, property) => {
@@ -204,6 +211,12 @@ export default function JobTable(props) {
         }
     }, []);
 
+    if(fetched){
+    for(let i=0;i<job.length;i++){
+        maxCol=(job[i].reports.length>maxCol)?job[i].reports.length:maxCol
+    }}
+
+
     return (
         <div className={classes.root}>
             
@@ -238,28 +251,44 @@ export default function JobTable(props) {
                                     for(let i=0; i<row.reports.length;i++){
                                         cell_stage.push(
                                             <TableCell
+                                                hover={true}
                                                 label={row.reports[i].stage_id}
                                                 style={{cursor:'pointer'}}
                                                 to={'/result/job/'+row.job_id+'/stage/'+row.reports[i].stage_id}
                                                 component={Link}
+                                                align="center"
                                                 onClick={(event) => {
                                                     handleCellClick(event, row, row.reports[i].stage_id)
                                                 }}>
+                                                <Button fullWidth={true} size='large'>
                                                 {// TODO: add cell for stages after failed
-                                                    (typeof row.reports[i].status!=='undefined')?row.reports[i].status:''
+                                                    (typeof row.reports[i].status!=='undefined')?
+                                                        (row.reports[i].status=='success')?
+                                                            <CheckCircle style={{ color: 'green' }}/>:
+                                                            <CancelIcon color='secondary'/>:''
                                                 }
+                                                </Button>
                                             </TableCell>
                                         )}
+                                    for(let i=0;i<(maxCol-row.reports.length);i++){
+                                        cell_stage.push(
+                                            <TableCell align="center">
+                                                <CancelIcon color='secondary'/>
+                                            </TableCell>
+                                        )
+                                    }
+
+
                                     return (
                                         <TableRow
-                                            hover
+
                                             tabIndex={-1}
                                             key={row.job_id}
-                                            style={{cursor:'pointer'}}
+
                                         >
                                             {// TODO: Set onClick
                                             }
-                                            <TableCell label={row.job_id}>
+                                            <TableCell label={row.job_id}  align="center">
                                                 {row.job_id}
                                             </TableCell>
                                             {cell_stage}

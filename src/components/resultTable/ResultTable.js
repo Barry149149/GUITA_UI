@@ -55,7 +55,6 @@ function EnhancedTableHead(props) {
     };
 
     const headCells = [
-        { id: 'job_batch_id', numeric: false, label: "Job Batch ID"},
         { id: 'assignment_name', numeric: false, label: 'Assignment Name'},
         { id: 'created_at', numeric: false, label: 'Submitted At'},
         { id: 'job_config_name', numeric: false, label: 'Job Config Name'},
@@ -140,7 +139,7 @@ export default function ResultTable(props) {
     const classes = useStyles();
 
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('job_batch_id');
+    const [orderBy, setOrderBy] = useState('assignment_name');
     const [filterCriteria, setFilterCriteria] = useState('')
     const [fetched, setFetched] = useState(false);
     const [selected, setSelected] = useState([]);
@@ -205,7 +204,11 @@ export default function ResultTable(props) {
                         />
                         <TableBody>
                             {stableSort(result, getComparator(order, orderBy))
-                                .filter(e => (e.job_batch_id.toString().toLowerCase().includes(filterCriteria.toLowerCase())))
+                                .filter(e => {
+                                    console.log(e)
+                                    return(e.assignment.assignment_name.toString().toLowerCase().includes(filterCriteria.toLowerCase())||
+                                        e.created_at.toLowerCase().includes(filterCriteria.toLowerCase()))
+                                })
                                 .map((row, index) => {
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     //const moment = require("moment-timezone");
@@ -222,9 +225,6 @@ export default function ResultTable(props) {
                                                     handleRowClick(event, row)
                                                 }}
                                             >
-                                                <TableCell label={row.job_batch_id}>
-                                                    {(row.job_batch_id !== null) ? row.job_batch_id : null}
-                                                </TableCell>
                                                 <TableCell>
                                                     {(row.assignment !== null) ? row.assignment.assignment_name : null}
                                                 </TableCell>
