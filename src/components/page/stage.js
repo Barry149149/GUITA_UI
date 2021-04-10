@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import StageSelect from "../stageTable/stageSelect";
 import Box from "@material-ui/core/Box";
 import React, { useEffect } from "react";
-import {useParams} from 'react-router-dom'
+import {Prompt, useParams} from 'react-router-dom'
 
 export default function StagePage(props){
 
@@ -35,6 +35,13 @@ export default function StagePage(props){
     })
     return(
         <Box p={3}>
+            <Prompt when={true} message={p=> {
+                if(p.pathname.includes('/config/'+configId+'/'+configName)) {
+                    return true
+                }else {
+                    return "All unsaved changes will be lost."
+                }
+            }} />
             <div style={(width<1080)?{
                 width:'100%'
             }:{
