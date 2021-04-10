@@ -17,7 +17,7 @@ export default function TablePanel(props){
 
     let {assignId,assignName}=useParams()
 
-    const {tabValue,formOpen,state,setFormOpen,dispatch,width,testcaseFetched}=props
+    const {tabValue,formOpen,state,setFormOpen,dispatch,width,fetched}=props
 
     const [cmdSchema,setCmdSchema]=useState({
         command:'None',
@@ -118,7 +118,7 @@ export default function TablePanel(props){
                 margin:0,
                 width:'100%',
             }}>
-               {(testcaseFetched)?
+               {(fetched)?
                     <div id="commandTable" style={(width<1080)?{width:'100%'}:((!formOpen)?{width:'100%'}:{width:'69%'})}>
                         <CommandTable
                             selectedCase={state.present.selectedCase}

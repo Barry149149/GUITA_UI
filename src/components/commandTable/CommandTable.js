@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     paper:{
         overflowX:'auto',
         overflow:'auto',
-        height:500,
+        height:650,
         maxHeight:700,
         backgroundColor:'#DDDDDD'
     },
@@ -286,8 +286,8 @@ export default function CommandTable(props){
                                 }}
                             />
                         </TableCell>
+                        <TableCell padding="checkbox">Step</TableCell>
                         <TableCell align="left"> Command </TableCell>
-                        <TableCell align="left"> Description </TableCell>
                         <TableCell align="right">
                             <IconButton id="button_expandRow" size="small"
                                         onClick={(e) => openAll() }>
@@ -385,11 +385,14 @@ export default function CommandTable(props){
                                                                 }}
                                                             />
                                                         </TableCell>
-                                                        <TableCell scope="row" align="left" >
-                                                            <p style={{fontSize:12,color:'#888888'}}>{row.command.command}</p>
+                                                        <TableCell padding="checkbox" align="center">
+                                                            {index}
                                                         </TableCell>
-                                                        <TableCell  align="left">
-                                                            {row.command.description}
+                                                        <TableCell scope="row" align="left" size="small">
+                                                            <Box>
+                                                            <Typography style={{fontSize:10,color:'#777777'}}>{row.command.command}</Typography>
+                                                            <Typography style={{fontSize:16,color:'#002984',fontWeight: 'bold'}}>{row.command.description}</Typography>
+                                                            </Box>
                                                         </TableCell>
                                                         <TableCell align="right">
                                                             <IconButton id="button_expandRow" size="small"

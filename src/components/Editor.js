@@ -553,7 +553,7 @@ export default function Editor() {
                       setTabValue={setTabValue}
                       state={state}
                       setDrawerOpen={setDrawerOpen}
-                      fetch={testCaseFetched}
+                      fetched={testCaseFetched}
                       setFetched={setTestCaseFetched}
 
                   />
@@ -565,7 +565,7 @@ export default function Editor() {
                       style={style}
                       state={state}
                       dispatch={dispatch}
-                      fetch={testCaseFetched}
+                      fetched={testCaseFetched}
                       setFetched={setTestCaseFetched}
                   />
                   </Route>
@@ -579,7 +579,7 @@ export default function Editor() {
                       width={(drawerOpen) ? (width - drawerWidth) : width}
                       selectedAssignment={selectedAssignment}
                       setNode={setNode}
-                      fetch={testCaseFetched}
+                      fetched={testCaseFetched}
                       setFetched={setTestCaseFetched}
                   />
                   </Route>

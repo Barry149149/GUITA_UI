@@ -7,7 +7,7 @@ import Box from "@material-ui/core/Box";
 import {Route} from "react-router-dom";
 
 export default function JsonEditorPanel(props){
-    const {classes,tabValue,style,state,dispatch}=props
+    const {classes,tabValue,style,state,dispatch,fetched}=props
 
     return(
 
