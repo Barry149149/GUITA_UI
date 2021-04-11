@@ -1,11 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Editor from './components/Editor';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import Editor from './components/Editor'
 
 // ========================================
 
-ReactDOM.render(
-        <Editor/>,
-    document.getElementById('root')
-);
+ReactDOM.render(<Editor />, document.getElementById('root'))

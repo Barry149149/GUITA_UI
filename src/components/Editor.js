@@ -1,748 +1,769 @@
-import React, {useState, useReducer,useLayoutEffect, useEffect} from 'react';
-import {lighten, makeStyles} from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-import SettingDialog from "./dialog/SettingDialog";
-import GuideTour from "./guideTour";
-import clsx from 'clsx';
-import SubmitConfirmDialog from "./dialog/SubmitCofirm";
-import SubmitWarningDialog from "./dialog/SubmitWarning";
-import DrawerTab from "./tab/drawerTab";
-import TablePanel from "./tab/tabpanels/contentPanels/TablePanel";
-import JsonEditorPanel from "./tab/tabpanels/contentPanels/JsonEditorPanel";
-import GuitaAppBar from "./GuitaAppBar";
-import Paper from "@material-ui/core/Paper";
-import ResultTable from "./resultTable/ResultTable";
-import AssignmentTable from './submissionTable/AssignmentTable';
-import JobTable from './resultTable/JobTable';
-import ReportTable from './resultTable/resultReport/ReportTable';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight"
-import {BrowserRouter as Router, Switch, Route, Link, useLocation, useParams} from 'react-router-dom';
-import TreePanel from "./tab/tabpanels/drawerPanels/TreePanel";
-import Slider from "@material-ui/core/Slider"
-import StagePage from "./page/stage"
-import TestCaseToolBar from "./tab/tabpanels/contentPanels/TestCaseToolBar";
-import Container from "@material-ui/core/Container";
+import React, { useState, useReducer, useLayoutEffect, useEffect } from 'react'
+import { lighten, makeStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
+import Box from '@material-ui/core/Box'
+import SettingDialog from './dialog/SettingDialog'
+import GuideTour from './guideTour'
+import clsx from 'clsx'
+import SubmitConfirmDialog from './dialog/SubmitCofirm'
+import SubmitWarningDialog from './dialog/SubmitWarning'
+import DrawerTab from './tab/drawerTab'
+import TablePanel from './tab/tabpanels/contentPanels/TablePanel'
+import JsonEditorPanel from './tab/tabpanels/contentPanels/JsonEditorPanel'
+import GuitaAppBar from './GuitaAppBar'
+import Paper from '@material-ui/core/Paper'
+import ResultTable from './resultTable/ResultTable'
+import AssignmentTable from './submissionTable/AssignmentTable'
+import JobTable from './resultTable/JobTable'
+import ReportTable from './resultTable/resultReport/ReportTable'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Dialog from '@material-ui/core/Dialog'
+import Button from '@material-ui/core/Button'
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useLocation,
+  useParams
+} from 'react-router-dom'
+import TreePanel from './tab/tabpanels/drawerPanels/TreePanel'
+import Slider from '@material-ui/core/Slider'
+import StagePage from './page/stage'
+import TestCaseToolBar from './tab/tabpanels/contentPanels/TestCaseToolBar'
+import Container from '@material-ui/core/Container'
 
-const drawerWidth = 440;
+const drawerWidth = 440
 
-function stateReducer(state, action){
-  const {past, present, future} = state;
+function stateReducer(state, action) {
+  const { past, present, future } = state
 
   switch (action.type) {
     case 'UNDO':
-      const previous=past[past.length-1]
-      const newPast=past.slice(0,past.length-1)
-      return{
-        past:newPast,
-        present:previous,
-        future:[present,...future]
+      const previous = past[past.length - 1]
+      const newPast = past.slice(0, past.length - 1)
+      return {
+        past: newPast,
+        present: previous,
+        future: [present, ...future]
       }
     case 'REDO':
-      const next=future[0]
-      const newFuture=future.slice(1)
-      return{
-        past: [...past,present],
+      const next = future[0]
+      const newFuture = future.slice(1)
+      return {
+        past: [...past, present],
         present: next,
         future: newFuture
       }
     case 'SET':
-      return{
-        past:[],
+      return {
+        past: [],
         present: action.data,
         future: []
       }
     default:
-      if(present===action.data) return state
-        return{
-          past: [...past, present],
-          present: action.data,
-          future:[]
-        }
+      if (present === action.data) return state
+      return {
+        past: [...past, present],
+        present: action.data,
+        future: []
+      }
   }
-
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'flex'
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24 // keep right padding when drawer closed
   },
   toolbar2: {
     paddingLeft: 20,
     paddingRight: 24,
-    backgroundColor:'#FFFFFF'// keep right padding when drawer closed
+    backgroundColor: '#FFFFFF' // keep right padding when drawer closed
   },
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
+    ...theme.mixins.toolbar
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+      duration: theme.transitions.duration.leavingScreen
+    })
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 36
   },
   menuButtonHidden: {
-    display: 'none',
+    display: 'none'
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: 'nowrap'
   },
   drawerOpen: {
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+      duration: theme.transitions.duration.enteringScreen
+    })
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: 100,
+      duration: 100
     }),
     overflowX: 'hidden',
     width: theme.spacing(16) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(16) + 1,
-    },
+      width: theme.spacing(16) + 1
+    }
   },
   drawerPaper: {
-    width: drawerWidth,
+    width: drawerWidth
   },
   drawerContainer: {
     paddingTop: theme.spacing(3),
     display: 'flex',
-    flexGrow: 1,
+    flexGrow: 1
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
-    backgroundColor: '#dcdcdc',
+    backgroundColor: '#dcdcdc'
   },
 
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
     overflow: 'auto',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   paper2: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   fixedHeight: {
-    height: 240,
+    height: 240
   },
-  tab2:{
+  tab2: {
     display: 'flex',
     minWidth: 120,
     width: 120,
-    "&$selected": {
-      backgroundColor: lighten(theme.palette.primary.light, 0.85),
+    '&$selected': {
+      backgroundColor: lighten(theme.palette.primary.light, 0.85)
     }
   },
-  tab:{
+  tab: {
     display: 'flex',
     minWidth: 80,
-    width: 80,
-
+    width: 80
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
     height: 600
   },
-  drawer_button:{
+  drawer_button: {
     display: 'flex',
     minWidth: 30,
-    width: 30,
+    width: 30
   },
   resultContainer: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
     height: 800
   },
-  resultPaper:{
-    height:'100%',
-    overflow: 'auto',
+  resultPaper: {
+    height: '100%',
+    overflow: 'auto'
   },
-  submissionPaper:{
-    height:'100%',
+  submissionPaper: {
+    height: '100%',
     overflow: 'auto',
-    [theme.breakpoints.down(800)]:{
-      minWidth:600
+    [theme.breakpoints.down(800)]: {
+      minWidth: 600
     }
   },
   submissionContainer: {
     display: 'flex',
-    flexGrow: 1,
+    flexGrow: 1
   },
-  selected:{}
-}));
+  selected: {}
+}))
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
+    'aria-controls': `full-width-tabpanel-${index}`
+  }
 }
 
 function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
+  const [size, setSize] = useState([0, 0])
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setSize([window.innerWidth, window.innerHeight])
     }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-  return size;
+    window.addEventListener('resize', updateSize)
+    updateSize()
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+  return size
 }
 
-
 export default function Editor() {
+  const classes = useStyles()
 
-  const classes = useStyles();
-
-
-  const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize()
 
   //this is for the test case management
-  const [config,setConfig] = useState({
-    driver:'',
-    language:'',
-    framework:'',
-    assignment_id:'',
-    assignments:'', //submission batch
-    assignmentsName: '',
-  });
-  const [selectedConfig, setSelectedConfig]=useState([])
-  const [stage,setStage]=useState([])
-  const [createdStage,setCreatedStage]=useState(0)
+  const [config, setConfig] = useState({
+    driver: '',
+    language: '',
+    framework: '',
+    assignment_id: '',
+    assignments: '', //submission batch
+    assignmentsName: ''
+  })
+  const [selectedConfig, setSelectedConfig] = useState([])
+  const [stage, setStage] = useState([])
+  const [createdStage, setCreatedStage] = useState(0)
 
-  const [state ,dispatch]=useReducer(stateReducer,{
-    past:[],
-    present:{
-      tree:[
+  const [state, dispatch] = useReducer(stateReducer, {
+    past: [],
+    present: {
+      tree: [
         {
           value: 'Test Cases',
           nodes: [
             {
-              id:1,
+              id: 1,
               value: 'Test 1',
               json: [],
-              json_id:[]
-            },
-          ],
-        },
+              json_id: []
+            }
+          ]
+        }
       ],
-      selectedCase:{
-        id:1,
+      selectedCase: {
+        id: 1,
         json: [],
-        json_id:[]
+        json_id: []
       },
       createdCases: 1,
-      noOfCases:1
+      noOfCases: 1
     },
-    future:[]
+    future: []
   })
-  const [testCaseFetched, setTestCaseFetched]=useState([])
+  const [testCaseFetched, setTestCaseFetched] = useState([])
 
-  const [node,setNode]=useState([])
+  const [node, setNode] = useState([])
 
-  const [assignData, setAssignData] = useState([]);
+  const [assignData, setAssignData] = useState([])
 
   //this is for the open of the corresponding entry
-  const [settingsOpen,setSettingsOpen] = useState(false);
-  const [formOpen,setFormOpen] = useState(false);
-  const [drawerOpen,setDrawerOpen] = useState(false);
-  const [stageFormOpen,setStageFormOpen]=useState(false)
-  const [stageSelectOpen, setStageSelectOpen]=useState(false)
-  const [imgDialogOpen,setImgDialogOpen] = useState(false);
-  const contentWidth= width-((drawerOpen)?360:80)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [formOpen, setFormOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [stageFormOpen, setStageFormOpen] = useState(false)
+  const [stageSelectOpen, setStageSelectOpen] = useState(false)
+  const [imgDialogOpen, setImgDialogOpen] = useState(false)
+  const contentWidth = width - (drawerOpen ? 360 : 80)
 
   //this is for the editor
-   const [style, setStyle] = useState({
+  const [style, setStyle] = useState({
     darkTheme: true,
-    fontSize: 14,
+    fontSize: 14
   })
 
-  const [tabValue, setTabValue] = useState(0);
-  const [drawerValue, setDrawerValue] = useState(0);
-  const [resultStep,setResultStep]=useState(0);
+  const [tabValue, setTabValue] = useState(0)
+  const [drawerValue, setDrawerValue] = useState(0)
+  const [resultStep, setResultStep] = useState(0)
 
-  const [guideRun,setGuideRun] = useState(true);
+  const [guideRun, setGuideRun] = useState(true)
 
   const handleDrawerChange = (event, newValue) => {
-    if(drawerValue===newValue && (newValue===0||newValue===1) ){
+    if (drawerValue === newValue && (newValue === 0 || newValue === 1)) {
       setDrawerOpen(!drawerOpen)
-    }else{
-      if(newValue===0||newValue===1) setDrawerOpen(true)
+    } else {
+      if (newValue === 0 || newValue === 1) setDrawerOpen(true)
       else setDrawerOpen(false)
     }
-    if(drawerValue===newValue && newValue===3){
-      setResultStep(0);
+    if (drawerValue === newValue && newValue === 3) {
+      setResultStep(0)
     }
-    setDrawerValue(newValue);
-  };
+    setDrawerValue(newValue)
+  }
 
-  const [submitConfirm, setSubmitConfirm]= useState(false);
-  const [submitWarning, setSubmitWarning]= useState(false);
+  const [submitConfirm, setSubmitConfirm] = useState(false)
+  const [submitWarning, setSubmitWarning] = useState(false)
   const [fileName, setFileName] = useState({
-    name: [],
-  });
+    name: []
+  })
 
   //this is for config management
-  const [createConfig, setCreateConfig]= useState(false);
+  const [createConfig, setCreateConfig] = useState(false)
 
   //this is for result page
-  const [resultData, setResultData]= useState({
+  const [resultData, setResultData] = useState({
     taskNumber: null,
     jobBatch: null,
-    result: [],
-  });
-  const [result, setResult]= useState([]);
-  const [job, setJob]= useState([]);
-
-  const [jobData, setJobData]= useState({
-    imgPath:[]
+    result: []
   })
-  const [configData, setConfigData] = useState([]);
+  const [result, setResult] = useState([])
+  const [job, setJob] = useState([])
+
+  const [jobData, setJobData] = useState({
+    imgPath: []
+  })
+  const [configData, setConfigData] = useState([])
 
   //this is for job batch result
-  const [jobBatch, setJobBatch]= useState({
-      assignment_id: null,
-      assignment_name: 'Assignment',
-      submission_batch_id: null,
-      zip_filename: 'Submission Batch',
-      job_config_id: null,
-      job_config_name: 'Job Config',
-  });
+  const [jobBatch, setJobBatch] = useState({
+    assignment_id: null,
+    assignment_name: 'Assignment',
+    submission_batch_id: null,
+    zip_filename: 'Submission Batch',
+    job_config_id: null,
+    job_config_name: 'Job Config'
+  })
 
-  const [reportImg, setReportImg]= useState({
-    name:"",
-    path:"",
-    paths:[]
-  });
- 
-  const [selectedJobConfig, setSelectedJobConfig] = useState(-1);
-  const [selectedJobConfigName, setSelectedJobConfigName] = useState('');
-  const [selectedAssignment, setSelectedAssignment]=useState(-1);
-  const [selectedAssignmentName, setSelectedAssignmentName]=useState('');
-  const [lastEditedJobConfig, setLastEditedJobConfig] = useState({id:-1,name:''});
-  const [testcaseFetched,setTestcaseFetched] = useState(false);
+  const [reportImg, setReportImg] = useState({
+    name: '',
+    path: '',
+    paths: []
+  })
+
+  const [selectedJobConfig, setSelectedJobConfig] = useState(-1)
+  const [selectedJobConfigName, setSelectedJobConfigName] = useState('')
+  const [selectedAssignment, setSelectedAssignment] = useState(-1)
+  const [selectedAssignmentName, setSelectedAssignmentName] = useState('')
+  const [lastEditedJobConfig, setLastEditedJobConfig] = useState({
+    id: -1,
+    name: ''
+  })
+  const [testcaseFetched, setTestcaseFetched] = useState(false)
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
   const handleSubmit = () => {
     if (config.driver && config.language && config.framework) {
-      const name = [];
-      for(let index=0;index<state.present.tree[0].nodes.length;index++){
-        name.push(state.present.tree[0].nodes[index].value);
+      const name = []
+      for (let index = 0; index < state.present.tree[0].nodes.length; index++) {
+        name.push(state.present.tree[0].nodes[index].value)
       }
-      console.log(name);
+      console.log(name)
       setFileName({
         ...fileName,
-        name: name,
-      });
-      console.log(fileName.name);
-      setSubmitConfirm(true);
-    } else{
-      setSubmitWarning(true);
+        name: name
+      })
+      console.log(fileName.name)
+      setSubmitConfirm(true)
+    } else {
+      setSubmitWarning(true)
     }
   }
 
-  function uploadFile(){
-    let fData = new FormData();
+  function uploadFile() {
+    let fData = new FormData()
 
-    fData.append('driver', config.driver);
-    fData.append('language', config.language);
-    fData.append('framework',config.framework);
+    fData.append('driver', config.driver)
+    fData.append('language', config.language)
+    fData.append('framework', config.framework)
 
-    const name = [];
-    for(let index=0;index<state.present.tree[0].nodes.length;index++){
-      name.push(state.present.tree[0].nodes[index].value);
-      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
-      const blob = new Blob([fileData],{type:'application/json'});
-      fData.append('testcases[]',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
+    const name = []
+    for (let index = 0; index < state.present.tree[0].nodes.length; index++) {
+      name.push(state.present.tree[0].nodes[index].value)
+      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json)
+      const blob = new Blob([fileData], { type: 'application/json' })
+      fData.append(
+        'testcases[]',
+        blob,
+        'testcase' + state.present.tree[0].nodes[index].id + '.json'
+      )
     }
-    console.log(name);
+    console.log(name)
     setFileName({
       ...fileName,
-      name: name,
-    });
-    console.log(fileName.name);
-    fData.append('submission_file', config.assignments);
+      name: name
+    })
+    console.log(fileName.name)
+    fData.append('submission_file', config.assignments)
 
     // This is for testcase create
-    const tData = new FormData();
-    for(let index=0;index<state.present.tree[0].nodes.length;index++){
-      name.push(state.present.tree[0].nodes[index].value);
-      tData.append('testcase_name', 'testcase'+state.present.tree[0].nodes[index].id);
-      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json);
-      const blob = new Blob([fileData],{type:'application/json'});
-      tData.append('testcase_file',blob, 'testcase'+state.present.tree[0].nodes[index].id+'.json');
+    const tData = new FormData()
+    for (let index = 0; index < state.present.tree[0].nodes.length; index++) {
+      name.push(state.present.tree[0].nodes[index].value)
+      tData.append(
+        'testcase_name',
+        'testcase' + state.present.tree[0].nodes[index].id
+      )
+      const fileData = JSON.stringify(state.present.tree[0].nodes[index].json)
+      const blob = new Blob([fileData], { type: 'application/json' })
+      tData.append(
+        'testcase_file',
+        blob,
+        'testcase' + state.present.tree[0].nodes[index].id + '.json'
+      )
     }
 
-    
-    fetch('/api/v2/assignment/'+config.assignment_id+'/testcase', {
+    fetch('/api/v2/assignment/' + config.assignment_id + '/testcase', {
       method: 'POST',
-      body: tData,
-    }).then(result => console.log(result)).catch(error => console.log(error));
-    
-    // This is for submission zip
-    let aData = new FormData();
-    aData.append('submission_file', config.assignments);
+      body: tData
+    })
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error))
 
-    fetch('/api/v2/assignment/'+config.assignment_id+'/submission_batch', {
+    // This is for submission zip
+    let aData = new FormData()
+    aData.append('submission_file', config.assignments)
+
+    fetch('/api/v2/assignment/' + config.assignment_id + '/submission_batch', {
       method: 'POST',
-      body: aData,
-    }).then(result => console.log(result)).catch(error => console.log(error));
+      body: aData
+    })
+      .then((result) => console.log(result))
+      .catch((error) => console.log(error))
   }
 
   //this is for tour guide
   function useTourStickyState(defaultValue, key) {
     const [value, setValue] = React.useState(() => {
-      const stickyValue = window.localStorage.getItem(key);
-      return stickyValue !== null
-        ? JSON.parse(stickyValue)
-        : defaultValue;
-    });
+      const stickyValue = window.localStorage.getItem(key)
+      return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue
+    })
     React.useEffect(() => {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    }, [key, value]);
-    return [value, setValue];
+      window.localStorage.setItem(key, JSON.stringify(value))
+    }, [key, value])
+    return [value, setValue]
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(node)
   })
 
-  const [
-    tour,
-    setTour
-  ] = useTourStickyState(0, "tour");
+  const [tour, setTour] = useTourStickyState(0, 'tour')
 
-  let guide;
+  let guide
 
-
-  if(tour<1){
-    guide= <GuideTour
-      drawerValue={drawerValue}
-      drawerOpen={drawerOpen}
-      setDrawerOpen={setDrawerOpen}
-      setDrawerValue={setDrawerValue}
-      setTabValue={setTabValue}
-      setFormOpen={setFormOpen}
-      setRun={setGuideRun}
-      tour={tour}
-      setTour={setTour}
-      run={guideRun}
-    />;
+  if (tour < 1) {
+    guide = (
+      <GuideTour
+        drawerValue={drawerValue}
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        setDrawerValue={setDrawerValue}
+        setTabValue={setTabValue}
+        setFormOpen={setFormOpen}
+        setRun={setGuideRun}
+        tour={tour}
+        setTour={setTour}
+        run={guideRun}
+      />
+    )
   }
   return (
-      <Router>
-        <div className={classes.root}>
-          {guide}
-          <CssBaseline />
-          <GuitaAppBar
-              classes={classes}
-              state={state}
-              handleSubmit={handleSubmit}
-              setSettingsOpen={setSettingsOpen}
-              setGuideRun={setGuideRun}
-              setTour={setTour}
-          />
-          <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
+    <Router>
+      <div className={classes.root}>
+        {guide}
+        <CssBaseline />
+        <GuitaAppBar
+          classes={classes}
+          state={state}
+          handleSubmit={handleSubmit}
+          setSettingsOpen={setSettingsOpen}
+          setGuideRun={setGuideRun}
+          setTour={setTour}
+        />
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: drawerOpen,
+            [classes.drawerClose]: !drawerOpen
+          })}
+          classes={{
+            paper: clsx({
               [classes.drawerOpen]: drawerOpen,
-              [classes.drawerClose]: !drawerOpen,
-            })}
-            classes={{
-              paper: clsx({
-                [classes.drawerOpen]: drawerOpen,
-                [classes.drawerClose]: !drawerOpen,
-              }),
-            }}
-          >
-            <div className={classes.drawerContainer} >
-              <div id='Drawer'>
-                  <Box p={4}/>
-                  <DrawerTab
-                      drawerValue={drawerValue}
-                      classes={classes}
-                      selectedAssignment={selectedAssignment}
-                      selectedAssignmentName={selectedAssignmentName}
-                      lastEditedJobConfig={lastEditedJobConfig}
-                  />
-              </div>
-              <div style={{width:240}}>
-                <Box p={3}/>
-                {(drawerOpen)?
-                    <Route path={'/testcase/:assignment_id/:assignment_name'}>
-                      <TreePanel
-                          drawerValue={drawerValue}
-                          selectedCase={state.present.selectedCase}
-                          tree={state.present.tree}
-                          createdCases={state.present.createdCases}
-                          noOfCases={state.present.noOfCases}
-                          dispatch={dispatch}
-                      />
-                    </Route>
-                      :
-                    null
-                }
-              </div>
+              [classes.drawerClose]: !drawerOpen
+            })
+          }}>
+          <div className={classes.drawerContainer}>
+            <div id="Drawer">
+              <Box p={4} />
+              <DrawerTab
+                drawerValue={drawerValue}
+                classes={classes}
+                selectedAssignment={selectedAssignment}
+                selectedAssignmentName={selectedAssignmentName}
+                lastEditedJobConfig={lastEditedJobConfig}
+              />
             </div>
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            <Container>
-            <Box p={3}>
-              <Paper className={classes.paper2}>
-                  <Route exact path='/'>
-
-                        <AssignmentTable
-                          jobBatch={jobBatch}
-                          setJobBatch={setJobBatch}
-                          setSelectedAssignment={setSelectedAssignment}
-                          handleDrawerChange={handleDrawerChange}
-                          setSelectedJobConfig={setSelectedJobConfig}
-                          selectedConfig={selectedConfig}
-                          setSelectedConfig={setSelectedConfig}
-                          setSelectedAssignmentName={setSelectedAssignmentName}
-                          setSelectedJobConfigName={setSelectedJobConfigName}
-                          assignData={assignData}
-                          setAssignData={setAssignData}
-                          setLastEditedJobConfig={setLastEditedJobConfig}
-                          configData={configData}
-                          setConfigData={setConfigData}
-                          setDrawerOpen={setDrawerOpen}
-                          state={state}
-                          setTestcaseFetched={setTestcaseFetched}
-                        />
-                  </Route>
-                  <Route path={'/testcase/:assignId/:assignName'}>
-                  <TestCaseToolBar
-                      classes={classes}
-                      tabValue={tabValue}
-                      selectedAssignmentName={selectedAssignmentName}
-                      dispatch={dispatch}
-                      setTabValue={setTabValue}
-                      state={state}
-                      setDrawerOpen={setDrawerOpen}
-                      fetched={testCaseFetched}
-                      setFetched={setTestCaseFetched}
-
-                  />
-                  </Route>
-                  <Route exact path={'/testcase/:assignId/:assignName/jsoneditor'}>
-                  <JsonEditorPanel
-                      classes={classes}
-                      tabValue={tabValue}
-                      style={style}
-                      state={state}
-                      dispatch={dispatch}
-                      fetched={testCaseFetched}
-                      setFetched={setTestCaseFetched}
-                  />
-                  </Route>
-                  <Route exact path={'/testcase/:assignId/:assignName'}>
-                  <TablePanel
-                      tabValue={tabValue}
-                      formOpen={formOpen}
-                      state={state}
-                      setFormOpen={setFormOpen}
-                      dispatch={dispatch}
-                      width={(drawerOpen) ? (width - drawerWidth) : width}
-                      selectedAssignment={selectedAssignment}
-                      setNode={setNode}
-                      fetched={testCaseFetched}
-                      setFetched={setTestCaseFetched}
-                  />
-                  </Route>
-                <Route exact path={'/config/:configId/:configName'}>
-                  <StagePage
-                      stage={stage}
-                      setStage={setStage}
-                      stageFormOpen={stageFormOpen}
-                      setStageFormOpen={setStageFormOpen}
-                      stageSelectOpen={stageSelectOpen}
-                      setStageSelectOpen={setStageSelectOpen}
-                      createConfig={createConfig}
-                      setCreateConfig={setCreateConfig}
-                      selectedJobConfig={selectedJobConfig}
-                      selectedJobConfigName={selectedJobConfigName}
-                      createdStage={createdStage}
-                      setCreatedStage={setCreatedStage}
-                      state={state}
-                      setDrawerOpen={setDrawerOpen}
+            <div style={{ width: 240 }}>
+              <Box p={3} />
+              {drawerOpen ? (
+                <Route path={'/testcase/:assignment_id/:assignment_name'}>
+                  <TreePanel
+                    drawerValue={drawerValue}
+                    selectedCase={state.present.selectedCase}
+                    tree={state.present.tree}
+                    createdCases={state.present.createdCases}
+                    noOfCases={state.present.noOfCases}
+                    dispatch={dispatch}
                   />
                 </Route>
-                        <Switch>
-                        <Route exact path='/result'>
-                          <ResultTable
-                                setResultStep={setResultStep}
-                                setJobData={setJobData}
-                                jobData={jobData}
-                                result={result}
-                                setResult={setResult}
-                                setDrawerOpen={setDrawerOpen}
-                            />
-                        </Route>
-                          <Route exact path={'/result/job batch/:jobBatchId'} component={JobTable}>
-                            <JobTable
-                                setResultStep={setResultStep}
-                                setJobData={setJobData}
-                                jobData={jobData}
-                                job={job}
-                                setJob={setJob}
-                                setDrawerOpen={setDrawerOpen}
-                            />
-                          </Route>
-                          <Route path={'/result/job/:jobId/stage/:stageId'}>
-                            <ReportTable
-                                setResultStep={setResultStep}
-                                jobData={jobData}
-                                setJobData={setJobData}
-                                handleImgDialogOpen={() => {
-                                  setImgDialogOpen(true)
-                                }}
-                                reportImg={reportImg}
-                                setReportImg={setReportImg}
-                                setDrawerOpen={setDrawerOpen}
-                            />
-                          </Route>
-                        </Switch>
-                        </Paper>
-              </Box>
-            </Container>
-              <SettingDialog
-                  open={settingsOpen}
-                  setOpen={setSettingsOpen}
-                  style={style}
-                  setStyle={setStyle}
-              />
-              <SubmitConfirmDialog
-                  submitConfirm={submitConfirm}
-                  setSubmitConfirm={setSubmitConfirm}
-                  uploadFile={uploadFile}
-                  fileName={fileName}
-              />
-              <SubmitWarningDialog
-                  submitWarning={submitWarning}
-                  setSubmitWarning={setSubmitWarning}
-              />
-              <ReportImageDialog
-                  open={imgDialogOpen}
-                  handleClose={()=>setImgDialogOpen(false)}
-                  title={reportImg.name}
-                  jobData={jobData}
-                  reportImg={reportImg}
-                  setReportImg={setReportImg}
-                  //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
-              />
-          </main>
-        </div>
-      </Router>
-  );
+              ) : null}
+            </div>
+          </div>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container>
+            <Box p={3}>
+              <Paper className={classes.paper2}>
+                <Route exact path="/">
+                  <AssignmentTable
+                    jobBatch={jobBatch}
+                    setJobBatch={setJobBatch}
+                    setSelectedAssignment={setSelectedAssignment}
+                    handleDrawerChange={handleDrawerChange}
+                    setSelectedJobConfig={setSelectedJobConfig}
+                    selectedConfig={selectedConfig}
+                    setSelectedConfig={setSelectedConfig}
+                    setSelectedAssignmentName={setSelectedAssignmentName}
+                    setSelectedJobConfigName={setSelectedJobConfigName}
+                    assignData={assignData}
+                    setAssignData={setAssignData}
+                    setLastEditedJobConfig={setLastEditedJobConfig}
+                    configData={configData}
+                    setConfigData={setConfigData}
+                    setDrawerOpen={setDrawerOpen}
+                    state={state}
+                    setTestcaseFetched={setTestcaseFetched}
+                  />
+                </Route>
+                <Route path={'/testcase/:assignId/:assignName'}>
+                  <TestCaseToolBar
+                    classes={classes}
+                    tabValue={tabValue}
+                    selectedAssignmentName={selectedAssignmentName}
+                    dispatch={dispatch}
+                    setTabValue={setTabValue}
+                    state={state}
+                    setDrawerOpen={setDrawerOpen}
+                    fetched={testCaseFetched}
+                    setFetched={setTestCaseFetched}
+                  />
+                </Route>
+                <Route
+                  exact
+                  path={'/testcase/:assignId/:assignName/jsoneditor'}>
+                  <JsonEditorPanel
+                    classes={classes}
+                    tabValue={tabValue}
+                    style={style}
+                    state={state}
+                    dispatch={dispatch}
+                    fetched={testCaseFetched}
+                    setFetched={setTestCaseFetched}
+                  />
+                </Route>
+                <Route exact path={'/testcase/:assignId/:assignName'}>
+                  <TablePanel
+                    tabValue={tabValue}
+                    formOpen={formOpen}
+                    state={state}
+                    setFormOpen={setFormOpen}
+                    dispatch={dispatch}
+                    width={drawerOpen ? width - drawerWidth : width}
+                    selectedAssignment={selectedAssignment}
+                    setNode={setNode}
+                    fetched={testCaseFetched}
+                    setFetched={setTestCaseFetched}
+                  />
+                </Route>
+                <Route exact path={'/config/:configId/:configName'}>
+                  <StagePage
+                    stage={stage}
+                    setStage={setStage}
+                    stageFormOpen={stageFormOpen}
+                    setStageFormOpen={setStageFormOpen}
+                    stageSelectOpen={stageSelectOpen}
+                    setStageSelectOpen={setStageSelectOpen}
+                    createConfig={createConfig}
+                    setCreateConfig={setCreateConfig}
+                    selectedJobConfig={selectedJobConfig}
+                    selectedJobConfigName={selectedJobConfigName}
+                    createdStage={createdStage}
+                    setCreatedStage={setCreatedStage}
+                    state={state}
+                    setDrawerOpen={setDrawerOpen}
+                  />
+                </Route>
+                <Switch>
+                  <Route exact path="/result">
+                    <ResultTable
+                      setResultStep={setResultStep}
+                      setJobData={setJobData}
+                      jobData={jobData}
+                      result={result}
+                      setResult={setResult}
+                      setDrawerOpen={setDrawerOpen}
+                    />
+                  </Route>
+                  <Route
+                    exact
+                    path={'/result/job batch/:jobBatchId'}
+                    component={JobTable}>
+                    <JobTable
+                      setResultStep={setResultStep}
+                      setJobData={setJobData}
+                      jobData={jobData}
+                      job={job}
+                      setJob={setJob}
+                      setDrawerOpen={setDrawerOpen}
+                    />
+                  </Route>
+                  <Route path={'/result/job/:jobId/stage/:stageId'}>
+                    <ReportTable
+                      setResultStep={setResultStep}
+                      jobData={jobData}
+                      setJobData={setJobData}
+                      handleImgDialogOpen={() => {
+                        setImgDialogOpen(true)
+                      }}
+                      reportImg={reportImg}
+                      setReportImg={setReportImg}
+                      setDrawerOpen={setDrawerOpen}
+                    />
+                  </Route>
+                </Switch>
+              </Paper>
+            </Box>
+          </Container>
+          <SettingDialog
+            open={settingsOpen}
+            setOpen={setSettingsOpen}
+            style={style}
+            setStyle={setStyle}
+          />
+          <SubmitConfirmDialog
+            submitConfirm={submitConfirm}
+            setSubmitConfirm={setSubmitConfirm}
+            uploadFile={uploadFile}
+            fileName={fileName}
+          />
+          <SubmitWarningDialog
+            submitWarning={submitWarning}
+            setSubmitWarning={setSubmitWarning}
+          />
+          <ReportImageDialog
+            open={imgDialogOpen}
+            handleClose={() => setImgDialogOpen(false)}
+            title={reportImg.name}
+            jobData={jobData}
+            reportImg={reportImg}
+            setReportImg={setReportImg}
+            //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+          />
+        </main>
+      </div>
+    </Router>
+  )
 }
 
-function ReportImageDialog(props){
-  const {open, title, handleClose, jobData, reportImg, setReportImg}=props
-  return(
-      <Dialog
-          open={open}
-          onClose={handleClose}
-          maxWidth='md'
-      >
-        <div
-          style={{
-            overflow:'hidden'
-          }}
-        >
+function ReportImageDialog(props) {
+  const { open, title, handleClose, jobData, reportImg, setReportImg } = props
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="md">
+      <div
+        style={{
+          overflow: 'hidden'
+        }}>
         <DialogTitle>{reportImg.paths[reportImg.path]}</DialogTitle>
         <div
-            style={{
-              display: 'flex',
-              flexGrow: 1,
-              margin:0
-            }}
-        >
+          style={{
+            display: 'flex',
+            flexGrow: 1,
+            margin: 0
+          }}>
           <Button
-              disabled={0===reportImg.path}
-              onClick={()=>{
-            if(reportImg.path>0){
-              setReportImg({
-                ...reportImg,
-                path:reportImg.path-1,
-              })
-            }
-          }}>
-            <KeyboardArrowLeftIcon/>
-          </Button>
-            <div style={{
-              width: '100%',
-            }}>
-              <img src={'/uploads/job/'+jobData.job_id+'/report/'+jobData.stage_id+'/'+reportImg.paths[reportImg.path]} width="100%" height="100%"/>
-            </div>
-            <Button
-                disabled={reportImg.paths.length-1===reportImg.path}
-                onClick={()=>{
-            if(reportImg.path<reportImg.paths.length-1){
-              setReportImg({
-                ...reportImg,
-                path:reportImg.path+1
-              })
-            }
-          }}>
-            <KeyboardArrowRightIcon/>
-          </Button>
-        </div>
-        <div style={{
-          width: '90%',
-          paddingLeft:20
-        }}>
-          <Slider
-              value={reportImg.path+1}
-              step={1}
-              marksf
-              min={0}
-              max={reportImg.paths.length-1}
-              onChange={(e,value)=>{
+            disabled={0 === reportImg.path}
+            onClick={() => {
+              if (reportImg.path > 0) {
                 setReportImg({
                   ...reportImg,
-                  path:value
+                  path: reportImg.path - 1
                 })
-
-              }}
-              valueLabelDisplay="auto"
+              }
+            }}>
+            <KeyboardArrowLeftIcon />
+          </Button>
+          <div
+            style={{
+              width: '100%'
+            }}>
+            <img
+              src={
+                '/uploads/job/' +
+                jobData.job_id +
+                '/report/' +
+                jobData.stage_id +
+                '/' +
+                reportImg.paths[reportImg.path]
+              }
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <Button
+            disabled={reportImg.paths.length - 1 === reportImg.path}
+            onClick={() => {
+              if (reportImg.path < reportImg.paths.length - 1) {
+                setReportImg({
+                  ...reportImg,
+                  path: reportImg.path + 1
+                })
+              }
+            }}>
+            <KeyboardArrowRightIcon />
+          </Button>
+        </div>
+        <div
+          style={{
+            width: '90%',
+            paddingLeft: 20
+          }}>
+          <Slider
+            value={reportImg.path + 1}
+            step={1}
+            marksf
+            min={0}
+            max={reportImg.paths.length - 1}
+            onChange={(e, value) => {
+              setReportImg({
+                ...reportImg,
+                path: value
+              })
+            }}
+            valueLabelDisplay="auto"
           />
         </div>
-        </div>
-      </Dialog>
+      </div>
+    </Dialog>
   )
 }
 /*
@@ -818,7 +839,6 @@ function ReportImageDialog(props){
                           </Box>
                   </Route>
             )}*/
-
 
 /*
 * <Route path={'/testcase/:assignId/:assignName'}>

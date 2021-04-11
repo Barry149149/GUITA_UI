@@ -13,61 +13,28 @@
       "driver": "CV",
       "setVariable": "settingsButton",
       "result": {
-        "value": [
-          227,
-          373
-        ],
+        "value": [227, 373],
         "candidates": [
           {
             "text": "Settings",
             "rect": [
-              [
-                197,
-                366
-              ],
-              [
-                257,
-                366
-              ],
-              [
-                257,
-                380
-              ],
-              [
-                197,
-                380
-              ]
+              [197, 366],
+              [257, 366],
+              [257, 380],
+              [197, 380]
             ],
-            "center": [
-              227,
-              373
-            ],
+            "center": [227, 373],
             "similarity": 67
           },
           {
             "text": "About/",
             "rect": [
-              [
-                142,
-                366
-              ],
-              [
-                191,
-                366
-              ],
-              [
-                191,
-                378
-              ],
-              [
-                142,
-                378
-              ]
+              [142, 366],
+              [191, 366],
+              [191, 378],
+              [142, 378]
             ],
-            "center": [
-              166,
-              372
-            ],
+            "center": [166, 372],
             "similarity": 55
           }
         ]
@@ -81,19 +48,13 @@
       "commandId": 2,
       "command": "click",
       "parameters": {
-        "widget": [
-          227,
-          373
-        ]
+        "widget": [227, 373]
       },
       "driver": "CV",
       "setVariable": null,
       "result": {
         "value": "success",
-        "point": [
-          227,
-          373
-        ]
+        "point": [227, 373]
       },
       "errors": [],
       "maxScore": 1,
@@ -177,35 +138,17 @@
       "driver": "CV",
       "setVariable": "playButton",
       "result": {
-        "value": [
-          199,
-          253
-        ],
+        "value": [199, 253],
         "candidates": [
           {
             "text": "Play",
             "rect": [
-              [
-                185,
-                246
-              ],
-              [
-                214,
-                246
-              ],
-              [
-                214,
-                260
-              ],
-              [
-                185,
-                260
-              ]
+              [185, 246],
+              [214, 246],
+              [214, 260],
+              [185, 260]
             ],
-            "center": [
-              199,
-              253
-            ],
+            "center": [199, 253],
             "similarity": 100
           }
         ]
@@ -219,19 +162,13 @@
       "commandId": 8,
       "command": "click",
       "parameters": {
-        "widget": [
-          199,
-          253
-        ]
+        "widget": [199, 253]
       },
       "driver": "CV",
       "setVariable": null,
       "result": {
         "value": "success",
-        "point": [
-          199,
-          253
-        ]
+        "point": [199, 253]
       },
       "errors": [],
       "maxScore": 1,
