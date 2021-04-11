@@ -37,25 +37,23 @@ export const commandDescription=(command)=>{
     try{
      switch (command.command){
         case"click":
-            return 'Click on '+command.widget.value+" that in type "+command.widget.type
+            return 'Click on '+command.widget.value.toString().toUpperCase()+" that in type "+command.widget.type.toString().toUpperCase()
         case"locateByWidgetName":
-            return 'Locate '+command.widgetName+' and set as '+command.setVariable
+            return 'Locate '+command.widgetName.toString().toUpperCase()+' and set as '+command.setVariable.toString().toUpperCase()
         case"sleep":
             return 'Sleep for '+command.time+'ms'
         case"getText":
-            if(command.widget.value||command.widget.type||command.setVariable)
-            return 'Get text from '+command.widget.value+' in type '+command.widget.type+' and assigned to '+command.setVariable
+            return 'Get text from '+command.widget.value.toString().toUpperCase()+' in type '+command.widget.type.toString().toUpperCase()+' and assigned to '+command.setVariable.toString().toUpperCase()
         case"assertEqual":
-            return 'Check if '+command.valueLhs.value+' in type '+command.valueLhs.type+' is equal to '+command.valueRhs
+            return 'Check if '+command.valueLhs.value.toString().toUpperCase()+' in type '+command.valueLhs.type.toString().toUpperCase()+' is equal to '+command.valueRhs.toString().toUpperCase()
         case"isVisible":
-            return 'Check if '+command.widget.value+' in type '+command.widget.type+' is Visible and assigned to '+command.setVariable
+            return 'Check if '+command.widget.value.toString().toUpperCase()+' in type '+command.widget.type.toString().toUpperCase()+' is Visible and assigned to '+command.setVariable.toString().toUpperCase()
         case"assert":
-            return 'Assert '+command.value.value+' in type '+command.value.type
+            return 'Assert '+command.value.value.toString().toUpperCase()+' in type '+command.value.type.toString().toUpperCase()
     }
     }catch(e){
         return 'Command incomplete'
     }
-
 }
 
 export const commandList=[

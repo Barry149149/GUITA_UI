@@ -391,7 +391,7 @@ export default function CommandTable(props){
                                                         <TableCell scope="row" align="left" size="small">
                                                             <Box>
                                                             <Typography style={{fontSize:10,color:'#777777'}}>{row.command.command}</Typography>
-                                                            <Typography style={{fontSize:16,color:'#002984',fontWeight: 'bold'}}>{row.command.description}</Typography>
+                                                            <Typography style={{fontSize:16,color:'#3f51b3',fontWeight: 'bold'}}>{row.command.description}</Typography>
                                                             </Box>
                                                         </TableCell>
                                                         <TableCell align="right">
