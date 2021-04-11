@@ -22,6 +22,7 @@ import Text from 'recharts/lib/component/Text'
 import { useParams } from 'react-router-dom'
 import { CheckCircle } from '@material-ui/icons'
 import CancelIcon from '@material-ui/icons/Cancel'
+import { Link } from '@material-ui/core'
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -208,9 +209,11 @@ function Row(props) {
                     <TableCell size="small" className={classes.tableCell}>
                       <Typography variant="h8" gutterBottom component="div">
                         result:{' '}
-                        {row.result.value === null
-                          ? 'null'
-                          : row.result.value.toString()}
+                        <Link component="button" variant="body2">
+                          {row.result.value === null
+                            ? 'null'
+                            : row.result.value.toString()}
+                        </Link>
                       </Typography>
                       <Collapse in={open.result}>
                         <Box
@@ -251,9 +254,11 @@ function Row(props) {
                     <TableCell size="small" className={classes.tableCell}>
                       <Typography variant="h8" gutterBottom component="div">
                         errors:{' '}
-                        {row.errors.map(
-                          (err, index) => index + 1 + ') ' + err.message
-                        ) + ','}
+                        <Link component="button" variant="body2">
+                          {row.errors.map(
+                            (err, index) => index + 1 + ') ' + err.message
+                          ) + ','}
+                        </Link>
                       </Typography>
                       <Collapse in={open.error}>
                         <Box
@@ -283,21 +288,23 @@ function Row(props) {
                   </TableRow>
                 ) : null}
                 {row.screenshotPath ? (
-                  <TableRow
-                    onClick={() => {
-                      setReportImg({
-                        ...reportImg,
-                        name: row.screenshotPath,
-                        path: reportImg.paths.indexOf(row.screenshotPath)
-                      })
-                      props.handleImgDialogOpen()
-                    }}
-                    style={{
-                      cursor: 'pointer'
-                    }}>
+                  <TableRow>
                     <TableCell size="small" className={classes.tableCell}>
                       <Typography variant="h8" gutterBottom component="div">
-                        Screenshot Path: {row.screenshotPath}
+                        Screenshot Path:
+                        <Link
+                          component="button"
+                          variant="body2"
+                          onClick={() => {
+                            setReportImg({
+                              ...reportImg,
+                              name: row.screenshotPath,
+                              path: reportImg.paths.indexOf(row.screenshotPath)
+                            })
+                            props.handleImgDialogOpen()
+                          }}>
+                          {row.screenshotPath}
+                        </Link>
                       </Typography>
                     </TableCell>
                   </TableRow>

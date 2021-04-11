@@ -36,7 +36,7 @@ import StagePage from './page/stage'
 import TestCaseToolBar from './tab/tabpanels/contentPanels/TestCaseToolBar'
 import Container from '@material-ui/core/Container'
 
-const drawerWidth = 440
+const drawerWidth = 460
 
 function stateReducer(state, action) {
   const { past, present, future } = state
@@ -161,7 +161,6 @@ const useStyles = makeStyles((theme) => ({
     height: 240
   },
   tab2: {
-    display: 'flex',
     minWidth: 120,
     width: 120,
     '&$selected': {
@@ -503,7 +502,7 @@ export default function Editor() {
           }}>
           <div className={classes.drawerContainer}>
             <div id="Drawer">
-              <Box p={4} />
+              <Box p={3} />
               <DrawerTab
                 drawerValue={drawerValue}
                 classes={classes}
