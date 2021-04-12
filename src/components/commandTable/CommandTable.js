@@ -467,6 +467,9 @@ export default function CommandTable(props) {
                                     {row.command.value === undefined ? null : (
                                       <TableCell>Value</TableCell>
                                     )}
+                                    {row.command.key === undefined ? null : (
+                                      <TableCell>Key</TableCell>
+                                    )}
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -516,6 +519,16 @@ export default function CommandTable(props) {
                                         </p>
                                         <p>
                                           {'Value:' + row.command.value.value}
+                                        </p>
+                                      </TableCell>
+                                    )}
+                                    {row.command.key === undefined ? null : (
+                                      <TableCell>
+                                        <p>
+                                          {'Key[]: ' +
+                                            JSON.stringify(
+                                              row.command.key
+                                            ).replace(/['"]+/g, '')}
                                         </p>
                                       </TableCell>
                                     )}
