@@ -103,7 +103,8 @@ export default function CaseTree(props) {
                   id: e.id,
                   json: props.tree[0].nodes.find((x) => x.id === e.id).json,
                   json_id: props.tree[0].nodes.find((x) => x.id === e.id)
-                    .json_id
+                    .json_id,
+                  value: props.tree[0].nodes.find((x) => x.id === e.id).value
                 }
               }
             })
