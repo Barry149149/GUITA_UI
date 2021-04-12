@@ -493,6 +493,7 @@ export default function Editor() {
           setSettingsOpen={setSettingsOpen}
           setGuideRun={setGuideRun}
           setTour={setTour}
+          postings={postings}
         />
         <Drawer
           variant="permanent"
