@@ -13,7 +13,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  TextField
+  TextField,
+  Tooltip
 } from '@material-ui/core'
 import { Link, useParams } from 'react-router-dom'
 import { CheckCircle } from '@material-ui/icons'
@@ -309,35 +310,41 @@ export default function JobTable(props) {
                         onClick={(event) => {
                           handleCellClick(event, row, row.reports[i].stage_id)
                         }}>
-                        <Button fullWidth={true} size="large">
-                          {
-                            // TODO: add cell for stages after failed
-                            typeof row.reports[i].status !== 'undefined' ? (
-                              row.reports[i].status === 'success' ? (
-                                <CheckCircle style={{ color: 'green' }} />
-                              ) : row.reports[i].status === 'pending' ? (
-                                <ClipLoader
-                                  color={'#3f51b5'}
-                                  loading={true}
-                                  size={24}
-                                />
-                              ) : row.reports[i].status === 'failed' ? (
-                                <CancelIcon color="secondary" />
+                        <Tooltip title={row.reports[i].status}>
+                          <Button fullWidth={true} size="large">
+                            {
+                              // TODO: add cell for stages after failed
+                              typeof row.reports[i].status !== 'undefined' ? (
+                                row.reports[i].status === 'success' ? (
+                                  <CheckCircle style={{ color: 'green' }} />
+                                ) : row.reports[i].status === 'pending' ? (
+                                  <ClipLoader
+                                    color={'#3f51b5'}
+                                    loading={true}
+                                    size={24}
+                                  />
+                                ) : row.reports[i].status === 'failed' ? (
+                                  <CancelIcon color="secondary" />
+                                ) : (
+                                  <RemoveCircleIcon
+                                    style={{ color: 'ffc400' }}
+                                  />
+                                )
                               ) : (
-                                <RemoveCircleIcon style={{ color: 'ffc400' }} />
+                                ''
                               )
-                            ) : (
-                              ''
-                            )
-                          }
-                        </Button>
+                            }
+                          </Button>
+                        </Tooltip>
                       </TableCell>
                     )
                   }
                   for (let i = 0; i < maxCol - row.reports.length; i++) {
                     cell_stage.push(
                       <TableCell align="center">
-                        <HourglassEmptyIcon color="#ffea00" />
+                        <Tooltip title="in queue">
+                          <HourglassEmptyIcon color="#ffea00" />
+                        </Tooltip>
                       </TableCell>
                     )
                   }
