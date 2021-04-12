@@ -88,6 +88,11 @@ function EnhancedTableHead(props) {
             </TableSortLabel>
           </TableCell>
         ))}
+        {headCell_stage.map((cell) => (
+          <TableCell key={cell.id} align="center">
+            {cell.label}
+          </TableCell>
+        ))}
       </TableRow>
     </TableHead>
   )

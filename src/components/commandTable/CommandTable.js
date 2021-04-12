@@ -263,7 +263,7 @@ export default function CommandTable(props) {
         )}
       </Toolbar>
       <Divider />
-      <Table>
+      <Table stickyHeader>
         <TableHead>
           <TableRow
             hover
