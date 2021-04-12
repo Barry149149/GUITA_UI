@@ -12,6 +12,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import Button from '@material-ui/core/Button'
+import SaveIcon from '@material-ui/icons/Save'
 
 export default function TestCaseToolBar(props) {
   const {
@@ -23,11 +25,14 @@ export default function TestCaseToolBar(props) {
     state,
     setDrawerOpen,
     fetched,
-    setFetched
+    setFetched,
+    file,
+    setFile
   } = props
 
   let { assignId, assignName } = useParams()
   const location = useLocation()
+  const [exists, setExists] = useState(false)
 
   useEffect(() => {
     setDrawerOpen(true)
@@ -41,8 +46,10 @@ export default function TestCaseToolBar(props) {
         .then((response) => response.json())
         .then(async (data) => {
           console.log(data)
+
           let newNodes = new Array()
           if (data.length == 0) {
+            setExists(false)
             dispatch({
               type: 'SET',
               data: {
@@ -69,38 +76,52 @@ export default function TestCaseToolBar(props) {
               }
             })
             return
+          } else {
+            setExists(true)
           }
+
           for (let i = 0; i < data.length; i++) {
-            if (data[i].testcase_name !== null) {
-              let { json, json_id } = await fetch(
-                '/uploads/assignment/' +
-                  assignId +
-                  '/testcase/' +
-                  data[i].testcase_id +
-                  '.json'
-              )
-                .then((response) => response.json())
-                .then((data) => {
-                  let json = [...data]
-                  let json_id = []
-                  for (let i = 0; i < data.length; i++) {
-                    json_id.push({
-                      id: i,
-                      command: json[i]
-                    })
-                  }
-                  return { json, json_id }
+            //console.log(data[i])
+            //console.log(data[i].testcase_name !== null)
+            try {
+              if (data[i].testcase_name !== null) {
+                //console.log(data[i])
+                let { json, json_id } = await fetch(
+                  '/uploads/assignment/' +
+                    assignId +
+                    '/testcase/' +
+                    data[i].testcase_id +
+                    '.json'
+                )
+                  .then((response) => response.json())
+                  .then((data) => {
+                    //console.log(data)
+
+                    let json = [...data]
+                    let json_id = []
+                    for (let i = 0; i < data.length; i++) {
+                      json_id.push({
+                        id: i,
+                        command: json[i]
+                      })
+                    }
+                    return { json, json_id }
+                  })
+
+                newNodes.push({
+                  id: i + 1,
+                  value: data[i].testcase_name,
+                  json: [...json],
+                  json_id: [...json_id]
                 })
-              newNodes.push({
-                id: i + 1,
-                value: 'Test' + (i + 1),
-                json: [...json],
-                json_id: [...json_id]
-              })
+                console.log(newNodes)
+              }
+            } catch (err) {
+              console.log(err)
             }
           }
           if (newNodes.length == 0) return
-          console.log(newNodes)
+          //console.log(newNodes)
           dispatch({
             type: 'SET',
             data: {
@@ -121,6 +142,38 @@ export default function TestCaseToolBar(props) {
       setFetched(true)
     }
   }, [fetched])
+
+  const saveTestcase = () => {
+    console.log(exists)
+    if (exists) {
+      const tData = new FormData()
+      for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
+        tData.append(
+          'testcase_name',
+          'testcase' + state.present.tree[0].nodes[i].value
+        )
+        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
+        const blob = new Blob([fileData], { type: 'application/json' })
+        tData.append(
+          'testcase_file',
+          blob,
+          'testcase' + state.present.tree[0].nodes[i].value + '.json'
+        )
+        //tData.append('resource_file',,)
+        //console.log(state.present.tree[0].nodes[i])
+      }
+      tData.append('resource_file', file.zip)
+
+      fetch('/api/v2/assignment/' + assignId + '/testcase', {
+        method: 'POST',
+        body: tData
+      })
+        .then((result) => console.log(result))
+        .catch((error) => console.log(error))
+    }
+    // TODO: PUT
+  }
+
   return (
     <React.Fragment>
       <Prompt
@@ -144,8 +197,16 @@ export default function TestCaseToolBar(props) {
             : tabValue === 0
             ? 'Table & Form Mode '
             : 'JSON Code Editor '}{' '}
-          / Test Case {state.present.selectedCase.id}
+          / {state.present.selectedCase.value}
         </Typography>
+        <Button
+          id="button_testcaseSave"
+          color="primary"
+          onClick={() => {
+            saveTestcase()
+          }}>
+          <SaveIcon />
+        </Button>
         <IconButton
           color="inherit"
           disabled={state.past.length === 0}

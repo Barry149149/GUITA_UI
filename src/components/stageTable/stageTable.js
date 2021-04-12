@@ -30,6 +30,7 @@ import Box from '@material-ui/core/Box'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { useLocation } from 'react-router-dom'
+import SaveIcon from '@material-ui/icons/Save'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,6 +76,7 @@ export default function StageTable(props) {
   const [create, setCreate] = useState(false)
   const { register, handleSubmit } = useForm()
   const [fetched, setFetched] = useState(false)
+  const [exists, setExists] = useState(false)
 
   const location = useLocation()
   useEffect(() => {
@@ -176,12 +178,12 @@ export default function StageTable(props) {
         'content-type': 'application/json'
       }
     })
-      .then((result) => {
-        return result.json()
-      })
+      .then((result) => result.json())
       .then((data) => {
-        console.log(data)
+        //console.log(data)
         // TODO: for each
+        //console.log(data)
+        //console.log(props.stage)
         for (let i = 0; i < props.stage.length; i++) {
           fetch('/api/v2/job_config/' + data.job_config_id + '/job_stage', {
             method: 'POST',
@@ -196,7 +198,23 @@ export default function StageTable(props) {
 
     setCreate(false)
   }
-  const saveConfig = () => {}
+  const saveConfig = () => {
+    console.log(exists)
+    if (!exists) {
+      for (let i = 0; i < props.stage.length; i++) {
+        console.log(props.stage[i])
+
+        fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
+          method: 'POST',
+          body: JSON.stringify(props.stage[i].json),
+          headers: {
+            'content-type': 'application/json'
+          }
+        }).catch((error) => console.log(error))
+      }
+    }
+    // TODO: PUT
+  }
 
   useEffect(() => {
     //console.log(props.selectedJobConfig)
@@ -208,8 +226,13 @@ export default function StageTable(props) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
+          console.log(data.length)
           const array = []
+          if (data.length !== 0) {
+            setExists(true)
+          } else {
+            setExists(false)
+          }
           for (let i = 0; i < data.length; i++) {
             const item = { id: i, json: data[i] }
             array.push(item)
@@ -222,6 +245,7 @@ export default function StageTable(props) {
       setFetched(true)
     }
   }, [])
+
   const isSelected = (id) => selected.indexOf(id) !== -1
   const isOpen = (id) => open.indexOf(id) !== -1
 
@@ -249,10 +273,11 @@ export default function StageTable(props) {
           <Tooltip title="Save">
             <Button
               id="button_commandSave"
-              variant="outlined"
               color="primary"
-              onClick={() => {}}>
-              Save
+              onClick={() => {
+                saveConfig()
+              }}>
+              <SaveIcon />
             </Button>
           </Tooltip>
         ) : (

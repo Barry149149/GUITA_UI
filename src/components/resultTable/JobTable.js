@@ -46,7 +46,7 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-  const { classes, order, orderBy, onRequestSort, result } = props
+  const { classes, order, orderBy, onRequestSort, result, stageName } = props
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property)
   }
@@ -58,12 +58,12 @@ function EnhancedTableHead(props) {
     headCell_stage.push({
       id: i + 1,
       numeric: false,
-      label: 'Stage ' + (i + 1)
+      label: stageName[i]
     })
   }
 
   const headCells = [
-    { id: 'job_id', numeric: false, label: 'Job ID' },
+    { id: 'submission_name', numeric: false, label: 'Submission Name' },
     ...headCell_stage
   ]
 
@@ -156,6 +156,7 @@ export default function JobTable(props) {
   const [orderBy, setOrderBy] = useState('job_id')
   const [filterCriteria, setFilterCriteria] = useState('')
   const [fetched, setFetched] = useState(false)
+  const [stageName, setStageName] = useState([])
   let maxCol = 0
 
   const handleRequestSort = (event, property) => {
@@ -181,6 +182,21 @@ export default function JobTable(props) {
     //TODO: change to correct path
     setDrawerOpen(false)
     if (jobBatchId) {
+      fetch(
+        '/api/v2/job_batch/' + jobBatchId + '?assignment=true&job_config=true',
+        {
+          headers: { 'content-Type': 'application/json' }
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          let name = []
+          for (let i = 0; i < data.job_config.job_stage.length; i++) {
+            name.push(data.job_config.job_stage[i].stage_name)
+          }
+          setStageName(name)
+          console.log(name)
+        })
       fetch('/api/v2/job_batch/' + jobBatchId + '/report', {
         headers: {
           'content-type': 'application/json'
@@ -252,6 +268,7 @@ export default function JobTable(props) {
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
               result={job}
+              stageName={stageName}
             />
             <TableBody>
               {stableSort(job, getComparator(order, orderBy))
@@ -307,12 +324,16 @@ export default function JobTable(props) {
                   }
 
                   return (
-                    <TableRow tabIndex={-1} key={row.job_id}>
+                    <TableRow
+                      tabIndex={-1}
+                      key={row.submission.submission_name}>
                       {
                         // TODO: Set onClick
                       }
-                      <TableCell label={row.job_id} align="center">
-                        {row.job_id}
+                      <TableCell
+                        label={row.submission.submission_name}
+                        align="center">
+                        {row.submission.submission_name}
                       </TableCell>
                       {cell_stage}
                     </TableRow>

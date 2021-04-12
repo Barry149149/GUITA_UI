@@ -314,6 +314,11 @@ export default function Editor() {
     name: []
   })
 
+  const [file, setFile] = useState({
+    zip_filename: null,
+    zip: null
+  })
+
   //this is for config management
   const [createConfig, setCreateConfig] = useState(false)
 
@@ -522,6 +527,8 @@ export default function Editor() {
                     createdCases={state.present.createdCases}
                     noOfCases={state.present.noOfCases}
                     dispatch={dispatch}
+                    file={file}
+                    setFile={setFile}
                   />
                 </Route>
               ) : null}
@@ -565,6 +572,8 @@ export default function Editor() {
                     setDrawerOpen={setDrawerOpen}
                     fetched={testCaseFetched}
                     setFetched={setTestCaseFetched}
+                    file={file}
+                    setFile={setFile}
                   />
                 </Route>
                 <Route
@@ -625,7 +634,7 @@ export default function Editor() {
                   </Route>
                   <Route
                     exact
-                    path={'/result/job batch/:jobBatchId'}
+                    path={'/result/job_batch/:jobBatchId'}
                     component={JobTable}>
                     <JobTable
                       setResultStep={setResultStep}
