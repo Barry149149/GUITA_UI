@@ -223,8 +223,15 @@ export default function ResultTable(props) {
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`
                   //const moment = require("moment-timezone");
+                  const date = new Date(row.created_at)
+
                   return (
-                    <Tooltip title={row.created_at}>
+                    <Tooltip
+                      title={
+                        date.toDateString('en-us') +
+                        ', ' +
+                        date.toLocaleTimeString('en-us')
+                      }>
                       <TableRow
                         hover
                         style={{ cursor: 'pointer' }}
@@ -241,7 +248,11 @@ export default function ResultTable(props) {
                             : null}
                         </TableCell>
                         <TableCell>
-                          {row.created_at !== null ? row.created_at : null}
+                          {row.created_at !== null
+                            ? date.toDateString('en-us') +
+                              ', ' +
+                              date.toLocaleTimeString('en-us')
+                            : null}
                         </TableCell>
                         <TableCell>
                           {row.job_config !== null
