@@ -9,10 +9,12 @@ import TableRow from '@material-ui/core/TableRow'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { TextField } from '@material-ui/core'
-import { Tooltip } from '@material-ui/core'
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import IconButton from '@material-ui/core/IconButton'
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  TextField
+} from '@material-ui/core'
 import { Link, useParams } from 'react-router-dom'
 import { CheckCircle } from '@material-ui/icons'
 import CancelIcon from '@material-ui/icons/Cancel'
@@ -20,6 +22,11 @@ import Button from '@material-ui/core/Button'
 import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
 import ClipLoader from 'react-spinners/ClipLoader'
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
+import useSWR from 'swr'
+import Box from '@material-ui/core/Box'
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
+
+const fetcher = (url) => fetch(url).then((r) => r.json())
 
 function descendingComparator(a, b, orderBy) {
   if (b.submission[orderBy] < a.submission[orderBy]) {
@@ -156,14 +163,7 @@ function ResultTableToolbar(props) {
 export default function JobTable(props) {
   let { jobBatchId } = useParams()
 
-  const {
-    setResultStep,
-    setJobData,
-    jobData,
-    job,
-    setJob,
-    setDrawerOpen
-  } = props
+  const { setResultStep, setJobData, jobData, setDrawerOpen } = props
 
   const classes = useStyles()
 
@@ -211,25 +211,33 @@ export default function JobTable(props) {
           })
           setMaxCol(data.job_config.job_stage.length)
           setStageName(name)
+          setFetched(true)
           console.log(name)
         })
-      fetch('/api/v2/job_batch/' + jobBatchId + '/report', {
-        headers: {
-          'content-type': 'application/json'
-        }
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-          const array = []
-          for (const value of data) {
-            array.push(value)
-          }
-          setJob(array)
-          setFetched(true)
-        })
+      // fetch('/api/v2/job_batch/' + jobBatchId + '/report', {
+      //   headers: {
+      //     'content-type': 'application/json'
+      //   }
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     console.log(data)
+      //     const array = []
+      //     for (const value of data) {
+      //       array.push(value)
+      //     }
+      //     setJob(array)
+      //     setFetched(true)
+      //   })
     }
   }, [])
+  const { data: job, error, isValidating } = useSWR(
+    '/api/v2/job_batch/' + jobBatchId + '/report',
+    fetcher,
+    {
+      refreshInterval: 5000
+    }
+  )
   /*
   if (fetched) {
     for (let i = 0; i < job.length; i++) {
@@ -245,8 +253,18 @@ export default function JobTable(props) {
         setFilterCriteria={setFilterCriteria}
         setResultStep={setResultStep}
       />
+      <Box style={{ backgroundColor: '#FFFFFF' }}>
+        <ListItem dense>
+          <ListItemIcon>
+            <ClipLoader color={'#222222'} loading={isValidating} size={16} />
+          </ListItemIcon>
+          <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+            Auto Reload Every 5 seconds
+          </ListItemText>
+        </ListItem>
+      </Box>
       <TableContainer className={classes.container}>
-        {fetched ? (
+        {job && !error && fetched ? (
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
@@ -295,16 +313,18 @@ export default function JobTable(props) {
                           {
                             // TODO: add cell for stages after failed
                             typeof row.reports[i].status !== 'undefined' ? (
-                              row.reports[i].status == 'success' ? (
+                              row.reports[i].status === 'success' ? (
                                 <CheckCircle style={{ color: 'green' }} />
-                              ) : row.reports[i].status == 'PENDING' ? (
+                              ) : row.reports[i].status === 'pending' ? (
                                 <ClipLoader
                                   color={'#3f51b5'}
                                   loading={true}
                                   size={24}
                                 />
-                              ) : (
+                              ) : row.reports[i].status === 'failed' ? (
                                 <CancelIcon color="secondary" />
+                              ) : (
+                                <RemoveCircleIcon style={{ color: 'ffc400' }} />
                               )
                             ) : (
                               ''

@@ -329,7 +329,7 @@ export default function Editor() {
     result: []
   })
   const [result, setResult] = useState([])
-  const [job, setJob] = useState([])
+  // const [job, setJob] = useState([])
 
   const [jobData, setJobData] = useState({
     imgPath: []
@@ -639,8 +639,6 @@ export default function Editor() {
                       setResultStep={setResultStep}
                       setJobData={setJobData}
                       jobData={jobData}
-                      job={job}
-                      setJob={setJob}
                       setDrawerOpen={setDrawerOpen}
                     />
                   </Route>
