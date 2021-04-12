@@ -150,7 +150,17 @@ export default function TablePanel(props) {
             dispatch={dispatch}
           />
         </div>
-      ) : null}
+      ) : (
+        <div
+          style={{
+            position: 'relative',
+            top: '50%',
+            left: '50%',
+            overflowX: 'hidden'
+          }}>
+          <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+        </div>
+      )}
       {formOpen ? (
         <React.Fragment>
           <div style={width < 1080 ? { height: '20px' } : { width: '2%' }} />
@@ -188,17 +198,7 @@ export default function TablePanel(props) {
             </div>
           </Grow>
         </React.Fragment>
-      ) : (
-        <div
-          style={{
-            position: 'relative',
-            top: '50%',
-            left: '50%',
-            overflowX: 'hidden'
-          }}>
-          <ClipLoader color={'#3f51b5'} loading={true} size={50} />
-        </div>
-      )}
+      ) : null}
     </div>
   )
 }

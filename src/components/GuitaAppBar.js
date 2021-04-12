@@ -57,7 +57,7 @@ export default function GuitaAppBar(props) {
           ) : postings === 2 ? (
             <ListItem dense>
               <ListItemIcon>
-                <CheckCircle color="green" />
+                <CheckCircle style={{ color: '#77DD77' }} />
               </ListItemIcon>
               <ListItemText style={{ color: '#FFFFFF', fontSize: 12 }}>
                 Submission Done
