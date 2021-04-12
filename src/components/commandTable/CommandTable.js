@@ -343,7 +343,7 @@ export default function CommandTable(props) {
               data: {
                 tree: [
                   {
-                    value: 'Test Cases',
+                    value: props.tree[0].value,
                     nodes: newNodes
                   }
                 ],
