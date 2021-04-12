@@ -169,7 +169,7 @@ export default function CommandTable(props) {
     for (let i = 0; i < props.selectedCase.json_id.length; i++) {
       if (selected.indexOf(props.selectedCase.json_id[i].id) !== -1) {
         commandDup_id.push({
-          id: props.selectedCase.json_id[i].length + duplicated,
+          id: props.selectedCase.json_id.length + duplicated - 1,
           command: props.selectedCase.json_id[i].command
         })
         commandDup.push(props.selectedCase.json[i])
@@ -209,7 +209,7 @@ export default function CommandTable(props) {
   }
 
   useEffect(() => {
-    //console.log(props.selectedCase.json_id)
+    console.log(props.selectedCase.json_id)
   })
 
   const isSelected = (id) => selected.indexOf(id) !== -1
