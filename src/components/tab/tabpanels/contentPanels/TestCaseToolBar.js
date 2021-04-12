@@ -145,6 +145,8 @@ export default function TestCaseToolBar(props) {
 
   const saveTestcase = () => {
     console.log(exists)
+    console.log(state.present.tree[0])
+    /*
     if (exists) {
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
@@ -152,7 +154,7 @@ export default function TestCaseToolBar(props) {
           'testcase_name',
           'testcase' + state.present.tree[0].nodes[i].value
         )
-        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
+        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json_id)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
           'testcase_file',
@@ -170,7 +172,7 @@ export default function TestCaseToolBar(props) {
       })
         .then((result) => console.log(result))
         .catch((error) => console.log(error))
-    }
+    }*/
     // TODO: PUT
   }
 
