@@ -29,6 +29,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
+import Hidden from '@material-ui/core/Hidden'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -430,7 +431,7 @@ export default function AssignmentTable(props) {
                     <TableRow hover tabIndex={-1} key={row.assignment_id}>
                       <TableCell>{row.assignment_name}</TableCell>
                       <TableCell>
-                        <FormControl>
+                        <FormControl style={{ maxWidth: 160 }}>
                           <Select
                             native
                             value={
@@ -494,30 +495,32 @@ export default function AssignmentTable(props) {
                               Create new Config
                             </option>
                           </Select>
-                          <Button
-                            disabled={selectedConfig[index].id === -1}
-                            component={Link}
-                            to={
-                              '/config/' +
-                              selectedConfig[index].id +
-                              '/' +
-                              selectedConfig[index].name
-                            }
-                            onClick={() => {
-                              setSelectedJobConfigName(
+                          {selectedConfig[index].id !== -1 ? (
+                            <Button
+                              disabled={selectedConfig[index].id === -1}
+                              component={Link}
+                              to={
+                                '/config/' +
+                                selectedConfig[index].id +
+                                '/' +
                                 selectedConfig[index].name
-                              )
-                              props.setLastEditedJobConfig({
-                                id: selectedConfig[index].id,
-                                name: selectedConfig[index].name
-                              })
-                            }}
-                            className={classes.editButton}
-                            disabled={selectedConfig[index].id === -1}>
-                            <Typography variant="h8" color="primary">
-                              Edit
-                            </Typography>
-                          </Button>
+                              }
+                              onClick={() => {
+                                setSelectedJobConfigName(
+                                  selectedConfig[index].name
+                                )
+                                props.setLastEditedJobConfig({
+                                  id: selectedConfig[index].id,
+                                  name: selectedConfig[index].name
+                                })
+                              }}
+                              className={classes.editButton}
+                              disabled={selectedConfig[index].id === -1}>
+                              <Typography variant="h8" color="primary">
+                                Edit
+                              </Typography>
+                            </Button>
+                          ) : null}
                         </FormControl>
                       </TableCell>
                       <TableCell align="right">
@@ -574,8 +577,13 @@ export default function AssignmentTable(props) {
         <DialogContent>
           <DialogContentText>Enter Job Config name.</DialogContentText>
           <form onSubmit={handleSubmit(handleCreateJobConfig)}>
-            <input name="jobConfigName" ref={register({ required: true })} />
+            <TextField
+              name="jobConfigName"
+              ref={register({ required: true })}
+              inputProps={{ maxLength: 20 }}
+            />
           </form>
+          <p style={{ fontSize: 12, color: '#AAAAAA' }}>Max. length is 18 </p>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCreateJobConfigCancelClose} color="primary">
