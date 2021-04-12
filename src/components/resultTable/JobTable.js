@@ -19,6 +19,7 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import Button from '@material-ui/core/Button'
 import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
 import ClipLoader from 'react-spinners/ClipLoader'
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 
 function descendingComparator(a, b, orderBy) {
   if (b.submission[orderBy] < a.submission[orderBy]) {
@@ -296,6 +297,8 @@ export default function JobTable(props) {
                             typeof row.reports[i].status !== 'undefined' ? (
                               row.reports[i].status == 'success' ? (
                                 <CheckCircle style={{ color: 'green' }} />
+                              ) : row.reports[i].status == 'PENDING' ? (
+                                'PENDING'
                               ) : (
                                 <CancelIcon color="secondary" />
                               )
@@ -310,7 +313,7 @@ export default function JobTable(props) {
                   for (let i = 0; i < maxCol - row.reports.length; i++) {
                     cell_stage.push(
                       <TableCell align="center">
-                        <CancelIcon color="secondary" />
+                        <HourglassEmptyIcon color="#ffea00" />
                       </TableCell>
                     )
                   }
