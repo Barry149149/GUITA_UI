@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography'
 import { TextField } from '@material-ui/core'
 import { Tooltip } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 function descendingComparator(a, b, orderBy) {
   if (orderBy == 'created_at') {
@@ -270,7 +272,17 @@ export default function ResultTable(props) {
                 })}
             </TableBody>
           </Table>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              left: '50%',
+              overflowX: 'hidden'
+            }}>
+            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+          </div>
+        )}
       </TableContainer>
     </div>
   )

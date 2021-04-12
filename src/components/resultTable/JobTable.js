@@ -17,6 +17,8 @@ import { Link, useParams } from 'react-router-dom'
 import { CheckCircle } from '@material-ui/icons'
 import CancelIcon from '@material-ui/icons/Cancel'
 import Button from '@material-ui/core/Button'
+import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 function descendingComparator(a, b, orderBy) {
   if (b.submission[orderBy] < a.submission[orderBy]) {
@@ -345,7 +347,17 @@ export default function JobTable(props) {
                 })}
             </TableBody>
           </Table>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              left: '50%',
+              overflowX: 'hidden'
+            }}>
+            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+          </div>
+        )}
       </TableContainer>
     </div>
   )

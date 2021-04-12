@@ -10,6 +10,8 @@ import TabPanel from '../Tabpanel'
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { Route, useParams } from 'react-router-dom'
+import ClipLoader from 'react-spinners/ClipLoader'
+import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
 
 export default function TablePanel(props) {
   let { assignId, assignName } = useParams()
@@ -186,7 +188,17 @@ export default function TablePanel(props) {
             </div>
           </Grow>
         </React.Fragment>
-      ) : null}
+      ) : (
+        <div
+          style={{
+            position: 'relative',
+            top: '50%',
+            left: '50%',
+            overflowX: 'hidden'
+          }}>
+          <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+        </div>
+      )}
     </div>
   )
 }

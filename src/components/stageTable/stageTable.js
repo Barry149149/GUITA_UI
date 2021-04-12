@@ -31,6 +31,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { useLocation } from 'react-router-dom'
 import SaveIcon from '@material-ui/icons/Save'
+import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
+import ClipLoader from 'react-spinners/ClipLoader'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -490,7 +492,17 @@ export default function StageTable(props) {
             })}
           </TableBody>
         </Table>
-      ) : null}
+      ) : (
+        <div
+          style={{
+            position: 'relative',
+            top: '50%',
+            left: '50%',
+            overflowX: 'hidden'
+          }}>
+          <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+        </div>
+      )}
       <Dialog open={create} onClose={handleCreateClose}>
         <DialogTitle>Submit New Job Configurations</DialogTitle>
         <DialogContent>

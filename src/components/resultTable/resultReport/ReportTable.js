@@ -23,6 +23,8 @@ import { useParams } from 'react-router-dom'
 import { CheckCircle } from '@material-ui/icons'
 import CancelIcon from '@material-ui/icons/Cancel'
 import { Link } from '@material-ui/core'
+import { ClimbingBoxLoader } from 'react-spinners'
+import ClipLoader from 'react-spinners/ClipLoader'
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -521,7 +523,17 @@ export default function ReportTable(props) {
               </TableBody>
             ) : null}
           </Table>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              left: '50%',
+              overflowX: 'hidden'
+            }}>
+            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+          </div>
+        )}
       </TableContainer>
     </div>
   )
