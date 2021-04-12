@@ -30,6 +30,8 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from 'react-router-dom'
 import Hidden from '@material-ui/core/Hidden'
+import ClipLoader from 'react-spinners/ClipLoader'
+import Container from '@material-ui/core/Container'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -570,7 +572,17 @@ export default function AssignmentTable(props) {
                 })}
             </TableBody>
           </Table>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              left: '50%',
+              overflowX: 'hidden'
+            }}>
+            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+          </div>
+        )}
       </TableContainer>
       <Dialog open={createJobConfig}>
         <DialogTitle>Create Job Config</DialogTitle>
