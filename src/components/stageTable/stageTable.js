@@ -59,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     maxHeight: 800
   },
+  tableHead: {
+    backgroundColor: '#F0F0F0',
+    '&$selected, &$selected:hover': {
+      backgroundColor: lighten(theme.palette.primary.light, 0.85)
+    }
+  },
   selected: {}
 }))
 
@@ -174,7 +180,7 @@ export default function StageTable(props) {
         return result.json()
       })
       .then((data) => {
-        //console.log(data)
+        console.log(data)
         // TODO: for each
         for (let i = 0; i < props.stage.length; i++) {
           fetch('/api/v2/job_config/' + data.job_config_id + '/job_stage', {
@@ -294,7 +300,7 @@ export default function StageTable(props) {
               aria-checked={
                 props.stage.length > 0 && props.stage.length === selected.length
               }
-              className={classes.tableRow}
+              className={classes.tableHead}
               classes={{ selected: classes.selected }}>
               <TableCell padding="checkbox">
                 <Checkbox
@@ -308,9 +314,15 @@ export default function StageTable(props) {
                   }}
                 />
               </TableCell>
-              <TableCell align="left">Stage Name</TableCell>
-              <TableCell align="left">Priority</TableCell>
-              <TableCell align="left">TestCaseID</TableCell>
+              <TableCell align="left">
+                <Typography variant="h7">Stage Name</Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography variant="h7">Priority</Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography variant="h7">TestCaseID</Typography>
+              </TableCell>
               <TableCell align="right">
                 <IconButton
                   id="button_expandRow"
@@ -399,44 +411,44 @@ export default function StageTable(props) {
                             </TableHead>
                             <TableBody>
                               <TableRow>
-                                {row.json.image ? (
+                                {row.json.stage_config.image ? (
                                   <TableCell align="left">
-                                    {row.json.image}
+                                    {row.json.stage_config.image}
                                   </TableCell>
                                 ) : (
                                   <TableCell />
                                 )}
-                                {row.json.extraPath ? (
+                                {row.json.stage_config.extraPath ? (
                                   <TableCell align="left">
-                                    {row.json.extraPath}
+                                    {row.json.stage_config.extraPath}
                                   </TableCell>
                                 ) : (
                                   <TableCell />
                                 )}
-                                {row.json.jobType ? (
+                                {row.json.stage_config.jobType ? (
                                   <TableCell align="left">
-                                    {row.json.jobType}
+                                    {row.json.stage_config.jobType}
                                   </TableCell>
                                 ) : (
                                   <TableCell />
                                 )}
-                                {row.json.mainClass ? (
+                                {row.json.stage_config.mainClass ? (
                                   <TableCell align="left">
-                                    {row.json.mainClass}
+                                    {row.json.stage_config.mainClass}
                                   </TableCell>
                                 ) : (
                                   <TableCell />
                                 )}
-                                {row.json.projectFile ? (
+                                {row.json.stage_config.projectFile ? (
                                   <TableCell align="left">
-                                    {row.json.projectFile}
+                                    {row.json.stage_config.projectFile}
                                   </TableCell>
                                 ) : (
                                   <TableCell />
                                 )}
-                                {row.json.stopTimeOut ? (
+                                {row.json.stage_config.stopTimeOut ? (
                                   <TableCell align="left">
-                                    {row.json.stopTimeOut}
+                                    {row.json.stage_config.stopTimeOut}
                                   </TableCell>
                                 ) : (
                                   <TableCell />

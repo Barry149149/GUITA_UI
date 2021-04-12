@@ -241,20 +241,22 @@ function Row(props) {
                   </TableRow>
                 ) : null}
                 {row.errors.length ? (
-                  <TableRow
-                    onClick={(e) =>
-                      setOpen({
-                        ...open,
-                        error: open.error
-                      })
-                    }
-                    style={{
-                      cursor: 'pointer'
-                    }}>
+                  <TableRow>
                     <TableCell size="small" className={classes.tableCell}>
                       <Typography variant="h8" gutterBottom component="div">
                         errors:{' '}
-                        <Link component="button" variant="body2">
+                        <Link
+                          component="button"
+                          variant="body2"
+                          onClick={(e) =>
+                            setOpen({
+                              ...open,
+                              error: !open.error
+                            })
+                          }
+                          style={{
+                            cursor: 'pointer'
+                          }}>
                           {row.errors.map(
                             (err, index) => index + 1 + ') ' + err.message
                           ) + ','}
@@ -319,15 +321,28 @@ function Row(props) {
 }
 
 function ReportTableToolbar(props) {
-  const { classes, table, result, setResultStep } = props
+  const { classes, table, result, setResultStep, fetched } = props
 
-  return (
-    <Toolbar>
-      <Typography className={classes.title} color="primary" variant="h6">
-        {table}
-      </Typography>
-    </Toolbar>
-  )
+  if (fetched) {
+    return (
+      <Toolbar>
+        <Typography className={classes.title} color="primary" variant="h6">
+          {table}
+        </Typography>
+        <Typography variant="body1">
+          {'Result: ' + result.summary.score + '/' + result.summary.maxScore}
+        </Typography>
+      </Toolbar>
+    )
+  } else {
+    return (
+      <Toolbar>
+        <Typography className={classes.title} variant="h6">
+          No Report is provided for this stage
+        </Typography>
+      </Toolbar>
+    )
+  }
 }
 
 export default function ReportTable(props) {
@@ -398,7 +413,7 @@ export default function ReportTable(props) {
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log(jobBatchId)
+        console.log(data)
         for (let i = 0, numData = data.length; i < numData; i++) {
           console.log(data[i].job_batch_id)
           if (data[i].job_batch_id == jobBatchId) {
@@ -416,9 +431,7 @@ export default function ReportTable(props) {
       })
   }, [])
 
-  useEffect(() => {
-    console.log(jobData)
-  })
+  useEffect(() => {})
 
   const handleOpenClick = (event, id) => {
     const openedIndex = open.indexOf(id)
@@ -462,6 +475,7 @@ export default function ReportTable(props) {
         classes={classes}
         result={result}
         setResultStep={props.setResultStep}
+        fetched={fetched}
       />
       <TableContainer className={classes.container}>
         {fetched ? (

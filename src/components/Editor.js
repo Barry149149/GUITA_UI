@@ -741,11 +741,7 @@ function ReportImageDialog(props) {
             <KeyboardArrowRightIcon />
           </Button>
         </div>
-        <div
-          style={{
-            width: '90%',
-            paddingLeft: 20
-          }}>
+        <Container>
           <Slider
             value={reportImg.path + 1}
             step={1}
@@ -760,7 +756,7 @@ function ReportImageDialog(props) {
             }}
             valueLabelDisplay="auto"
           />
-        </div>
+        </Container>
       </div>
     </Dialog>
   )
