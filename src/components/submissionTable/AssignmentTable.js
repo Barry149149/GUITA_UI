@@ -291,7 +291,7 @@ export default function AssignmentTable(props) {
     aData.append('submission_file', file.zip)
 
     const response = await fetch(
-      '/api/v2/assignmnet/' + jobBatch.assignment_id + '/submission_batch',
+      '/api/v2/assignment/' + selected + '/submission_batch',
       {
         method: 'POST',
         body: aData

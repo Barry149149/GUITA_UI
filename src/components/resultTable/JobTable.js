@@ -298,7 +298,11 @@ export default function JobTable(props) {
                               row.reports[i].status == 'success' ? (
                                 <CheckCircle style={{ color: 'green' }} />
                               ) : row.reports[i].status == 'PENDING' ? (
-                                'PENDING'
+                                <ClipLoader
+                                  color={'#3f51b5'}
+                                  loading={true}
+                                  size={24}
+                                />
                               ) : (
                                 <CancelIcon color="secondary" />
                               )

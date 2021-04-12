@@ -268,7 +268,7 @@ export default function Editor() {
     },
     future: []
   })
-  const [testCaseFetched, setTestCaseFetched] = useState([])
+  const [testCaseFetched, setTestCaseFetched] = useState(false)
 
   const [node, setNode] = useState([])
 
