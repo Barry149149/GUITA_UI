@@ -230,7 +230,7 @@ export default function ResultTable(props) {
                         style={{ cursor: 'pointer' }}
                         tabIndex={-1}
                         key={row.job_batch_id}
-                        to={'/result/job batch/' + row.job_batch_id}
+                        to={'/result/job_batch/' + row.job_batch_id}
                         component={Link}
                         onClick={(event) => {
                           handleRowClick(event, row)

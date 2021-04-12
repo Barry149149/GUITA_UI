@@ -28,11 +28,6 @@ export default function TreePanel(props) {
 
   let { assignment_id, assignment_name } = useParams()
 
-  const [file, setFile] = useState({
-    zip_filename: null,
-    zip: null
-  })
-
   return (
     <React.Fragment>
       <Box p={3}>
@@ -69,8 +64,8 @@ export default function TreePanel(props) {
               hidden
               onChange={(e) => {
                 //TODO: submit img zip
-                setFile({
-                  ...file,
+                props.setFile({
+                  ...props.file,
                   zip_filename: e.target.files[0].name,
                   zip: e.target.files[0]
                 })
@@ -80,7 +75,9 @@ export default function TreePanel(props) {
           </Button>
           <pr style={{ fontSize: 14, color: '#666666' }}>
             {' '}
-            {file.zip_filename ? file.zip_filename : 'No file selected'}
+            {props.file.zip_filename
+              ? props.file.zip_filename
+              : 'No file selected'}
           </pr>
           <p style={{ fontSize: 12, color: '#888888' }}>
             Upload a ZIP of png files for Image Comparisons

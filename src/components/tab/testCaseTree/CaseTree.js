@@ -130,7 +130,7 @@ export default function CaseTree(props) {
         <DialogTitle>{'Confirm Deletion'}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this {props.selectedCase.id}
+            Are you sure you want to delete {props.selectedCase.value}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
