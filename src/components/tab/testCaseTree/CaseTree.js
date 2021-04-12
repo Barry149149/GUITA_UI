@@ -161,6 +161,7 @@ export default function CaseTree(props) {
                   noOfCases: newNoOfCases,
                   selectedCase: {
                     id: props.tree[0].nodes[0].id,
+                    value: props.tree[0].nodes[0].value,
                     json: props.tree[0].nodes[0].json,
                     json_id: props.tree[0].nodes[0].json_id
                   }
@@ -224,6 +225,7 @@ export default function CaseTree(props) {
                   noOfCases: props.noOfCases + 1,
                   selectedCase: {
                     id: props.createdCases + 1,
+                    value: caseName,
                     json: [],
                     json_id: []
                   }

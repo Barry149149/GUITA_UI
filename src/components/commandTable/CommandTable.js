@@ -110,7 +110,7 @@ export default function CommandTable(props) {
       return
     }
     for (let i = 0; i < props.selectedCase.json_id.length; i++) {
-      newSelected.push(i + 1)
+      newSelected.push(i)
     }
     setSelected(newSelected)
   }
@@ -122,7 +122,7 @@ export default function CommandTable(props) {
       return
     }
     for (let i = 0; i < props.selectedCase.json_id.length; i++) {
-      newSelected.push(i + 1)
+      newSelected.push(i)
     }
     setOpen(newSelected)
   }
@@ -320,7 +320,7 @@ export default function CommandTable(props) {
               new_json_id = [
                 ...new_json_id,
                 {
-                  id: i + 1,
+                  id: i,
                   command: new_json_unordered[i].command
                 }
               ]
