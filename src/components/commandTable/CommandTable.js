@@ -145,7 +145,7 @@ export default function CommandTable(props) {
       data: {
         tree: [
           {
-            value: 'Test Cases',
+            value: props.tree[0].value,
             nodes: newNodes
           }
         ],
@@ -191,7 +191,7 @@ export default function CommandTable(props) {
       data: {
         tree: [
           {
-            value: 'Test Cases',
+            value: props.tree[0].value,
             nodes: newNodes
           }
         ],
@@ -290,7 +290,13 @@ export default function CommandTable(props) {
               />
             </TableCell>
             <TableCell padding="checkbox">Step</TableCell>
-            <TableCell align="left"> Command </TableCell>
+            <TableCell align="left" colSpan={10}>
+              {' '}
+              Command{' '}
+            </TableCell>
+            <TableCell align="right" padding="checkbox">
+              Weight
+            </TableCell>
             <TableCell align="right">
               <IconButton
                 id="button_expandRow"
@@ -390,7 +396,11 @@ export default function CommandTable(props) {
                             <TableCell padding="checkbox" align="center">
                               {index}
                             </TableCell>
-                            <TableCell scope="row" align="left" size="small">
+                            <TableCell
+                              scope="row"
+                              align="left"
+                              size="small"
+                              colSpan={10}>
                               <Box>
                                 <Typography
                                   style={{ fontSize: 10, color: '#777777' }}>
@@ -405,6 +415,11 @@ export default function CommandTable(props) {
                                   {row.command.description}
                                 </Typography>
                               </Box>
+                            </TableCell>
+                            <TableCell align={'right'}>
+                              {typeof row.command.weight === 'undefined'
+                                ? 1
+                                : row.command.weight}
                             </TableCell>
                             <TableCell align="right">
                               <IconButton
@@ -470,6 +485,9 @@ export default function CommandTable(props) {
                                     {row.command.keys === undefined ? null : (
                                       <TableCell>Keys</TableCell>
                                     )}
+                                    {row.command.text === undefined ? null : (
+                                      <TableCell>Text</TableCell>
+                                    )}
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -530,6 +548,11 @@ export default function CommandTable(props) {
                                               row.command.key
                                             ).replace(/['"]+/g, '')}
                                         </p>
+                                      </TableCell>
+                                    )}
+                                    {row.command.text === undefined ? null : (
+                                      <TableCell>
+                                        <p>{'Text: ' + row.command.text}</p>
                                       </TableCell>
                                     )}
                                   </TableRow>
