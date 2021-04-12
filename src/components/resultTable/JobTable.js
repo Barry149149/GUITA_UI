@@ -62,10 +62,7 @@ function EnhancedTableHead(props) {
     })
   }
 
-  const headCells = [
-    { id: 'job_id', numeric: false, label: 'Job ID' },
-    ...headCell_stage
-  ]
+  const headCells = [{ id: 'job_id', numeric: false, label: 'Job ID' }]
 
   return (
     <TableHead>
@@ -86,6 +83,11 @@ function EnhancedTableHead(props) {
                 </span>
               ) : null}
             </TableSortLabel>
+          </TableCell>
+        ))}
+        {headCell_stage.map((cell) => (
+          <TableCell key={cell.id} align="center">
+            {cell.label}
           </TableCell>
         ))}
       </TableRow>
