@@ -30,6 +30,16 @@ const intStruct = (title) => {
   }
 }
 
+const arrayStruct = (title) => {
+  return {
+    title: title,
+    type: 'array',
+    items: {
+      type: 'string'
+    }
+  }
+}
+
 export const commandDescription = (command) => {
   try {
     switch (command.command) {
@@ -97,11 +107,87 @@ export const commandList = [
     }
   },
   {
+    command: 'assert',
+    schema: {
+      type: 'object',
+      properties: {
+        weight: intStruct('Weight'),
+        value: valTypeStruct('Asserted Value'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'assertEqual',
+    schema: {
+      type: 'object',
+      required: ['valueRhs'],
+      properties: {
+        weight: intStruct('Weight'),
+        valueLhs: valTypeStruct('Value Lhs'),
+        valueRhs: stringStruct('Value Rhs'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'assertImageSimilar',
+    schema: {
+      type: 'object',
+      required: ['widget', 'expected'],
+      properties: {
+        weight: intStruct('Weight'),
+        widget: valTypeStruct('Widget'),
+        expected: stringStruct('Path to expected image')
+      }
+    }
+  },
+  {
     command: 'click',
     schema: {
       type: 'object',
       properties: {
-        widget: valTypeStruct('widget'),
+        weight: intStruct('Weight'),
+        widget: valTypeStruct('Widget'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'getText',
+    schema: {
+      type: 'object',
+      required: ['widget', 'setVariable'],
+      properties: {
+        weight: intStruct('Weight'),
+        widget: valTypeStruct('Widget'),
+        setVariable: stringStruct('Set Variable'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'isVisible',
+    schema: {
+      type: 'object',
+      required: ['widget', 'setVariable'],
+      properties: {
+        weight: intStruct('Weight'),
+        widget: valTypeStruct('Widget'),
+        setVariable: stringStruct('Set Variable'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'locateByWidgetClass',
+    schema: {
+      type: 'object',
+      required: ['widgetName', 'setVariable'],
+      properties: {
+        weight: intStruct('Weight'),
+        widgetName: stringStruct('Widget Name'),
+        setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
@@ -112,8 +198,22 @@ export const commandList = [
       type: 'object',
       required: ['widgetName', 'setVariable'],
       properties: {
+        weight: intStruct('Weight'),
         widgetName: stringStruct('Widget Name'),
-        setVariable: stringStruct('set Variable'),
+        setVariable: stringStruct('Set Variable'),
+        description: stringStruct('Description')
+      }
+    }
+  },
+  {
+    command: 'locateByWidgetText',
+    schema: {
+      type: 'object',
+      required: ['widgetName', 'setVariable'],
+      properties: {
+        weight: intStruct('Weight'),
+        widgetName: stringStruct('Widget Name'),
+        setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
@@ -130,48 +230,24 @@ export const commandList = [
     }
   },
   {
-    command: 'getText',
+    command: 'typeHotkeys',
     schema: {
       type: 'object',
-      required: ['widget', 'setVariable'],
+      required: ['keys'],
       properties: {
-        widget: valTypeStruct('widget'),
-        setVariable: stringStruct('set Variable'),
-        description: stringStruct('Description')
+        weight: intStruct('Weight'),
+        keys: arrayStruct('The text to type')
       }
     }
   },
   {
-    command: 'assertEqual',
+    command: 'typeText',
     schema: {
       type: 'object',
-      required: ['valueRhs'],
+      required: ['text'],
       properties: {
-        valueLhs: valTypeStruct('Value Lhs'),
-        valueRhs: stringStruct('Value Rhs'),
-        description: stringStruct('Description')
-      }
-    }
-  },
-  {
-    command: 'isVisible',
-    schema: {
-      type: 'object',
-      required: ['widget', 'setVariable'],
-      properties: {
-        widget: valTypeStruct('widget'),
-        setVariable: stringStruct('set Variable'),
-        description: stringStruct('Description')
-      }
-    }
-  },
-  {
-    command: 'assert',
-    schema: {
-      type: 'object',
-      properties: {
-        value: valTypeStruct('Asserted Value'),
-        description: stringStruct('Description')
+        weight: intStruct('Weight'),
+        text: stringStruct('The text to type')
       }
     }
   }
