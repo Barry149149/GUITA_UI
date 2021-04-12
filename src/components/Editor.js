@@ -457,10 +457,6 @@ export default function Editor() {
     return [value, setValue]
   }
 
-  useEffect(() => {
-    console.log(postings)
-  })
-
   const [tour, setTour] = useTourStickyState(0, 'tour')
 
   let guide
