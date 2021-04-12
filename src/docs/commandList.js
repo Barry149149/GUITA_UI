@@ -40,6 +40,15 @@ const arrayStruct = (title) => {
   }
 }
 
+const driverStruct = (title) => {
+  return {
+    title: title,
+    type: 'string',
+    enum: [null, 'CV', 'DOM'],
+    default: 'DOM'
+  }
+}
+
 export const commandDescription = (command) => {
   try {
     switch (command.command) {
@@ -148,6 +157,7 @@ export const commandList = [
       type: 'object',
       properties: {
         weight: intStruct('Weight'),
+        driver: driverStruct('Driver'),
         widget: valTypeStruct('Widget'),
         description: stringStruct('Description')
       }
@@ -212,6 +222,7 @@ export const commandList = [
       required: ['widgetName', 'setVariable'],
       properties: {
         weight: intStruct('Weight'),
+        driver: driverStruct('Driver'),
         widgetName: stringStruct('Widget Name'),
         setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
