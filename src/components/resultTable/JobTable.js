@@ -268,6 +268,7 @@ export default function JobTable(props) {
                     .includes(filterCriteria.toLowerCase())
                 )
                 .map((row, index) => {
+                  console.log(row)
                   const labelId = `enhanced-table-checkbox-${index}`
                   let cell_stage = []
                   for (let i = 0; i < row.reports.length; i++) {
