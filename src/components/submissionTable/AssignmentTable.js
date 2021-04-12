@@ -610,11 +610,11 @@ export default function AssignmentTable(props) {
           <p style={{ fontSize: 12, color: '#AAAAAA' }}>Max. length is 18 </p>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCreateJobConfigCancelClose} color="primary">
-            Cancel
-          </Button>
           <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">
             Confirm
+          </Button>
+          <Button onClick={handleCreateJobConfigCancelClose} color="primary">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -649,9 +649,6 @@ export default function AssignmentTable(props) {
           </Button>
           {file.zip_filename == null ? ' no files uploaded' : file.zip_filename}
           <DialogActions>
-            <Button color="secondary" onClick={() => setSubmitDialog(false)}>
-              Cancel
-            </Button>
             <Button
               disabled={file.zip_filename == null}
               onClick={() => {
@@ -660,6 +657,9 @@ export default function AssignmentTable(props) {
                 setSubmitDialog(false)
               }}>
               Submit
+            </Button>
+            <Button color="secondary" onClick={() => setSubmitDialog(false)}>
+              Cancel
             </Button>
           </DialogActions>
         </DialogContent>
