@@ -326,9 +326,7 @@ export default function JobTable(props) {
                                 ) : row.reports[i].status === 'failed' ? (
                                   <CancelIcon color="secondary" />
                                 ) : (
-                                  <RemoveCircleIcon
-                                    style={{ color: 'ffc400' }}
-                                  />
+                                  <RemoveCircleIcon />
                                 )
                               ) : (
                                 ''
