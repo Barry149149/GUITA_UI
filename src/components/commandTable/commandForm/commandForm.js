@@ -88,7 +88,7 @@ export default function CommandForm(props) {
             newNodes.find((x) => x.id === props.selectedCase.id).json_id = [
               ...props.selectedCase.json_id,
               {
-                id: props.selectedCase.json.length + 1,
+                id: props.selectedCase.json.length,
                 command: {
                   command: props.cmdSchema.command,
                   ...e.formData,
@@ -120,7 +120,7 @@ export default function CommandForm(props) {
                   json_id: [
                     ...props.selectedCase.json_id,
                     {
-                      id: props.selectedCase.json.length + 1,
+                      id: props.selectedCase.json.length,
                       command: {
                         command: props.cmdSchema.command,
                         ...e.formData,

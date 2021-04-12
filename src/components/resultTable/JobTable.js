@@ -19,10 +19,10 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import Button from '@material-ui/core/Button'
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (b.submission[orderBy] < a.submission[orderBy]) {
     return -1
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (b.submission[orderBy] > a.submission[orderBy]) {
     return 1
   }
 
@@ -63,8 +63,7 @@ function EnhancedTableHead(props) {
   }
 
   const headCells = [
-    { id: 'submission_name', numeric: false, label: 'Submission Name' },
-    ...headCell_stage
+    { id: 'submission_name', numeric: false, label: 'Submission Name' }
   ]
 
   return (
@@ -158,7 +157,7 @@ export default function JobTable(props) {
   const classes = useStyles()
 
   const [order, setOrder] = useState('asc')
-  const [orderBy, setOrderBy] = useState('job_id')
+  const [orderBy, setOrderBy] = useState('submission_name')
   const [filterCriteria, setFilterCriteria] = useState('')
   const [fetched, setFetched] = useState(false)
   const [stageName, setStageName] = useState([])
@@ -278,7 +277,7 @@ export default function JobTable(props) {
             <TableBody>
               {stableSort(job, getComparator(order, orderBy))
                 .filter((e) =>
-                  e.job_id
+                  e.submission.submission_name
                     .toString()
                     .toLowerCase()
                     .includes(filterCriteria.toLowerCase())

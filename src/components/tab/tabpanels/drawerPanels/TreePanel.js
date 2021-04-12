@@ -9,6 +9,7 @@ import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import { Prompt, Route, useParams } from 'react-router-dom'
 import NavigationBlocker from '../../../Prompt/Warning'
+import { commandDescription } from '../../../../docs/commandList'
 
 const useStyles = makeStyles((theme) => ({
   readOnlyBox: {
@@ -121,10 +122,22 @@ export default function TreePanel(props) {
                         console.log(jsObject)
 
                         let new_json_id = []
+                        let new_json = []
                         for (let j = 0; j < jsObject.length; j++) {
+                          let tempDescription =
+                            typeof jsObject[i].description === 'undefined'
+                              ? commandDescription(jsObject[j])
+                              : jsObject[i].description
+                          new_json.push({
+                            ...jsObject[i],
+                            description: tempDescription
+                          })
                           new_json_id.push({
                             id: j + 1,
-                            command: jsObject[j]
+                            command: {
+                              ...jsObject[j],
+                              description: tempDescription
+                            }
                           })
                         }
 
@@ -132,12 +145,12 @@ export default function TreePanel(props) {
                           id: props.createdCases + parseInt(i) + 1,
                           value:
                             'Test ' + (props.createdCases + parseInt(i) + 1),
-                          json: jsObject,
+                          json: new_json,
                           json_id: new_json_id
                         })
 
                         last_id = i
-                        last_jsObject = jsObject
+                        last_jsObject = new_json
                         last_new_json_id = new_json_id
                       }
 
