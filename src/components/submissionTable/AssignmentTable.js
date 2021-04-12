@@ -203,7 +203,8 @@ export default function AssignmentTable(props) {
     configData,
     setConfigData,
     state,
-    setTestcaseFetched
+    setTestcaseFetched,
+    setPostings
   } = props
   const classes = useStyles()
 
@@ -290,30 +291,34 @@ export default function AssignmentTable(props) {
 
     aData.append('submission_file', file.zip)
 
-    const response = await fetch(
-      '/api/v2/assignmnet/' + jobBatch.assignment_id + '/submission_batch',
-      {
+    try {
+      const response = await fetch(
+        '/api/v2/assignment/' + jobBatch.assignment_id + '/submission_batch',
+        {
+          method: 'POST',
+          body: aData
+        }
+      )
+      const data = await response.json()
+      fetch('/api/v2/job_batch', {
         method: 'POST',
-        body: aData
-      }
-    )
-    const data = await response.json()
-
-    fetch('/api/v2/job_batch', {
-      method: 'POST',
-      body: JSON.stringify({
-        assignment_id: selected,
-        submission_batch_id: data.submission_batch_id,
-        job_config_id: selectedConfig[indexed].id
-      }),
-      headers: {
-        'content-type': 'application/json'
-      }
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        console.log(data)
+        body: JSON.stringify({
+          assignment_id: selected,
+          submission_batch_id: data.submission_batch_id,
+          job_config_id: selectedConfig[indexed].id
+        }),
+        headers: {
+          'content-type': 'application/json'
+        }
       })
+        .then((result) => result.json())
+        .then((data) => {
+          setPostings(2)
+          console.log(data)
+        })
+    } catch (e) {
+      setPostings(3)
+    }
   }
 
   useEffect(() => {
@@ -560,6 +565,10 @@ export default function AssignmentTable(props) {
                             onClick={(e) => {
                               setSelected(row.assignment_id)
                               setIndexed(index)
+                              setJobBatch({
+                                ...jobBatch,
+                                assignment_id: row.assignment_id
+                              })
                               handleCloseClick(e, row.assignment_id)
                               setSubmitDialog(open)
                             }}>
@@ -640,6 +649,7 @@ export default function AssignmentTable(props) {
             <Button
               disabled={file.zip_filename == null}
               onClick={() => {
+                setPostings(1)
                 handleJobBatchSubmit()
                 setSubmitDialog(false)
               }}>

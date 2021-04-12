@@ -361,6 +361,7 @@ export default function Editor() {
     name: ''
   })
   const [testcaseFetched, setTestcaseFetched] = useState(false)
+  const [postings, setPostings] = useState(0)
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -457,7 +458,7 @@ export default function Editor() {
   }
 
   useEffect(() => {
-    console.log(node)
+    console.log(postings)
   })
 
   const [tour, setTour] = useTourStickyState(0, 'tour')
@@ -559,6 +560,7 @@ export default function Editor() {
                     setDrawerOpen={setDrawerOpen}
                     state={state}
                     setTestcaseFetched={setTestcaseFetched}
+                    setPostings={setPostings}
                   />
                 </Route>
                 <Route path={'/testcase/:assignId/:assignName'}>
