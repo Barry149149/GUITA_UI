@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { TextField } from '@material-ui/core'
+import { TextField, Tooltip } from '@material-ui/core'
 import { Radio } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -537,6 +537,7 @@ export default function AssignmentTable(props) {
                           }}>
                           <MoreVertIcon />
                         </IconButton>
+
                         <Menu
                           open={isItemOpened}
                           keepMounted
@@ -561,7 +562,9 @@ export default function AssignmentTable(props) {
                             }>
                             Edit Test Cases
                           </MenuItem>
+
                           <MenuItem
+                            disabled={selectedConfig[index].id === -1}
                             onClick={(e) => {
                               setSelected(row.assignment_id)
                               setIndexed(index)
@@ -646,6 +649,9 @@ export default function AssignmentTable(props) {
           </Button>
           {file.zip_filename == null ? ' no files uploaded' : file.zip_filename}
           <DialogActions>
+            <Button color="secondary" onClick={() => setSubmitDialog(false)}>
+              Cancel
+            </Button>
             <Button
               disabled={file.zip_filename == null}
               onClick={() => {
@@ -655,7 +661,6 @@ export default function AssignmentTable(props) {
               }}>
               Submit
             </Button>
-            <Button onClick={() => setSubmitDialog(false)}>Cancel</Button>
           </DialogActions>
         </DialogContent>
       </Dialog>
