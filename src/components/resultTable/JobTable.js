@@ -46,7 +46,15 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-  const { classes, order, orderBy, onRequestSort, result, stageName } = props
+  const {
+    classes,
+    order,
+    orderBy,
+    onRequestSort,
+    result,
+    stageName,
+    maxCol
+  } = props
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property)
   }
@@ -54,7 +62,7 @@ function EnhancedTableHead(props) {
   let headCell_stage = []
 
   // TODO: Check valid length
-  for (let i = 0; i < result[0].reports.length; i++) {
+  for (let i = 0; i < maxCol; i++) {
     headCell_stage.push({
       id: i + 1,
       numeric: false,
@@ -161,7 +169,7 @@ export default function JobTable(props) {
   const [filterCriteria, setFilterCriteria] = useState('')
   const [fetched, setFetched] = useState(false)
   const [stageName, setStageName] = useState([])
-  let maxCol = 0
+  const [maxCol, setMaxCol] = useState(0)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -176,10 +184,6 @@ export default function JobTable(props) {
       stage_id: stage_id
     })
     console.log('haha, I have been clicked')
-  }
-
-  const handleRowClick = (event, row) => {
-    setResultStep(2)
   }
 
   useEffect(() => {
@@ -198,6 +202,11 @@ export default function JobTable(props) {
           for (let i = 0; i < data.job_config.job_stage.length; i++) {
             name.push(data.job_config.job_stage[i].stage_name)
           }
+          setJobData({
+            ...jobData,
+            assignment_name: data.assignment.assignment_name
+          })
+          setMaxCol(data.job_config.job_stage.length)
           setStageName(name)
           console.log(name)
         })
@@ -214,42 +223,17 @@ export default function JobTable(props) {
             array.push(value)
           }
           setJob(array)
-
-          return fetch(
-            '/api/v2/job_batch?assignment=true&job_config=true&submission_batch=true',
-            {
-              headers: {
-                'content-type': 'application/json'
-              }
-            }
-          )
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          for (let i = 0, numData = data.length; i < numData; i++) {
-            console.log(data[i].job_batch_id)
-            if (data[i].job_batch_id == jobBatchId) {
-              return data[i].assignment.assignment_name
-            }
-          }
-        })
-        .then((result) => {
-          setJobData({
-            ...jobData,
-            assignment_name: result
-          })
-
           setFetched(true)
         })
     }
   }, [])
-
+  /*
   if (fetched) {
     for (let i = 0; i < job.length; i++) {
       maxCol = job[i].reports.length > maxCol ? job[i].reports.length : maxCol
     }
   }
-
+*/
   return (
     <div className={classes.root}>
       <ResultTableToolbar
@@ -273,6 +257,7 @@ export default function JobTable(props) {
               onRequestSort={handleRequestSort}
               result={job}
               stageName={stageName}
+              maxCol={maxCol}
             />
             <TableBody>
               {stableSort(job, getComparator(order, orderBy))
