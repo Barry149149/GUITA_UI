@@ -69,7 +69,8 @@ export default function TestCaseToolBar(props) {
                 selectedCase: {
                   id: 1,
                   json: [],
-                  json_id: []
+                  json_id: [],
+                  value: 'Test 1'
                 },
                 createdCases: 1,
                 noOfCases: 1
@@ -146,7 +147,7 @@ export default function TestCaseToolBar(props) {
   const saveTestcase = () => {
     console.log(exists)
     console.log(state.present.tree[0])
-    /*
+
     if (exists) {
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
@@ -172,7 +173,7 @@ export default function TestCaseToolBar(props) {
       })
         .then((result) => console.log(result))
         .catch((error) => console.log(error))
-    }*/
+    }
     // TODO: PUT
   }
 
