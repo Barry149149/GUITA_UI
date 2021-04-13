@@ -223,6 +223,7 @@ export default function StageTable(props) {
   useEffect(() => {
     //console.log(props.selectedJobConfig)
     if (props.configId) {
+      console.log('Existing Config, fetch now')
       fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
         headers: {
           'content-type': 'application/json'

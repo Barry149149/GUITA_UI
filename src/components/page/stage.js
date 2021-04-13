@@ -26,7 +26,8 @@ export default function StagePage(props) {
     createdStage,
     setCreatedStage,
     state,
-    setDrawerOpen
+    setDrawerOpen,
+    selectedAssignment
   } = props
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export default function StagePage(props) {
             selectedJobConfigName={selectedJobConfigName}
             configId={configId}
             configName={configName}
+            selectedAssignment={selectedAssignment}
           />
         </div>
         <div style={{ height: '20px', width: '2%' }} />
@@ -96,6 +98,7 @@ export default function StagePage(props) {
                 createdStage={createdStage}
                 setCreatedStage={setCreatedStage}
                 testcases={state.present.tree[0].nodes}
+                selectedAssignment={selectedAssignment}
               />
             </div>
           </Grow>

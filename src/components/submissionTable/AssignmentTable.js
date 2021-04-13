@@ -510,6 +510,7 @@ export default function AssignmentTable(props) {
                                         : ''
                                   })
                                 }
+                                setSelectedAssignment(row.assignment_id)
                                 setSelectedJobConfig(event.target.value)
                               }
                             }}>

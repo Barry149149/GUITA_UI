@@ -41,88 +41,87 @@ export default function TestCaseToolBar(props) {
   // TODO: Save test case here
 
   useEffect(() => {
-    if (assignId) {
-      fetch('/api/v2/assignment/' + assignId + '/testcase')
-        .then((response) => response.json())
-        .then(async (data) => {
-          console.log(data)
+    fetch('/api/v2/assignment/' + assignId + '/testcase')
+      .then((response) => response.json())
+      .then(async (data) => {
+        console.log(data)
 
-          let newNodes = new Array()
-          if (data.length == 0) {
-            setExists(false)
-            dispatch({
-              type: 'SET',
-              data: {
-                tree: [
-                  {
-                    value: assignName,
-                    nodes: [
-                      {
-                        id: 1,
-                        value: 'Test 1',
-                        json: [],
-                        json_id: []
-                      }
-                    ]
-                  }
-                ],
-                selectedCase: {
-                  id: 1,
-                  json: [],
-                  json_id: [],
-                  value: 'Test 1'
-                },
-                createdCases: 1,
-                noOfCases: 1
-              }
-            })
-            return
-          } else {
-            setExists(true)
-          }
-
-          for (let i = 0; i < data.length; i++) {
-            //console.log(data[i])
-            //console.log(data[i].testcase_name !== null)
-            try {
-              if (data[i].testcase_name !== null) {
-                //console.log(data[i])
-                let { json, json_id } = await fetch(
-                  '/uploads/assignment/' +
-                    assignId +
-                    '/testcase/' +
-                    data[i].testcase_id +
-                    '.json'
-                )
-                  .then((response) => response.json())
-                  .then((data) => {
-                    //console.log(data)
-
-                    let json = [...data]
-                    let json_id = []
-                    for (let i = 0; i < data.length; i++) {
-                      json_id.push({
-                        id: i,
-                        command: json[i]
-                      })
+        let newNodes = new Array()
+        if (data.length == 0) {
+          setExists(false)
+          dispatch({
+            type: 'SET',
+            data: {
+              tree: [
+                {
+                  value: assignName,
+                  nodes: [
+                    {
+                      id: 1,
+                      value: 'Test 1',
+                      json: [],
+                      json_id: []
                     }
-                    return { json, json_id }
-                  })
-
-                newNodes.push({
-                  id: i + 1,
-                  value: data[i].testcase_name,
-                  json: [...json],
-                  json_id: [...json_id]
-                })
-                console.log(newNodes)
-              }
-            } catch (err) {
-              console.log(err)
+                  ]
+                }
+              ],
+              selectedCase: {
+                id: 1,
+                json: [],
+                json_id: [],
+                value: 'Test 1'
+              },
+              createdCases: 1,
+              noOfCases: 1
             }
+          })
+          return
+        } else {
+          setExists(true)
+        }
+
+        for (let i = 0; i < data.length; i++) {
+          try {
+            if (data[i].testcase_name !== null) {
+              let { json, json_id } = await fetch(
+                '/uploads/assignment/' +
+                  assignId +
+                  '/testcase/' +
+                  data[i].testcase_id +
+                  '.json'
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  //console.log(data)
+
+                  let json = [...data]
+                  let json_id = []
+                  for (let i = 0; i < data.length; i++) {
+                    json_id.push({
+                      id: i,
+                      command: json[i]
+                    })
+                  }
+                  return { json, json_id }
+                })
+
+              newNodes.push({
+                id: i + 1,
+                value: data[i].testcase_name,
+                json: [...json],
+                json_id: [...json_id]
+              })
+              console.log(newNodes) // newNodes here is OK
+            }
+          } catch (err) {
+            console.log(err)
           }
-          if (newNodes.length == 0) return
-          //console.log(newNodes)
+        }
+        if (newNodes.length == 0) return
+        //console.log(newNodes)
+
+        // But failed here
+        /*
           dispatch({
             type: 'SET',
             data: {
@@ -136,12 +135,8 @@ export default function TestCaseToolBar(props) {
               createdCases: data.length,
               noOfCases: data.length
             }
-          })
-        })
-      setFetched(true)
-    } else {
-      setFetched(true)
-    }
+          })*/
+      }) //.then(setFetched(true))
   }, [fetched])
 
   const saveTestcase = () => {
@@ -163,10 +158,8 @@ export default function TestCaseToolBar(props) {
         tData.append(
           'testcase_file',
           blob,
-          'testcase' + state.present.tree[0].nodes[i].value + '.json'
+          state.present.tree[0].nodes[i].value + '.json'
         )
-        //tData.append('resource_file',,)
-        //console.log(state.present.tree[0].nodes[i])
       }
       tData.append('resource_file', file.zip)
 
@@ -175,6 +168,12 @@ export default function TestCaseToolBar(props) {
         body: tData
       })
         .then((result) => console.log(result))
+        .then(
+          setFile({
+            zip_filename: null,
+            zip: null
+          })
+        )
         .catch((error) => console.log(error))
     }
     // TODO: PUT

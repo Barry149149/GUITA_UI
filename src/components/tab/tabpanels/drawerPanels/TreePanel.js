@@ -84,6 +84,9 @@ export default function TreePanel(props) {
             Upload a ZIP of png files for Image Comparisons
           </p>
           <Box pt={1} />
+          {
+            // TODO: not applicable format
+          }
           <Button
             size="small"
             id="button_upload"

@@ -618,6 +618,7 @@ export default function Editor() {
                     setCreatedStage={setCreatedStage}
                     state={state}
                     setDrawerOpen={setDrawerOpen}
+                    selectedAssignment={selectedAssignment}
                   />
                 </Route>
                 <Switch>
