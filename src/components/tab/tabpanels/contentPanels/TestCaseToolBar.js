@@ -121,22 +121,23 @@ export default function TestCaseToolBar(props) {
         //console.log(newNodes)
 
         // But failed here
-        /*
-          dispatch({
-            type: 'SET',
-            data: {
-              tree: [
-                {
-                  value: assignName,
-                  nodes: [...newNodes]
-                }
-              ],
-              selectedCase: { ...newNodes[0] },
-              createdCases: data.length,
-              noOfCases: data.length
-            }
-          })*/
-      }) //.then(setFetched(true))
+
+        dispatch({
+          type: 'SET',
+          data: {
+            tree: [
+              {
+                value: assignName,
+                nodes: [...newNodes]
+              }
+            ],
+            selectedCase: { ...newNodes[0] },
+            createdCases: data.length,
+            noOfCases: data.length
+          }
+        })
+      })
+      .then(setFetched(true))
   }, [fetched])
 
   const saveTestcase = () => {
@@ -153,7 +154,7 @@ export default function TestCaseToolBar(props) {
           'testcase_name',
           'testcase' + state.present.tree[0].nodes[i].value
         )
-        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json_id)
+        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
           'testcase_file',
