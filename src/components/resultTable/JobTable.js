@@ -148,6 +148,17 @@ function ResultTableToolbar(props) {
 
   return (
     <Toolbar>
+      <ToolTip title="Download Job Report">
+        <Button
+          size="small"
+          variant="outlined"
+          color="primary"
+          onClick={() => {
+            console.log('Clicked')
+          }}>
+          Download Report
+        </Button>
+      </ToolTip>
       <Typography className={classes.title} color="primary" variant="h6">
         {table}
       </Typography>
