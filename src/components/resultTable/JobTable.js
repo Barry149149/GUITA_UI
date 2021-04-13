@@ -324,7 +324,20 @@ export default function JobTable(props) {
                               // TODO: add cell for stages after failed
                               typeof row.reports[i].status !== 'undefined' ? (
                                 row.reports[i].status === 'success' ? (
-                                  <CheckCircle style={{ color: 'green' }} />
+                                  <div>
+                                    <CheckCircle style={{ color: 'green' }} />
+                                    {row.reports[i].report_summary &&
+                                      row.reports[i].report_summary.score &&
+                                      row.reports[i].report_summary
+                                        .maxScore && (
+                                        <div>
+                                          {row.reports[i].report_summary.score +
+                                            '/' +
+                                            row.reports[i].report_summary
+                                              .maxScore}
+                                        </div>
+                                      )}
+                                  </div>
                                 ) : row.reports[i].status === 'pending' ? (
                                   <ClipLoader
                                     color={'#3f51b5'}
