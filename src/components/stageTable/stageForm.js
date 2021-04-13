@@ -146,6 +146,7 @@ export default function StageForm(props) {
               onChange={(e) => {
                 setNewStage({
                   ...newStage,
+                  assignment_id: props.selectedAssignment,
                   testcase_id: e.target.value
                 })
               }}>
