@@ -174,13 +174,13 @@ function TableToolbar(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCreateAssignmentCancelClose} color="primary">
-            Cancel
-          </Button>
           <Button
             onClick={handleSubmit(handleCreateAssignment)}
             color="primary">
             Confirm
+          </Button>
+          <Button onClick={handleCreateAssignmentCancelClose} color="primary">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -219,6 +219,7 @@ export default function AssignmentTable(props) {
     testcase: []
   })
   const [file, setFile] = useState([])
+  const [chooseFile, setChooseFile] = useState(false)
 
   //this one is for temp use
 
@@ -230,6 +231,7 @@ export default function AssignmentTable(props) {
     anchor: null
   })
   const [submitDialog, setSubmitDialog] = useState(false)
+  const [submissionBatch, setSubmissionBatch] = useState([])
 
   const handleOpenClick = (event, id) => {
     setOpen({
@@ -263,6 +265,8 @@ export default function AssignmentTable(props) {
   }
 
   const handleCreateJobConfig = (data) => {
+    console.log(data)
+
     fetch('/api/v2/job_config', {
       method: 'POST',
       body: JSON.stringify({ job_config_name: data.jobConfigName }),
@@ -272,6 +276,7 @@ export default function AssignmentTable(props) {
     })
       .then((result) => console.log(result))
       .catch((error) => console.log(error))
+
     handleCreateJobConfigClose()
   }
 
@@ -287,24 +292,35 @@ export default function AssignmentTable(props) {
   }
 
   const handleJobBatchSubmit = async () => {
-    let aData = new FormData()
+    let batch_id = 0
+    if (typeof file.zip !== null && file.zip_id == 0) {
+      let aData = new FormData()
 
-    aData.append('submission_file', file.zip)
+      aData.append('submission_file', file.zip)
+
+      try {
+        const response = await fetch(
+          '/api/v2/assignment/' + selected + '/submission_batch',
+          {
+            method: 'POST',
+            body: aData
+          }
+        )
+        const data = await response.json()
+        batch_id = data.submission_batch_id
+      } catch (e) {
+        setPostings(3)
+      }
+    } else {
+      batch_id = file.zip_id
+    }
 
     try {
-      const response = await fetch(
-        '/api/v2/assignment/' + selected + '/submission_batch',
-        {
-          method: 'POST',
-          body: aData
-        }
-      )
-      const data = await response.json()
       fetch('/api/v2/job_batch', {
         method: 'POST',
         body: JSON.stringify({
           assignment_id: selected,
-          submission_batch_id: data.submission_batch_id,
+          submission_batch_id: batch_id,
           job_config_id: selectedConfig[indexed].id
         }),
         headers: {
@@ -365,6 +381,16 @@ export default function AssignmentTable(props) {
         setFetched(true)
       })
   }, [fetched])
+
+  const handleSubmitPreprocess = (assignId) => {
+    fetch('/api/v2/assignment/' + assignId + '/submission_batch', {})
+      .then((result) => result.json())
+      .then((data) => {
+        setSubmissionBatch(data)
+      })
+
+    setSubmitDialog(true)
+  }
 
   return (
     <div className={classes.root}>
@@ -484,6 +510,7 @@ export default function AssignmentTable(props) {
                                         : ''
                                   })
                                 }
+                                setSelectedAssignment(row.assignment_id)
                                 setSelectedJobConfig(event.target.value)
                               }
                             }}>
@@ -573,7 +600,9 @@ export default function AssignmentTable(props) {
                                 assignment_id: row.assignment_id
                               })
                               handleCloseClick(e, row.assignment_id)
-                              setSubmitDialog(open)
+                              handleSubmitPreprocess(row.assignment_id)
+                              //setSubmitDialog(open)
+                              setChooseFile(false)
                             }}>
                             Submit
                           </MenuItem>
@@ -601,13 +630,12 @@ export default function AssignmentTable(props) {
         <DialogContent>
           <DialogContentText>Enter Job Config name.</DialogContentText>
           <form onSubmit={handleSubmit(handleCreateJobConfig)}>
-            <TextField
+            <input
               name="jobConfigName"
               ref={register({ required: true })}
-              inputProps={{ maxLength: 20 }}
+              //inputProps={{ maxLength: 20 }}
             />
           </form>
-          <p style={{ fontSize: 12, color: '#AAAAAA' }}>Max. length is 18 </p>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">
@@ -624,30 +652,84 @@ export default function AssignmentTable(props) {
           <DialogContentText>
             Please upload student submission upon submit the job batch
           </DialogContentText>
-          <Button
-            className={classes.uploadButton}
-            id="button_upload"
-            component="label"
-            variant="outlined"
-            color="primary"
-            onClick={() => {}}>
-            Upload Student Submission
-            <input
-              type="file"
-              id="file"
-              name="file"
-              accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
-              hidden
-              onChange={(e) => {
-                setFile({
-                  zip_filename: e.target.files[0].name,
-                  zip: e.target.files[0]
-                })
-                e.target.value = null
-              }}
-            />
-          </Button>
-          {file.zip_filename == null ? ' no files uploaded' : file.zip_filename}
+
+          {!chooseFile ? (
+            <Select
+              native
+              value={
+                typeof file.zip_id === 'undefined' || !file.zip_id
+                  ? 0
+                  : file.zip_id
+              }
+              onChange={(e, property) => {
+                console.log(e.target.value)
+
+                if (e.target.value == -1) {
+                  setChooseFile(true)
+                } else {
+                  console.log(e.target.value)
+                  console.log(
+                    submissionBatch.find(
+                      (x) => x.submission_batch_id == e.target.value
+                    ).zip_filename
+                  )
+                  setFile({
+                    zip_filename: submissionBatch.find(
+                      (x) => x.submission_batch_id == e.target.value
+                    ).zip_filename,
+                    zip_id: e.target.value
+                  })
+                  e.target.value = null
+                }
+              }}>
+              <option aria-label="None" />
+              {submissionBatch.map((row, index) => {
+                return (
+                  <option
+                    key={row.submission_batch_id}
+                    value={row.submission_batch_id}
+                    label={row.zip_filename}>
+                    {row.zip_filename}
+                  </option>
+                )
+              })}
+              <Divider />
+              <option aria-label="Upload Student Submission" value={-1}>
+                Upload Student Submission
+              </option>
+            </Select>
+          ) : null}
+          {chooseFile ? (
+            <Button
+              className={classes.uploadButton}
+              id="button_upload"
+              component="label"
+              variant="outlined"
+              color="primary"
+              onClick={() => {}}>
+              Upload Student Submission
+              <input
+                type="file"
+                id="file"
+                name="file"
+                accept="application/octet-stream,application/zip-compressed,application/x-zip,application/x-zip-compressed"
+                hidden
+                onChange={(e) => {
+                  setFile({
+                    zip_id: 0,
+                    zip_filename: e.target.files[0].name,
+                    zip: e.target.files[0]
+                  })
+                  e.target.value = null
+                }}
+              />
+            </Button>
+          ) : null}
+          {chooseFile
+            ? file.zip_filename == null
+              ? ' no files uploaded'
+              : file.zip_filename
+            : null}
           <DialogActions>
             <Button
               disabled={file.zip_filename == null}

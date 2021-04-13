@@ -41,51 +41,48 @@ export default function TestCaseToolBar(props) {
   // TODO: Save test case here
 
   useEffect(() => {
-    if (assignId) {
-      fetch('/api/v2/assignment/' + assignId + '/testcase')
-        .then((response) => response.json())
-        .then(async (data) => {
-          console.log(data)
+    fetch('/api/v2/assignment/' + assignId + '/testcase')
+      .then((response) => response.json())
+      .then(async (data) => {
+        console.log(data)
 
-          let newNodes = new Array()
-          if (data.length == 0) {
-            setExists(false)
-            dispatch({
-              type: 'SET',
-              data: {
-                tree: [
-                  {
-                    value: assignName,
-                    nodes: [
-                      {
-                        id: 1,
-                        value: 'Test 1',
-                        json: [],
-                        json_id: []
-                      }
-                    ]
-                  }
-                ],
-                selectedCase: {
-                  id: 1,
-                  json: [],
-                  json_id: [],
-                  value: 'Test 1'
-                },
-                createdCases: 1,
-                noOfCases: 1
-              }
-            })
-            return
-          } else {
-            setExists(true)
-          }
+        let newNodes = new Array()
+        if (data.length == 0) {
+          setExists(false)
+          dispatch({
+            type: 'SET',
+            data: {
+              tree: [
+                {
+                  value: assignName,
+                  nodes: [
+                    {
+                      id: 1,
+                      value: 'Test 1',
+                      json: [],
+                      json_id: []
+                    }
+                  ]
+                }
+              ],
+              selectedCase: {
+                id: 1,
+                json: [],
+                json_id: [],
+                value: 'Test 1'
+              },
+              createdCases: 1,
+              noOfCases: 1
+            }
+          })
+          return
+        } else {
+          setExists(true)
+        }
 
-          for (let i = 0; i < data.length; i++) {
-            //console.log(data[i])
-            //console.log(data[i].testcase_name !== null)
+        for (let i = 0; i < data.length; i++) {
+          try {
             if (data[i].testcase_name !== null) {
-              //console.log(data[i])
               let { json, json_id } = await fetch(
                 '/uploads/assignment/' +
                   assignId +
@@ -114,52 +111,56 @@ export default function TestCaseToolBar(props) {
                 json: [...json],
                 json_id: [...json_id]
               })
-              console.log(newNodes)
+              console.log(newNodes) // newNodes here is OK
             }
+          } catch (err) {
+            console.log(err)
           }
-          if (newNodes.length == 0) return
-          //console.log(newNodes)
-          dispatch({
-            type: 'SET',
-            data: {
-              tree: [
-                {
-                  value: assignName,
-                  nodes: [...newNodes]
-                }
-              ],
-              selectedCase: { ...newNodes[0] },
-              createdCases: data.length,
-              noOfCases: data.length
-            }
-          })
+        }
+        if (newNodes.length == 0) return
+        //console.log(newNodes)
+
+        // But failed here
+
+        dispatch({
+          type: 'SET',
+          data: {
+            tree: [
+              {
+                value: assignName,
+                nodes: [...newNodes]
+              }
+            ],
+            selectedCase: { ...newNodes[0] },
+            createdCases: data.length,
+            noOfCases: data.length
+          }
         })
-      setFetched(true)
-    } else {
-      setFetched(true)
-    }
+      })
+      .then(setFetched(true))
   }, [fetched])
 
   const saveTestcase = () => {
+    console.log(assignId)
+
     console.log(exists)
     console.log(state.present.tree[0])
 
-    if (exists) {
+    if (!exists) {
+      //console.log('Test case not exist, submit now')
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
         tData.append(
           'testcase_name',
           'testcase' + state.present.tree[0].nodes[i].value
         )
-        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json_id)
+        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
           'testcase_file',
           blob,
-          'testcase' + state.present.tree[0].nodes[i].value + '.json'
+          state.present.tree[0].nodes[i].value + '.json'
         )
-        //tData.append('resource_file',,)
-        //console.log(state.present.tree[0].nodes[i])
       }
       tData.append('resource_file', file.zip)
 
@@ -168,6 +169,12 @@ export default function TestCaseToolBar(props) {
         body: tData
       })
         .then((result) => console.log(result))
+        .then(
+          setFile({
+            zip_filename: null,
+            zip: null
+          })
+        )
         .catch((error) => console.log(error))
     }
     // TODO: PUT

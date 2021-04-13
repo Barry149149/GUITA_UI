@@ -71,8 +71,27 @@ export const commandDescription = (command) => {
         )
       case 'locateByWidgetName':
         return (
-          'Locate ' +
+          'Locate Name ' +
           command.widgetName.toString().toUpperCase() +
+          ' and set as ' +
+          command.setVariable.toString().toUpperCase()
+        )
+      case 'locateByWidgetText':
+        return (
+          'Locate Text ' +
+          command.widgetName.toString().toUpperCase() +
+          ' and set as ' +
+          command.setVariable.toString().toUpperCase()
+        )
+      case 'locateByWidgetClass':
+        return (
+          'Locate Class ' +
+          command.widgetName.toString().toUpperCase() +
+          ' {Value: ' +
+          command.widget.value.toString().toUpperCase() +
+          ', Type: ' +
+          command.widget.type.toString().toUpperCase() +
+          ' }' +
           ' and set as ' +
           command.setVariable.toString().toUpperCase()
         )
@@ -96,6 +115,15 @@ export const commandDescription = (command) => {
           ' is equal to ' +
           command.valueRhs.toString().toUpperCase()
         )
+      case 'assertImageSimilar':
+        return (
+          'Check if ' +
+          command.widget.value.toString().toUpperCase() +
+          ' in type ' +
+          command.widget.type.toString().toUpperCase() +
+          ' is equal to ' +
+          command.expected.toString().toUpperCase()
+        )
       case 'isVisible':
         return (
           'Check if ' +
@@ -112,6 +140,10 @@ export const commandDescription = (command) => {
           ' in type ' +
           command.value.type.toString().toUpperCase()
         )
+      case 'typeHotkeys':
+        return 'Press Key ' + command.key.toString().toUpperCase()
+      case 'typeText':
+        return 'Input Text: ' + command.text
     }
   } catch (e) {
     return 'Command incomplete'

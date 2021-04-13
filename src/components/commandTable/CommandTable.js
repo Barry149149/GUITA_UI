@@ -563,8 +563,9 @@ export default function CommandTable(props) {
                                     undefined ? null : (
                                       <TableCell>
                                         <p>
-                                          {'Offset By Ratio: ' +
-                                            row.command.offsetByRatio}
+                                          {'Offset By Ratio: [' +
+                                            row.command.offsetByRatio +
+                                            ']'}
                                         </p>
                                       </TableCell>
                                     )}

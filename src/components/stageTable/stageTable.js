@@ -202,6 +202,8 @@ export default function StageTable(props) {
   }
   const saveConfig = () => {
     console.log(exists)
+    console.log(props.stage)
+
     if (!exists) {
       for (let i = 0; i < props.stage.length; i++) {
         console.log(props.stage[i])
@@ -221,6 +223,7 @@ export default function StageTable(props) {
   useEffect(() => {
     //console.log(props.selectedJobConfig)
     if (props.configId) {
+      console.log('Existing Config, fetch now')
       fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
         headers: {
           'content-type': 'application/json'
