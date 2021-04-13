@@ -27,7 +27,8 @@ export default function TestCaseToolBar(props) {
     fetched,
     setFetched,
     file,
-    setFile
+    setFile,
+    setPostings
   } = props
 
   let { assignId, assignName } = useParams()
@@ -154,7 +155,15 @@ export default function TestCaseToolBar(props) {
           'testcase_name',
           'testcase' + state.present.tree[0].nodes[i].value
         )
-        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
+        let newJson = []
+        for (
+          let j = 0;
+          j < state.present.tree[0].nodes[i].json_id.length;
+          j++
+        ) {
+          newJson.push(state.present.tree[0].nodes[i].json_id[i].command)
+        }
+        const fileData = JSON.stringify(newJson)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
           'testcase_file',
@@ -175,7 +184,11 @@ export default function TestCaseToolBar(props) {
             zip: null
           })
         )
-        .catch((error) => console.log(error))
+        .then((result) => setPostings(2))
+        .catch((error) => {
+          setPostings(3)
+          console.log(error)
+        })
     }
     // TODO: PUT
   }
@@ -209,6 +222,7 @@ export default function TestCaseToolBar(props) {
           id="button_testcaseSave"
           color="primary"
           onClick={() => {
+            setPostings(1)
             saveTestcase()
           }}>
           <SaveIcon />
