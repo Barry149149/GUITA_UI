@@ -148,7 +148,6 @@ function ResultTableToolbar(props) {
 
   return (
     <Toolbar>
-      <Tooltip title="Download Job Report"></Tooltip>
       <Typography className={classes.title} color="primary" variant="h6">
         {table}
       </Typography>
