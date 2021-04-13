@@ -40,6 +40,16 @@ const arrayStruct = (title) => {
   }
 }
 
+const arrayStructInt = (title) => {
+  return {
+    title: title,
+    type: 'array',
+    items: {
+      type: 'number'
+    }
+  }
+}
+
 const driverStruct = (title) => {
   return {
     title: title,
@@ -159,6 +169,7 @@ export const commandList = [
         weight: intStruct('Weight'),
         driver: driverStruct('Driver'),
         widget: valTypeStruct('Widget'),
+        offsetByRatio: arrayStructInt('Offset'),
         description: stringStruct('Description')
       }
     }

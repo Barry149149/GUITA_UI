@@ -84,41 +84,37 @@ export default function TestCaseToolBar(props) {
           for (let i = 0; i < data.length; i++) {
             //console.log(data[i])
             //console.log(data[i].testcase_name !== null)
-            try {
-              if (data[i].testcase_name !== null) {
-                //console.log(data[i])
-                let { json, json_id } = await fetch(
-                  '/uploads/assignment/' +
-                    assignId +
-                    '/testcase/' +
-                    data[i].testcase_id +
-                    '.json'
-                )
-                  .then((response) => response.json())
-                  .then((data) => {
-                    //console.log(data)
+            if (data[i].testcase_name !== null) {
+              //console.log(data[i])
+              let { json, json_id } = await fetch(
+                '/uploads/assignment/' +
+                  assignId +
+                  '/testcase/' +
+                  data[i].testcase_id +
+                  '.json'
+              )
+                .then((response) => response.json())
+                .then((data) => {
+                  //console.log(data)
 
-                    let json = [...data]
-                    let json_id = []
-                    for (let i = 0; i < data.length; i++) {
-                      json_id.push({
-                        id: i,
-                        command: json[i]
-                      })
-                    }
-                    return { json, json_id }
-                  })
-
-                newNodes.push({
-                  id: i + 1,
-                  value: data[i].testcase_name,
-                  json: [...json],
-                  json_id: [...json_id]
+                  let json = [...data]
+                  let json_id = []
+                  for (let i = 0; i < data.length; i++) {
+                    json_id.push({
+                      id: i,
+                      command: json[i]
+                    })
+                  }
+                  return { json, json_id }
                 })
-                console.log(newNodes)
-              }
-            } catch (err) {
-              console.log(err)
+
+              newNodes.push({
+                id: i + 1,
+                value: data[i].testcase_name,
+                json: [...json],
+                json_id: [...json_id]
+              })
+              console.log(newNodes)
             }
           }
           if (newNodes.length == 0) return

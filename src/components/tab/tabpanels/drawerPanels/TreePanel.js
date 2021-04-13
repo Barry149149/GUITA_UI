@@ -195,10 +195,7 @@ export default function TreePanel(props) {
               console.log(props.tree[0].nodes[0].json)
               for (const index in props.tree[0].nodes) {
                 const fileData = JSON.stringify(props.tree[0].nodes[index].json)
-                zip.file(
-                  'testcase' + props.tree[0].nodes[index].id + '.json',
-                  fileData
-                )
+                zip.file(props.tree[0].nodes[index].value + '.json', fileData)
               }
               zip.generateAsync({ type: 'blob' }).then(function (content) {
                 saveAs(content, 'testcases.zip')

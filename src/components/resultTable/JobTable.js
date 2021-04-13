@@ -255,14 +255,22 @@ export default function JobTable(props) {
         setResultStep={setResultStep}
       />
       <Box style={{ backgroundColor: '#FFFFFF' }}>
-        <ListItem dense>
-          <ListItemIcon>
-            <ClipLoader color={'#222222'} loading={isValidating} size={16} />
-          </ListItemIcon>
-          <ListItemText style={{ color: '#777777', fontSize: 12 }}>
-            Auto Reload Every 5 seconds
-          </ListItemText>
-        </ListItem>
+        {isValidating ? (
+          <ListItem dense>
+            <ListItemIcon>
+              <ClipLoader color={'#222222'} loading={isValidating} size={16} />
+            </ListItemIcon>
+            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+              Auto Reload Every 5 seconds
+            </ListItemText>
+          </ListItem>
+        ) : (
+          <ListItem dense>
+            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+              Completed
+            </ListItemText>
+          </ListItem>
+        )}
       </Box>
       <TableContainer className={classes.container}>
         {job && !error && fetched ? (
