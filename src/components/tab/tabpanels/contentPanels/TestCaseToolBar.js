@@ -145,10 +145,13 @@ export default function TestCaseToolBar(props) {
   }, [fetched])
 
   const saveTestcase = () => {
+    console.log(assignId)
+
     console.log(exists)
     console.log(state.present.tree[0])
 
-    if (exists) {
+    if (!exists) {
+      //console.log('Test case not exist, submit now')
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
         tData.append(
