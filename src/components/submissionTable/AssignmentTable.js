@@ -174,13 +174,13 @@ function TableToolbar(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCreateAssignmentCancelClose} color="primary">
-            Cancel
-          </Button>
           <Button
             onClick={handleSubmit(handleCreateAssignment)}
             color="primary">
             Confirm
+          </Button>
+          <Button onClick={handleCreateAssignmentCancelClose} color="primary">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -265,6 +265,8 @@ export default function AssignmentTable(props) {
   }
 
   const handleCreateJobConfig = (data) => {
+    console.log(data)
+
     fetch('/api/v2/job_config', {
       method: 'POST',
       body: JSON.stringify({ job_config_name: data.jobConfigName }),
@@ -274,6 +276,7 @@ export default function AssignmentTable(props) {
     })
       .then((result) => console.log(result))
       .catch((error) => console.log(error))
+
     handleCreateJobConfigClose()
   }
 
@@ -626,13 +629,12 @@ export default function AssignmentTable(props) {
         <DialogContent>
           <DialogContentText>Enter Job Config name.</DialogContentText>
           <form onSubmit={handleSubmit(handleCreateJobConfig)}>
-            <TextField
+            <input
               name="jobConfigName"
               ref={register({ required: true })}
-              inputProps={{ maxLength: 20 }}
+              //inputProps={{ maxLength: 20 }}
             />
           </form>
-          <p style={{ fontSize: 12, color: '#AAAAAA' }}>Max. length is 18 </p>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit(handleCreateJobConfig)} color="primary">
