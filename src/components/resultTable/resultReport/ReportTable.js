@@ -296,7 +296,7 @@ function Row(props) {
                   <TableRow>
                     <TableCell size="small" className={classes.tableCell}>
                       <Typography variant="h8" gutterBottom component="div">
-                        Screenshot Path:
+                        Screenshot:
                         <Link
                           component="button"
                           variant="body2"
