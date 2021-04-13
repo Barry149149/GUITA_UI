@@ -327,9 +327,16 @@ export default function JobTable(props) {
                                   <div>
                                     <CheckCircle style={{ color: 'green' }} />
                                     {row.reports[i].report_summary &&
-                                      row.reports[i].report_summary.score &&
-                                      row.reports[i].report_summary
-                                        .maxScore && (
+                                      row.reports[
+                                        i
+                                      ].report_summary.hasOwnProperty(
+                                        'score'
+                                      ) &&
+                                      row.reports[
+                                        i
+                                      ].report_summary.hasOwnProperty(
+                                        'maxScore'
+                                      ) && (
                                         <div>
                                           {row.reports[i].report_summary.score +
                                             '/' +
