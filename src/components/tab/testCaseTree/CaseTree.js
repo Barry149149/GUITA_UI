@@ -167,6 +167,22 @@ export default function CaseTree(props) {
                   }
                 }
               })
+              if (
+                props.tree[0].nodes.find((x) => x.id === props.selectedCase.id)
+                  .testcase_id !== null ||
+                typeof props.tree[0].nodes.find(
+                  (x) => x.id === props.selectedCase.id
+                ).testcase_id != 'undefined'
+              ) {
+                let tempDelete = props.deletedTestcase
+                tempDelete.push(
+                  props.tree[0].nodes.find(
+                    (x) => x.id === props.selectedCase.id
+                  ).testcase_id
+                )
+                props.setDeletedTestcase(tempDelete)
+                console.log(tempDelete)
+              }
               handleClose()
             }}
             color="secondary"

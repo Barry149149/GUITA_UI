@@ -28,7 +28,9 @@ export default function TestCaseToolBar(props) {
     setFetched,
     file,
     setFile,
-    setPostings
+    setPostings,
+    deletedTestcase,
+    setDeletedTestcase
   } = props
 
   let { assignId, assignName } = useParams()
@@ -45,7 +47,7 @@ export default function TestCaseToolBar(props) {
     fetch('/api/v2/assignment/' + assignId + '/testcase')
       .then((response) => response.json())
       .then(async (data) => {
-        console.log(data)
+        //console.log(data)
 
         let newNodes = new Array()
         if (data.length == 0) {
@@ -105,21 +107,21 @@ export default function TestCaseToolBar(props) {
                   }
                   return { json, json_id }
                 })
-
               newNodes.push({
                 id: i + 1,
                 value: data[i].testcase_name,
                 json: [...json],
-                json_id: [...json_id]
+                json_id: [...json_id],
+                testcase_id: data[i].testcase_id
               })
-              console.log(newNodes) // newNodes here is OK
+              //console.log(newNodes) // newNodes here is OK
             }
           } catch (err) {
             console.log(err)
           }
         }
         if (newNodes.length == 0) return
-        //console.log(newNodes)
+        console.log(newNodes)
 
         // But failed here
 
@@ -141,54 +143,96 @@ export default function TestCaseToolBar(props) {
       .then(setFetched(true))
   }, [fetched])
 
-  const saveTestcase = () => {
-    console.log(assignId)
-
-    console.log(exists)
+  useEffect(() => {
     console.log(state.present.tree[0])
+  })
+  const saveTestcase = () => {
+    // Testcase json
+    for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
+      console.log(state.present.tree[0].nodes[i].testcase_id)
 
-    if (!exists) {
-      console.log('Test case not exist, submit now')
       const tData = new FormData()
-      for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
-        tData.append('testcase_name', state.present.tree[0].nodes[i].value)
-        let newJson = []
-        for (
-          let j = 0;
-          j < state.present.tree[0].nodes[i].json_id.length;
-          j++
-        ) {
-          newJson.push(state.present.tree[0].nodes[i].json_id[j].command)
-        }
-        console.log(newJson)
-        const fileData = JSON.stringify(newJson)
-        const blob = new Blob([fileData], { type: 'application/json' })
-        tData.append(
-          'testcase_file',
-          blob,
-          state.present.tree[0].nodes[i].value + '.json'
-        )
+      tData.append('testcase_name', state.present.tree[0].nodes[i].value)
+      let newJson = []
+      for (let j = 0; j < state.present.tree[0].nodes[i].json_id.length; j++) {
+        newJson.push(state.present.tree[0].nodes[i].json_id[j].command)
       }
-      tData.append('resource_file', file.zip)
+      //console.log(newJson)
+      const fileData = JSON.stringify(newJson)
+      const blob = new Blob([fileData], { type: 'application/json' })
+      tData.append(
+        'testcase_file',
+        blob,
+        state.present.tree[0].nodes[i].value + '.json'
+      )
 
+      if (
+        state.present.tree[0].nodes[i].testcase_id === null ||
+        typeof state.present.tree[0].nodes[i].testcase_id == 'undefined'
+      ) {
+        console.log('Not exist')
+
+        fetch('/api/v2/assignment/' + assignId + '/testcase', {
+          method: 'POST',
+          body: tData
+        })
+          .then((result) => console.log(result))
+
+          .catch((error) => {
+            setPostings(3)
+            console.log(error)
+          })
+      } else {
+        console.log('Exist')
+
+        fetch(
+          '/api/v2/assignment/' +
+            assignId +
+            '/testcase/' +
+            state.present.tree[0].nodes[i].testcase_id,
+          {
+            method: 'PUT',
+            body: tData
+          }
+        )
+          .then((result) => console.log(result))
+          .catch((error) => {
+            setPostings(3)
+            console.log(error)
+          })
+      }
+    }
+
+    // Img zip
+    if (file.zip !== null || typeof file.zip == 'undefined') {
+      const iData = new FormData()
+      iData.append('resource_file', file.zip)
       fetch('/api/v2/assignment/' + assignId + '/testcase', {
         method: 'POST',
-        body: tData
+        body: iData
       })
         .then((result) => console.log(result))
-        .then(
-          setFile({
-            zip_filename: null,
-            zip: null
-          })
-        )
         .catch((error) => {
           setPostings(3)
           console.log(error)
         })
-      setPostings(2)
     }
-    // TODO: PUT
+
+    // Delete testcase
+    // TODO: Delete test case
+    /*
+        for(let i = 0; i < deletedTestcase.length; i++){
+          fetch('/api/v2/assignment/' + assignId + '/testcase/' + deletedTestcase[i], {
+            method: 'DELETE'
+          }).then(result=>console.log(result)).catch(error=>{
+            setPostings(3)
+            console.log(error)
+          })
+        }
+        setDeletedTestcase([])*/
+
+    setFetched(false)
+    setPostings(2)
   }
 
   return (

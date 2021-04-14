@@ -253,7 +253,8 @@ export default function Editor() {
               id: 1,
               value: 'Test 1',
               json: [],
-              json_id: []
+              json_id: [],
+              testcase_id: null
             }
           ]
         }
@@ -362,6 +363,7 @@ export default function Editor() {
   })
   const [testcaseFetched, setTestcaseFetched] = useState(false)
   const [postings, setPostings] = useState(0)
+  const [deletedTestcase, setDeletedTestcase] = useState([])
 
   //this is for zip submission
   //TODO: clean submit function, put it in submission panel
@@ -527,6 +529,8 @@ export default function Editor() {
                     dispatch={dispatch}
                     file={file}
                     setFile={setFile}
+                    setDeletedTestcase={setDeletedTestcase}
+                    deletedTestcase={deletedTestcase}
                   />
                 </Route>
               ) : null}
@@ -574,6 +578,8 @@ export default function Editor() {
                     file={file}
                     setFile={setFile}
                     setPostings={setPostings}
+                    deletedTestcase={deletedTestcase}
+                    setDeletedTestcase={setDeletedTestcase}
                   />
                 </Route>
                 <Route

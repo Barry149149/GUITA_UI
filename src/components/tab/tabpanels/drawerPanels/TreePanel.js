@@ -41,6 +41,8 @@ export default function TreePanel(props) {
           noOfCases={props.noOfCases}
           dispatch={props.dispatch}
           assignment_name={assignment_name}
+          setDeletedTestcase={props.setDeletedTestcase}
+          deletedTestcase={props.deletedTestcase}
         />
         <Box pt={3} />
         <div

@@ -209,7 +209,7 @@ export default function CommandTable(props) {
   }
 
   useEffect(() => {
-    console.log(props.selectedCase.json_id)
+    //console.log(props.selectedCase.json_id)
   })
 
   const isSelected = (id) => selected.indexOf(id) !== -1
