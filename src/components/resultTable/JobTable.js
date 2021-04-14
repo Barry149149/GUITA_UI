@@ -26,6 +26,7 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 import useSWR from 'swr'
 import Box from '@material-ui/core/Box'
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
+import SyncLoader from 'react-spinners/SyncLoader'
 
 const fetcher = (url) => fetch(url).then((r) => r.json())
 
@@ -255,22 +256,14 @@ export default function JobTable(props) {
         setResultStep={setResultStep}
       />
       <Box style={{ backgroundColor: '#FFFFFF' }}>
-        {isValidating ? (
-          <ListItem dense>
-            <ListItemIcon>
-              <ClipLoader color={'#222222'} loading={isValidating} size={16} />
-            </ListItemIcon>
-            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
-              Auto Reload Every 5 seconds
-            </ListItemText>
-          </ListItem>
-        ) : (
-          <ListItem dense>
-            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
-              Completed
-            </ListItemText>
-          </ListItem>
-        )}
+        <ListItem dense>
+          <ListItemIcon>
+            <SyncLoader color={'#DDDDDD'} size={6} />
+          </ListItemIcon>
+          <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+            Synchronized with server
+          </ListItemText>
+        </ListItem>
       </Box>
       <TableContainer className={classes.container}>
         {job && !error && fetched ? (
