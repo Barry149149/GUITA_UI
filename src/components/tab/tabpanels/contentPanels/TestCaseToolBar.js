@@ -158,7 +158,7 @@ export default function TestCaseToolBar(props) {
           j < state.present.tree[0].nodes[i].json_id.length;
           j++
         ) {
-          newJson.push(state.present.tree[0].nodes[i].json_id[i].command)
+          newJson.push(state.present.tree[0].nodes[i].json_id[j].command)
         }
         console.log(newJson)
         const fileData = JSON.stringify(newJson)
