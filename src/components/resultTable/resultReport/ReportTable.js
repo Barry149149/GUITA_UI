@@ -127,7 +127,7 @@ function Row(props) {
         onClick={(e) => handleOpenClick(e, row.commandId)}>
         <TableCell>{row.commandId}</TableCell>
         <TableCell>{row.command}</TableCell>
-        <TableCell>
+        <TableCell align="center">
           {row.status === 'success' ? (
             <CheckCircle style={{ color: 'green' }} />
           ) : row.status === 'failed' ? (
@@ -497,7 +497,7 @@ export default function ReportTable(props) {
             <TableHead>
               <TableCell>Command ID</TableCell>
               <TableCell>Command</TableCell>
-              <TableCell>Result</TableCell>
+              <TableCell align="center">Result</TableCell>
               <TableCell align="right">
                 <IconButton
                   id="button_expandRow"
