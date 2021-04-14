@@ -27,7 +27,8 @@ export default function TestCaseToolBar(props) {
     fetched,
     setFetched,
     file,
-    setFile
+    setFile,
+    setPostings
   } = props
 
   let { assignId, assignName } = useParams()
@@ -147,11 +148,20 @@ export default function TestCaseToolBar(props) {
     console.log(state.present.tree[0])
 
     if (!exists) {
-      //console.log('Test case not exist, submit now')
+      console.log('Test case not exist, submit now')
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
         tData.append('testcase_name', state.present.tree[0].nodes[i].value)
-        const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
+        let newJson = []
+        for (
+          let j = 0;
+          j < state.present.tree[0].nodes[i].json_id.length;
+          j++
+        ) {
+          newJson.push(state.present.tree[0].nodes[i].json_id[i].command)
+        }
+        console.log(newJson)
+        const fileData = JSON.stringify(newJson)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
           'testcase_file',
@@ -172,7 +182,11 @@ export default function TestCaseToolBar(props) {
             zip: null
           })
         )
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          setPostings(3)
+          console.log(error)
+        })
+      setPostings(2)
     }
     // TODO: PUT
   }
@@ -206,6 +220,7 @@ export default function TestCaseToolBar(props) {
           id="button_testcaseSave"
           color="primary"
           onClick={() => {
+            setPostings(1)
             saveTestcase()
           }}>
           <SaveIcon />

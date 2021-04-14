@@ -25,6 +25,7 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import { Link } from '@material-ui/core'
 import { ClimbingBoxLoader } from 'react-spinners'
 import ClipLoader from 'react-spinners/ClipLoader'
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -127,11 +128,16 @@ function Row(props) {
         <TableCell>{row.commandId}</TableCell>
         <TableCell>{row.command}</TableCell>
         <TableCell>
-          {row.score == row.maxScore ? (
+          {row.status === 'success' ? (
             <CheckCircle style={{ color: 'green' }} />
-          ) : (
+          ) : row.status === 'failed' ? (
             <CancelIcon color="secondary" />
+          ) : row.status === 'aborted' ? (
+            <RemoveCircleIcon />
+          ) : (
+            row.status
           )}
+          {row.maxScore > 0 && <div>{row.score + '/' + row.maxScore}</div>}
         </TableCell>
         <TableCell align="right">
           <IconButton

@@ -255,14 +255,22 @@ export default function JobTable(props) {
         setResultStep={setResultStep}
       />
       <Box style={{ backgroundColor: '#FFFFFF' }}>
-        <ListItem dense>
-          <ListItemIcon>
-            <ClipLoader color={'#222222'} loading={isValidating} size={16} />
-          </ListItemIcon>
-          <ListItemText style={{ color: '#777777', fontSize: 12 }}>
-            Auto Reload Every 5 seconds
-          </ListItemText>
-        </ListItem>
+        {isValidating ? (
+          <ListItem dense>
+            <ListItemIcon>
+              <ClipLoader color={'#222222'} loading={isValidating} size={16} />
+            </ListItemIcon>
+            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+              Auto Reload Every 5 seconds
+            </ListItemText>
+          </ListItem>
+        ) : (
+          <ListItem dense>
+            <ListItemText style={{ color: '#777777', fontSize: 12 }}>
+              Completed
+            </ListItemText>
+          </ListItem>
+        )}
       </Box>
       <TableContainer className={classes.container}>
         {job && !error && fetched ? (
@@ -316,7 +324,27 @@ export default function JobTable(props) {
                               // TODO: add cell for stages after failed
                               typeof row.reports[i].status !== 'undefined' ? (
                                 row.reports[i].status === 'success' ? (
-                                  <CheckCircle style={{ color: 'green' }} />
+                                  <div>
+                                    <CheckCircle style={{ color: 'green' }} />
+                                    {row.reports[i].report_summary &&
+                                      row.reports[
+                                        i
+                                      ].report_summary.hasOwnProperty(
+                                        'score'
+                                      ) &&
+                                      row.reports[
+                                        i
+                                      ].report_summary.hasOwnProperty(
+                                        'maxScore'
+                                      ) && (
+                                        <div>
+                                          {row.reports[i].report_summary.score +
+                                            '/' +
+                                            row.reports[i].report_summary
+                                              .maxScore}
+                                        </div>
+                                      )}
+                                  </div>
                                 ) : row.reports[i].status === 'pending' ? (
                                   <ClipLoader
                                     color={'#3f51b5'}

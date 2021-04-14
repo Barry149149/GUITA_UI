@@ -573,6 +573,7 @@ export default function Editor() {
                     setFetched={setTestCaseFetched}
                     file={file}
                     setFile={setFile}
+                    setPostings={setPostings}
                   />
                 </Route>
                 <Route

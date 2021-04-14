@@ -488,6 +488,10 @@ export default function CommandTable(props) {
                                     {row.command.text === undefined ? null : (
                                       <TableCell>Text</TableCell>
                                     )}
+                                    {row.command.offsetByRatio ===
+                                    undefined ? null : (
+                                      <TableCell>Offset By Ratio</TableCell>
+                                    )}
                                   </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -553,6 +557,16 @@ export default function CommandTable(props) {
                                     {row.command.text === undefined ? null : (
                                       <TableCell>
                                         <p>{'Text: ' + row.command.text}</p>
+                                      </TableCell>
+                                    )}
+                                    {row.command.offsetByRatio ===
+                                    undefined ? null : (
+                                      <TableCell>
+                                        <p>
+                                          {'Offset By Ratio: [' +
+                                            row.command.offsetByRatio +
+                                            ']'}
+                                        </p>
                                       </TableCell>
                                     )}
                                   </TableRow>
