@@ -26,6 +26,8 @@ import { Link } from '@material-ui/core'
 import { ClimbingBoxLoader } from 'react-spinners'
 import ClipLoader from 'react-spinners/ClipLoader'
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -320,6 +322,27 @@ function Row(props) {
                     </TableCell>
                   </TableRow>
                 ) : null}
+                {row.studentImgPath && row.expectedImgPath ? (
+                  <TableRow>
+                    <TableCell size="small" className={classes.tableCell}>
+                      <Typography variant="h8" gutterBottom component="div">
+                        Student v Expected Screenshot:
+                        <Link
+                          component="button"
+                          variant="body2"
+                          onClick={() => {
+                            props.setSvEImg({
+                              open: true,
+                              student: row.studentImgPath,
+                              expected: row.expectedImgPath
+                            })
+                          }}>
+                          {row.studentImgPath + '& ...expected.png'}
+                        </Link>
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : null}
               </Table>
             </Box>
           </Collapse>
@@ -371,6 +394,11 @@ export default function ReportTable(props) {
   const [fetched, setFetched] = useState(false)
   const [result, setResult] = useState([])
   const [open, setOpen] = useState([])
+  const [svEImg, setSvEImg] = useState({
+    student: '',
+    expected: '',
+    open: false
+  })
 
   useEffect(() => {
     setDrawerOpen(false)
@@ -478,70 +506,119 @@ export default function ReportTable(props) {
   const isOpen = (id) => open.indexOf(id) !== -1
 
   return (
-    <div className={classes.root}>
-      <ReportTableToolbar
-        table={jobData.assignment_name + ' / Stage ' + stageId}
-        classes={classes}
-        result={result}
-        setResultStep={props.setResultStep}
-        fetched={fetched}
-      />
-      <TableContainer className={classes.container}>
-        {fetched ? (
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="enhanced table"
-            stickyHeader>
-            <TableHead>
-              <TableCell>Command ID</TableCell>
-              <TableCell>Command</TableCell>
-              <TableCell align="center">Result</TableCell>
-              <TableCell align="right">
-                <IconButton
-                  id="button_expandRow"
-                  size="small"
-                  onClick={(e) => openAll()}>
-                  {typeof result.breakdown !== 'undefined' &&
-                  result.breakdown.length > 0 &&
-                  result.breakdown.length === open.length ? (
-                    <KeyboardArrowUpIcon />
-                  ) : (
-                    <KeyboardArrowDownIcon />
-                  )}
-                </IconButton>
-              </TableCell>
-            </TableHead>
-            {typeof result.breakdown !== 'undefined' ? (
-              <TableBody>
-                {result.breakdown.map((row, index) => (
-                  <Row
-                    row={row}
-                    isOpen={isOpen}
-                    jobData={jobData}
-                    setJobData={setJobData}
-                    handleOpenClick={handleOpenClick}
-                    handleImgDialogOpen={props.handleImgDialogOpen}
-                    reportImg={reportImg}
-                    setReportImg={setReportImg}
-                  />
-                ))}
-              </TableBody>
-            ) : null}
-          </Table>
-        ) : (
-          <div
-            style={{
-              position: 'relative',
-              top: '50%',
-              left: '50%',
-              overflowX: 'hidden'
-            }}>
-            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+    <React.Fragment>
+      <div className={classes.root}>
+        <ReportTableToolbar
+          table={jobData.assignment_name + ' / Stage ' + stageId}
+          classes={classes}
+          result={result}
+          setResultStep={props.setResultStep}
+          fetched={fetched}
+        />
+        <TableContainer className={classes.container}>
+          {fetched ? (
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size="medium"
+              aria-label="enhanced table"
+              stickyHeader>
+              <TableHead>
+                <TableCell>Command ID</TableCell>
+                <TableCell>Command</TableCell>
+                <TableCell align="center">Result</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    id="button_expandRow"
+                    size="small"
+                    onClick={(e) => openAll()}>
+                    {typeof result.breakdown !== 'undefined' &&
+                    result.breakdown.length > 0 &&
+                    result.breakdown.length === open.length ? (
+                      <KeyboardArrowUpIcon />
+                    ) : (
+                      <KeyboardArrowDownIcon />
+                    )}
+                  </IconButton>
+                </TableCell>
+              </TableHead>
+              {typeof result.breakdown !== 'undefined' ? (
+                <TableBody>
+                  {result.breakdown.map((row, index) => (
+                    <Row
+                      row={row}
+                      isOpen={isOpen}
+                      jobData={jobData}
+                      setJobData={setJobData}
+                      handleOpenClick={handleOpenClick}
+                      handleImgDialogOpen={props.handleImgDialogOpen}
+                      reportImg={reportImg}
+                      setReportImg={setReportImg}
+                      setSvEImg={setSvEImg}
+                    />
+                  ))}
+                </TableBody>
+              ) : null}
+            </Table>
+          ) : (
+            <div
+              style={{
+                position: 'relative',
+                top: '50%',
+                left: '50%',
+                overflowX: 'hidden'
+              }}>
+              <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+            </div>
+          )}
+        </TableContainer>
+      </div>
+      <Dialog
+        open={svEImg.open}
+        onClose={() =>
+          setSvEImg({
+            ...svEImg,
+            open: false
+          })
+        }>
+        <DialogTitle>{svEImg.student + ' v. expected'}</DialogTitle>
+        <div
+          style={{
+            display: 'flex',
+            flexGrow: 1,
+            margin: 0
+          }}>
+          <div style={{ width: '50%' }}>
+            Student:
+            <img
+              src={
+                '/uploads/job/' +
+                jobId +
+                '/report/' +
+                stageId +
+                '/' +
+                svEImg.student
+              }
+              style={{ width: '100%' }}
+            />
           </div>
-        )}
-      </TableContainer>
-    </div>
+          <div style={{ width: 20 }} />
+          <div style={{ width: '50%' }}>
+            Expected:
+            <img
+              src={
+                '/uploads/job/' +
+                jobId +
+                '/report/' +
+                stageId +
+                '/' +
+                svEImg.expected
+              }
+              style={{ width: '100%' }}
+            />
+          </div>
+        </div>
+      </Dialog>
+    </React.Fragment>
   )
 }
