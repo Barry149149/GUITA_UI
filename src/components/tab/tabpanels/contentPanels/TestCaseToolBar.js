@@ -150,10 +150,7 @@ export default function TestCaseToolBar(props) {
       //console.log('Test case not exist, submit now')
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
-        tData.append(
-          'testcase_name',
-          'testcase' + state.present.tree[0].nodes[i].value
-        )
+        tData.append('testcase_name', state.present.tree[0].nodes[i].value)
         const fileData = JSON.stringify(state.present.tree[0].nodes[i].json)
         const blob = new Blob([fileData], { type: 'application/json' })
         tData.append(
