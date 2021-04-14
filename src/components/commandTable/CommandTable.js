@@ -549,7 +549,7 @@ export default function CommandTable(props) {
                                         <p>
                                           {'Keys[]: ' +
                                             JSON.stringify(
-                                              row.command.key
+                                              row.command.keys
                                             ).replace(/['"]+/g, '')}
                                         </p>
                                       </TableCell>
