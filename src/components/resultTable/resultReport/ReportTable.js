@@ -128,7 +128,17 @@ function Row(props) {
         key={row.commandId}
         onClick={(e) => handleOpenClick(e, row.commandId)}>
         <TableCell>{row.commandId}</TableCell>
-        <TableCell>{row.command}</TableCell>
+        <TableCell>
+          {row.command}
+          <Typography
+            style={{
+              fontSize: 16,
+              color: '#3f51b3',
+              fontWeight: 'bold'
+            }}>
+            {row.parameters.description}
+          </Typography>
+        </TableCell>
         <TableCell align="center">
           {row.status === 'success' ? (
             <CheckCircle style={{ color: 'green' }} />
