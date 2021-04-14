@@ -442,7 +442,7 @@ export default function CommandTable(props) {
                         classes={{ selected: classes.selected }}>
                         <TableCell
                           style={{ paddingBottom: 0, paddingTop: 0 }}
-                          colSpan={6}>
+                          colSpan={16}>
                           <Collapse
                             in={isItemOpened}
                             timeout="auto"

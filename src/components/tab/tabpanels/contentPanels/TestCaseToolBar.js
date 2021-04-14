@@ -151,17 +151,14 @@ export default function TestCaseToolBar(props) {
       console.log('Test case not exist, submit now')
       const tData = new FormData()
       for (let i = 0; i < state.present.tree[0].nodes.length; i++) {
-        tData.append(
-          'testcase_name',
-          'testcase' + state.present.tree[0].nodes[i].value
-        )
+        tData.append('testcase_name', state.present.tree[0].nodes[i].value)
         let newJson = []
         for (
           let j = 0;
           j < state.present.tree[0].nodes[i].json_id.length;
           j++
         ) {
-          newJson.push(state.present.tree[0].nodes[i].json_id[i].command)
+          newJson.push(state.present.tree[0].nodes[i].json_id[j].command)
         }
         console.log(newJson)
         const fileData = JSON.stringify(newJson)

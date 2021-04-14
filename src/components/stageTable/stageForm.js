@@ -61,9 +61,29 @@ export default function StageForm(props) {
     stage_config: {},
     testcase_id: null
   })
+  const [fetched, setFetched] = useState(false)
+  const [testcase, setTestcase] = useState([])
   useEffect(() => {
     console.log(props.stage)
   })
+
+  useEffect(() => {
+    fetch('/api/v2/assignment/' + props.selectedAssignment + '/testcase', {
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+      .then((result) => result.json())
+      .then((data) => {
+        let tempTestcase = []
+        for (let i = 0; i < data.length; i++) {
+          tempTestcase.push(data[i])
+        }
+        setTestcase(tempTestcase)
+      })
+      .then(setFetched(true))
+  }, [fetched])
+
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
@@ -139,25 +159,31 @@ export default function StageForm(props) {
           {
             //TODO: Sync Test Case
           }
-          <FormControl className={classes.form}>
-            <InputLabel>Test Case ID</InputLabel>
-            <Select
-              value={newStage.testcase_id}
-              onChange={(e) => {
-                setNewStage({
-                  ...newStage,
-                  assignment_id: props.selectedAssignment,
-                  testcase_id: e.target.value
-                })
-              }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {props.testcases.map((row) => {
-                return <MenuItem value={row.id}>{row.value}</MenuItem>
-              })}
-            </Select>
-          </FormControl>
+          {fetched ? (
+            <FormControl className={classes.form}>
+              <InputLabel>Test Case ID</InputLabel>
+              <Select
+                value={newStage.testcase_id}
+                onChange={(e) => {
+                  setNewStage({
+                    ...newStage,
+                    assignment_id: props.selectedAssignment,
+                    testcase_id: e.target.value
+                  })
+                }}>
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {testcase.map((row) => {
+                  return (
+                    <MenuItem value={row.testcase_id}>
+                      {row.testcase_name}
+                    </MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+          ) : null}
           <br />
           <FormControl className={classes.form}>
             <Button
