@@ -281,7 +281,6 @@ export default function Editor() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [stageFormOpen, setStageFormOpen] = useState(false)
   const [stageSelectOpen, setStageSelectOpen] = useState(false)
-  const [imgDialogOpen, setImgDialogOpen] = useState(false)
   const contentWidth = width - (drawerOpen ? 360 : 80)
 
   //this is for the editor
@@ -655,9 +654,9 @@ export default function Editor() {
                       setResultStep={setResultStep}
                       jobData={jobData}
                       setJobData={setJobData}
-                      handleImgDialogOpen={() => {
-                        setImgDialogOpen(true)
-                      }}
+                      // handleImgDialogOpen={() => {
+                      //   setImgDialogOpen(true)
+                      // }}
                       reportImg={reportImg}
                       setReportImg={setReportImg}
                       setDrawerOpen={setDrawerOpen}
@@ -683,98 +682,21 @@ export default function Editor() {
             submitWarning={submitWarning}
             setSubmitWarning={setSubmitWarning}
           />
-          <ReportImageDialog
-            open={imgDialogOpen}
-            handleClose={() => setImgDialogOpen(false)}
-            title={reportImg.name}
-            jobData={jobData}
-            reportImg={reportImg}
-            setReportImg={setReportImg}
-            //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
-          />
+          {/*<ReportImageDialog*/}
+          {/*  open={imgDialogOpen}*/}
+          {/*  handleClose={() => setImgDialogOpen(false)}*/}
+          {/*  title={reportImg.name}*/}
+          {/*  jobData={jobData}*/}
+          {/*  reportImg={reportImg}*/}
+          {/*  setReportImg={setReportImg}*/}
+          {/*  //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"*/}
+          {/*/>*/}
         </main>
       </div>
     </Router>
   )
 }
 
-function ReportImageDialog(props) {
-  const { open, title, handleClose, jobData, reportImg, setReportImg } = props
-  return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md">
-      <div
-        style={{
-          overflow: 'hidden'
-        }}>
-        <DialogTitle>{reportImg.paths[reportImg.path]}</DialogTitle>
-        <div
-          style={{
-            display: 'flex',
-            flexGrow: 1,
-            margin: 0
-          }}>
-          <Button
-            disabled={0 === reportImg.path}
-            onClick={() => {
-              if (reportImg.path > 0) {
-                setReportImg({
-                  ...reportImg,
-                  path: reportImg.path - 1
-                })
-              }
-            }}>
-            <KeyboardArrowLeftIcon />
-          </Button>
-          <div
-            style={{
-              width: '100%'
-            }}>
-            <img
-              src={
-                '/uploads/job/' +
-                jobData.job_id +
-                '/report/' +
-                jobData.stage_id +
-                '/' +
-                reportImg.paths[reportImg.path]
-              }
-              width="100%"
-              height="100%"
-            />
-          </div>
-          <Button
-            disabled={reportImg.paths.length - 1 === reportImg.path}
-            onClick={() => {
-              if (reportImg.path < reportImg.paths.length - 1) {
-                setReportImg({
-                  ...reportImg,
-                  path: reportImg.path + 1
-                })
-              }
-            }}>
-            <KeyboardArrowRightIcon />
-          </Button>
-        </div>
-        <Container>
-          <Slider
-            value={reportImg.path + 1}
-            step={1}
-            marksf
-            min={0}
-            max={reportImg.paths.length - 1}
-            onChange={(e, value) => {
-              setReportImg({
-                ...reportImg,
-                path: value
-              })
-            }}
-            valueLabelDisplay="auto"
-          />
-        </Container>
-      </div>
-    </Dialog>
-  )
-}
 /*
                       {assignData.map((row)=>
                   <Route path={'/testcase/'+row.assignment_id+'/'+row.assignment_name}>
