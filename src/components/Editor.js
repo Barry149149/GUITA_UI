@@ -601,6 +601,7 @@ export default function Editor() {
                     setNode={setNode}
                     fetched={testCaseFetched}
                     setFetched={setTestCaseFetched}
+                    height={height}
                   />
                 </Route>
                 <Route exact path={'/config/:configId/:configName'}>
