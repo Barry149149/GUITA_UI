@@ -209,7 +209,7 @@ export default function CommandTable(props) {
   }
 
   useEffect(() => {
-    console.log(props.selectedCase.json_id)
+    //console.log(props.selectedCase.json_id)
   })
 
   const isSelected = (id) => selected.indexOf(id) !== -1
@@ -442,7 +442,7 @@ export default function CommandTable(props) {
                         classes={{ selected: classes.selected }}>
                         <TableCell
                           style={{ paddingBottom: 0, paddingTop: 0 }}
-                          colSpan={6}>
+                          colSpan={16}>
                           <Collapse
                             in={isItemOpened}
                             timeout="auto"
@@ -549,7 +549,7 @@ export default function CommandTable(props) {
                                         <p>
                                           {'Keys[]: ' +
                                             JSON.stringify(
-                                              row.command.key
+                                              row.command.keys
                                             ).replace(/['"]+/g, '')}
                                         </p>
                                       </TableCell>

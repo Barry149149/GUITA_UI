@@ -204,24 +204,34 @@ export default function StageTable(props) {
     console.log(exists)
     console.log(props.stage)
 
-    if (!exists) {
-      for (let i = 0; i < props.stage.length; i++) {
-        console.log(props.stage[i])
+    for (let i = 0; i < props.stage.length; i++) {
+      console.log(props.stage[i].json.stage_id)
 
-        fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
-          method: 'POST',
+      //if(props.stage[i].json.stage_id === null || typeof props.stage[i].json.stage_id == 'undefined'){
+      fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
+        method: 'POST',
+        body: JSON.stringify(props.stage[i].json),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+        .then((result) => console.log(result))
+        .catch((error) => console.log(error))
+      //} else {
+      /*
+        fetch('/api/v2/job_config/' + props.configId + '/job_stage/' + props.stage[i].json.stage_id,{
+          method: 'PUT',
           body: JSON.stringify(props.stage[i].json),
           headers: {
             'content-type': 'application/json'
           }
-        }).catch((error) => console.log(error))
-      }
+        }).then(result => console.log(result)).catch(error => console.log(error))
+        */
+      //}
     }
-    // TODO: PUT
   }
 
   useEffect(() => {
-    //console.log(props.selectedJobConfig)
     if (props.configId) {
       console.log('Existing Config, fetch now')
       fetch('/api/v2/job_config/' + props.configId + '/job_stage', {
@@ -249,7 +259,7 @@ export default function StageTable(props) {
       props.setStage([])
       setFetched(true)
     }
-  }, [])
+  }, [fetched])
 
   const isSelected = (id) => selected.indexOf(id) !== -1
   const isOpen = (id) => open.indexOf(id) !== -1
