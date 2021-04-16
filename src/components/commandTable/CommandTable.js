@@ -44,10 +44,7 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 1 100%'
   },
   paper: {
-    overflowX: 'auto',
-    overflow: 'auto',
-    height: 650,
-    maxHeight: 700,
+    height: '90%',
     backgroundColor: '#DDDDDD'
   },
   tableRow: {

@@ -26,14 +26,6 @@ export default function TablePanel(props) {
     fetched
   } = props
 
-  const [cmdSchema, setCmdSchema] = useState({
-    command: 'None',
-    schema: {
-      type: 'object'
-    },
-    formData: ''
-  })
-  const [formData, setFormData] = useState({})
   /*
     useEffect(()=>{
         if(assignId){
@@ -117,39 +109,17 @@ export default function TablePanel(props) {
     },[fetched])*/
 
   return (
-    <div
-      style={
-        width < 1080
-          ? {
-              width: '100%'
-            }
-          : {
-              display: 'flex',
-              flexGrow: 1,
-              margin: 0,
-              width: '100%'
-            }
-      }>
+    <React.Fragment>
       {fetched ? (
-        <div
-          id="commandTable"
-          style={
-            width < 1080
-              ? { width: '100%' }
-              : !formOpen
-              ? { width: '100%' }
-              : { width: '69%' }
-          }>
-          <CommandTable
-            selectedCase={state.present.selectedCase}
-            formOpen={formOpen}
-            setFormOpen={setFormOpen}
-            tree={state.present.tree}
-            createdCases={state.present.createdCases}
-            noOfCases={state.present.noOfCases}
-            dispatch={dispatch}
-          />
-        </div>
+        <CommandTable
+          selectedCase={state.present.selectedCase}
+          formOpen={formOpen}
+          setFormOpen={setFormOpen}
+          tree={state.present.tree}
+          createdCases={state.present.createdCases}
+          noOfCases={state.present.noOfCases}
+          dispatch={dispatch}
+        />
       ) : (
         <div
           style={{
@@ -161,44 +131,6 @@ export default function TablePanel(props) {
           <ClipLoader color={'#3f51b5'} loading={true} size={50} />
         </div>
       )}
-      {formOpen ? (
-        <React.Fragment>
-          <div style={width < 1080 ? { height: '20px' } : { width: '2%' }} />
-          <Grow in={formOpen} timeout={formOpen ? 1000 : 0}>
-            <div style={width < 1080 ? { width: '100%' } : { width: '29%' }}>
-              <Paper id="commandForm" elevation={3}>
-                <Box pt={1} />
-                <Tooltip title="Close" style={{ float: 'right' }}>
-                  <Button
-                    onClick={() => {
-                      setFormOpen(false)
-                    }}
-                    variant="small">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18">
-                      <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
-                    </svg>
-                  </Button>
-                </Tooltip>
-                <CommandForm
-                  selectedCase={state.present.selectedCase}
-                  cmdSchema={cmdSchema}
-                  setCmdSchema={setCmdSchema}
-                  tree={state.present.tree}
-                  formData={formData}
-                  setFormData={setFormData}
-                  createdCases={state.present.createdCases}
-                  noOfCases={state.present.noOfCases}
-                  dispatch={dispatch}
-                />
-              </Paper>
-            </div>
-          </Grow>
-        </React.Fragment>
-      ) : null}
-    </div>
+    </React.Fragment>
   )
 }
