@@ -150,6 +150,81 @@ export const commandDescription = (command) => {
   }
 }
 
+export const TOKEN_TYPE = {
+  VARIABLE: 'variable',
+  NORMAL: 'normal',
+  STUB: 'stub' // For formatting UNKNOWN
+}
+
+export function getCommandDescription(command) {
+  const parseAssertImageSimilar = (command) => {
+    return [
+      ['Assert', TOKEN_TYPE.NORMAL],
+      [command.widget.value, TOKEN_TYPE.VARIABLE],
+      ['looks similar to', TOKEN_TYPE.NORMAL],
+      [command.expected, TOKEN_TYPE.VARIABLE]
+    ]
+  }
+
+  const parseLocateByWidgetProperty = (command, property) => {
+    const propertyString =
+      property === 'text' ? `"${command.widgetName}"` : command.widgetName
+    return [
+      [`Locate widget with ${property}`, TOKEN_TYPE.NORMAL],
+      [propertyString, TOKEN_TYPE.VARIABLE],
+      ['then assign result to', TOKEN_TYPE.NORMAL],
+      [command.setVariable, TOKEN_TYPE.VARIABLE]
+    ]
+  }
+
+  const parseClick = (command) => {
+    return [
+      ['Click on', TOKEN_TYPE.NORMAL],
+      [command.widget.value, TOKEN_TYPE.VARIABLE]
+    ]
+  }
+
+  const parseTypeHotKeys = (command) => {
+    return [
+      ['Press', TOKEN_TYPE.NORMAL],
+      [command.keys.join(' + '), TOKEN_TYPE.VARIABLE]
+    ]
+  }
+
+  const parseUnknown = (_) => {
+    return [
+      ['No default description', TOKEN_TYPE.STUB]
+      // ["/", TOKEN_TYPE.STUB]
+    ]
+  }
+
+  const get_parse_func = (commandName) => {
+    switch (commandName) {
+      case 'assertImageSimilar':
+        return parseAssertImageSimilar
+      case 'click':
+        return parseClick
+      case 'locateByWidgetClass':
+        return (command) => parseLocateByWidgetProperty(command, 'class')
+      case 'locateByWidgetName':
+        return (command) => parseLocateByWidgetProperty(command, 'ID')
+      case 'locateByWidgetText':
+        return (command) => parseLocateByWidgetProperty(command, 'text')
+      case 'typeHotkeys':
+        return parseTypeHotKeys
+      default:
+        return parseUnknown
+    }
+  }
+
+  const parse_func = get_parse_func(command.command)
+  const stringAndFormatList: Array = parse_func(command)
+  return {
+    stringAndFormatList: stringAndFormatList,
+    plainText: stringAndFormatList.map(([string, _]) => string).join(' ')
+  }
+}
+
 export const commandList = [
   {
     command: 'None',
