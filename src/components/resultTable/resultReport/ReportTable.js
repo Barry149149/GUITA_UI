@@ -210,6 +210,8 @@ export default function ReportTable(props) {
       .then((result) => {
         setJobData({
           ...jobData,
+          job_id: jobId,
+          stage_id: stageId,
           assignment_name: result
         })
 
