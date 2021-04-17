@@ -7,34 +7,53 @@ import { Link } from '@material-ui/core'
 import Collapse from '@material-ui/core/Collapse'
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import Divider from '@material-ui/core/Divider'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    padding: '10px'
-  },
-  table: {
-    minWidth: 450
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1
-  },
-  title: {
-    flex: '1 1 100%'
-  },
   container: {
-    maxHeight: 650
+    // borderTopColor: "white",
+    // borderTopWidth: 2,
+    // borderTopStyle: "solid",
+    borderBottomColor: 'darkgray',
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid',
+    maxHeight: 650,
+    padding: 20,
+    color: 'dimgrey',
+    backgroundColor: '#fbfbfb',
+    fontFamily: 'Lato'
+    // backgroundColor: "rgba(240, 248, 255, 0.5)"
+  },
+  header: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    lineHeight: '2em'
+  },
+  parameter: {
+    lineHeight: '1.5em'
+  },
+  emph: {
+    fontWeight: 'bold'
+  },
+  error: {
+    color: 'orangered'
+  },
+  errorDetail: {
+    color: 'orangered',
+    fontSize: 'small',
+    fontFamily: 'Monospace',
+    wordWrap: 'break-word'
   },
   tableCell: {
     padding: '0px 8px'
+  },
+  divider: {
+    margin: '12px 0px'
   }
 }))
 
@@ -54,163 +73,97 @@ export function ReportRowDetail({
     error: false
   })
 
-  console.log('expanding!')
+  function Parameters({ params }) {
+    return (
+      <Grid container>
+        <Grid item sm={12} md={3} lg={2}>
+          <div className={classes.header}>Parameters</div>
+        </Grid>
+        <Grid item sm={12} md={9} lg={10}>
+          {Object.entries(params).map(([key, val]) => {
+            return (
+              <div className={classes.parameter}>
+                {key}: {val ? val : 'none'}
+              </div>
+            )
+          })}
+        </Grid>
+      </Grid>
+    )
+  }
+
+  function Result({ result }) {
+    const [open, setOpen] = useState(false)
+    const resultDetail = Object.entries(result).map(([key, val]) => {
+      return key === 'value' ? null : (
+        <div className={classes.parameter} key={key}>
+          {key}: {val ? val : 'none'}
+        </div>
+      )
+    })
+
+    return (
+      <Grid container>
+        <Grid item sm={12} md={3} lg={2}>
+          <div className={classes.header}>Result</div>
+        </Grid>
+        <Grid item sm={12} md={9} lg={10}>
+          <div className={classes.parameter}>
+            <span className={classes.emph}>{result.value}</span>
+            <IconButton size="small" onClick={() => setOpen(!open)}>
+              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+            {open ? resultDetail : null}
+          </div>
+        </Grid>
+      </Grid>
+    )
+  }
+
+  function Error({ error, idx, showIdx }) {
+    const [open, setOpen] = useState(false)
+
+    return (
+      <Grid container>
+        <Grid item sm={12} md={3} lg={2}>
+          <div className={`${classes.header} ${classes.error}`}>
+            {showIdx ? `Error #${idx}` : 'Error'}
+          </div>
+        </Grid>
+        <Grid item sm={12} md={9} lg={10}>
+          <div className={classes.parameter}>
+            <span className={`${classes.emph} ${classes.error}`}>
+              {error.message}
+            </span>
+            <IconButton size="small" onClick={() => setOpen(!open)}>
+              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+          </div>
+        </Grid>
+        <Grid item>
+          {open ? (
+            <div className={classes.errorDetail}>{error.detail}</div>
+          ) : null}
+        </Grid>
+      </Grid>
+    )
+  }
+
   return (
-    <Box margin={1}>
+    <Box margin={0} className={classes.container}>
+      <Parameters
+        params={{
+          ...row.parameters,
+          driver: row.driver,
+          setVariable: row.setVariable
+        }}
+      />
+      <Divider variant="fullWidth" className={classes.divider} />
+      {row.result ? <Result result={row.result} /> : null}
+      {row.errors.length ? (
+        <Error error={row.errors[0]} showIdx={false} />
+      ) : null}
       <Table>
-        {row.parameters ? (
-          <TableRow>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                Parameters:
-              </Typography>
-              <Box
-                border={1}
-                borderColor="grey.500"
-                style={{
-                  minHeight: 60,
-                  width: '100%'
-                }}>
-                <pre
-                  style={{
-                    textAlign: 'left',
-                    padding: 5,
-                    'white-space': 'pre-wrap'
-                  }}>
-                  {JSON.stringify(row.parameters, null, 2)}
-                </pre>
-              </Box>
-            </TableCell>
-          </TableRow>
-        ) : null}
-        {row.driver ? (
-          <TableRow>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                Driver: {row.driver}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        ) : null}
-        {row.setVariable ? (
-          <TableRow>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                setVariable: {row.setVariable}
-              </Typography>
-            </TableCell>
-          </TableRow>
-        ) : null}
-        {row.result ? (
-          <TableRow
-            onClick={(e) =>
-              setOpen({
-                ...open,
-                result: !open.result
-              })
-            }
-            style={{
-              cursor: 'pointer'
-            }}>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                result:{' '}
-                <Link component="button" variant="body2">
-                  {row.result.value === null
-                    ? 'null'
-                    : row.result.value.toString()}
-                </Link>
-              </Typography>
-              <Collapse in={open.result}>
-                <Box
-                  border={1}
-                  borderColor="grey.500"
-                  style={{
-                    minHeight: 60,
-                    width: '100%',
-                    minWidth: '100%'
-                  }}>
-                  <pre
-                    style={{
-                      textAlign: 'left',
-                      padding: 5,
-                      'white-space': 'pre-wrap'
-                    }}>
-                    {JSON.stringify(row.result, null, 2).replace(/\\n/gm, '\n')}
-                  </pre>
-                </Box>
-              </Collapse>
-            </TableCell>
-          </TableRow>
-        ) : null}
-        {row.errors.length ? (
-          <TableRow>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                errors:{' '}
-                <Link
-                  component="button"
-                  variant="body2"
-                  onClick={(e) =>
-                    setOpen({
-                      ...open,
-                      error: !open.error
-                    })
-                  }
-                  style={{
-                    cursor: 'pointer'
-                  }}>
-                  {row.errors.map(
-                    (err, index) => index + 1 + ') ' + err.message
-                  ) + ','}
-                </Link>
-              </Typography>
-              <Collapse in={open.error}>
-                <Box
-                  border={1}
-                  borderColor="grey.500"
-                  style={{
-                    minHeight: 60,
-                    width: '100%',
-                    minWidth: '100%'
-                  }}>
-                  <pre
-                    style={{
-                      textAlign: 'left',
-                      padding: 5,
-                      'white-space': 'pre-wrap'
-                    }}>
-                    {row.errors.map((err, index) =>
-                      JSON.stringify(err, null, 2).replace(/\\n/gm, '\n')
-                    )}
-                  </pre>
-                </Box>
-              </Collapse>
-            </TableCell>
-          </TableRow>
-        ) : null}
-        {row.screenshotPath ? (
-          <TableRow>
-            <TableCell size="small" className={classes.tableCell}>
-              <Typography variant="h8" gutterBottom component="div">
-                Screenshot:
-                <Link
-                  component="button"
-                  variant="body2"
-                  onClick={() => {
-                    setReportImg({
-                      ...reportImg,
-                      name: row.screenshotPath,
-                      path: reportImg.paths.indexOf(row.screenshotPath)
-                    })
-                    handleImgDialogOpen()
-                  }}>
-                  {row.screenshotPath}
-                </Link>
-              </Typography>
-            </TableCell>
-          </TableRow>
-        ) : null}
         {row.studentImgPath && row.expectedImgPath ? (
           <TableRow>
             <TableCell size="small" className={classes.tableCell}>

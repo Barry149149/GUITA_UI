@@ -8,29 +8,16 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { resultSample } from '../../../docs/resultSample'
-import Collapse from '@material-ui/core/Collapse'
-import Divider from '@material-ui/core/Divider'
-import Box from '@material-ui/core/Box'
-import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import Text from 'recharts/lib/component/Text'
 import { useParams } from 'react-router-dom'
-import { CheckCircle } from '@material-ui/icons'
-import CancelIcon from '@material-ui/icons/Cancel'
-import { Link } from '@material-ui/core'
-import { ClimbingBoxLoader } from 'react-spinners'
+import { styled } from '@material-ui/core'
 import ClipLoader from 'react-spinners/ClipLoader'
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { ReportRowDetail } from './ReportRowDetail'
 import { ReportImageDialog } from './ReportImageDialog'
 import { Row } from './ReportRow'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -77,32 +64,38 @@ import { Row } from './ReportRow'
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    padding: '10px'
+    padding: '10px',
+    fontFamily: 'Lato'
   },
   table: {
     minWidth: 450
   },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1
-  },
   title: {
-    flex: '1 1 100%'
+    flex: '1'
   },
   container: {
-    maxHeight: 650
+    maxHeight: '70vh' // why ?,
   },
-  tableCell: {
-    padding: '0px 8px'
+  openButton: {
+    width: 36,
+    height: 36
+  },
+  totalScore: {
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: 'large'
   }
 }))
+
+const HeaderCell = styled(TableCell)({
+  color: '#090909',
+  fontWeight: 'bold',
+  // backgroundColor: "#f5f5f5",
+  borderBottomColor: 'lightgray',
+  paddingBottom: 8,
+  paddingTop: 8,
+  fontFamily: 'Lato'
+})
 
 function ReportTableToolbar(props) {
   const { classes, table, result, setResultStep, fetched } = props
@@ -113,9 +106,12 @@ function ReportTableToolbar(props) {
         <Typography className={classes.title} color="primary" variant="h6">
           {table}
         </Typography>
-        <Typography variant="body1">
-          {'Result: ' + result.summary.score + '/' + result.summary.maxScore}
-        </Typography>
+        <div className={classes.totalScore}>
+          {'Total Score: ' +
+            result.summary.score +
+            '/' +
+            result.summary.maxScore}
+        </div>
       </Toolbar>
     )
   } else {
@@ -131,7 +127,6 @@ function ReportTableToolbar(props) {
 
 export default function ReportTable(props) {
   let { jobId, stageId } = useParams()
-
   const {
     setResultStep,
     jobData,
@@ -278,24 +273,29 @@ export default function ReportTable(props) {
               aria-label="enhanced table"
               stickyHeader>
               <TableHead>
-                <TableCell></TableCell>
-                <TableCell align="center">Screenshot</TableCell>
-                <TableCell>Command</TableCell>
-                <TableCell align="center">Result</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    id="button_expandRow"
-                    size="small"
-                    onClick={(e) => openAll()}>
-                    {typeof result.breakdown !== 'undefined' &&
-                    result.breakdown.length > 0 &&
-                    result.breakdown.length === open.length ? (
-                      <KeyboardArrowUpIcon />
-                    ) : (
-                      <KeyboardArrowDownIcon />
-                    )}
-                  </IconButton>
-                </TableCell>
+                <TableRow>
+                  <HeaderCell>{}</HeaderCell>
+                  <HeaderCell>{}</HeaderCell>
+
+                  <HeaderCell>Command</HeaderCell>
+                  <HeaderCell align="center">Result</HeaderCell>
+                  <HeaderCell align="center">Score</HeaderCell>
+                  <HeaderCell align="center">
+                    <IconButton
+                      className={classes.openButton}
+                      id="button_expandRow"
+                      size="small"
+                      onClick={(e) => openAll()}>
+                      {typeof result.breakdown !== 'undefined' &&
+                      result.breakdown.length > 0 &&
+                      result.breakdown.length === open.length ? (
+                        <KeyboardArrowUpIcon />
+                      ) : (
+                        <KeyboardArrowDownIcon />
+                      )}
+                    </IconButton>
+                  </HeaderCell>
+                </TableRow>
               </TableHead>
               {typeof result.breakdown !== 'undefined' ? (
                 <TableBody>
