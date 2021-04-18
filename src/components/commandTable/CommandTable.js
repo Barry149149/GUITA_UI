@@ -20,9 +20,11 @@ import Button from '@material-ui/core/Button'
 import Grow from '@material-ui/core/Grow'
 import { PlaylistAdd } from '@material-ui/icons'
 import DeleteIcon from '@material-ui/icons/Delete'
-import { Divider } from '@material-ui/core'
+import { Divider, styled } from '@material-ui/core'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
+import { CommandTableRow } from './CommandTableRow'
+import { TableHeaderCellStyle } from '../../style/mystyle'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,44 +66,6 @@ export default function CommandTable(props) {
 
   const [selected, setSelected] = useState([])
   const [open, setOpen] = useState([])
-
-  const handleRowClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id)
-    let newSelected = []
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
-    }
-    setSelected(newSelected)
-  }
-
-  const handleOpenClick = (event, id) => {
-    const openedIndex = open.indexOf(id)
-    let newSelected = []
-
-    if (openedIndex === -1) {
-      newSelected = newSelected.concat(open, id)
-    } else if (openedIndex === 0) {
-      newSelected = newSelected.concat(open.slice(1))
-    } else if (openedIndex === open.length - 1) {
-      newSelected = newSelected.concat(open.slice(0, -1))
-    } else if (openedIndex > 0) {
-      newSelected = newSelected.concat(
-        open.slice(0, openedIndex),
-        open.slice(openedIndex + 1)
-      )
-    }
-    setOpen(newSelected)
-  }
 
   const selectAll = () => {
     let newSelected = []
@@ -216,6 +180,10 @@ export default function CommandTable(props) {
   const isOpen = (id) => open.indexOf(id) !== -1
   const numSelected = selected.length
 
+  const StyledHeaderCell = styled(TableCell)({
+    ...TableHeaderCellStyle
+  })
+
   return (
     <div className={classes.paper}>
       <Toolbar
@@ -289,14 +257,11 @@ export default function CommandTable(props) {
                 }}
               />
             </TableCell>
-            <TableCell padding="checkbox">Step</TableCell>
-            <TableCell align="left" colSpan={10}>
-              {' '}
-              Command{' '}
-            </TableCell>
-            <TableCell align="right" padding="checkbox">
-              Weight
-            </TableCell>
+            <StyledHeaderCell padding="checkbox">Step</StyledHeaderCell>
+            <StyledHeaderCell align="left">Command</StyledHeaderCell>
+            <StyledHeaderCell align="right" padding="checkbox">
+              Score
+            </StyledHeaderCell>
             <TableCell align="right">
               <IconButton
                 id="button_expandRow"
@@ -372,68 +337,18 @@ export default function CommandTable(props) {
                     <React.Fragment>
                       <Draggable draggableId={`${row.id}`} index={index}>
                         {(provided, snapshot) => (
-                          <TableRow
-                            hover
-                            key={row.id}
-                            aria-checked={isItemSelected}
-                            selected={isItemSelected}
-                            className={classes.tableRow}
-                            classes={{ selected: classes.selected }}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}>
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                id="checkbox_commandTableRow"
-                                checked={isItemSelected}
-                                color="primary"
-                                onChange={(event) => {
-                                  props.setFormOpen(false)
-                                  handleRowClick(event, row.id)
-                                }}
-                              />
-                            </TableCell>
-                            <TableCell padding="checkbox" align="center">
-                              {index}
-                            </TableCell>
-                            <TableCell
-                              scope="row"
-                              align="left"
-                              size="small"
-                              colSpan={10}>
-                              <Box>
-                                <Typography
-                                  style={{ fontSize: 10, color: '#777777' }}>
-                                  {row.command.command}
-                                </Typography>
-                                <Typography
-                                  style={{
-                                    fontSize: 16,
-                                    color: '#3f51b3',
-                                    fontWeight: 'bold'
-                                  }}>
-                                  {row.command.description}
-                                </Typography>
-                              </Box>
-                            </TableCell>
-                            <TableCell align={'right'}>
-                              {typeof row.command.weight === 'undefined'
-                                ? 1
-                                : row.command.weight}
-                            </TableCell>
-                            <TableCell align="right">
-                              <IconButton
-                                id="button_expandRow"
-                                size="small"
-                                onClick={(e) => handleOpenClick(e, row.id)}>
-                                {isItemOpened ? (
-                                  <KeyboardArrowUpIcon />
-                                ) : (
-                                  <KeyboardArrowDownIcon />
-                                )}
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
+                          <CommandTableRow
+                            selected={selected}
+                            setSelected={setSelected}
+                            open={open}
+                            setOpen={setOpen}
+                            row={row}
+                            provided={provided}
+                            index={index}
+                            isItemSelected={isItemSelected}
+                            isItemOpened={isItemOpened}
+                            setFormOpen={props.setFormOpen}
+                          />
                         )}
                       </Draggable>
                       <TableRow

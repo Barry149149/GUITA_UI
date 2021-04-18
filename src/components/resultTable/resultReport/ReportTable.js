@@ -18,6 +18,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { ReportImageDialog } from './ReportImageDialog'
 import { Row } from './ReportRow'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { TableHeaderCellStyle } from '../../../style/mystyle'
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -89,13 +90,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const HeaderCell = styled(TableCell)({
-  color: '#090909',
-  fontWeight: 'bold',
-  // backgroundColor: "#f5f5f5",
-  borderBottomColor: 'lightgray',
-  paddingBottom: 8,
-  paddingTop: 8,
-  fontFamily: 'Lato'
+  ...TableHeaderCellStyle
 })
 
 function ReportTableToolbar(props) {

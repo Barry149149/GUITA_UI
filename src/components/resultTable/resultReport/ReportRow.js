@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Chip, Paper, Tooltip } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import { getCommandDescription, TOKEN_TYPE } from '../../../docs/commandList'
+import { CommandDescriptionText } from '../../BaseRow'
+import { TableRowStyle } from '../../../style/mystyle'
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -29,49 +31,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: '2px 2px 4px lightgrey',
     '&:hover, &:focus': { boxShadow: '4px 4px 8px lightgrey' }
   },
-  commandId: {
-    color: (props) => (props.isItemOpened ? '#3f51b3' : 'gray'),
-    // color: "gray",
-    fontFamily: 'Inconsolata',
-    fontWeight: (props) => (props.isItemOpened ? 'bold' : 'normal')
-  },
-  commandName: {
-    fontFamily: 'Inconsolata',
-    color: 'dimgrey'
-  },
-  commandDescription: {
-    fontSize: 15,
-    color: '#3f51b3',
-    fontWeight: 'bold',
-    lineHeight: '120%'
-  },
-  variable: {
-    fontFamily: 'Inconsolata',
-    color: 'steelblue'
-  },
-  stub: {
-    color: 'lightgray',
-    fontWeight: 'normal'
-  },
-  score: {
-    fontFamily: 'Inconsolata',
-    color: 'dimgrey'
-  },
-  detailContainer: {
-    // backgroundColor: '#f5f5f5',
-    padding: 0
-  },
-  mainContainer: {
-    backgroundColor: (props) => (props.isItemOpened ? '#fbfbfb' : 'inherit'),
-    fontFamily: 'Lato',
-    cursor: 'pointer'
-  },
-  openButton: {
-    width: 36,
-    height: 36,
-    paddingBottom: 8,
-    paddingTop: 8
-  }
+  ...TableRowStyle
 }))
 
 export function Row(props) {
@@ -127,27 +87,6 @@ export function Row(props) {
     )
   }
 
-  function CommandDescriptionText({ command }) {
-    const description = getCommandDescription(command)
-    return (
-      <div>
-        {
-          // description.plainText
-          description.stringAndFormatList.map(([token, token_type]) => {
-            switch (token_type) {
-              case TOKEN_TYPE.VARIABLE:
-                return <span className={classes.variable}>{token} </span>
-              case TOKEN_TYPE.STUB:
-                return <span className={classes.stub}>{token} </span>
-              default:
-                return token + ' '
-            }
-          })
-        }
-      </div>
-    )
-  }
-
   return (
     <React.Fragment>
       <TableRow
@@ -165,8 +104,9 @@ export function Row(props) {
         <TableCell>
           <Box className={classes.commandName}>{row.command}</Box>
           <div className={classes.commandDescription}>
-            {/*{row.parameters.description}*/}
-            {row.fullCommand ? (
+            {row.parameters.description ? (
+              row.parameters.description
+            ) : row.fullCommand ? (
               <CommandDescriptionText command={row.fullCommand} />
             ) : null}
           </div>
