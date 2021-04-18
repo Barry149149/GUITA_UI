@@ -92,9 +92,8 @@ export function Row(props) {
   const classes = useStyles({ isItemOpened })
 
   const screenshotPath = () => {
-    if (row.status === 'aborted') return null
-    const filename = reportImg.paths[row.commandId - 1]
-    return `/uploads/job/${jobData.job_id}/report/${jobData.stage_id}/${filename}`
+    if (!row.screenshotPath) return null
+    return `/uploads/job/${jobData.job_id}/report/${jobData.stage_id}/${row.screenshotPath}`
   }
 
   function ImageThumbnail({ imgPath }) {
