@@ -74,7 +74,8 @@ const useStyles = makeStyles(() => ({
     flex: '1'
   },
   container: {
-    maxHeight: '70vh' // why ?,
+    maxHeight: 650
+    // maxHeight: '70vh',
   },
   openButton: {
     width: 36,
