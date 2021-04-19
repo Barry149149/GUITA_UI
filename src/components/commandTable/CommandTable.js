@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     overflow: 'auto',
-    height: '90%'
+    height: '80%'
     // backgroundColor: '#DDDDDD'
   },
   tableRow: {
@@ -196,11 +196,11 @@ export default function CommandTable(props) {
             component="div">
             {numSelected} selected
           </Typography>
-        ) : (
-          <Typography className={classes.title} variant="h7" color="primary">
-            Command Table
-          </Typography>
-        )}
+        ) : null
+        // <Typography className={classes.title} variant="h7" color="primary">
+        //   Command Table
+        // </Typography>
+        }
         {!(numSelected > 0) ? (
           <Tooltip title="Add">
             <Grow in={!(props.formOpen || numSelected > 0)}>

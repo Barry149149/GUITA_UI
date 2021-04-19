@@ -30,7 +30,8 @@ export default function TestCaseToolBar(props) {
     setFile,
     setPostings,
     deletedTestcase,
-    setDeletedTestcase
+    setDeletedTestcase,
+    renderEditorToolbar
   } = props
 
   let { assignId, assignName } = useParams()
@@ -260,6 +261,34 @@ export default function TestCaseToolBar(props) {
             : 'JSON Code Editor '}{' '}
           / {state.present.selectedCase.value}
         </Typography>
+        <Tabs
+          value={location.pathname.includes('jsoneditor') ? 1 : 0}
+          indicatorColor="primary"
+          textColor="primary"
+          centered={true}>
+          <Tooltip title="Table Mode">
+            <Tab
+              className={classes.tab}
+              aria-label="tab_tableView"
+              icon={<TableChartIcon />}
+              component={Link}
+              label="Table Mode"
+              to={'/testcase/' + assignId + '/' + assignName}
+            />
+          </Tooltip>
+          <Tooltip title="Code Editor">
+            <Tab
+              className={classes.tab}
+              aria-label="tab_codeEditor"
+              icon={<CodeIcon />}
+              component={Link}
+              label="JSON Mode"
+              to={'/testcase/' + assignId + '/' + assignName + '/jsoneditor'}
+            />
+          </Tooltip>
+        </Tabs>
+      </Toolbar>
+      <Toolbar className={classes.toolbar2}>
         <Button
           id="button_testcaseSave"
           color="primary"
@@ -285,30 +314,6 @@ export default function TestCaseToolBar(props) {
           }}>
           <RedoIcon />
         </IconButton>
-        <Tabs
-          value={location.pathname.includes('jsoneditor') ? 1 : 0}
-          indicatorColor="primary"
-          textColor="primary"
-          centered={true}>
-          <Tooltip title="Table Mode">
-            <Tab
-              className={classes.tab}
-              aria-label="tab_tableView"
-              icon={<TableChartIcon color="primary" />}
-              component={Link}
-              to={'/testcase/' + assignId + '/' + assignName}
-            />
-          </Tooltip>
-          <Tooltip title="CodeEditor">
-            <Tab
-              className={classes.tab}
-              aria-label="tab_codeEditor"
-              icon={<CodeIcon color="primary" />}
-              component={Link}
-              to={'/testcase/' + assignId + '/' + assignName + '/jsoneditor'}
-            />
-          </Tooltip>
-        </Tabs>
       </Toolbar>
     </React.Fragment>
   )

@@ -22,17 +22,38 @@ import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import DeleteIcon from '@material-ui/icons/Delete'
 import RemoveIcon from '@material-ui/icons/Remove'
+import Button from '@material-ui/core/Button'
+import { Add } from '@material-ui/icons'
+import CloseIcon from '@material-ui/icons/Close'
+import CancelIcon from '@material-ui/icons/Cancel'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(2),
-    marginLeft: theme.spacing(2.5),
-    minWidth: 120
+    // margin: theme.spacing(2),
+    // marginLeft: theme.spacing(2.5),
+    // minWidth: 120
   },
   form: {
     minHeight: 180,
-    marginTop: 0,
-    width: 300
+    // marginTop: 0,
+    // width: 300
+    padding: 24,
+    paddingTop: 0
+  },
+  titleBar: {
+    display: 'flex',
+    // height: 48,
+    width: '100%',
+    paddingTop: 16,
+    justifyContent: 'space-between'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: -16,
+    width: '24px',
+    height: '24px',
+    color: 'lightgray'
   }
 }))
 
@@ -86,13 +107,22 @@ export default function CommandForm(props) {
   const classes = useStyles()
 
   return (
-    <div>
-      <FormControl className={classes.formControl}>
-        <Title>Command Form</Title>
+    <div className={classes.form}>
+      <FormControl className={classes.formControl} style={{ width: '100%' }}>
+        <IconButton
+          className={classes.closeButton}
+          size="small"
+          onClick={() => props.setFormOpen(false)}>
+          <CloseIcon />
+        </IconButton>
+        <div className={classes.titleBar}>
+          <Title>Command Form</Title>
+        </div>
         <Box p={1} />
         <div id="select_command">
           <Select
-            style={{ marginLeft: 6, fontSize: 'large', fontWeight: 'bold' }}
+            defaultValue="click" // how to make this work :(
+            style={{ fontSize: 'large' }}
             onChange={(e) => {
               //Should be update through this onChange
               props.setCmdSchema({
@@ -105,7 +135,7 @@ export default function CommandForm(props) {
             value={props.cmdSchema.command}>
             {Object.keys(commandSchema).map((command) => {
               return (
-                <MenuItem key={`${command}-selector`} value={command}>
+                <MenuItem key={command} value={command}>
                   {command}
                 </MenuItem>
               )
@@ -114,88 +144,94 @@ export default function CommandForm(props) {
         </div>
       </FormControl>
       <Divider />
-      <div style={{ paddingLeft: 24, paddingRight: 24, paddingBottom: 24 }}>
-        <Form
-          classes={classes.form}
-          schema={props.cmdSchema.schema}
-          formData={props.formData}
-          uiSchema={uiSchema}
-          ArrayFieldTemplate={CustomArrayFieldTemplate}
-          onChange={(e) => {
-            props.setFormData(e.formData)
-          }}
-          onSubmit={(e) => {
-            let tempDescription
-            if (!e.formData.description) {
-              tempDescription = commandDescription({
-                command: props.cmdSchema.command,
-                ...e.formData
-              })
-            } else {
-              tempDescription = e.formData.description
-            }
+      <Form
+        schema={props.cmdSchema.schema}
+        formData={props.formData}
+        uiSchema={uiSchema}
+        ArrayFieldTemplate={CustomArrayFieldTemplate}
+        onChange={(e) => {
+          props.setFormData(e.formData)
+        }}
+        onSubmit={(e) => {
+          let tempDescription
+          if (!e.formData.description) {
+            tempDescription = commandDescription({
+              command: props.cmdSchema.command,
+              ...e.formData
+            })
+          } else {
+            tempDescription = e.formData.description
+          }
 
-            if (props.cmdSchema.command === 'None') {
-              return
+          if (props.cmdSchema.command === 'None') {
+            return
+          }
+          let newNodes = [...props.tree[0].nodes]
+          newNodes.find((x) => x.id === props.selectedCase.id).json = [
+            ...props.selectedCase.json,
+            {
+              command: props.cmdSchema.command,
+              ...e.formData,
+              description: tempDescription
             }
-            let newNodes = [...props.tree[0].nodes]
-            newNodes.find((x) => x.id === props.selectedCase.id).json = [
-              ...props.selectedCase.json,
-              {
+          ]
+          newNodes.find((x) => x.id === props.selectedCase.id).json_id = [
+            ...props.selectedCase.json_id,
+            {
+              id: props.selectedCase.json.length,
+              command: {
                 command: props.cmdSchema.command,
                 ...e.formData,
                 description: tempDescription
               }
-            ]
-            newNodes.find((x) => x.id === props.selectedCase.id).json_id = [
-              ...props.selectedCase.json_id,
-              {
-                id: props.selectedCase.json.length,
-                command: {
-                  command: props.cmdSchema.command,
-                  ...e.formData,
-                  description: tempDescription
-                }
-              }
-            ]
+            }
+          ]
 
-            props.dispatch({
-              data: {
-                tree: [
+          props.dispatch({
+            data: {
+              tree: [
+                {
+                  value: props.tree[0].value,
+                  nodes: newNodes
+                }
+              ],
+              createdCases: props.createdCases,
+              noOfCases: props.noOfCases,
+              selectedCase: {
+                ...props.selectedCase,
+                json: [
+                  ...props.selectedCase.json,
                   {
-                    value: props.tree[0].value,
-                    nodes: newNodes
+                    command: props.cmdSchema.command,
+                    ...e.formData,
+                    description: tempDescription
                   }
                 ],
-                createdCases: props.createdCases,
-                noOfCases: props.noOfCases,
-                selectedCase: {
-                  ...props.selectedCase,
-                  json: [
-                    ...props.selectedCase.json,
-                    {
+                json_id: [
+                  ...props.selectedCase.json_id,
+                  {
+                    id: props.selectedCase.json.length,
+                    command: {
                       command: props.cmdSchema.command,
                       ...e.formData,
                       description: tempDescription
                     }
-                  ],
-                  json_id: [
-                    ...props.selectedCase.json_id,
-                    {
-                      id: props.selectedCase.json.length,
-                      command: {
-                        command: props.cmdSchema.command,
-                        ...e.formData,
-                        description: tempDescription
-                      }
-                    }
-                  ]
-                }
+                  }
+                ]
               }
-            })
-          }}
-        />
-      </div>
+            }
+          })
+        }}>
+        {/*  https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/form-props/#children */}
+        <Button
+          style={{ marginTop: '2em' }}
+          // variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          type="submit">
+          Add
+        </Button>
+      </Form>
     </div>
   )
 }
