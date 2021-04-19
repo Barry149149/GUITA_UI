@@ -232,7 +232,7 @@ export default function CommandForm(props) {
         {/*  https://react-jsonschema-form.readthedocs.io/en/latest/api-reference/form-props/#children */}
         <Button
           style={{ marginTop: '2em' }}
-          // variant="contained"
+          variant="contained"
           color="primary"
           startIcon={<AddIcon />}
           type="submit">
