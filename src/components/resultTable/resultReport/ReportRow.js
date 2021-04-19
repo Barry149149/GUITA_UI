@@ -13,7 +13,11 @@ import { ReportRowDetail } from './ReportRowDetail'
 import { makeStyles } from '@material-ui/core/styles'
 import { Chip, Paper, Tooltip } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
-import { getCommandDescription, TOKEN_TYPE } from '../../../docs/commandList'
+import {
+  commandDescription,
+  getCommandDescription,
+  TOKEN_TYPE
+} from '../../../docs/commandList'
 import { CommandDescriptionText } from '../../BaseRow'
 import { TableRowStyle } from '../../../style/mystyle'
 
@@ -104,7 +108,7 @@ export function Row(props) {
         <TableCell>
           <Box className={classes.commandName}>{row.command}</Box>
           <div className={classes.commandDescription}>
-            {row.parameters.description ? (
+            {row.parameters.description === commandDescription(row.command) ? (
               row.parameters.description
             ) : row.fullCommand ? (
               <CommandDescriptionText command={row.fullCommand} />
