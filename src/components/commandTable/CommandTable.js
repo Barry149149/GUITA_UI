@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 1 100%'
   },
   paper: {
+    overflow: 'auto',
     height: '90%'
     // backgroundColor: '#DDDDDD'
   },
