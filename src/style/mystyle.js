@@ -53,3 +53,34 @@ export const TableHeaderCellStyle = {
   paddingTop: 8,
   fontFamily: 'Lato'
 }
+
+export const DetailPaneStyle = {
+  container: {
+    // borderTopColor: "white",
+    // borderTopWidth: 2,
+    // borderTopStyle: "solid",
+    borderBottomColor: 'darkgray',
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid',
+    maxHeight: 650,
+    padding: 20,
+    color: 'dimgrey',
+    backgroundColor: '#fbfbfb',
+    fontFamily: 'Lato'
+    // backgroundColor: "rgba(240, 248, 255, 0.5)"
+  },
+  header: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    lineHeight: '1.5em'
+  },
+  parameter: {
+    lineHeight: '1.5em'
+  },
+  emph: {
+    fontWeight: 'bold'
+  },
+  divider: {
+    margin: '12px 0px'
+  }
+}
