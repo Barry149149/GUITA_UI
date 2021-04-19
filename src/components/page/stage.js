@@ -6,6 +6,7 @@ import StageSelect from '../stageTable/stageSelect'
 import Box from '@material-ui/core/Box'
 import React, { useEffect } from 'react'
 import { Prompt, useParams } from 'react-router-dom'
+import Paper from '@material-ui/core/Paper'
 
 export default function StagePage(props) {
   let { configId, configName } = useParams()
@@ -27,7 +28,8 @@ export default function StagePage(props) {
     setCreatedStage,
     state,
     setDrawerOpen,
-    selectedAssignment
+    selectedAssignment,
+    height
   } = props
 
   useEffect(() => {
@@ -47,7 +49,7 @@ export default function StagePage(props) {
       />
       <div
         style={
-          width < 1080
+          contentWidth < 1080
             ? {
                 width: '100%'
               }
@@ -67,21 +69,38 @@ export default function StagePage(props) {
               ? { width: '100%' }
               : { width: '69%' }
           }>
-          <StageTable
-            stage={stage}
-            setStage={setStage}
-            stageFormOpen={stageFormOpen}
-            setStageFormOpen={setStageFormOpen}
-            stageSelectOpen={stageSelectOpen}
-            setStageSelectOpen={setStageSelectOpen}
-            createConfig={createConfig}
-            setCreateConfig={setCreateConfig}
-            selectedJobConfig={selectedJobConfig}
-            selectedJobConfigName={selectedJobConfigName}
-            configId={configId}
-            configName={configName}
-            selectedAssignment={selectedAssignment}
-          />
+          <Paper
+            style={
+              contentWidth < 1080
+                ? {
+                    width: '100%',
+                    height: ((height - 100) / 3) * 2,
+                    overflowX: 'auto',
+                    overflow: 'auto'
+                  }
+                : {
+                    width: '100%',
+                    height: height - 100,
+                    overflowX: 'auto',
+                    overflow: 'auto'
+                  }
+            }>
+            <StageTable
+              stage={stage}
+              setStage={setStage}
+              stageFormOpen={stageFormOpen}
+              setStageFormOpen={setStageFormOpen}
+              stageSelectOpen={stageSelectOpen}
+              setStageSelectOpen={setStageSelectOpen}
+              createConfig={createConfig}
+              setCreateConfig={setCreateConfig}
+              selectedJobConfig={selectedJobConfig}
+              selectedJobConfigName={selectedJobConfigName}
+              configId={configId}
+              configName={configName}
+              selectedAssignment={selectedAssignment}
+            />
+          </Paper>
         </div>
         <div style={{ height: '20px', width: '2%' }} />
         {stageFormOpen ? (
@@ -90,16 +109,23 @@ export default function StagePage(props) {
               style={
                 contentWidth < 1080 ? { width: '100%' } : { width: '29%' }
               }>
-              <StageForm
-                stage={stage}
-                setStage={setStage}
-                stageFormOpen={stageFormOpen}
-                setStageFormOpen={setStageFormOpen}
-                createdStage={createdStage}
-                setCreatedStage={setCreatedStage}
-                testcases={state.present.tree[0].nodes}
-                selectedAssignment={selectedAssignment}
-              />
+              <Paper
+                style={
+                  contentWidth < 1080
+                    ? { height: (height - 100) / 3, overflow: 'auto' }
+                    : { height: height - 100, overflow: 'auto' }
+                }>
+                <StageForm
+                  stage={stage}
+                  setStage={setStage}
+                  stageFormOpen={stageFormOpen}
+                  setStageFormOpen={setStageFormOpen}
+                  createdStage={createdStage}
+                  setCreatedStage={setCreatedStage}
+                  testcases={state.present.tree[0].nodes}
+                  selectedAssignment={selectedAssignment}
+                />
+              </Paper>
             </div>
           </Grow>
         ) : null}

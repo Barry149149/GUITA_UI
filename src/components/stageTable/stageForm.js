@@ -86,135 +86,131 @@ export default function StageForm(props) {
 
   return (
     <React.Fragment>
-      <Paper className={classes.paper}>
-        <Toolbar>
-          <Typography
-            className={classes.title}
-            color="primary"
-            component="h2"
-            variant="h6">
-            Stage Form
+      <Toolbar>
+        <Typography
+          className={classes.title}
+          color="primary"
+          component="h2"
+          variant="h6">
+          Stage Form
+        </Typography>
+        <Tooltip title="Close Form">
+          <Button onClick={() => props.setStageFormOpen(false)}>
+            <CloseIcon />
+          </Button>
+        </Tooltip>
+      </Toolbar>
+      <Divider />
+      <div className={classes.container}>
+        <FormControl className={classes.form}>
+          <TextField
+            id="stage_name"
+            label="Stage Name"
+            required={true}
+            onChange={(e) =>
+              setNewStage({
+                ...newStage,
+                stage_name: e.target.value
+              })
+            }
+          />
+        </FormControl>
+        <br />
+        <FormControl className={classes.form} required={true}>
+          Priority:
+          <Input
+            className={classes.input}
+            value={newStage.priority}
+            margin="dense"
+            onChange={(e) =>
+              setNewStage({
+                ...newStage,
+                priority: e.target.value === '' ? '' : Number(e.target.value)
+              })
+            }
+            inputProps={{
+              step: 1,
+              min: 0,
+              max: 50,
+              type: 'number',
+              'aria-labelledby': 'input-slider'
+            }}
+          />
+        </FormControl>
+        <div style={{ paddingLeft: 7, paddingRight: 7 }}>
+          <Typography id="stageForm_slider" gutterBottom>
+            Configuration
           </Typography>
-          <Tooltip title="Close Form">
-            <Button onClick={() => props.setStageFormOpen(false)}>
-              <CloseIcon />
-            </Button>
-          </Tooltip>
-        </Toolbar>
-        <Divider />
-        <div className={classes.container}>
-          <FormControl className={classes.form}>
-            <TextField
-              id="stage_name"
-              label="Stage Name"
-              required={true}
-              onChange={(e) =>
+          <JSONInput
+            locale={locale}
+            width="100%"
+            height="300px"
+            onChange={(e) => {
+              if (!e.error) {
                 setNewStage({
                   ...newStage,
-                  stage_name: e.target.value
+                  stage_config: e.jsObject
                 })
               }
-            />
-          </FormControl>
-          <br />
-          <FormControl className={classes.form} required={true}>
-            Priority:
-            <Input
-              className={classes.input}
-              value={newStage.priority}
-              margin="dense"
-              onChange={(e) =>
-                setNewStage({
-                  ...newStage,
-                  priority: e.target.value === '' ? '' : Number(e.target.value)
-                })
-              }
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 50,
-                type: 'number',
-                'aria-labelledby': 'input-slider'
-              }}
-            />
-          </FormControl>
-          <div style={{ paddingLeft: 7, paddingRight: 7 }}>
-            <Typography id="stageForm_slider" gutterBottom>
-              Configuration
-            </Typography>
-            <JSONInput
-              locale={locale}
-              width="100%"
-              height="300px"
-              onChange={(e) => {
-                if (!e.error) {
-                  setNewStage({
-                    ...newStage,
-                    stage_config: e.jsObject
-                  })
-                }
-              }}
-            />
-          </div>
-          {
-            //TODO: Sync Test Case
-          }
-          {fetched ? (
-            <FormControl className={classes.form}>
-              <InputLabel>Test Case ID</InputLabel>
-              <Select
-                value={newStage.testcase_id}
-                onChange={(e) => {
-                  setNewStage({
-                    ...newStage,
-                    assignment_id: props.selectedAssignment,
-                    testcase_id: e.target.value
-                  })
-                }}>
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {testcase.map((row) => {
-                  return (
-                    <MenuItem value={row.testcase_id}>
-                      {row.testcase_name}
-                    </MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          ) : null}
-          <br />
-          <FormControl className={classes.form}>
-            <Button
-              color="primary"
-              variant="outlined"
-              onClick={() => {
-                if (newStage.stage_name && newStage.priority) {
-                  setError({ message: '' })
-                  props.setStage([
-                    ...props.stage,
-                    {
-                      id: props.createdStage,
-                      json: newStage
-                    }
-                  ])
-                  props.setCreatedStage(props.createdStage + 1)
-                } else {
-                  if (!newStage.priority)
-                    setError({ message: 'Missing Priority' })
-                  if (!newStage.stage_name)
-                    setError({ message: 'Missing Stage Name' })
-                }
-              }}>
-              Submit
-            </Button>
-          </FormControl>
-          {error.message ? (
-            <p style={{ color: 'red' }}>{error.message}</p>
-          ) : null}
+            }}
+          />
         </div>
-      </Paper>
+        {
+          //TODO: Sync Test Case
+        }
+        {fetched ? (
+          <FormControl className={classes.form}>
+            <InputLabel>Test Case ID</InputLabel>
+            <Select
+              value={newStage.testcase_id}
+              onChange={(e) => {
+                setNewStage({
+                  ...newStage,
+                  assignment_id: props.selectedAssignment,
+                  testcase_id: e.target.value
+                })
+              }}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {testcase.map((row) => {
+                return (
+                  <MenuItem value={row.testcase_id}>
+                    {row.testcase_name}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        ) : null}
+        <br />
+        <FormControl className={classes.form}>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => {
+              if (newStage.stage_name && newStage.priority) {
+                setError({ message: '' })
+                props.setStage([
+                  ...props.stage,
+                  {
+                    id: props.createdStage,
+                    json: newStage
+                  }
+                ])
+                props.setCreatedStage(props.createdStage + 1)
+              } else {
+                if (!newStage.priority)
+                  setError({ message: 'Missing Priority' })
+                if (!newStage.stage_name)
+                  setError({ message: 'Missing Stage Name' })
+              }
+            }}>
+            Submit
+          </Button>
+        </FormControl>
+        {error.message ? <p style={{ color: 'red' }}>{error.message}</p> : null}
+      </div>
     </React.Fragment>
   )
 }

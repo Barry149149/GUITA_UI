@@ -35,6 +35,9 @@ import Slider from '@material-ui/core/Slider'
 import StagePage from './page/stage'
 import TestCaseToolBar from './tab/tabpanels/contentPanels/TestCaseToolBar'
 import Container from '@material-ui/core/Container'
+import Grow from '@material-ui/core/Grow'
+import Tooltip from '@material-ui/core/Tooltip'
+import CommandForm from './commandTable/CommandForm'
 
 const drawerWidth = 460
 
@@ -281,7 +284,12 @@ export default function Editor() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [stageFormOpen, setStageFormOpen] = useState(false)
   const [stageSelectOpen, setStageSelectOpen] = useState(false)
-  const contentWidth = width - (drawerOpen ? 360 : 80)
+  // <<<<<<< HEAD
+  // const contentWidth = width - (drawerOpen ? 360 : 80)
+  // =======
+  // const [imgDialogOpen, setImgDialogOpen] = useState(false)
+  const contentWidth = width - (drawerOpen ? 460 : 80)
+  // >>>>>>> master
 
   //this is for the editor
   const [style, setStyle] = useState({
@@ -321,6 +329,15 @@ export default function Editor() {
 
   //this is for config management
   const [createConfig, setCreateConfig] = useState(false)
+
+  const [cmdSchema, setCmdSchema] = useState({
+    command: 'None',
+    schema: {
+      type: 'object'
+    },
+    formData: ''
+  })
+  const [formData, setFormData] = useState({})
 
   //this is for result page
   const [resultData, setResultData] = useState({
@@ -538,32 +555,61 @@ export default function Editor() {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
+          <Box pt={1} />
           <Container>
-            <Box p={3}>
-              <Paper className={classes.paper2}>
-                <Route exact path="/">
-                  <AssignmentTable
-                    jobBatch={jobBatch}
-                    setJobBatch={setJobBatch}
-                    setSelectedAssignment={setSelectedAssignment}
-                    handleDrawerChange={handleDrawerChange}
-                    setSelectedJobConfig={setSelectedJobConfig}
-                    selectedConfig={selectedConfig}
-                    setSelectedConfig={setSelectedConfig}
-                    setSelectedAssignmentName={setSelectedAssignmentName}
-                    setSelectedJobConfigName={setSelectedJobConfigName}
-                    assignData={assignData}
-                    setAssignData={setAssignData}
-                    setLastEditedJobConfig={setLastEditedJobConfig}
-                    configData={configData}
-                    setConfigData={setConfigData}
-                    setDrawerOpen={setDrawerOpen}
-                    state={state}
-                    setTestcaseFetched={setTestcaseFetched}
-                    setPostings={setPostings}
-                  />
-                </Route>
-                <Route path={'/testcase/:assignId/:assignName'}>
+            <Route exact path="/">
+              <AssignmentTable
+                jobBatch={jobBatch}
+                setJobBatch={setJobBatch}
+                setSelectedAssignment={setSelectedAssignment}
+                handleDrawerChange={handleDrawerChange}
+                setSelectedJobConfig={setSelectedJobConfig}
+                selectedConfig={selectedConfig}
+                setSelectedConfig={setSelectedConfig}
+                setSelectedAssignmentName={setSelectedAssignmentName}
+                setSelectedJobConfigName={setSelectedJobConfigName}
+                assignData={assignData}
+                setAssignData={setAssignData}
+                setLastEditedJobConfig={setLastEditedJobConfig}
+                configData={configData}
+                setConfigData={setConfigData}
+                setDrawerOpen={setDrawerOpen}
+                state={state}
+                setTestcaseFetched={setTestcaseFetched}
+                setPostings={setPostings}
+              />
+            </Route>
+            <Route path={'/testcase/:assignId/:assignName'}>
+              <div
+                style={
+                  contentWidth < 1080
+                    ? {
+                        width: '100%'
+                      }
+                    : {
+                        display: 'flex',
+                        flexGrow: 1,
+                        margin: 0,
+                        width: '100%'
+                      }
+                }>
+                <Paper
+                  className={classes.paper2}
+                  style={
+                    contentWidth < 1080
+                      ? {
+                          width: '100%',
+                          height: ((height - 100) / 3) * 2,
+                          overflowX: 'auto',
+                          overflow: 'auto'
+                        }
+                      : {
+                          width: '100%',
+                          height: height - 100,
+                          overflowX: 'auto',
+                          overflow: 'auto'
+                        }
+                  }>
                   <TestCaseToolBar
                     classes={classes}
                     tabValue={tabValue}
@@ -580,53 +626,123 @@ export default function Editor() {
                     deletedTestcase={deletedTestcase}
                     setDeletedTestcase={setDeletedTestcase}
                   />
-                </Route>
-                <Route
-                  exact
-                  path={'/testcase/:assignId/:assignName/jsoneditor'}>
-                  <JsonEditorPanel
-                    classes={classes}
-                    tabValue={tabValue}
-                    style={style}
-                    state={state}
-                    dispatch={dispatch}
-                    fetched={testCaseFetched}
-                    setFetched={setTestCaseFetched}
-                  />
-                </Route>
+
+                  <Route
+                    exact
+                    path={'/testcase/:assignId/:assignName/jsoneditor'}>
+                    <JsonEditorPanel
+                      classes={classes}
+                      tabValue={tabValue}
+                      style={style}
+                      state={state}
+                      dispatch={dispatch}
+                      fetched={testCaseFetched}
+                      setFetched={setTestCaseFetched}
+                    />
+                  </Route>
+                  <Route exact path={'/testcase/:assignId/:assignName'}>
+                    <TablePanel
+                      tabValue={tabValue}
+                      formOpen={formOpen}
+                      state={state}
+                      setFormOpen={setFormOpen}
+                      dispatch={dispatch}
+                      width={drawerOpen ? width - drawerWidth : width}
+                      selectedAssignment={selectedAssignment}
+                      setNode={setNode}
+                      fetched={testCaseFetched}
+                      setFetched={setTestCaseFetched}
+                      height={height}
+                    />
+                  </Route>
+                </Paper>
+
                 <Route exact path={'/testcase/:assignId/:assignName'}>
-                  <TablePanel
-                    tabValue={tabValue}
-                    formOpen={formOpen}
-                    state={state}
-                    setFormOpen={setFormOpen}
-                    dispatch={dispatch}
-                    width={drawerOpen ? width - drawerWidth : width}
-                    selectedAssignment={selectedAssignment}
-                    setNode={setNode}
-                    fetched={testCaseFetched}
-                    setFetched={setTestCaseFetched}
-                  />
+                  {formOpen ? (
+                    <React.Fragment>
+                      <div
+                        style={
+                          contentWidth < 1080
+                            ? { height: '20px' }
+                            : { width: '2%' }
+                        }
+                      />
+                      <Grow in={formOpen} timeout={formOpen ? 1000 : 0}>
+                        <div
+                          style={
+                            contentWidth < 1080
+                              ? { width: '100%' }
+                              : { width: '29%' }
+                          }>
+                          <Paper
+                            id="commandForm"
+                            elevation={3}
+                            style={
+                              contentWidth < 1080
+                                ? {
+                                    height: (height - 100) / 3,
+                                    overflow: 'auto'
+                                  }
+                                : { height: height - 100, overflow: 'auto' }
+                            }>
+                            <Box pt={1} />
+                            <Tooltip title="Close" style={{ float: 'right' }}>
+                              <Button
+                                onClick={() => {
+                                  setFormOpen(false)
+                                }}
+                                variant="small">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 18 18">
+                                  <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                                </svg>
+                              </Button>
+                            </Tooltip>
+                            <CommandForm
+                              selectedCase={state.present.selectedCase}
+                              cmdSchema={cmdSchema}
+                              setCmdSchema={setCmdSchema}
+                              tree={state.present.tree}
+                              formData={formData}
+                              setFormData={setFormData}
+                              createdCases={state.present.createdCases}
+                              noOfCases={state.present.noOfCases}
+                              dispatch={dispatch}
+                            />
+                          </Paper>
+                        </div>
+                      </Grow>
+                    </React.Fragment>
+                  ) : null}
                 </Route>
-                <Route exact path={'/config/:configId/:configName'}>
-                  <StagePage
-                    stage={stage}
-                    setStage={setStage}
-                    stageFormOpen={stageFormOpen}
-                    setStageFormOpen={setStageFormOpen}
-                    stageSelectOpen={stageSelectOpen}
-                    setStageSelectOpen={setStageSelectOpen}
-                    createConfig={createConfig}
-                    setCreateConfig={setCreateConfig}
-                    selectedJobConfig={selectedJobConfig}
-                    selectedJobConfigName={selectedJobConfigName}
-                    createdStage={createdStage}
-                    setCreatedStage={setCreatedStage}
-                    state={state}
-                    setDrawerOpen={setDrawerOpen}
-                    selectedAssignment={selectedAssignment}
-                  />
-                </Route>
+              </div>
+            </Route>
+            <Route exact path={'/config/:configId/:configName'}>
+              <StagePage
+                stage={stage}
+                setStage={setStage}
+                stageFormOpen={stageFormOpen}
+                setStageFormOpen={setStageFormOpen}
+                stageSelectOpen={stageSelectOpen}
+                setStageSelectOpen={setStageSelectOpen}
+                createConfig={createConfig}
+                setCreateConfig={setCreateConfig}
+                selectedJobConfig={selectedJobConfig}
+                selectedJobConfigName={selectedJobConfigName}
+                createdStage={createdStage}
+                setCreatedStage={setCreatedStage}
+                state={state}
+                setDrawerOpen={setDrawerOpen}
+                selectedAssignment={selectedAssignment}
+                contentWidth={contentWidth}
+                height={height}
+              />
+            </Route>
+            <Route path={'/result'}>
+              <Paper className={classes.paper2}>
                 <Switch>
                   <Route exact path="/result">
                     <ResultTable
@@ -664,7 +780,7 @@ export default function Editor() {
                   </Route>
                 </Switch>
               </Paper>
-            </Box>
+            </Route>
           </Container>
           <SettingDialog
             open={settingsOpen}
