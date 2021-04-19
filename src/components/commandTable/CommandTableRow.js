@@ -14,7 +14,10 @@ import Collapse from '@material-ui/core/Collapse'
 import { CommandTableRowDetail } from './CommandTableRowDetail'
 
 const useStyles = makeStyles(() => ({
-  ...TableRowStyle
+  ...TableRowStyle,
+  selected: {
+    backgroundColor: 'blue'
+  }
 }))
 
 export function CommandTableRow({
@@ -78,7 +81,6 @@ export function CommandTableRow({
         aria-checked={isItemSelected}
         selected={isItemSelected}
         className={classes.mainContainer}
-        // classes={{ selected: classes.selected }}
         ref={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}>

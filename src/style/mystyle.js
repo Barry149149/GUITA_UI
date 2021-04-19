@@ -33,6 +33,9 @@ export const TableRowStyle = {
   },
   mainContainer: {
     backgroundColor: (props) => (props.isItemOpened ? '#fbfbfb' : 'white'),
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: 'aliceblue'
+    },
     fontFamily: 'Lato',
     cursor: 'pointer'
   },
