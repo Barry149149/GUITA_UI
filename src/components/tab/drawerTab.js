@@ -49,9 +49,7 @@ export default function DrawerTab(props) {
           <ListItemText
             disableTypography
             primary={
-              <Typography
-                color="primary"
-                style={{ 'font-family': 'Segoe UI', 'font-weight': 'bold' }}>
+              <Typography color="primary" style={{ 'font-weight': 'bold' }}>
                 {'Home'}
               </Typography>
             }
@@ -80,9 +78,7 @@ export default function DrawerTab(props) {
           <ListItemText
             disableTypography
             primary={
-              <Typography
-                color="primary"
-                style={{ 'font-family': 'Segoe UI', 'font-weight': 'bold' }}>
+              <Typography color="primary" style={{ 'font-weight': 'bold' }}>
                 {'Test Case'}
               </Typography>
             }
@@ -111,9 +107,7 @@ export default function DrawerTab(props) {
           <ListItemText
             disableTypography
             primary={
-              <Typography
-                color="primary"
-                style={{ 'font-family': 'Segoe UI', 'font-weight': 'bold' }}>
+              <Typography color="primary" style={{ 'font-weight': 'bold' }}>
                 {'Config'}
               </Typography>
             }
@@ -130,9 +124,7 @@ export default function DrawerTab(props) {
           <ListItemText
             disableTypography
             primary={
-              <Typography
-                color="primary"
-                style={{ 'font-family': 'Segoe UI', 'font-weight': 'bold' }}>
+              <Typography color="primary" style={{ 'font-weight': 'bold' }}>
                 {'Result'}
               </Typography>
             }
