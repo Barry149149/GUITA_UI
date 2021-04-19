@@ -1,10 +1,27 @@
-import { Box, Divider, FormControl, MenuItem, Select } from '@material-ui/core'
-import { commandDescription, commandList } from '../../../docs/commandList'
+import {
+  Box,
+  Checkbox,
+  Divider,
+  FormControl,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  MenuItem,
+  Select,
+  TextField
+} from '@material-ui/core'
+import { commandDescription, commandSchema } from '../../docs/commandList'
 import Form from '@rjsf/material-ui'
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Title from '../../Title'
-import drawerTab from '../../tab/drawerTab'
+import Title from '../Title'
+import drawerTab from '../tab/drawerTab'
+import Typography from '@material-ui/core/Typography'
+import AddIcon from '@material-ui/icons/Add'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import DeleteIcon from '@material-ui/icons/Delete'
+import RemoveIcon from '@material-ui/icons/Remove'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -19,14 +36,54 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+function CustomArrayFieldTemplate(props) {
+  return (
+    <div className={props.className}>
+      <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.54)' }}>
+        {`${props.title} ${props.required ? '*' : ''}`}
+      </div>
+      {props.items &&
+        props.items.map((element) => {
+          // console.log(element.children)
+          return (
+            <div>
+              {element.children}
+              <div style={{ padding: 4 }}></div>
+              {/*  Adding margin/padding to the outer div doesn't work arrrrrr*/}
+            </div>
+          )
+        })}
+      <div style={{ float: 'right' }}>
+        {props.canAdd && (
+          <IconButton onClick={props.onAddClick} size="small">
+            <AddIcon />
+          </IconButton>
+        )}
+        {props.items && (
+          <IconButton
+            onClick={(e) => {
+              const last = props.items[props.items.length - 1]
+              last.onDropIndexClick(last.index)(e)
+            }}
+            size="small">
+            <RemoveIcon />
+          </IconButton>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const uiSchema = {
+  'ui:order': [
+    '*', // all undefined ones come here.
+    'weight',
+    'description'
+  ]
+}
+
 export default function CommandForm(props) {
   const classes = useStyles()
-
-  useEffect(() => {
-    console.log(props.selectedCase)
-  })
-
-  const [driver, setDriver] = React.useState('DOM')
 
   return (
     <div>
@@ -35,20 +92,20 @@ export default function CommandForm(props) {
         <Box p={1} />
         <div id="select_command">
           <Select
+            style={{ marginLeft: 6, fontSize: 'large', fontWeight: 'bold' }}
             onChange={(e) => {
               //Should be update through this onChange
               props.setCmdSchema({
                 ...props.cmdSchema,
                 command: e.target.value,
-                schema: commandList.find((x) => x.command === e.target.value)
-                  .schema
+                schema: commandSchema[e.target.value].schema
               })
               props.setFormData({})
             }}
             value={props.cmdSchema.command}>
-            {commandList.map(({ index, command }) => {
+            {Object.keys(commandSchema).map((command) => {
               return (
-                <MenuItem key={index} value={command}>
+                <MenuItem key={`${command}-selector`} value={command}>
                   {command}
                 </MenuItem>
               )
@@ -62,6 +119,8 @@ export default function CommandForm(props) {
           classes={classes.form}
           schema={props.cmdSchema.schema}
           formData={props.formData}
+          uiSchema={uiSchema}
+          ArrayFieldTemplate={CustomArrayFieldTemplate}
           onChange={(e) => {
             props.setFormData(e.formData)
           }}

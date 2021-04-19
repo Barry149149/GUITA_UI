@@ -59,6 +59,12 @@ const driverStruct = (title) => {
   }
 }
 
+const WeightStruct = {
+  title: 'Weight',
+  type: 'number',
+  default: 1
+}
+
 export const commandDescription = (command) => {
   try {
     switch (command.command) {
@@ -166,6 +172,13 @@ export function getCommandDescription(command) {
     ]
   }
 
+  const parseClick = (command) => {
+    return [
+      ['Click on', TOKEN_TYPE.NORMAL],
+      [command.widget.value, TOKEN_TYPE.VARIABLE]
+    ]
+  }
+
   const parseLocateByWidgetProperty = (command, property) => {
     const propertyString =
       property === 'text' ? `"${command.widgetName}"` : command.widgetName
@@ -177,10 +190,11 @@ export function getCommandDescription(command) {
     ]
   }
 
-  const parseClick = (command) => {
+  const parseSleep = (command) => {
     return [
-      ['Click on', TOKEN_TYPE.NORMAL],
-      [command.widget.value, TOKEN_TYPE.VARIABLE]
+      ['Sleep for', TOKEN_TYPE.NORMAL],
+      [command.time, TOKEN_TYPE.VARIABLE],
+      ['second(s)', TOKEN_TYPE.NORMAL]
     ]
   }
 
@@ -199,22 +213,20 @@ export function getCommandDescription(command) {
   }
 
   const get_parse_func = (commandName) => {
-    switch (commandName) {
-      case 'assertImageSimilar':
-        return parseAssertImageSimilar
-      case 'click':
-        return parseClick
-      case 'locateByWidgetClass':
-        return (command) => parseLocateByWidgetProperty(command, 'class')
-      case 'locateByWidgetName':
-        return (command) => parseLocateByWidgetProperty(command, 'ID')
-      case 'locateByWidgetText':
-        return (command) => parseLocateByWidgetProperty(command, 'text')
-      case 'typeHotkeys':
-        return parseTypeHotKeys
-      default:
-        return parseUnknown
+    const parserMap = {
+      assertImageSimilar: parseAssertImageSimilar,
+      click: parseClick,
+      locateByWidgetClass: (command) =>
+        parseLocateByWidgetProperty(command, 'class'),
+      locateByWidgetName: (command) =>
+        parseLocateByWidgetProperty(command, 'ID'),
+      locateByWidgetText: (command) =>
+        parseLocateByWidgetProperty(command, 'text'),
+      sleep: parseSleep,
+      typeHotkeys: parseTypeHotKeys
     }
+    const parser = parserMap[commandName]
+    return parser ? parser : parseUnknown
   }
 
   const parse_func = get_parse_func(command.command)
@@ -225,55 +237,55 @@ export function getCommandDescription(command) {
   }
 }
 
-export const commandList = [
-  {
-    command: 'None',
-    schema: {
-      type: 'object'
-    }
-  },
-  {
+export const commandSchema = {
+  // {
+  //   command: 'None',
+  //   schema: {
+  //     type: 'object'
+  //   }
+  // },
+  assert: {
     command: 'assert',
     schema: {
       type: 'object',
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         value: valTypeStruct('Asserted Value'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  assertEqual: {
     command: 'assertEqual',
     schema: {
       type: 'object',
       required: ['valueRhs'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         valueLhs: valTypeStruct('Value Lhs'),
         valueRhs: stringStruct('Value Rhs'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  assertImageSimilar: {
     command: 'assertImageSimilar',
     schema: {
       type: 'object',
       required: ['widget', 'expected'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         widget: valTypeStruct('Widget'),
         expected: stringStruct('Path to expected image')
       }
     }
   },
-  {
+  click: {
     command: 'click',
     schema: {
       type: 'object',
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         driver: driverStruct('Driver'),
         widget: valTypeStruct('Widget'),
         offsetByRatio: arrayStructInt('Offset'),
@@ -281,65 +293,65 @@ export const commandList = [
       }
     }
   },
-  {
+  getText: {
     command: 'getText',
     schema: {
       type: 'object',
       required: ['widget', 'setVariable'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         widget: valTypeStruct('Widget'),
         setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  isVisible: {
     command: 'isVisible',
     schema: {
       type: 'object',
       required: ['widget', 'setVariable'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         widget: valTypeStruct('Widget'),
         setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  locateByWidgetClass: {
     command: 'locateByWidgetClass',
     schema: {
       type: 'object',
       required: ['widgetName', 'setVariable'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         widgetName: stringStruct('Widget Name'),
         setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  locateByWidgetName: {
     command: 'locateByWidgetName',
     schema: {
       type: 'object',
       required: ['widgetName', 'setVariable'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         widgetName: stringStruct('Widget Name'),
         setVariable: stringStruct('Set Variable'),
         description: stringStruct('Description')
       }
     }
   },
-  {
+  locateByWidgetText: {
     command: 'locateByWidgetText',
     schema: {
       type: 'object',
       required: ['widgetName', 'setVariable'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         driver: driverStruct('Driver'),
         widgetName: stringStruct('Widget Name'),
         setVariable: stringStruct('Set Variable'),
@@ -347,7 +359,7 @@ export const commandList = [
       }
     }
   },
-  {
+  sleep: {
     command: 'sleep',
     schema: {
       type: 'object',
@@ -358,26 +370,26 @@ export const commandList = [
       }
     }
   },
-  {
+  typeHotkeys: {
     command: 'typeHotkeys',
     schema: {
       type: 'object',
       required: ['keys'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         keys: arrayStruct('The text to type')
       }
     }
   },
-  {
+  typeText: {
     command: 'typeText',
     schema: {
       type: 'object',
       required: ['text'],
       properties: {
-        weight: intStruct('Weight'),
+        weight: WeightStruct,
         text: stringStruct('The text to type')
       }
     }
   }
-]
+}

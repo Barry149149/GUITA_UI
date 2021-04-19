@@ -49,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
     overflowX: 'auto',
     overflow: 'auto',
     height: 650,
-    maxHeight: 700,
-    backgroundColor: '#DDDDDD'
+    maxHeight: 700
+    // backgroundColor: '#DDDDDD'
   },
   tableRow: {
     backgroundColor: '#FFFFFF',
@@ -172,9 +172,9 @@ export default function CommandTable(props) {
     setSelected([])
   }
 
-  useEffect(() => {
-    //console.log(props.selectedCase.json_id)
-  })
+  // useEffect(() => {
+  //   console.log(props.selectedCase.json_id)
+  // })
 
   const isSelected = (id) => selected.indexOf(id) !== -1
   const isOpen = (id) => open.indexOf(id) !== -1
@@ -260,7 +260,7 @@ export default function CommandTable(props) {
             <StyledHeaderCell padding="checkbox">Step</StyledHeaderCell>
             <StyledHeaderCell align="left">Command</StyledHeaderCell>
             <StyledHeaderCell align="right" padding="checkbox">
-              Score
+              Weight
             </StyledHeaderCell>
             <TableCell align="right">
               <IconButton
@@ -351,146 +351,6 @@ export default function CommandTable(props) {
                           />
                         )}
                       </Draggable>
-                      <TableRow
-                        selected={isItemSelected}
-                        className={classes.tableRow}
-                        classes={{ selected: classes.selected }}>
-                        <TableCell
-                          style={{ paddingBottom: 0, paddingTop: 0 }}
-                          colSpan={16}>
-                          <Collapse
-                            in={isItemOpened}
-                            timeout="auto"
-                            unmountOnExit>
-                            <Box margin={1}>
-                              <Typography
-                                variant="h8"
-                                gutterBottom
-                                component="div">
-                                Detail
-                              </Typography>
-                              <Table size="small">
-                                <TableHead>
-                                  <TableRow>
-                                    {row.command.widgetName ===
-                                    undefined ? null : (
-                                      <TableCell>WidgetName</TableCell>
-                                    )}
-                                    {row.command.widget === undefined ? null : (
-                                      <TableCell>Widget</TableCell>
-                                    )}
-                                    {row.command.setVariable ===
-                                    undefined ? null : (
-                                      <TableCell>SetVariable</TableCell>
-                                    )}
-                                    {row.command.valueLhs ===
-                                    undefined ? null : (
-                                      <TableCell>ValueLhs</TableCell>
-                                    )}
-                                    {row.command.valueRhs ===
-                                    undefined ? null : (
-                                      <TableCell>ValueRhs</TableCell>
-                                    )}
-                                    {row.command.time === undefined ? null : (
-                                      <TableCell>Time</TableCell>
-                                    )}
-                                    {row.command.value === undefined ? null : (
-                                      <TableCell>Value</TableCell>
-                                    )}
-                                    {row.command.keys === undefined ? null : (
-                                      <TableCell>Keys</TableCell>
-                                    )}
-                                    {row.command.text === undefined ? null : (
-                                      <TableCell>Text</TableCell>
-                                    )}
-                                    {row.command.offsetByRatio ===
-                                    undefined ? null : (
-                                      <TableCell>Offset By Ratio</TableCell>
-                                    )}
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  <TableRow>
-                                    {row.command.widgetName ===
-                                    undefined ? null : (
-                                      <TableCell component="th" scope="row">
-                                        {row.command.widgetName}
-                                      </TableCell>
-                                    )}
-                                    {row.command.widget === undefined ? null : (
-                                      <TableCell>
-                                        {'Type:' +
-                                          row.command.widget.type +
-                                          ' Value:' +
-                                          row.command.widget.value}
-                                      </TableCell>
-                                    )}
-                                    {row.command.setVariable ===
-                                    undefined ? null : (
-                                      <TableCell>
-                                        {row.command.setVariable}
-                                      </TableCell>
-                                    )}
-                                    {row.command.valueLhs ===
-                                    undefined ? null : (
-                                      <TableCell>
-                                        {'Type: ' +
-                                          row.command.valueLhs.type +
-                                          ', Value:' +
-                                          row.command.valueLhs.value}
-                                      </TableCell>
-                                    )}
-                                    {row.command.valueRhs ===
-                                    undefined ? null : (
-                                      <TableCell>
-                                        {row.command.valueRhs}
-                                      </TableCell>
-                                    )}
-                                    {row.command.time === undefined ? null : (
-                                      <TableCell>{row.command.time}</TableCell>
-                                    )}
-                                    {row.command.value === undefined ? null : (
-                                      <TableCell>
-                                        <p>
-                                          {'Type: ' + row.command.value.type}
-                                        </p>
-                                        <p>
-                                          {'Value:' + row.command.value.value}
-                                        </p>
-                                      </TableCell>
-                                    )}
-                                    {row.command.keys === undefined ? null : (
-                                      <TableCell>
-                                        <p>
-                                          {'Keys[]: ' +
-                                            JSON.stringify(
-                                              row.command.keys
-                                            ).replace(/['"]+/g, '')}
-                                        </p>
-                                      </TableCell>
-                                    )}
-                                    {row.command.text === undefined ? null : (
-                                      <TableCell>
-                                        <p>{'Text: ' + row.command.text}</p>
-                                      </TableCell>
-                                    )}
-                                    {row.command.offsetByRatio ===
-                                    undefined ? null : (
-                                      <TableCell>
-                                        <p>
-                                          {'Offset By Ratio: [' +
-                                            row.command.offsetByRatio +
-                                            ']'}
-                                        </p>
-                                      </TableCell>
-                                    )}
-                                  </TableRow>
-                                </TableBody>
-                              </Table>
-                            </Box>
-                          </Collapse>
-                        </TableCell>
-                      </TableRow>
                     </React.Fragment>
                   )
                 })}

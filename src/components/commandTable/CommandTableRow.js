@@ -10,6 +10,8 @@ import React from 'react'
 import { lighten, makeStyles } from '@material-ui/core/styles'
 import { TableRowStyle } from '../../style/mystyle'
 import { CommandDescriptionText } from '../BaseRow'
+import Collapse from '@material-ui/core/Collapse'
+import { CommandTableRowDetail } from './CommandTableRowDetail'
 
 const useStyles = makeStyles(() => ({
   ...TableRowStyle
@@ -69,50 +71,59 @@ export function CommandTableRow({
   const command = row.command
 
   return (
-    <TableRow
-      hover
-      key={row.id}
-      aria-checked={isItemSelected}
-      selected={isItemSelected}
-      className={classes.mainContainer}
-      // classes={{ selected: classes.selected }}
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}>
-      <TableCell padding="checkbox">
-        <Checkbox
-          id="checkbox_commandTableRow"
-          checked={isItemSelected}
-          color="primary"
-          onChange={(event) => {
-            setFormOpen(false)
-            handleRowClick(event, row.id)
-          }}
-        />
-      </TableCell>
-      <TableCell className={classes.commandId}>{index + 1}</TableCell>
+    <React.Fragment>
+      <TableRow
+        hover
+        key={row.id}
+        aria-checked={isItemSelected}
+        selected={isItemSelected}
+        className={classes.mainContainer}
+        // classes={{ selected: classes.selected }}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}>
+        <TableCell padding="checkbox">
+          <Checkbox
+            id="checkbox_commandTableRow"
+            checked={isItemSelected}
+            color="primary"
+            onChange={(event) => {
+              setFormOpen(false)
+              handleRowClick(event, row.id)
+            }}
+          />
+        </TableCell>
+        <TableCell className={classes.commandId}>{index + 1}</TableCell>
 
-      <TableCell>
-        <Box className={classes.commandName}>{command.command}</Box>
-        <div className={classes.commandDescription}>
-          {command.description ? (
-            command.description
-          ) : (
-            <CommandDescriptionText command={row.command} />
-          )}
-        </div>
-      </TableCell>
-      <TableCell className={classes.score} align="center">
-        {typeof row.command.weight === 'undefined' ? 1 : row.command.weight}
-      </TableCell>
-      <TableCell align="right">
-        <IconButton
-          id="button_expandRow"
-          size="small"
-          onClick={(e) => handleOpenClick(e, row.id)}>
-          {isItemOpened ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </IconButton>
-      </TableCell>
-    </TableRow>
+        <TableCell>
+          <Box className={classes.commandName}>{command.command}</Box>
+          <div className={classes.commandDescription}>
+            {command.description ? (
+              command.description
+            ) : (
+              <CommandDescriptionText command={row.command} />
+            )}
+          </div>
+        </TableCell>
+        <TableCell className={classes.score} align="center">
+          {typeof row.command.weight === 'undefined' ? 1 : row.command.weight}
+        </TableCell>
+        <TableCell align="right">
+          <IconButton
+            id="button_expandRow"
+            size="small"
+            onClick={(e) => handleOpenClick(e, row.id)}>
+            {isItemOpened ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell className={classes.detailContainer} colSpan={5}>
+          <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
+            <CommandTableRowDetail row={row} />
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
   )
 }
