@@ -75,12 +75,12 @@ const useStyles = makeStyles(() => ({
     flex: '1'
   },
   container: {
-    maxHeight: 650
-    // maxHeight: '70vh',
+    // maxHeight: 650
+    maxHeight: '75vh'
   },
   openButton: {
-    width: 36,
-    height: 36
+    width: 32,
+    height: 32
   },
   totalScore: {
     fontFamily: 'Lato',

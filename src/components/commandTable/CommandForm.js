@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     minHeight: 180,
     // marginTop: 0,
-    // width: 300
+    // width: 240,
     padding: 24,
     paddingTop: 0
   },
@@ -60,7 +60,13 @@ const useStyles = makeStyles((theme) => ({
 function CustomArrayFieldTemplate(props) {
   return (
     <div className={props.className}>
-      <div style={{ fontSize: '12px', color: 'rgba(0, 0, 0, 0.54)' }}>
+      <div
+        style={{
+          fontSize: '12px',
+          color: 'rgba(0, 0, 0, 0.54)',
+          padding: 4,
+          paddingLeft: 8
+        }}>
         {`${props.title} ${props.required ? '*' : ''}`}
       </div>
       {props.items &&
@@ -98,6 +104,7 @@ function CustomArrayFieldTemplate(props) {
 const uiSchema = {
   'ui:order': [
     '*', // all undefined ones come here.
+    'driver',
     'weight',
     'description'
   ]
@@ -143,7 +150,7 @@ export default function CommandForm(props) {
           </Select>
         </div>
       </FormControl>
-      <Divider />
+      <Divider style={{ height: 1, marginTop: '-1px' }} />
       <Form
         schema={props.cmdSchema.schema}
         formData={props.formData}

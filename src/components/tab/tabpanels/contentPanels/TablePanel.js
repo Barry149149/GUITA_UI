@@ -109,7 +109,7 @@ export default function TablePanel(props) {
     },[fetched])*/
 
   return (
-    <React.Fragment>
+    <div style={{ overflowY: 'hidden' }}>
       {fetched ? (
         <CommandTable
           selectedCase={state.present.selectedCase}
@@ -131,6 +131,6 @@ export default function TablePanel(props) {
           <ClipLoader color={'#3f51b5'} loading={true} size={50} />
         </div>
       )}
-    </React.Fragment>
+    </div>
   )
 }

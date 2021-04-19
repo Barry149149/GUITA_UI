@@ -601,13 +601,13 @@ export default function Editor() {
                           width: '100%',
                           height: ((height - 100) / 3) * 2,
                           overflowX: 'auto',
-                          overflow: 'auto'
+                          overflowY: 'hidden'
                         }
                       : {
                           width: '100%',
                           height: height - 100,
                           overflowX: 'auto',
-                          overflow: 'auto'
+                          overflowY: 'hidden'
                         }
                   }>
                   <TestCaseToolBar

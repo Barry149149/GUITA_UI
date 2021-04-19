@@ -14,6 +14,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import SaveIcon from '@material-ui/icons/Save'
+import Divider from '@material-ui/core/Divider'
 
 export default function TestCaseToolBar(props) {
   const {
@@ -30,8 +31,7 @@ export default function TestCaseToolBar(props) {
     setFile,
     setPostings,
     deletedTestcase,
-    setDeletedTestcase,
-    renderEditorToolbar
+    setDeletedTestcase
   } = props
 
   let { assignId, assignName } = useParams()
@@ -261,6 +261,32 @@ export default function TestCaseToolBar(props) {
             : 'JSON Code Editor '}{' '}
           / {state.present.selectedCase.value}
         </Typography>
+        <Button
+          id="button_testcaseSave"
+          color="primary"
+          onClick={() => {
+            setPostings(1)
+            saveTestcase()
+          }}>
+          <SaveIcon />
+        </Button>
+        <IconButton
+          color="inherit"
+          disabled={state.past.length === 0}
+          onClick={() => {
+            dispatch({ type: 'UNDO' })
+          }}>
+          <UndoIcon />
+        </IconButton>
+        <IconButton
+          color="inherit"
+          disabled={state.future.length === 0}
+          onClick={() => {
+            dispatch({ type: 'REDO' })
+          }}>
+          <RedoIcon />
+        </IconButton>
+
         <Tabs
           value={location.pathname.includes('jsoneditor') ? 1 : 0}
           indicatorColor="primary"
@@ -287,33 +313,6 @@ export default function TestCaseToolBar(props) {
             />
           </Tooltip>
         </Tabs>
-      </Toolbar>
-      <Toolbar className={classes.toolbar2}>
-        <Button
-          id="button_testcaseSave"
-          color="primary"
-          onClick={() => {
-            setPostings(1)
-            saveTestcase()
-          }}>
-          <SaveIcon />
-        </Button>
-        <IconButton
-          color="inherit"
-          disabled={state.past.length === 0}
-          onClick={() => {
-            dispatch({ type: 'UNDO' })
-          }}>
-          <UndoIcon />
-        </IconButton>
-        <IconButton
-          color="inherit"
-          disabled={state.future.length === 0}
-          onClick={() => {
-            dispatch({ type: 'REDO' })
-          }}>
-          <RedoIcon />
-        </IconButton>
       </Toolbar>
     </React.Fragment>
   )

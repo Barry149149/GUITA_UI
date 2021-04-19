@@ -43,11 +43,12 @@ const useStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.primary.dark
         },
   title: {
-    flex: '1 1 100%'
+    flex: '1'
   },
   paper: {
+    // overflow: 'hidden',
     overflow: 'auto',
-    height: '80%'
+    height: '75vh'
     // backgroundColor: '#DDDDDD'
   },
   tableRow: {
@@ -183,11 +184,12 @@ export default function CommandTable(props) {
   })
 
   return (
-    <div className={classes.paper}>
+    <React.Fragment>
       <Toolbar
         className={clsx(classes.root, {
           [classes.highlight]: numSelected > 0
-        })}>
+        })}
+        style={{ height: 48, minHeight: 48 }}>
         {numSelected > 0 ? (
           <Typography
             className={classes.title}
@@ -196,11 +198,15 @@ export default function CommandTable(props) {
             component="div">
             {numSelected} selected
           </Typography>
-        ) : null
-        // <Typography className={classes.title} variant="h7" color="primary">
-        //   Command Table
-        // </Typography>
-        }
+        ) : (
+          // null
+          <Typography
+            className={classes.title}
+            variant="subtitle1"
+            color="primary">
+            {}
+          </Typography>
+        )}
         {!(numSelected > 0) ? (
           <Tooltip title="Add">
             <Grow in={!(props.formOpen || numSelected > 0)}>
@@ -208,8 +214,9 @@ export default function CommandTable(props) {
                 id="button_commandAdd"
                 onClick={() => {
                   props.setFormOpen(true)
-                }}>
-                <PlaylistAdd />
+                }}
+                startIcon={<PlaylistAdd />}>
+                Add Command
               </Button>
             </Grow>
           </Tooltip>
@@ -228,136 +235,144 @@ export default function CommandTable(props) {
           </React.Fragment>
         )}
       </Toolbar>
-      <Divider />
-      <Table stickyHeader>
-        <TableHead>
-          <TableRow
-            hover
-            selected={
-              props.selectedCase.json_id.length > 0 &&
-              props.selectedCase.json_id.length === selected.length
-            }
-            aria-checked={
-              props.selectedCase.json_id.length > 0 &&
-              props.selectedCase.json_id.length === selected.length
-            }
-            className={classes.tableRow}
-            classes={{ selected: classes.selected }}>
-            <TableCell padding="checkbox">
-              <Checkbox
-                checked={
-                  props.selectedCase.json_id.length > 0 &&
-                  props.selectedCase.json_id.length === selected.length
-                }
-                color="primary"
-                onChange={(event) => {
-                  selectAll()
-                }}
-              />
-            </TableCell>
-            <StyledHeaderCell padding="checkbox">Step</StyledHeaderCell>
-            <StyledHeaderCell align="left">Command</StyledHeaderCell>
-            <StyledHeaderCell align="right" padding="checkbox">
-              Weight
-            </StyledHeaderCell>
-            <TableCell align="right">
-              <IconButton
-                id="button_expandRow"
-                size="small"
-                onClick={(e) => openAll()}>
-                {props.selectedCase.json_id.length > 0 &&
-                props.selectedCase.json_id.length === open.length ? (
-                  <KeyboardArrowUpIcon />
-                ) : (
-                  <KeyboardArrowDownIcon />
-                )}
-              </IconButton>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <DragDropContext
-          onDragEnd={(result) => {
-            if (!result.destination) return
-
-            let new_json_unordered = props.selectedCase.json_id
-            const [removed] = new_json_unordered.splice(result.source.index, 1)
-            new_json_unordered.splice(result.destination.index, 0, removed)
-
-            let new_json_id = [],
-              new_json = []
-            for (let i = 0; i < new_json_unordered.length; i++) {
-              new_json_id = [
-                ...new_json_id,
-                {
-                  id: i,
-                  command: new_json_unordered[i].command
-                }
-              ]
-              new_json = [...new_json, new_json_unordered[i].command]
-            }
-
-            let newNodes = [...props.tree[0].nodes]
-            newNodes.find((x) => x.id === props.selectedCase.id).json = new_json
-            newNodes.find(
-              (x) => x.id === props.selectedCase.id
-            ).json_id = new_json_id
-
-            props.dispatch({
-              data: {
-                tree: [
-                  {
-                    value: props.tree[0].value,
-                    nodes: newNodes
-                  }
-                ],
-                createdCases: props.createdCases,
-                noOfCases: props.noOfCases,
-                selectedCase: {
-                  ...props.selectedCase,
-                  json_id: new_json_id,
-                  json: new_json
-                }
+      <div className={classes.paper}>
+        <Divider />
+        <Table stickyHeader style={{}}>
+          <TableHead>
+            <TableRow
+              hover
+              selected={
+                props.selectedCase.json_id.length > 0 &&
+                props.selectedCase.json_id.length === selected.length
               }
-            })
-          }}
-          onBeforeDragStart={() => {
-            open.length = 0
-            selected.length = 0
-          }}>
-          <Droppable droppableId="1" type="Command">
-            {(provided, snapshot) => (
-              <TableBody ref={provided.innerRef} {...provided.droppableProps}>
-                {props.selectedCase.json_id.map((row, index) => {
-                  const isItemOpened = isOpen(row.id)
-                  const isItemSelected = isSelected(row.id)
+              aria-checked={
+                props.selectedCase.json_id.length > 0 &&
+                props.selectedCase.json_id.length === selected.length
+              }
+              className={classes.tableRow}
+              classes={{ selected: classes.selected }}>
+              <StyledHeaderCell padding="checkbox">
+                <Checkbox
+                  style={{ height: 32, width: 32 }}
+                  checked={
+                    props.selectedCase.json_id.length > 0 &&
+                    props.selectedCase.json_id.length === selected.length
+                  }
+                  color="primary"
+                  onChange={(event) => {
+                    selectAll()
+                  }}
+                />
+              </StyledHeaderCell>
+              <StyledHeaderCell padding="checkbox">Step</StyledHeaderCell>
+              <StyledHeaderCell align="left">Command</StyledHeaderCell>
+              <StyledHeaderCell align="right" padding="checkbox">
+                Weight
+              </StyledHeaderCell>
+              <StyledHeaderCell align="right">
+                <IconButton
+                  id="button_expandRow"
+                  size="small"
+                  onClick={(e) => openAll()}>
+                  {props.selectedCase.json_id.length > 0 &&
+                  props.selectedCase.json_id.length === open.length ? (
+                    <KeyboardArrowUpIcon />
+                  ) : (
+                    <KeyboardArrowDownIcon />
+                  )}
+                </IconButton>
+              </StyledHeaderCell>
+            </TableRow>
+          </TableHead>
+          <DragDropContext
+            onDragEnd={(result) => {
+              if (!result.destination) return
 
-                  return (
-                    <React.Fragment>
-                      <Draggable draggableId={`${row.id}`} index={index}>
-                        {(provided, snapshot) => (
-                          <CommandTableRow
-                            selected={selected}
-                            setSelected={setSelected}
-                            open={open}
-                            setOpen={setOpen}
-                            row={row}
-                            provided={provided}
-                            index={index}
-                            isItemSelected={isItemSelected}
-                            isItemOpened={isItemOpened}
-                            setFormOpen={props.setFormOpen}
-                          />
-                        )}
-                      </Draggable>
-                    </React.Fragment>
-                  )
-                })}
-                {provided.placeholder}
-              </TableBody>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </Table>
-    </div>
+              let new_json_unordered = props.selectedCase.json_id
+              const [removed] = new_json_unordered.splice(
+                result.source.index,
+                1
+              )
+              new_json_unordered.splice(result.destination.index, 0, removed)
+
+              let new_json_id = [],
+                new_json = []
+              for (let i = 0; i < new_json_unordered.length; i++) {
+                new_json_id = [
+                  ...new_json_id,
+                  {
+                    id: i,
+                    command: new_json_unordered[i].command
+                  }
+                ]
+                new_json = [...new_json, new_json_unordered[i].command]
+              }
+
+              let newNodes = [...props.tree[0].nodes]
+              newNodes.find(
+                (x) => x.id === props.selectedCase.id
+              ).json = new_json
+              newNodes.find(
+                (x) => x.id === props.selectedCase.id
+              ).json_id = new_json_id
+
+              props.dispatch({
+                data: {
+                  tree: [
+                    {
+                      value: props.tree[0].value,
+                      nodes: newNodes
+                    }
+                  ],
+                  createdCases: props.createdCases,
+                  noOfCases: props.noOfCases,
+                  selectedCase: {
+                    ...props.selectedCase,
+                    json_id: new_json_id,
+                    json: new_json
+                  }
+                }
+              })
+            }}
+            onBeforeDragStart={() => {
+              open.length = 0
+              selected.length = 0
+            }}>
+            <Droppable droppableId="1" type="Command">
+              {(provided, snapshot) => (
+                <TableBody ref={provided.innerRef} {...provided.droppableProps}>
+                  {props.selectedCase.json_id.map((row, index) => {
+                    const isItemOpened = isOpen(row.id)
+                    const isItemSelected = isSelected(row.id)
+
+                    return (
+                      <React.Fragment>
+                        <Draggable draggableId={`${row.id}`} index={index}>
+                          {(provided, snapshot) => (
+                            <CommandTableRow
+                              selected={selected}
+                              setSelected={setSelected}
+                              open={open}
+                              setOpen={setOpen}
+                              row={row}
+                              provided={provided}
+                              index={index}
+                              isItemSelected={isItemSelected}
+                              isItemOpened={isItemOpened}
+                              setFormOpen={props.setFormOpen}
+                            />
+                          )}
+                        </Draggable>
+                      </React.Fragment>
+                    )
+                  })}
+                  {provided.placeholder}
+                </TableBody>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Table>
+      </div>
+    </React.Fragment>
   )
 }

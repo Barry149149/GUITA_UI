@@ -16,7 +16,7 @@ import { CommandTableRowDetail } from './CommandTableRowDetail'
 const useStyles = makeStyles(() => ({
   ...TableRowStyle,
   selected: {
-    backgroundColor: 'blue'
+    // backgroundColor: 'blue'
   }
 }))
 

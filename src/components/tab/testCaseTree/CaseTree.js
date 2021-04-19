@@ -85,8 +85,8 @@ export default function CaseTree(props) {
       <div
         style={{
           overflow: 'auto',
-          maxHeight: 400,
-          height: 400,
+          // maxHeight: 400,
+          // height: 400,
           width: 270
         }}>
         <MuiTreeView

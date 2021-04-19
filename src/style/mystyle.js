@@ -52,6 +52,7 @@ export const TableHeaderCellStyle = {
   fontWeight: 'bold',
   // backgroundColor: "#f5f5f5",
   borderBottomColor: 'lightgray',
+  borderBottom: '2px solid',
   paddingBottom: 8,
   paddingTop: 8,
   fontFamily: 'Lato'

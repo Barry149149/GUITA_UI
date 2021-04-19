@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     // fontWeight: "bold",
     fontSize: '14px',
     minWidth: 220,
-    backgroundColor: 'ghostwhite'
+    backgroundColor: 'aliceblue'
     // color: "white"
     // border: "2px solid"
   },
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: '100%'
+    height: '95%'
   }
 }))
 
@@ -243,7 +243,7 @@ export default function TreePanel(props) {
               <HelpOutlineIcon />
             </Tooltip>
           </div>
-          <Divider variant="fullWidth" />
+          <Divider variant="middle" />
 
           <Button
             className={classes.uploadButton}

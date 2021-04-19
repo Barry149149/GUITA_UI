@@ -128,6 +128,7 @@ function ResultTableToolbar(props) {
       </Typography>
       <TextField
         label="Search"
+        // InputLabelProps={{shrink: false}}
         onChange={(e) => {
           setFilterCriteria(e.target.value)
         }}
