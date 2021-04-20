@@ -129,7 +129,7 @@ export default function CommandForm(props) {
         <div id="select_command">
           <Select
             defaultValue="click" // how to make this work :(
-            style={{ fontSize: 'large' }}
+            style={{ fontSize: 'large', width: '100%' }}
             onChange={(e) => {
               //Should be update through this onChange
               props.setCmdSchema({
@@ -236,7 +236,7 @@ export default function CommandForm(props) {
           color="primary"
           startIcon={<AddIcon />}
           type="submit">
-          Add
+          Submit
         </Button>
       </Form>
     </div>
