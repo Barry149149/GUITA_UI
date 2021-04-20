@@ -88,3 +88,39 @@ export const DetailPaneStyle = {
     margin: '12px 0px'
   }
 }
+
+export const FormStyle = {
+  formControl: {
+    // margin: theme.spacing(2),
+    // marginLeft: theme.spacing(2.5),
+    // minWidth: 120
+  },
+  form: {
+    minHeight: 180,
+    // marginTop: 0,
+    // width: 240,
+    padding: 24,
+    paddingTop: 0,
+    paddingBottom: 12,
+    display: 'flex',
+    flexDirection: 'column',
+    // backgroundColor: "aliceblue",
+    height: '100%'
+  },
+  titleBar: {
+    display: 'flex',
+    // height: 48,
+    width: '100%',
+    padding: 0,
+    paddingTop: 16,
+    justifyContent: 'space-between'
+  },
+  closeButton: {
+    // position: 'absolute',
+    // top: 0,
+    // right: -16,
+    width: '24px',
+    height: '24px',
+    color: 'lightgray'
+  }
+}

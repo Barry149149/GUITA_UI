@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  styled,
   TableBody
 } from '@material-ui/core'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -33,8 +34,11 @@ import { useLocation } from 'react-router-dom'
 import SaveIcon from '@material-ui/icons/Save'
 import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
 import ClipLoader from 'react-spinners/ClipLoader'
+import { TableHeaderCellStyle, TableRowStyle } from '../../style/mystyle'
+import { StageTableRowDetail } from './StageTableRowDetail'
 
 const useStyles = makeStyles((theme) => ({
+  ...TableRowStyle,
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1)
@@ -54,13 +58,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tableRow: {
     '&$selected, &$selected:hover': {
-      backgroundColor: lighten(theme.palette.primary.light, 0.85)
+      backgroundColor: 'lightgray'
+    },
+    '&.Mui-selected, &.Mui-selected:hover': {
+      backgroundColor: '#f5f5f5' // why is shit turning red?
     }
-  },
-  paper: {
-    overflowX: 'auto',
-    overflow: 'auto',
-    maxHeight: 800
   },
   tableHead: {
     backgroundColor: '#F0F0F0',
@@ -264,8 +266,12 @@ export default function StageTable(props) {
   const isSelected = (id) => selected.indexOf(id) !== -1
   const isOpen = (id) => open.indexOf(id) !== -1
 
+  const StyledHeaderCell = styled(TableCell)({
+    ...TableHeaderCellStyle
+  })
+
   return (
-    <Paper className={classes.paper}>
+    <React.Fragment>
       <Toolbar
         className={clsx(classes.root, {
           [classes.highlight]: selected.length > 0
@@ -330,7 +336,7 @@ export default function StageTable(props) {
         )}
       </Toolbar>
       {fetched ? (
-        <Table classes={classes.root}>
+        <Table>
           <TableHead>
             <TableRow
               hover
@@ -340,9 +346,10 @@ export default function StageTable(props) {
               aria-checked={
                 props.stage.length > 0 && props.stage.length === selected.length
               }
-              className={classes.tableHead}
-              classes={{ selected: classes.selected }}>
-              <TableCell padding="checkbox">
+              className={classes.tableRow}
+              // classes={{ selected: classes.selected }}
+            >
+              <StyledHeaderCell padding="checkbox">
                 <Checkbox
                   checked={
                     props.stage.length > 0 &&
@@ -353,17 +360,24 @@ export default function StageTable(props) {
                     selectAll()
                   }}
                 />
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="h7">Stage Name</Typography>
-              </TableCell>
-              <TableCell align="left">
+              </StyledHeaderCell>
+              <StyledHeaderCell align="left">StageName</StyledHeaderCell>
+              <StyledHeaderCell align="center">
                 <Typography variant="h7">Priority</Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="h7">TestCaseID</Typography>
-              </TableCell>
-              <TableCell align="right">
+              </StyledHeaderCell>
+              <StyledHeaderCell align="center">
+                <Typography variant="h7">Job Type</Typography>
+              </StyledHeaderCell>
+              <StyledHeaderCell align="center">
+                <Typography variant="h7">Timeout (s)</Typography>
+              </StyledHeaderCell>
+              <StyledHeaderCell align="center">
+                <Typography variant="h7">Abort on Error</Typography>
+              </StyledHeaderCell>
+              <StyledHeaderCell align="center">
+                <Typography variant="h7">Image</Typography>
+              </StyledHeaderCell>
+              <StyledHeaderCell align="right">
                 <IconButton
                   id="button_expandRow"
                   size="small"
@@ -375,7 +389,7 @@ export default function StageTable(props) {
                     <KeyboardArrowDownIcon />
                   )}
                 </IconButton>
-              </TableCell>
+              </StyledHeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -389,8 +403,10 @@ export default function StageTable(props) {
                     key={row.id}
                     aria-checked={isItemSelected}
                     selected={isItemSelected}
-                    className={classes.tableRow}
-                    classes={{ selected: classes.selected }}>
+                    // className={classes.tableRow}
+                    className={classes.mainContainer}
+                    // classes={{ selected: classes.selected }}
+                  >
                     <TableCell padding="checkbox">
                       <Checkbox
                         id="checkbox_commandTableRow"
@@ -406,16 +422,29 @@ export default function StageTable(props) {
                     ) : (
                       <TableCell />
                     )}
-                    {row.json.priority ? (
-                      <TableCell align="left">{row.json.priority}</TableCell>
+                    {typeof row.json.priority !== 'undefined' ? (
+                      <TableCell align="center">
+                        {row.json.priority.toString()}
+                      </TableCell>
                     ) : (
                       <TableCell />
                     )}
-                    {row.json.testcase_id ? (
-                      <TableCell align="left">{row.json.testcase_id}</TableCell>
-                    ) : (
-                      <TableCell />
-                    )}
+                    <TableCell align="center">
+                      {row.json.stage_config.jobType}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.json.stage_config.stopTimeout
+                        ? row.json.stage_config.stopTimeout
+                        : 60}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.json.stage_config.abortOnError
+                        ? row.json.stage_config.abortOnError.toString()
+                        : 'false'}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.json.stage_config.image}
+                    </TableCell>
                     <TableCell align="right">
                       <IconButton
                         id="button_expandRow"
@@ -431,72 +460,11 @@ export default function StageTable(props) {
                   </TableRow>
                   <TableRow>
                     <TableCell
-                      style={{ paddingBottom: 0, paddingTop: 0 }}
-                      colSpan={6}>
+                      // style={{ paddingBottom: 0, paddingTop: 0 }}
+                      className={classes.detailContainer}
+                      colSpan={8}>
                       <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
-                        <Box margin={1}>
-                          <Typography variant="h6" gutterBottom component="div">
-                            Detail
-                          </Typography>
-                          <Table size="small" aria-label="purchases">
-                            <TableHead>
-                              <TableRow>
-                                <TableCell align="left">Image</TableCell>
-                                <TableCell align="left">ExtraPath</TableCell>
-                                <TableCell align="left">JobType</TableCell>
-                                <TableCell align="left">MainClass</TableCell>
-                                <TableCell align="left">ProjectFile</TableCell>
-                                <TableCell align="left">Timeout</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableRow>
-                                {row.json.stage_config.image ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.image}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                                {row.json.stage_config.extraPath ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.extraPath}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                                {row.json.stage_config.jobType ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.jobType}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                                {row.json.stage_config.mainClass ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.mainClass}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                                {row.json.stage_config.projectFile ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.projectFile}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                                {row.json.stage_config.stopTimeOut ? (
-                                  <TableCell align="left">
-                                    {row.json.stage_config.stopTimeOut}
-                                  </TableCell>
-                                ) : (
-                                  <TableCell />
-                                )}
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </Box>
+                        <StageTableRowDetail row={row} />
                       </Collapse>
                     </TableCell>
                   </TableRow>
@@ -533,6 +501,6 @@ export default function StageTable(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+    </React.Fragment>
   )
 }

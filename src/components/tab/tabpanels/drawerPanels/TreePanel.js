@@ -15,10 +15,11 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 
 const useStyles = makeStyles((theme) => ({
-  readOnlyBox: {
-    width: 160,
-    maxWidth: 160,
-    minWidth: 160
+  root: {
+    backgroundColor: 'white',
+    width: 300,
+    height: '100%',
+    paddingLeft: 24
   },
   uploadButton: {
     height: 40,
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'capitalize',
     // fontWeight: "bold",
     fontSize: '14px',
-    minWidth: 220,
+    width: 200,
     backgroundColor: 'aliceblue'
     // color: "white"
     // border: "2px solid"
@@ -63,12 +64,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TreePanel(props) {
   const classes = useStyles()
-
   let { assignment_id, assignment_name } = useParams()
 
   return (
-    // Case tree width is 260
-    <Box p={3} style={{ width: 260, height: '90%' }}>
+    <Box p={3} className={classes.root}>
       <Title>Test Cases</Title>
       <Divider />
       <div className={classes.panelBody}>

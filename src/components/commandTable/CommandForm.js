@@ -8,14 +8,15 @@ import {
   ListItemText,
   MenuItem,
   Select,
-  TextField
+  TextField,
+  Toolbar
 } from '@material-ui/core'
 import { commandDescription, commandSchema } from '../../docs/commandList'
 import Form from '@rjsf/material-ui'
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../Title'
-import drawerTab from '../tab/drawerTab'
+import drawerTab from '../tab/DrawerTab'
 import Typography from '@material-ui/core/Typography'
 import AddIcon from '@material-ui/icons/Add'
 import IconButton from '@material-ui/core/IconButton'
@@ -26,35 +27,11 @@ import Button from '@material-ui/core/Button'
 import { Add } from '@material-ui/icons'
 import CloseIcon from '@material-ui/icons/Close'
 import CancelIcon from '@material-ui/icons/Cancel'
+import { FormStyle } from '../../style/mystyle'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    // margin: theme.spacing(2),
-    // marginLeft: theme.spacing(2.5),
-    // minWidth: 120
-  },
-  form: {
-    minHeight: 180,
-    // marginTop: 0,
-    // width: 240,
-    padding: 24,
-    paddingTop: 0
-  },
-  titleBar: {
-    display: 'flex',
-    // height: 48,
-    width: '100%',
-    paddingTop: 16,
-    justifyContent: 'space-between'
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 0,
-    right: -16,
-    width: '24px',
-    height: '24px',
-    color: 'lightgray'
-  }
+  ...FormStyle
 }))
 
 function CustomArrayFieldTemplate(props) {
@@ -115,16 +92,19 @@ export default function CommandForm(props) {
 
   return (
     <div className={classes.form}>
+      <Toolbar className={classes.titleBar}>
+        <Typography color="primary" component="h2" variant="h6">
+          Command Form
+        </Typography>
+        <Tooltip title="Close">
+          <IconButton
+            className={classes.closeButton}
+            onClick={() => props.setFormOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Tooltip>
+      </Toolbar>
       <FormControl className={classes.formControl} style={{ width: '100%' }}>
-        <IconButton
-          className={classes.closeButton}
-          size="small"
-          onClick={() => props.setFormOpen(false)}>
-          <CloseIcon />
-        </IconButton>
-        <div className={classes.titleBar}>
-          <Title>Command Form</Title>
-        </div>
         <Box p={1} />
         <div id="select_command">
           <Select
