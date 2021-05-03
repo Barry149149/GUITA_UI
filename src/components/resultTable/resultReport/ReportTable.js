@@ -75,8 +75,7 @@ const useStyles = makeStyles(() => ({
     flex: '1'
   },
   container: {
-    // maxHeight: 650
-    maxHeight: '75vh'
+    maxHeight: 'calc(75vh - 64px)' // 64 is toolbar height
   },
   openButton: {
     width: 32,
