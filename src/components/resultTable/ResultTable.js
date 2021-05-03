@@ -114,7 +114,8 @@ const useStyles = makeStyles(() => ({
     flex: '1 1 100%'
   },
   container: {
-    maxHeight: 650
+    height: '100%'
+    // maxHeight: 650
   }
 }))
 
@@ -128,6 +129,7 @@ function ResultTableToolbar(props) {
       </Typography>
       <TextField
         label="Search"
+        // InputLabelProps={{shrink: false}}
         onChange={(e) => {
           setFilterCriteria(e.target.value)
         }}
@@ -160,7 +162,7 @@ export default function ResultTable(props) {
       assignment_name: row.assignment.assignment_name,
       created_at: row.created_at
     })
-    console.log(row)
+    // console.log(row)
     setResultStep(1)
   }
 
@@ -188,7 +190,7 @@ export default function ResultTable(props) {
   }, [])
 
   return (
-    <div className={classes.root}>
+    <React.Fragment>
       <ResultTableToolbar
         table="Job Batch List"
         classes={classes}
@@ -284,6 +286,6 @@ export default function ResultTable(props) {
           </div>
         )}
       </TableContainer>
-    </div>
+    </React.Fragment>
   )
 }

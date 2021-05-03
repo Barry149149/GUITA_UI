@@ -10,6 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import {
+  Fade,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -140,7 +141,7 @@ const useStyles = makeStyles(() => ({
     flex: '1 1 100%'
   },
   container: {
-    maxHeight: 650
+    height: '100%'
   }
 }))
 
@@ -248,23 +249,29 @@ export default function JobTable(props) {
   }
 */
   return (
-    <div className={classes.root}>
+    <React.Fragment>
       <ResultTableToolbar
         table={jobData.assignment_name}
         classes={classes}
         setFilterCriteria={setFilterCriteria}
         setResultStep={setResultStep}
       />
-      <Box style={{ backgroundColor: '#FFFFFF' }}>
-        <ListItem dense>
-          <ListItemIcon>
-            <SyncLoader color={'#DDDDDD'} size={6} />
-          </ListItemIcon>
-          <ListItemText style={{ color: '#777777', fontSize: 12 }}>
-            Synchronized with server
-          </ListItemText>
-        </ListItem>
-      </Box>
+      {/*<div style={{ minHeight: 48, height: 48, maxHeight: 48 }}>*/}
+      {/* Wow don't do this, the table will keep re-rendering! */}
+      {/* Is is the table always re-rendering already? */}
+      {/*<Fade in={isValidating} timeout={{appear: 500, enter: 1000, exit: 1000,}}>*/}
+      <ListItem dense size="small">
+        <ListItemIcon
+          style={{ width: 24, height: 24, marginRight: -12, marginLeft: 12 }}>
+          <SyncLoader color={'#DDDDDD'} size={5} />
+        </ListItemIcon>
+        <ListItemText style={{ color: '#999999', fontSize: 12 }}>
+          synchronizing with server
+        </ListItemText>
+      </ListItem>
+      {/*</Fade>*/}
+      {/*</div>*/}
+
       <TableContainer className={classes.container}>
         {job && !error && fetched ? (
           <Table
@@ -398,6 +405,6 @@ export default function JobTable(props) {
           </div>
         )}
       </TableContainer>
-    </div>
+    </React.Fragment>
   )
 }

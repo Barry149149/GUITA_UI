@@ -8,26 +8,17 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { resultSample } from '../../../docs/resultSample'
-import Collapse from '@material-ui/core/Collapse'
-import Divider from '@material-ui/core/Divider'
-import Box from '@material-ui/core/Box'
-import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import Text from 'recharts/lib/component/Text'
 import { useParams } from 'react-router-dom'
-import { CheckCircle } from '@material-ui/icons'
-import CancelIcon from '@material-ui/icons/Cancel'
-import { Link } from '@material-ui/core'
-import { ClimbingBoxLoader } from 'react-spinners'
+import { styled } from '@material-ui/core'
 import ClipLoader from 'react-spinners/ClipLoader'
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { ReportImageDialog } from './ReportImageDialog'
+import { Row } from './ReportRow'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import { TableHeaderCellStyle } from '../../../style/mystyle'
 
 /*function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
@@ -74,293 +65,33 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    padding: '10px'
+    padding: '10px',
+    fontFamily: 'Lato'
   },
   table: {
     minWidth: 450
   },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1
-  },
   title: {
-    flex: '1 1 100%'
+    flex: '1'
   },
   container: {
-    maxHeight: 650
+    // maxHeight: 650
+    maxHeight: '75vh'
   },
-  tableCell: {
-    padding: '0px 8px'
+  openButton: {
+    width: 32,
+    height: 32
+  },
+  totalScore: {
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: 'large'
   }
 }))
 
-function Row(props) {
-  const classes = useStyles()
-  const {
-    row,
-    isOpen,
-    handleOpenClick,
-    jobData,
-    setJobData,
-    reportImg,
-    setReportImg
-  } = props
-
-  const isItemOpened = isOpen(row.commandId)
-  const [open, setOpen] = useState({
-    result: false,
-    error: false
-  })
-
-  return (
-    <React.Fragment>
-      <TableRow
-        hover
-        style={{ cursor: 'pointer' }}
-        tabIndex={-1}
-        key={row.commandId}
-        onClick={(e) => handleOpenClick(e, row.commandId)}>
-        <TableCell>{row.commandId}</TableCell>
-        <TableCell>
-          {row.command}
-          <Typography
-            style={{
-              fontSize: 16,
-              color: '#3f51b3',
-              fontWeight: 'bold'
-            }}>
-            {row.parameters.description}
-          </Typography>
-        </TableCell>
-        <TableCell align="center">
-          {row.status === 'success' ? (
-            <CheckCircle style={{ color: 'green' }} />
-          ) : row.status === 'failed' ? (
-            <CancelIcon color="secondary" />
-          ) : row.status === 'aborted' ? (
-            <RemoveCircleIcon />
-          ) : (
-            row.status
-          )}
-          {row.maxScore > 0 && <div>{row.score + '/' + row.maxScore}</div>}
-        </TableCell>
-        <TableCell align="right">
-          <IconButton
-            id="button_expandRow"
-            size="small"
-            onClick={(e) => handleOpenClick(e, row.commandId)}>
-            {isItemOpened ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={isItemOpened} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                Detail:
-              </Typography>
-              <Table>
-                <TableRow>
-                  <TableCell size="small" className={classes.tableCell}>
-                    Score: {row.score + '/' + row.maxScore}
-                  </TableCell>
-                </TableRow>
-                {row.parameters ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        Parameters:
-                      </Typography>
-                      <Box
-                        border={1}
-                        borderColor="grey.500"
-                        style={{
-                          minHeight: 60,
-                          width: '100%'
-                        }}>
-                        <pre
-                          style={{
-                            textAlign: 'left',
-                            padding: 5,
-                            'white-space': 'pre-wrap'
-                          }}>
-                          {JSON.stringify(row.parameters, null, 2)}
-                        </pre>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.driver ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        Driver: {row.driver}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.setVariable ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        setVariable: {row.setVariable}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.result ? (
-                  <TableRow
-                    onClick={(e) =>
-                      setOpen({
-                        ...open,
-                        result: !open.result
-                      })
-                    }
-                    style={{
-                      cursor: 'pointer'
-                    }}>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        result:{' '}
-                        <Link component="button" variant="body2">
-                          {row.result.value === null
-                            ? 'null'
-                            : row.result.value.toString()}
-                        </Link>
-                      </Typography>
-                      <Collapse in={open.result}>
-                        <Box
-                          border={1}
-                          borderColor="grey.500"
-                          style={{
-                            minHeight: 60,
-                            width: '100%',
-                            minWidth: '100%'
-                          }}>
-                          <pre
-                            style={{
-                              textAlign: 'left',
-                              padding: 5,
-                              'white-space': 'pre-wrap'
-                            }}>
-                            {JSON.stringify(row.result, null, 2).replace(
-                              /\\n/gm,
-                              '\n'
-                            )}
-                          </pre>
-                        </Box>
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.errors.length ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        errors:{' '}
-                        <Link
-                          component="button"
-                          variant="body2"
-                          onClick={(e) =>
-                            setOpen({
-                              ...open,
-                              error: !open.error
-                            })
-                          }
-                          style={{
-                            cursor: 'pointer'
-                          }}>
-                          {row.errors.map(
-                            (err, index) => index + 1 + ') ' + err.message
-                          ) + ','}
-                        </Link>
-                      </Typography>
-                      <Collapse in={open.error}>
-                        <Box
-                          border={1}
-                          borderColor="grey.500"
-                          style={{
-                            minHeight: 60,
-                            width: '100%',
-                            minWidth: '100%'
-                          }}>
-                          <pre
-                            style={{
-                              textAlign: 'left',
-                              padding: 5,
-                              'white-space': 'pre-wrap'
-                            }}>
-                            {row.errors.map((err, index) =>
-                              JSON.stringify(err, null, 2).replace(
-                                /\\n/gm,
-                                '\n'
-                              )
-                            )}
-                          </pre>
-                        </Box>
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.screenshotPath ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        Screenshot:
-                        <Link
-                          component="button"
-                          variant="body2"
-                          onClick={() => {
-                            setReportImg({
-                              ...reportImg,
-                              name: row.screenshotPath,
-                              path: reportImg.paths.indexOf(row.screenshotPath)
-                            })
-                            props.handleImgDialogOpen()
-                          }}>
-                          {row.screenshotPath}
-                        </Link>
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-                {row.studentImgPath && row.expectedImgPath ? (
-                  <TableRow>
-                    <TableCell size="small" className={classes.tableCell}>
-                      <Typography variant="h8" gutterBottom component="div">
-                        Student v Expected Screenshot:
-                        <Link
-                          component="button"
-                          variant="body2"
-                          onClick={() => {
-                            props.setSvEImg({
-                              open: true,
-                              student: row.studentImgPath,
-                              expected: row.expectedImgPath
-                            })
-                          }}>
-                          {row.studentImgPath + '& ...expected.png'}
-                        </Link>
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : null}
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  )
-}
+const HeaderCell = styled(TableCell)({
+  ...TableHeaderCellStyle
+})
 
 function ReportTableToolbar(props) {
   const { classes, table, result, setResultStep, fetched } = props
@@ -371,9 +102,12 @@ function ReportTableToolbar(props) {
         <Typography className={classes.title} color="primary" variant="h6">
           {table}
         </Typography>
-        <Typography variant="body1">
-          {'Result: ' + result.summary.score + '/' + result.summary.maxScore}
-        </Typography>
+        <div className={classes.totalScore}>
+          {'Total Score: ' +
+            result.summary.score +
+            '/' +
+            result.summary.maxScore}
+        </div>
       </Toolbar>
     )
   } else {
@@ -389,7 +123,6 @@ function ReportTableToolbar(props) {
 
 export default function ReportTable(props) {
   let { jobId, stageId } = useParams()
-
   const {
     setResultStep,
     jobData,
@@ -409,6 +142,8 @@ export default function ReportTable(props) {
     expected: '',
     open: false
   })
+
+  const [imgDialogOpen, setImgDialogOpen] = useState(false)
 
   useEffect(() => {
     setDrawerOpen(false)
@@ -471,6 +206,8 @@ export default function ReportTable(props) {
       .then((result) => {
         setJobData({
           ...jobData,
+          job_id: jobId,
+          stage_id: stageId,
           assignment_name: result
         })
 
@@ -534,23 +271,29 @@ export default function ReportTable(props) {
               aria-label="enhanced table"
               stickyHeader>
               <TableHead>
-                <TableCell>Command ID</TableCell>
-                <TableCell>Command</TableCell>
-                <TableCell align="center">Result</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    id="button_expandRow"
-                    size="small"
-                    onClick={(e) => openAll()}>
-                    {typeof result.breakdown !== 'undefined' &&
-                    result.breakdown.length > 0 &&
-                    result.breakdown.length === open.length ? (
-                      <KeyboardArrowUpIcon />
-                    ) : (
-                      <KeyboardArrowDownIcon />
-                    )}
-                  </IconButton>
-                </TableCell>
+                <TableRow>
+                  <HeaderCell>{}</HeaderCell>
+                  <HeaderCell>{}</HeaderCell>
+
+                  <HeaderCell>Command</HeaderCell>
+                  <HeaderCell align="center">Result</HeaderCell>
+                  <HeaderCell align="center">Score</HeaderCell>
+                  <HeaderCell align="center">
+                    <IconButton
+                      className={classes.openButton}
+                      id="button_expandRow"
+                      size="small"
+                      onClick={(e) => openAll()}>
+                      {typeof result.breakdown !== 'undefined' &&
+                      result.breakdown.length > 0 &&
+                      result.breakdown.length === open.length ? (
+                        <KeyboardArrowUpIcon />
+                      ) : (
+                        <KeyboardArrowDownIcon />
+                      )}
+                    </IconButton>
+                  </HeaderCell>
+                </TableRow>
               </TableHead>
               {typeof result.breakdown !== 'undefined' ? (
                 <TableBody>
@@ -561,7 +304,7 @@ export default function ReportTable(props) {
                       jobData={jobData}
                       setJobData={setJobData}
                       handleOpenClick={handleOpenClick}
-                      handleImgDialogOpen={props.handleImgDialogOpen}
+                      handleImgDialogOpen={() => setImgDialogOpen(true)}
                       reportImg={reportImg}
                       setReportImg={setReportImg}
                       setSvEImg={setSvEImg}
@@ -629,6 +372,15 @@ export default function ReportTable(props) {
           </div>
         </div>
       </Dialog>
+      <ReportImageDialog
+        open={imgDialogOpen}
+        handleClose={() => setImgDialogOpen(false)}
+        title={reportImg.name}
+        jobData={jobData}
+        reportImg={reportImg}
+        setReportImg={setReportImg}
+        //imgPath="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png"
+      />
     </React.Fragment>
   )
 }

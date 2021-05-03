@@ -78,7 +78,7 @@ export default function TestCasePageJsEditor(props) {
                 to={'/testcase/' + assignId + '/' + assignName}
               />
             </Tooltip>
-            <Tooltip title="CodeEditor">
+            <Tooltip title="Code Editor">
               <Tab
                 className={classes.tab}
                 aria-label="tab_codeEditor"

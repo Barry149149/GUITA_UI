@@ -14,23 +14,19 @@ import { useParams, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import SaveIcon from '@material-ui/icons/Save'
+import Divider from '@material-ui/core/Divider'
 
 export default function TestCaseToolBar(props) {
   const {
     classes,
     tabValue,
-    selectedAssignmentName,
     dispatch,
-    setTabValue,
     state,
     setDrawerOpen,
     fetched,
     setFetched,
     file,
-    setFile,
-    setPostings,
-    deletedTestcase,
-    setDeletedTestcase
+    setPostings
   } = props
 
   let { assignId, assignName } = useParams()
@@ -247,9 +243,10 @@ export default function TestCaseToolBar(props) {
           }
         }}
       />
-      <Toolbar className={classes.toolbar2}>
+      <Toolbar className={classes.toolbar2} style={{ paddingRight: 0 }}>
         <Typography
           className={classes.title}
+          style={{ flexGrow: 1 }}
           color="primary"
           variant="h6"
           component="div">
@@ -285,6 +282,7 @@ export default function TestCaseToolBar(props) {
           }}>
           <RedoIcon />
         </IconButton>
+
         <Tabs
           value={location.pathname.includes('jsoneditor') ? 1 : 0}
           indicatorColor="primary"
@@ -293,18 +291,22 @@ export default function TestCaseToolBar(props) {
           <Tooltip title="Table Mode">
             <Tab
               className={classes.tab}
+              style={{ padding: 0 }}
               aria-label="tab_tableView"
-              icon={<TableChartIcon color="primary" />}
+              icon={<TableChartIcon />}
               component={Link}
+              label="Table Mode"
               to={'/testcase/' + assignId + '/' + assignName}
             />
           </Tooltip>
-          <Tooltip title="CodeEditor">
+          <Tooltip title="Code Editor">
             <Tab
               className={classes.tab}
+              style={{ padding: 0 }}
               aria-label="tab_codeEditor"
-              icon={<CodeIcon color="primary" />}
+              icon={<CodeIcon />}
               component={Link}
+              label="JSON Mode"
               to={'/testcase/' + assignId + '/' + assignName + '/jsoneditor'}
             />
           </Tooltip>

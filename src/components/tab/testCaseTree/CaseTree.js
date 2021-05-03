@@ -85,8 +85,8 @@ export default function CaseTree(props) {
       <div
         style={{
           overflow: 'auto',
-          maxHeight: 400,
-          height: 400,
+          // maxHeight: 400,
+          // height: 400,
           width: 270
         }}>
         <MuiTreeView
@@ -160,10 +160,10 @@ export default function CaseTree(props) {
                   createdCases: props.createdCases,
                   noOfCases: newNoOfCases,
                   selectedCase: {
-                    id: props.tree[0].nodes[0].id,
-                    value: props.tree[0].nodes[0].value,
-                    json: props.tree[0].nodes[0].json,
-                    json_id: props.tree[0].nodes[0].json_id
+                    id: newNodes[0].id,
+                    value: newNodes[0].value,
+                    json: newNodes[0].json,
+                    json_id: newNodes[0].json_id
                   }
                 }
               })

@@ -5,7 +5,8 @@ import {
   MenuItem,
   Select,
   Toolbar,
-  Input
+  Input,
+  OutlinedInput
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import Paper from '@material-ui/core/Paper'
@@ -24,24 +25,28 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton'
+import { FormStyle } from '../../style/mystyle'
 
 const useStyle = makeStyles((theme) => ({
+  ...FormStyle,
   slider: {
     width: 150
   },
-  input: {
-    width: 42
+  formControl: {
+    // width: 42
+    paddingTop: 12,
+    paddingBottom: 12
+    // paddingLeft: 12,
+    // paddingRight: 12
   },
-  form: {
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    minWidth: 150
-  },
-  container: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2)
+  stageFormContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    // justifyContent: "flex-start",
+    paddingTop: 12,
+    // height: "100%",
+    flexGrow: 1
   },
   paper: {
     overflowX: 'visible',
@@ -85,24 +90,22 @@ export default function StageForm(props) {
   }, [fetched])
 
   return (
-    <React.Fragment>
-      <Toolbar>
-        <Typography
-          className={classes.title}
-          color="primary"
-          component="h2"
-          variant="h6">
+    <div className={classes.form}>
+      <Toolbar className={classes.titleBar}>
+        <Typography color="primary" component="h2" variant="h6">
           Stage Form
         </Typography>
-        <Tooltip title="Close Form">
-          <Button onClick={() => props.setStageFormOpen(false)}>
+        <Tooltip title="Close">
+          <IconButton
+            className={classes.closeButton}
+            onClick={() => props.setStageFormOpen(false)}>
             <CloseIcon />
-          </Button>
+          </IconButton>
         </Tooltip>
       </Toolbar>
       <Divider />
-      <div className={classes.container}>
-        <FormControl className={classes.form}>
+      <div className={classes.stageFormContainer}>
+        <FormControl className={classes.formControl}>
           <TextField
             id="stage_name"
             label="Stage Name"
@@ -115,13 +118,11 @@ export default function StageForm(props) {
             }
           />
         </FormControl>
-        <br />
-        <FormControl className={classes.form} required={true}>
-          Priority:
-          <Input
-            className={classes.input}
+        <FormControl className={classes.formControl} required={true}>
+          <TextField
+            label="Priority"
             value={newStage.priority}
-            margin="dense"
+            required={true}
             onChange={(e) =>
               setNewStage({
                 ...newStage,
@@ -130,21 +131,85 @@ export default function StageForm(props) {
             }
             inputProps={{
               step: 1,
-              min: 0,
+              min: 1,
               max: 50,
               type: 'number',
               'aria-labelledby': 'input-slider'
             }}
           />
         </FormControl>
-        <div style={{ paddingLeft: 7, paddingRight: 7 }}>
-          <Typography id="stageForm_slider" gutterBottom>
-            Configuration
-          </Typography>
+        {fetched && (
+          <FormControl className={classes.formControl}>
+            <TextField
+              select
+              label="Test Case"
+              value={newStage.testcase_id}
+              onChange={(e) => {
+                setNewStage({
+                  ...newStage,
+                  assignment_id: props.selectedAssignment,
+                  testcase_id: e.target.value
+                })
+              }}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {testcase.map((row) => (
+                <MenuItem value={row.testcase_id}>{row.testcase_name}</MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+        )}
+        <Divider style={{ marginTop: 12 }} variant="light" />
+        <div
+          style={{
+            color: 'gray',
+            fontSize: '16px',
+            paddingTop: 12,
+            paddingBottom: 12
+          }}>
+          Configuration
+        </div>
+        <div style={{ flex: 1, marginBottom: 12 }}>
           <JSONInput
             locale={locale}
+            colors={{
+              default: '#000000',
+              background: 'white',
+              background_warning: '#FEECEB',
+              string: 'orangered',
+              number: 'green',
+              colon: '#0978B7',
+              keys: '#006d8e',
+              keys_whiteSpace: '#835FB6',
+              primitive: '#386FA4',
+              error: 'red'
+            }}
+            style={{
+              outerBox: {
+                borderTop: '1px solid',
+                borderTopColor: 'gray',
+                borderBottom: '1px solid',
+                borderBottomColor: 'gray'
+              },
+              labelColumn: {
+                width: 32,
+                backgroundColor: '#f9f9f9',
+                color: 'dimgray'
+              },
+              body: {
+                fontSize: '13px'
+                // fontWeight: "bold"
+              }
+            }}
+            placeholder={{
+              image: '',
+              jobType: '',
+              stopTimeout: 60,
+              abortOnError: false
+            }}
             width="100%"
-            height="300px"
+            height="100%"
             onChange={(e) => {
               if (!e.error) {
                 setNewStage({
@@ -158,36 +223,12 @@ export default function StageForm(props) {
         {
           //TODO: Sync Test Case
         }
-        {fetched ? (
-          <FormControl className={classes.form}>
-            <InputLabel>Test Case ID</InputLabel>
-            <Select
-              value={newStage.testcase_id}
-              onChange={(e) => {
-                setNewStage({
-                  ...newStage,
-                  assignment_id: props.selectedAssignment,
-                  testcase_id: e.target.value
-                })
-              }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              {testcase.map((row) => {
-                return (
-                  <MenuItem value={row.testcase_id}>
-                    {row.testcase_name}
-                  </MenuItem>
-                )
-              })}
-            </Select>
-          </FormControl>
-        ) : null}
-        <br />
-        <FormControl className={classes.form}>
+
+        <FormControl>
           <Button
             color="primary"
-            variant="outlined"
+            variant="contained"
+            style={{ width: 100 }}
             onClick={() => {
               if (newStage.stage_name && newStage.priority) {
                 setError({ message: '' })
@@ -211,6 +252,6 @@ export default function StageForm(props) {
         </FormControl>
         {error.message ? <p style={{ color: 'red' }}>{error.message}</p> : null}
       </div>
-    </React.Fragment>
+    </div>
   )
 }
