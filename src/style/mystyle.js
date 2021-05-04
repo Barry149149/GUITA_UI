@@ -66,7 +66,6 @@ export const DetailPaneStyle = {
     borderBottomColor: 'darkgray',
     borderBottomWidth: 1,
     borderBottomStyle: 'solid',
-    maxHeight: 650,
     padding: 20,
     color: 'dimgrey',
     backgroundColor: '#fbfbfb',

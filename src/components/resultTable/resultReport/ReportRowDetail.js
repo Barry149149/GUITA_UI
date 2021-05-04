@@ -14,6 +14,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { DetailPaneStyle } from '../../../style/mystyle'
+import { RowDetailBody } from '../../BaseRow'
 
 const useStyles = makeStyles(() => ({
   ...DetailPaneStyle,
@@ -41,13 +42,7 @@ export function ReportRowDetail({ row, setSvEImg }) {
           <div className={classes.header}>Parameters</div>
         </Grid>
         <Grid item sm={12} md={9} lg={10}>
-          {Object.entries(params).map(([key, val]) => {
-            return (
-              <div className={classes.parameter}>
-                {key}: {val ? val : 'none'}
-              </div>
-            )
-          })}
+          <RowDetailBody items={params} />
         </Grid>
       </Grid>
     )
@@ -55,13 +50,6 @@ export function ReportRowDetail({ row, setSvEImg }) {
 
   function Result({ result }) {
     const [open, setOpen] = useState(false)
-    const resultDetail = Object.entries(result).map(([key, val]) => {
-      return key === 'value' ? null : (
-        <div className={classes.parameter} key={key}>
-          {key}: {val ? val : 'none'}
-        </div>
-      )
-    })
 
     return (
       <Grid container>
@@ -70,11 +58,16 @@ export function ReportRowDetail({ row, setSvEImg }) {
         </Grid>
         <Grid item sm={12} md={9} lg={10}>
           <div className={classes.parameter}>
-            <span className={classes.emph}>{result.value}</span>
+            <span className={classes.emph}>{result.value.toString()}</span>
             <IconButton size="small" onClick={() => setOpen(!open)}>
               {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
-            {open ? resultDetail : null}
+            {open && (
+              <RowDetailBody
+                items={result}
+                topLevelFieldsToIgnore={['value']}
+              />
+            )}
           </div>
         </Grid>
       </Grid>
@@ -96,9 +89,11 @@ export function ReportRowDetail({ row, setSvEImg }) {
             <span className={`${classes.emph} ${classes.error}`}>
               {error.message}
             </span>
-            <IconButton size="small" onClick={() => setOpen(!open)}>
-              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
+            {error.detail && (
+              <IconButton size="small" onClick={() => setOpen(!open)}>
+                {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            )}
           </div>
         </Grid>
         <Grid item>
