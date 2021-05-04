@@ -10,34 +10,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { DetailPaneStyle } from '../../style/mystyle'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
+import { RowDetailBody } from '../BaseRow'
 
 const useStyles = makeStyles(() => ({
   ...DetailPaneStyle
 }))
 
-function DetailSection({ header, items }) {
-  function DetailSectionBody({ items }) {
-    return (
-      <Grid item sm={12} md={9} lg={10}>
-        <div style={{ paddingLeft: '10px' }}>
-          {Object.entries(items).map(([key, val]) => {
-            return typeof val === 'object' ? (
-              <div>
-                <div className={classes.parameter}>{key}:</div>
-                <DetailSectionBody items={val} />
-              </div>
-            ) : (
-              <div className={classes.parameter}>
-                {key === 'setVariable' ? '' : `${key}: `}
-                {val ? val : 'none'}
-              </div>
-            )
-          })}
-        </div>
-      </Grid>
-    )
-  }
-
+function DetailSection({ header, items, topLevelFieldsToIgnore }) {
   const classes = useStyles()
 
   return (
@@ -45,7 +24,12 @@ function DetailSection({ header, items }) {
       <Grid item sm={12} md={3} lg={2}>
         <div className={classes.header}>{header}</div>
       </Grid>
-      <DetailSectionBody items={items} />
+      <Grid item sm={12} md={9} lg={10}>
+        <RowDetailBody
+          items={items}
+          topLevelFieldsToIgnore={topLevelFieldsToIgnore}
+        />
+      </Grid>
     </Grid>
   )
 }
@@ -56,7 +40,7 @@ export function CommandTableRowDetail({ row }) {
     const setVar = {}
     const misc = {}
     Object.entries(row.command).forEach(([key, val]) => {
-      if (key === 'command') return
+      if (key === 'command') return null
       else if (key === 'setVariable') {
         setVar[key] = val
       } else if (['weight', 'description', 'driver'].includes(key)) {
@@ -72,7 +56,11 @@ export function CommandTableRowDetail({ row }) {
 
   return (
     <Box margin={0} className={classes.container}>
-      <DetailSection header="Parameters" items={parameters} />
+      <DetailSection
+        header="Parameters"
+        items={parameters}
+        topLevelFieldsToIgnore={['setVariable']}
+      />
       {Object.keys(setVariable).length ? (
         <Divider variant="fullWidth" className={classes.divider} />
       ) : null}
