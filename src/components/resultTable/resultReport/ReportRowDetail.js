@@ -50,7 +50,8 @@ export function ReportRowDetail({ row, setSvEImg }) {
 
   function Result({ result }) {
     const [open, setOpen] = useState(false)
-
+    // If result only contains the value field, then hide the expand button
+    const isExpandable = result && Object.keys(result).length > 1
     return (
       <Grid container>
         <Grid item sm={12} md={3} lg={2}>
@@ -59,9 +60,11 @@ export function ReportRowDetail({ row, setSvEImg }) {
         <Grid item sm={12} md={9} lg={10}>
           <div className={classes.parameter}>
             <span className={classes.emph}>{result.value.toString()}</span>
-            <IconButton size="small" onClick={() => setOpen(!open)}>
-              {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
+            {isExpandable && (
+              <IconButton size="small" onClick={() => setOpen(!open)}>
+                {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            )}
             {open && (
               <RowDetailBody
                 items={result}
