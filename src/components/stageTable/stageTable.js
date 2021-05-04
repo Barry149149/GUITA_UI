@@ -36,6 +36,7 @@ import ClimbingBoxLoader from 'react-spinners/ClimbingBoxLoader'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { TableHeaderCellStyle, TableRowStyle } from '../../style/mystyle'
 import { StageTableRowDetail } from './StageTableRowDetail'
+import TableContainer from '@material-ui/core/TableContainer'
 
 const useStyles = makeStyles((theme) => ({
   ...TableRowStyle,
@@ -336,143 +337,149 @@ export default function StageTable(props) {
         )}
       </Toolbar>
       {fetched ? (
-        <Table>
-          <TableHead>
-            <TableRow
-              hover
-              selected={
-                props.stage.length > 0 && props.stage.length === selected.length
-              }
-              aria-checked={
-                props.stage.length > 0 && props.stage.length === selected.length
-              }
-              className={classes.tableRow}
-              // classes={{ selected: classes.selected }}
-            >
-              <StyledHeaderCell padding="checkbox">
-                <Checkbox
-                  checked={
-                    props.stage.length > 0 &&
-                    props.stage.length === selected.length
-                  }
-                  color="primary"
-                  onChange={(event) => {
-                    selectAll()
-                  }}
-                />
-              </StyledHeaderCell>
-              <StyledHeaderCell align="left">StageName</StyledHeaderCell>
-              <StyledHeaderCell align="center">
-                <Typography variant="h7">Priority</Typography>
-              </StyledHeaderCell>
-              <StyledHeaderCell align="center">
-                <Typography variant="h7">Job Type</Typography>
-              </StyledHeaderCell>
-              <StyledHeaderCell align="center">
-                <Typography variant="h7">Timeout (s)</Typography>
-              </StyledHeaderCell>
-              <StyledHeaderCell align="center">
-                <Typography variant="h7">Abort on Error</Typography>
-              </StyledHeaderCell>
-              <StyledHeaderCell align="center">
-                <Typography variant="h7">Image</Typography>
-              </StyledHeaderCell>
-              <StyledHeaderCell align="right">
-                <IconButton
-                  id="button_expandRow"
-                  size="small"
-                  onClick={(e) => openAll()}>
-                  {props.stage.length > 0 &&
-                  props.stage.length === open.length ? (
-                    <KeyboardArrowUpIcon />
-                  ) : (
-                    <KeyboardArrowDownIcon />
-                  )}
-                </IconButton>
-              </StyledHeaderCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.stage.map((row) => {
-              const isItemSelected = isSelected(row.id)
-              const isItemOpen = isOpen(row.id)
-              return (
-                <React.Fragment>
-                  <TableRow
-                    hover
-                    key={row.id}
-                    aria-checked={isItemSelected}
-                    selected={isItemSelected}
-                    // className={classes.tableRow}
-                    className={classes.mainContainer}
-                    // classes={{ selected: classes.selected }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        id="checkbox_commandTableRow"
-                        checked={isItemSelected}
-                        color="primary"
-                        onChange={(event) => {
-                          handleClick(event, row.id)
-                        }}
-                      />
-                    </TableCell>
-                    {row.json.stage_name ? (
-                      <TableCell align="left">{row.json.stage_name}</TableCell>
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow
+                hover
+                selected={
+                  props.stage.length > 0 &&
+                  props.stage.length === selected.length
+                }
+                aria-checked={
+                  props.stage.length > 0 &&
+                  props.stage.length === selected.length
+                }
+                className={classes.tableRow}
+                // classes={{ selected: classes.selected }}
+              >
+                <StyledHeaderCell padding="checkbox">
+                  <Checkbox
+                    checked={
+                      props.stage.length > 0 &&
+                      props.stage.length === selected.length
+                    }
+                    color="primary"
+                    onChange={(event) => {
+                      selectAll()
+                    }}
+                  />
+                </StyledHeaderCell>
+                <StyledHeaderCell align="left">StageName</StyledHeaderCell>
+                <StyledHeaderCell align="center">
+                  <Typography variant="h7">Priority</Typography>
+                </StyledHeaderCell>
+                <StyledHeaderCell align="center">
+                  <Typography variant="h7">Job Type</Typography>
+                </StyledHeaderCell>
+                <StyledHeaderCell align="center">
+                  <Typography variant="h7">Timeout (s)</Typography>
+                </StyledHeaderCell>
+                <StyledHeaderCell align="center">
+                  <Typography variant="h7">Abort on Error</Typography>
+                </StyledHeaderCell>
+                <StyledHeaderCell align="center">
+                  <Typography variant="h7">Image</Typography>
+                </StyledHeaderCell>
+                <StyledHeaderCell align="right">
+                  <IconButton
+                    id="button_expandRow"
+                    size="small"
+                    onClick={(e) => openAll()}>
+                    {props.stage.length > 0 &&
+                    props.stage.length === open.length ? (
+                      <KeyboardArrowUpIcon />
                     ) : (
-                      <TableCell />
+                      <KeyboardArrowDownIcon />
                     )}
-                    {typeof row.json.priority !== 'undefined' ? (
-                      <TableCell align="center">
-                        {row.json.priority.toString()}
+                  </IconButton>
+                </StyledHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.stage.map((row) => {
+                const isItemSelected = isSelected(row.id)
+                const isItemOpen = isOpen(row.id)
+                return (
+                  <React.Fragment>
+                    <TableRow
+                      hover
+                      key={row.id}
+                      aria-checked={isItemSelected}
+                      selected={isItemSelected}
+                      // className={classes.tableRow}
+                      className={classes.mainContainer}
+                      // classes={{ selected: classes.selected }}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          id="checkbox_commandTableRow"
+                          checked={isItemSelected}
+                          color="primary"
+                          onChange={(event) => {
+                            handleClick(event, row.id)
+                          }}
+                        />
                       </TableCell>
-                    ) : (
-                      <TableCell />
-                    )}
-                    <TableCell align="center">
-                      {row.json.stage_config.jobType}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.json.stage_config.stopTimeout
-                        ? row.json.stage_config.stopTimeout
-                        : 60}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.json.stage_config.abortOnError
-                        ? row.json.stage_config.abortOnError.toString()
-                        : 'false'}
-                    </TableCell>
-                    <TableCell align="center">
-                      {row.json.stage_config.image}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        id="button_expandRow"
-                        size="small"
-                        onClick={(e) => handleOpenClick(e, row.id)}>
-                        {isItemOpen ? (
-                          <KeyboardArrowUpIcon />
-                        ) : (
-                          <KeyboardArrowDownIcon />
-                        )}
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell
-                      // style={{ paddingBottom: 0, paddingTop: 0 }}
-                      className={classes.detailContainer}
-                      colSpan={8}>
-                      <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
-                        <StageTableRowDetail row={row} />
-                      </Collapse>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              )
-            })}
-          </TableBody>
-        </Table>
+                      {row.json.stage_name ? (
+                        <TableCell align="left">
+                          {row.json.stage_name}
+                        </TableCell>
+                      ) : (
+                        <TableCell />
+                      )}
+                      {typeof row.json.priority !== 'undefined' ? (
+                        <TableCell align="center">
+                          {row.json.priority.toString()}
+                        </TableCell>
+                      ) : (
+                        <TableCell />
+                      )}
+                      <TableCell align="center">
+                        {row.json.stage_config.jobType}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.json.stage_config.stopTimeout
+                          ? row.json.stage_config.stopTimeout
+                          : 60}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.json.stage_config.abortOnError
+                          ? row.json.stage_config.abortOnError.toString()
+                          : 'false'}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.json.stage_config.image}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          id="button_expandRow"
+                          size="small"
+                          onClick={(e) => handleOpenClick(e, row.id)}>
+                          {isItemOpen ? (
+                            <KeyboardArrowUpIcon />
+                          ) : (
+                            <KeyboardArrowDownIcon />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        // style={{ paddingBottom: 0, paddingTop: 0 }}
+                        className={classes.detailContainer}
+                        colSpan={8}>
+                        <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
+                          <StageTableRowDetail row={row} />
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       ) : (
         <div
           style={{

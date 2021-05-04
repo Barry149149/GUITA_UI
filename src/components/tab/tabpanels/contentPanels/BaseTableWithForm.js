@@ -25,7 +25,9 @@ const useStyles = makeStyles(() => ({
     padding: 24,
     paddingLeft: 32,
     paddingRight: 16,
-    overflowY: 'hidden'
+    overflowY: 'hidden',
+    display: 'flex',
+    flexDirection: 'column'
   },
   formContainer: {
     height: '100%',
