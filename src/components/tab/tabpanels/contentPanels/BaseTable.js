@@ -21,7 +21,9 @@ const useStyles = makeStyles(() => ({
     overflowY: 'hidden',
     padding: 24,
     paddingLeft: 32,
-    paddingRight: 32
+    paddingRight: 32,
+    display: 'flex',
+    flexDirection: 'column'
   }
 }))
 

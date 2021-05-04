@@ -63,11 +63,6 @@ import { TableHeaderCellStyle } from '../../../style/mystyle'
 }*/
 
 const useStyles = makeStyles(() => ({
-  root: {
-    width: '100%',
-    padding: '10px',
-    fontFamily: 'Lato'
-  },
   table: {
     minWidth: 450
   },
@@ -75,7 +70,7 @@ const useStyles = makeStyles(() => ({
     flex: '1'
   },
   container: {
-    maxHeight: 'calc(75vh - 64px)' // 64 is toolbar height
+    // maxHeight: 'calc(75vh - 64px)' // 64 is toolbar height
   },
   openButton: {
     width: 32,
@@ -253,78 +248,76 @@ export default function ReportTable(props) {
 
   return (
     <React.Fragment>
-      <div className={classes.root}>
-        <ReportTableToolbar
-          table={jobData.assignment_name + ' / Stage ' + stageId}
-          classes={classes}
-          result={result}
-          setResultStep={props.setResultStep}
-          fetched={fetched}
-        />
-        <TableContainer className={classes.container}>
-          {fetched ? (
-            <Table
-              className={classes.table}
-              aria-labelledby="tableTitle"
-              size="medium"
-              aria-label="enhanced table"
-              stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <HeaderCell>{}</HeaderCell>
-                  <HeaderCell>{}</HeaderCell>
+      <ReportTableToolbar
+        table={jobData.assignment_name + ' / Stage ' + stageId}
+        classes={classes}
+        result={result}
+        setResultStep={props.setResultStep}
+        fetched={fetched}
+      />
+      <TableContainer className={classes.container}>
+        {fetched ? (
+          <Table
+            className={classes.table}
+            aria-labelledby="tableTitle"
+            size="medium"
+            aria-label="enhanced table"
+            stickyHeader>
+            <TableHead>
+              <TableRow>
+                <HeaderCell>{}</HeaderCell>
+                <HeaderCell>{}</HeaderCell>
 
-                  <HeaderCell>Command</HeaderCell>
-                  <HeaderCell align="center">Result</HeaderCell>
-                  <HeaderCell align="center">Score</HeaderCell>
-                  <HeaderCell align="center">
-                    <IconButton
-                      className={classes.openButton}
-                      id="button_expandRow"
-                      size="small"
-                      onClick={(e) => openAll()}>
-                      {typeof result.breakdown !== 'undefined' &&
-                      result.breakdown.length > 0 &&
-                      result.breakdown.length === open.length ? (
-                        <KeyboardArrowUpIcon />
-                      ) : (
-                        <KeyboardArrowDownIcon />
-                      )}
-                    </IconButton>
-                  </HeaderCell>
-                </TableRow>
-              </TableHead>
-              {typeof result.breakdown !== 'undefined' ? (
-                <TableBody>
-                  {result.breakdown.map((row, index) => (
-                    <Row
-                      row={row}
-                      isOpen={isOpen}
-                      jobData={jobData}
-                      setJobData={setJobData}
-                      handleOpenClick={handleOpenClick}
-                      handleImgDialogOpen={() => setImgDialogOpen(true)}
-                      reportImg={reportImg}
-                      setReportImg={setReportImg}
-                      setSvEImg={setSvEImg}
-                    />
-                  ))}
-                </TableBody>
-              ) : null}
-            </Table>
-          ) : (
-            <div
-              style={{
-                position: 'relative',
-                top: '50%',
-                left: '50%',
-                overflowX: 'hidden'
-              }}>
-              <ClipLoader color={'#3f51b5'} loading={true} size={50} />
-            </div>
-          )}
-        </TableContainer>
-      </div>
+                <HeaderCell>Command</HeaderCell>
+                <HeaderCell align="center">Result</HeaderCell>
+                <HeaderCell align="center">Score</HeaderCell>
+                <HeaderCell align="center">
+                  <IconButton
+                    className={classes.openButton}
+                    id="button_expandRow"
+                    size="small"
+                    onClick={(e) => openAll()}>
+                    {typeof result.breakdown !== 'undefined' &&
+                    result.breakdown.length > 0 &&
+                    result.breakdown.length === open.length ? (
+                      <KeyboardArrowUpIcon />
+                    ) : (
+                      <KeyboardArrowDownIcon />
+                    )}
+                  </IconButton>
+                </HeaderCell>
+              </TableRow>
+            </TableHead>
+            {typeof result.breakdown !== 'undefined' ? (
+              <TableBody>
+                {result.breakdown.map((row, index) => (
+                  <Row
+                    row={row}
+                    isOpen={isOpen}
+                    jobData={jobData}
+                    setJobData={setJobData}
+                    handleOpenClick={handleOpenClick}
+                    handleImgDialogOpen={() => setImgDialogOpen(true)}
+                    reportImg={reportImg}
+                    setReportImg={setReportImg}
+                    setSvEImg={setSvEImg}
+                  />
+                ))}
+              </TableBody>
+            ) : null}
+          </Table>
+        ) : (
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              left: '50%',
+              overflowX: 'hidden'
+            }}>
+            <ClipLoader color={'#3f51b5'} loading={true} size={50} />
+          </div>
+        )}
+      </TableContainer>
       <Dialog
         open={svEImg.open}
         onClose={() =>
