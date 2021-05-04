@@ -10,34 +10,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { DetailPaneStyle } from '../../style/mystyle'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
+import { RowDetailBody } from '../BaseRow'
 
 const useStyles = makeStyles(() => ({
   ...DetailPaneStyle
 }))
 
 function DetailSection({ header, items }) {
-  function DetailSectionBody({ items }) {
-    return (
-      <Grid item sm={12} md={9} lg={10}>
-        <div style={{ paddingLeft: '10px' }}>
-          {Object.entries(items).map(([key, val]) => {
-            return typeof val === 'object' ? (
-              <div>
-                <div className={classes.parameter}>{key}:</div>
-                <DetailSectionBody items={val} />
-              </div>
-            ) : (
-              <div className={classes.parameter}>
-                {key === 'setVariable' ? '' : `${key}: `}
-                {val ? val : 'none'}
-              </div>
-            )
-          })}
-        </div>
-      </Grid>
-    )
-  }
-
   const classes = useStyles()
 
   return (
@@ -45,7 +24,7 @@ function DetailSection({ header, items }) {
       <Grid item sm={12} md={3} lg={2}>
         <div className={classes.header}>{header}</div>
       </Grid>
-      <DetailSectionBody items={items} />
+      <RowDetailBody items={items} />
     </Grid>
   )
 }
