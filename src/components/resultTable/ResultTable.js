@@ -214,15 +214,19 @@ export default function ResultTable(props) {
               {stableSort(result, getComparator(order, orderBy))
                 .filter((e) => {
                   console.log(e)
-                  return (
-                    e.assignment.assignment_name
-                      .toString()
-                      .toLowerCase()
-                      .includes(filterCriteria.toLowerCase()) ||
-                    e.created_at
-                      .toLowerCase()
-                      .includes(filterCriteria.toLowerCase())
-                  )
+                  try {
+                    return (
+                      e.assignment.assignment_name
+                        .toString()
+                        .toLowerCase()
+                        .includes(filterCriteria.toLowerCase()) ||
+                      e.created_at
+                        .toLowerCase()
+                        .includes(filterCriteria.toLowerCase())
+                    )
+                  } catch (e) {
+                    return true
+                  }
                 })
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`
