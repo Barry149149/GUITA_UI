@@ -59,7 +59,9 @@ export function ReportRowDetail({ row, setSvEImg }) {
         </Grid>
         <Grid item sm={12} md={9} lg={10}>
           <div className={classes.parameter}>
-            <span className={classes.emph}>{result.value.toString()}</span>
+            <span className={classes.emph}>
+              {result.value == null ? null : result.value.toString()}
+            </span>
             {isExpandable && (
               <IconButton size="small" onClick={() => setOpen(!open)}>
                 {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
