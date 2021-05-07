@@ -405,44 +405,45 @@ export default function AssignmentTable(props) {
 
       <TableContainer className={classes.container}>
         {fetched ? (
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="enhanced table"
-            stickyHeader>
-            <EnhancedTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {stableSort(assignData, getComparator(order, orderBy))
-                .filter((e) =>
-                  e.assignment_id
-                    .toString()
-                    .toLowerCase()
-                    .includes(filterCriteria.toLowerCase())
-                )
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`
-                  let cell_testcase = []
-                  cell_testcase.push(
-                    <TableCell>
-                      <Button
-                        id="button_commandSave"
-                        color="primary"
-                        component={Link}
-                        path={'/testcase'}
-                        onClick={(e) => {
-                          handleCellClick(row.assignment_id)
-                        }}>
-                        <AddCircleOutlineIcon />
-                      </Button>
-                    </TableCell>
+          <div style={{ height: 700, overflow: 'auto' }}>
+            <Table
+              className={classes.table}
+              aria-labelledby="tableTitle"
+              size="medium"
+              aria-label="enhanced table"
+              stickyHeader>
+              <EnhancedTableHead
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+              />
+              <TableBody>
+                {stableSort(assignData, getComparator(order, orderBy))
+                  .filter((e) =>
+                    e.assignment_id
+                      .toString()
+                      .toLowerCase()
+                      .includes(filterCriteria.toLowerCase())
                   )
-                  /*
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`
+                    let cell_testcase = []
+                    cell_testcase.push(
+                      <TableCell>
+                        <Button
+                          id="button_commandSave"
+                          color="primary"
+                          component={Link}
+                          path={'/testcase'}
+                          onClick={(e) => {
+                            handleCellClick(row.assignment_id)
+                          }}>
+                          <AddCircleOutlineIcon />
+                        </Button>
+                      </TableCell>
+                    )
+                    /*
                             if(testcases[row.assignment_id-1].length){
                                 cell_testcase.push(
                                     <TableCell>Total: {testcases.testcase[testcases.assignment_id.indexOf(row.assignment_id)]}</TableCell>
@@ -461,48 +462,29 @@ export default function AssignmentTable(props) {
                                 </Button>
                                 </TableCell>)
                             }*/
-                  const isItemOpened = open.id === row.assignment_id
-                  return (
-                    <TableRow hover tabIndex={-1} key={row.assignment_id}>
-                      <TableCell>{row.assignment_name}</TableCell>
-                      <TableCell>
-                        <FormControl style={{ maxWidth: 160 }}>
-                          <Select
-                            native
-                            value={
-                              typeof selectedConfig[index].id === 'undefined' ||
-                              !selectedConfig[index].id
-                                ? 0
-                                : selectedConfig[index].id
-                            }
-                            onChange={(event, property) => {
-                              if (event.target.value < -1) {
-                                handleCreateJobConfigOpen()
-                              } else {
-                                const entry = index
-                                let newSelectedConfig = [...selectedConfig]
-                                newSelectedConfig[entry] = {
-                                  id: event.target.value,
-                                  name:
-                                    event.target.value != -1
-                                      ? configData.find(
-                                          (x) =>
-                                            x.job_config_id ==
-                                            event.target.value
-                                        ).job_config_name
-                                      : ''
-                                }
-                                setSelectedConfig([...newSelectedConfig])
-
-                                //Todo:Remember to setJobBatch on sumbit
-
-                                if (
-                                  jobBatch.assignment_id === row.assignment_id
-                                ) {
-                                  setJobBatch({
-                                    ...jobBatch,
-                                    job_config_id: event.target.value,
-                                    job_config_name:
+                    const isItemOpened = open.id === row.assignment_id
+                    return (
+                      <TableRow hover tabIndex={-1} key={row.assignment_id}>
+                        <TableCell>{row.assignment_name}</TableCell>
+                        <TableCell>
+                          <FormControl style={{ maxWidth: 160 }}>
+                            <Select
+                              native
+                              value={
+                                typeof selectedConfig[index].id ===
+                                  'undefined' || !selectedConfig[index].id
+                                  ? 0
+                                  : selectedConfig[index].id
+                              }
+                              onChange={(event, property) => {
+                                if (event.target.value < -1) {
+                                  handleCreateJobConfigOpen()
+                                } else {
+                                  const entry = index
+                                  let newSelectedConfig = [...selectedConfig]
+                                  newSelectedConfig[entry] = {
+                                    id: event.target.value,
+                                    name:
                                       event.target.value != -1
                                         ? configData.find(
                                             (x) =>
@@ -510,111 +492,131 @@ export default function AssignmentTable(props) {
                                               event.target.value
                                           ).job_config_name
                                         : ''
-                                  })
+                                  }
+                                  setSelectedConfig([...newSelectedConfig])
+
+                                  //Todo:Remember to setJobBatch on sumbit
+
+                                  if (
+                                    jobBatch.assignment_id === row.assignment_id
+                                  ) {
+                                    setJobBatch({
+                                      ...jobBatch,
+                                      job_config_id: event.target.value,
+                                      job_config_name:
+                                        event.target.value != -1
+                                          ? configData.find(
+                                              (x) =>
+                                                x.job_config_id ==
+                                                event.target.value
+                                            ).job_config_name
+                                          : ''
+                                    })
+                                  }
+                                  setSelectedAssignment(row.assignment_id)
+                                  setSelectedJobConfig(event.target.value)
                                 }
-                                setSelectedAssignment(row.assignment_id)
-                                setSelectedJobConfig(event.target.value)
-                              }
+                              }}>
+                              <option aria-label="None" value={-1} />
+                              {configData.map((row, index) => {
+                                return (
+                                  <option
+                                    key={row.job_config_id}
+                                    value={row.job_config_id}>
+                                    {row.job_config_name}
+                                  </option>
+                                )
+                              })}
+                              <Divider />
+                              <option aria-label="Create New Config" value={-2}>
+                                Create new Config
+                              </option>
+                            </Select>
+                            {selectedConfig[index].id !== -1 ? (
+                              <Button
+                                disabled={selectedConfig[index].id === -1}
+                                component={Link}
+                                to={
+                                  '/config/' +
+                                  selectedConfig[index].id +
+                                  '/' +
+                                  selectedConfig[index].name
+                                }
+                                onClick={() => {
+                                  setSelectedJobConfigName(
+                                    selectedConfig[index].name
+                                  )
+                                  props.setLastEditedJobConfig({
+                                    id: selectedConfig[index].id,
+                                    name: selectedConfig[index].name
+                                  })
+                                }}
+                                className={classes.editButton}
+                                disabled={selectedConfig[index].id === -1}>
+                                <Typography variant="h8" color="primary">
+                                  Edit
+                                </Typography>
+                              </Button>
+                            ) : null}
+                          </FormControl>
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            onClick={(e) => {
+                              handleOpenClick(e, row.assignment_id)
                             }}>
-                            <option aria-label="None" value={-1} />
-                            {configData.map((row, index) => {
-                              return (
-                                <option
-                                  key={row.job_config_id}
-                                  value={row.job_config_id}>
-                                  {row.job_config_name}
-                                </option>
-                              )
-                            })}
-                            <Divider />
-                            <option aria-label="Create New Config" value={-2}>
-                              Create new Config
-                            </option>
-                          </Select>
-                          {selectedConfig[index].id !== -1 ? (
-                            <Button
-                              disabled={selectedConfig[index].id === -1}
+                            <MoreVertIcon />
+                          </IconButton>
+
+                          <Menu
+                            open={isItemOpened}
+                            keepMounted
+                            anchorEl={open.anchor}
+                            onClose={(e) =>
+                              handleCloseClick(e, row.assignment_id)
+                            }>
+                            <MenuItem
+                              onClick={(e) =>
+                                handleEditClick(
+                                  e,
+                                  row.assignment_id,
+                                  row.assignment_name
+                                )
+                              }
                               component={Link}
                               to={
-                                '/config/' +
-                                selectedConfig[index].id +
+                                '/testcase/' +
+                                row.assignment_id +
                                 '/' +
-                                selectedConfig[index].name
-                              }
-                              onClick={() => {
-                                setSelectedJobConfigName(
-                                  selectedConfig[index].name
-                                )
-                                props.setLastEditedJobConfig({
-                                  id: selectedConfig[index].id,
-                                  name: selectedConfig[index].name
-                                })
-                              }}
-                              className={classes.editButton}
-                              disabled={selectedConfig[index].id === -1}>
-                              <Typography variant="h8" color="primary">
-                                Edit
-                              </Typography>
-                            </Button>
-                          ) : null}
-                        </FormControl>
-                      </TableCell>
-                      <TableCell align="right">
-                        <IconButton
-                          onClick={(e) => {
-                            handleOpenClick(e, row.assignment_id)
-                          }}>
-                          <MoreVertIcon />
-                        </IconButton>
-
-                        <Menu
-                          open={isItemOpened}
-                          keepMounted
-                          anchorEl={open.anchor}
-                          onClose={(e) =>
-                            handleCloseClick(e, row.assignment_id)
-                          }>
-                          <MenuItem
-                            onClick={(e) =>
-                              handleEditClick(
-                                e,
-                                row.assignment_id,
                                 row.assignment_name
-                              )
-                            }
-                            component={Link}
-                            to={
-                              '/testcase/' +
-                              row.assignment_id +
-                              '/' +
-                              row.assignment_name
-                            }>
-                            Edit Test Cases
-                          </MenuItem>
+                              }>
+                              Edit Test Cases
+                            </MenuItem>
 
-                          <MenuItem
-                            disabled={selectedConfig[index].id === -1}
-                            onClick={(e) => {
-                              setSelected(row.assignment_id)
-                              setIndexed(index)
-                              setJobBatch({
-                                ...jobBatch,
-                                assignment_id: row.assignment_id
-                              })
-                              handleCloseClick(e, row.assignment_id)
-                              handleSubmitPreprocess(row.assignment_id)
-                              //setSubmitDialog(open)
-                              setChooseFile(false)
-                            }}>
-                            Submit
-                          </MenuItem>
-                        </Menu>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-            </TableBody>
-          </Table>
+                            <MenuItem
+                              disabled={selectedConfig[index].id === -1}
+                              onClick={(e) => {
+                                setSelected(row.assignment_id)
+                                setIndexed(index)
+                                setJobBatch({
+                                  ...jobBatch,
+                                  assignment_id: row.assignment_id
+                                })
+                                handleCloseClick(e, row.assignment_id)
+                                handleSubmitPreprocess(row.assignment_id)
+                                //setSubmitDialog(open)
+                                setChooseFile(false)
+                              }}>
+                              Submit
+                            </MenuItem>
+                          </Menu>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+              </TableBody>
+            </Table>
+          </div>
         ) : (
           <div
             style={{

@@ -15,6 +15,7 @@ import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import SaveIcon from '@material-ui/icons/Save'
 import Divider from '@material-ui/core/Divider'
+import TablePanel from './TablePanel'
 
 export default function TestCaseToolBar(props) {
   const {
@@ -26,7 +27,9 @@ export default function TestCaseToolBar(props) {
     fetched,
     setFetched,
     file,
-    setPostings
+    setPostings,
+    setSelectedAssignment,
+    setSelectedAssignmentName
   } = props
 
   let { assignId, assignName } = useParams()
@@ -120,7 +123,8 @@ export default function TestCaseToolBar(props) {
         console.log(newNodes)
 
         // But failed here
-
+        setSelectedAssignment(assignId)
+        setSelectedAssignmentName(assignName)
         dispatch({
           type: 'SET',
           data: {
@@ -287,7 +291,10 @@ export default function TestCaseToolBar(props) {
           value={location.pathname.includes('jsoneditor') ? 1 : 0}
           indicatorColor="primary"
           textColor="primary"
-          centered={true}>
+          centered={true}
+          onClick={() => {
+            props.setFormOpen(false)
+          }}>
           <Tooltip title="Table Mode">
             <Tab
               className={classes.tab}

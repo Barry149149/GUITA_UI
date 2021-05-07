@@ -37,7 +37,9 @@ export default function TablePanel(props) {
     setFile,
     setPostings,
     deletedTestcase,
-    setDeletedTestcase
+    setDeletedTestcase,
+    setSelectedAssignment,
+    setSelectedAssignmentName
   } = props
 
   /*
@@ -141,6 +143,9 @@ export default function TablePanel(props) {
         setPostings={setPostings}
         deletedTestcase={deletedTestcase}
         setDeletedTestcase={setDeletedTestcase}
+        setFormOpen={setFormOpen}
+        setSelectedAssignment={setSelectedAssignment}
+        setSelectedAssignmentName={setSelectedAssignmentName}
       />
       <Route exact path={`${path}/jsoneditor`}>
         <JsonEditorPanel

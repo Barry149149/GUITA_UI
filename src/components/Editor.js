@@ -394,6 +394,8 @@ export default function MainContainer() {
       selectedAssignment={selectedAssignment}
       setNode={setNode}
       themeOptions={themeOptions}
+      setSelectedAssignment={setSelectedAssignment}
+      setSelectedAssignmentName={setSelectedAssignmentName}
     />
   )
 
@@ -456,6 +458,7 @@ export default function MainContainer() {
       state={state}
       setDrawerOpen={setDrawerOpen}
       selectedAssignment={selectedAssignment}
+      setLastEditedJobConfig={setLastEditedJobConfig}
     />
   )
 

@@ -153,7 +153,7 @@ export default function CaseTree(props) {
                 data: {
                   tree: [
                     {
-                      value: 'Test Cases',
+                      value: props.tree[0].value,
                       nodes: newNodes
                     }
                   ],
@@ -225,7 +225,7 @@ export default function CaseTree(props) {
                 data: {
                   tree: [
                     {
-                      value: 'Test Cases',
+                      value: props.tree[0].value,
                       nodes: [
                         ...props.tree[0].nodes,
                         {
